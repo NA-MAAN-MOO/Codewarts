@@ -22,7 +22,7 @@ const { json } = pkg;
 
 app.use(json());
 app.use(cors());
-app.use(express.static('../client/build'));
+// app.use(express.static('../client/build'));
 
 //db connect
 const db = `mongodb+srv://juncheol:${mongoPassword}@cluster0.v0izvl3.mongodb.net/?retryWrites=true&w=majority`;
