@@ -55,7 +55,7 @@ function YjsCodeMirror() {
     // { params: { auth: roomId } } // Specify a query-string that will be url-encoded and attached to the `serverUrl`
   );
 
-  provider.on('status', (event) => {
+  provider.on('status', (event: any) => {
     console.log(event.status); // logs "connected" or "disconnected"
   });
   const ytext = ydoc.getText('codemirror');
@@ -115,8 +115,8 @@ function YjsCodeMirror() {
         python(),
         yCollab(ytext, provider.awareness, { undoManager }),
         keymap.of([indentWithTab]),
-        keymap.of([standardKeymap]),
-        keymap.of([defaultKeymap]),
+        keymap.of(standardKeymap),
+        keymap.of(defaultKeymap),
         myTheme,
         noctisLilac,
       ],
@@ -124,7 +124,7 @@ function YjsCodeMirror() {
 
     const view = new EditorView({
       state: state,
-      parent: editor.current,
+      parent: editor.current || undefined,
     });
 
     /* view 중복 생성 방지 */

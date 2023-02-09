@@ -2,6 +2,26 @@ import MainScene from './scenes/Mainscene';
 import Phaser from 'phaser';
 import PhaserMatterCollisionPlugin from 'phaser-matter-collision-plugin';
 
+const pluginConfig = {
+  // The plugin class:
+  plugin: PhaserMatterCollisionPlugin,
+  // Where to store in Scene.Systems, e.g. scene.sys.matterCollision:
+  key: 'matterCollision' as 'matterCollision',
+  // Where to store in the Scene, e.g. scene.matterCollision:
+  mapping: 'matterCollision' as 'matterCollision',
+};
+
+declare module 'phaser' {
+  interface Scene {
+    [pluginConfig.mapping]: PhaserMatterCollisionPlugin;
+  }
+  namespace Scenes {
+    interface Systems {
+      [pluginConfig.key]: PhaserMatterCollisionPlugin;
+    }
+  }
+}
+
 const config = {
   // width: "100%", //  scene이 그려지는 canvas의 width 값
   // height: "100%", //  scene이 그려지는 canvas의 height 값
@@ -24,13 +44,7 @@ const config = {
     },
   },
   plugins: {
-    scene: [
-      {
-        plugin: PhaserMatterCollisionPlugin,
-        key: 'matterCollision',
-        mapping: 'matterCollision',
-      },
-    ],
+    scene: [pluginConfig],
   },
 };
 
