@@ -12,13 +12,13 @@ function UserForm() {
   // }));
 
   /* ref 생성 */
-  const inputRef = useRef();
-  const roomIdRef = useRef();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const roomIdRef = useRef<HTMLInputElement>(null);
 
   /* "방 만들기" 실행 */
   const createRoom = async () => {
-    if (inputRef.current === undefined) return;
-    const nameInputValue = inputRef.current.value;
+    if (!inputRef.current) return;
+    const nameInputValue: string = inputRef.current.value;
 
     alert('방 만들자~');
 
@@ -70,9 +70,7 @@ function UserForm() {
       <p>
         <span>Your Name </span>
         <input placeholder="Write your name" ref={inputRef} />
-        <button size="lg" onClick={createRoom}>
-          방 만들기
-        </button>
+        <button onClick={createRoom}>방 만들기</button>
       </p>
       <p>
         <span>Room ID </span>
