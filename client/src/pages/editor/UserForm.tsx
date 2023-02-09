@@ -36,7 +36,7 @@ function UserForm() {
         username: nameInputValue,
       });
 
-      setRoomId(data.roomId);
+      dispatch(setRoomId(data.roomId));
 
       console.log(`onSuccess! 방 ID는 : ${data.roomId}`);
       alert('유저네임 생성 완료. 방 ID를 다른 사람에게 공유하세요');
@@ -58,7 +58,7 @@ function UserForm() {
       return;
     }
 
-    setRoomId(roomIdValue);
+    dispatch(setRoomId(roomIdValue));
     dispatch(setUserName(nameInput));
 
     alert('방 입장 성공');
