@@ -1,0 +1,64 @@
+{
+    "anims": [
+        {
+            "key": "idle",
+            "type": "frames",
+            "repeat": -1,
+            "frameRate": 12,
+            "frames": [
+                {
+                    "key": "dino",
+                    "frame": "dinosprites_doux_0"
+                },
+                {
+                    "key": "dino",
+                    "frame": "dinosprites_doux_1"
+                },
+                {
+                    "key": "dino",
+                    "frame": "dinosprites_doux_2"
+                },
+                {
+                    "key": "dino",
+                    "frame": "dinosprites_doux_3"
+                }
+            ]
+        },
+        {
+            "key": "walk",
+            "type": "frames",
+            "repeat": -1,
+            "frameRate": 12,
+            "frames": [
+                {
+                    "key": "dino",
+                    "frame": "dinosprites_doux_4"
+                },
+                {
+                    "key": "dino",
+                    "frame": "dinosprites_doux_5"
+                },
+                {
+                    "key": "dino",
+                    "frame": "dinosprites_doux_6"
+                },
+                {
+                    "key": "dino",
+                    "frame": "dinosprites_doux_7"
+                },
+                {
+                    "key": "dino",
+                    "frame": "dinosprites_doux_8"
+                },
+                {
+                    "key": "dino",
+                    "frame": "dinosprites_doux_9"
+                },
+                {
+                    "key": "dino",
+                    "frame": "dinosprites_doux_10"
+                }
+            ]
+        }
+    ]
+}
