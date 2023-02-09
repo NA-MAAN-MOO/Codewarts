@@ -7,8 +7,8 @@ import Game from 'pages/Game';
 import Start from 'pages/Start';
 import Editor from 'pages/Editor';
 import { openEditor, openGame } from 'stores/modeSlice';
-
 import './codeuk';
+
 function App() {
   const mode = process.env.REACT_APP_MODE;
   const { MAIN, GAME, EDITOR } = GAME_STATUS;

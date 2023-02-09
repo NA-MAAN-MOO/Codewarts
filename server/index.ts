@@ -20,7 +20,7 @@ const { json } = pkg;
 const app: Express = express();
 app.use(json());
 app.use(cors());
-// app.use(express.static('../client/build'));
+app.use(express.static('../client/build'));
 
 //merge phaser 230209
 const httpServer = http.createServer(app);
@@ -34,10 +34,9 @@ mongoose
   .then(() => console.log('MongoDB Connected...'))
   .catch((err) => console.log(err));
 
-//8080 서버 연결
-app.listen(port, () => {
-  console.log('server is running');
-});
+// app.listen(port, () => {
+//   console.log('server is running');
+// });
 
 players = [];
 //merge phaser 230209
@@ -74,12 +73,12 @@ io.on('connection', (socket: Socket) => {
   socket.on('disconnect', () => {
     // socket이 연결 해제됩니다~
     console.log('user disconnected!!!');
-    socket.broadcast.emit('playerDisconnect', socket.id);
-    // players.forEach((player) => {
-    //     if (player.socketId !== socket.id) {
-    //         player.socket.emit("playerDisconnect", socket.id);
-    //     }
-    // });
+    // socket.broadcast.emit('playerDisconnect', socket.id);
+    players.forEach((player) => {
+      if (player.socketId !== socket.id) {
+        player.socket.emit('playerDisconnect', socket.id);
+      }
+    });
     players = players.filter((player) => player.socketId !== socket.id);
   });
 
@@ -109,7 +108,8 @@ io.on('connection', (socket: Socket) => {
   });
 });
 
-httpServer.listen(port);
+//8080 서버 연결
+httpServer.listen(3000);
 
 /* 에디터 서버 포트: 3001 */
 editorServer.listen(3001, () => {

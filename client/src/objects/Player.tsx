@@ -102,7 +102,8 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     //     motion = "idle";
     // }
 
-    this.scene.socket.emit('movement', {
+    const { socket } = this.scene as MainScene;
+    socket.emit('movement', {
       x: this.x,
       y: this.y,
       motion: motion,
