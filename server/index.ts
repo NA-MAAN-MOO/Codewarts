@@ -31,7 +31,7 @@ mongoose
   .then(() => console.log('MongoDB Connected...'))
   .catch((err) => console.log(err));
 
-app.listen(3000, () => {
+app.listen(port, () => {
   console.log('server is running');
 });
 
