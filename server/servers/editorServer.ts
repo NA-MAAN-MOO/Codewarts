@@ -2,7 +2,7 @@ import express, { Express, Request, Response } from 'express';
 import http from 'http';
 import cors from 'cors';
 import { createClient } from 'redis';
-import chalk from 'chalk';
+// import chalk from 'chalk';
 import editorRouter from '../routes/editor';
 import pkg from 'body-parser';
 
@@ -20,9 +20,9 @@ redisClient.on('error', console.error);
 /* default client configuration */
 redisClient
   .connect()
-  .then(() => console.log(chalk.bold.blue('Connected to redis locally!')))
+  .then(() => console.log('Connected to redis locally!'))
   .catch(() => {
-    console.error(chalk.bold.red('Error connecting to redis'));
+    console.error('Error connecting to redis');
   });
 
 app.use((req, res, next) => {

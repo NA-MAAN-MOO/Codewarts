@@ -6,7 +6,7 @@ import http from 'http';
 // import { v4 } from 'uuid';
 // import moment from 'moment';
 import pkg from 'body-parser';
-import chalk from 'chalk';
+// import chalk from 'chalk';
 import mongoose from 'mongoose';
 import editorServer from './servers/editorServer';
 
@@ -37,5 +37,5 @@ app.listen(3000, () => {
 
 /* 에디터 서버 포트: 3001 */
 editorServer.listen(3001, () => {
-  console.log(chalk.bold.green('Server listening on *:3001'));
+  console.log('Server listening on *:3001');
 });
