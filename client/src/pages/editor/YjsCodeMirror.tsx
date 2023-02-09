@@ -1,5 +1,5 @@
 /* react */
-import { useEffect, useRef } from 'react';
+import { useRef, useEffect } from 'react';
 
 /* lib */
 import * as random from 'lib0/random';
@@ -55,7 +55,7 @@ function YjsCodeMirror() {
     // { params: { auth: roomId } } // Specify a query-string that will be url-encoded and attached to the `serverUrl`
   );
 
-  provider.on('status', (event) => {
+  provider.on('status', (event: any) => {
     console.log(event.status); // logs "connected" or "disconnected"
   });
   const ytext = ydoc.getText('codemirror');
@@ -115,12 +115,14 @@ function YjsCodeMirror() {
         python(),
         yCollab(ytext, provider.awareness, { undoManager }),
         keymap.of([indentWithTab]),
-        keymap.of([standardKeymap]),
-        keymap.of([defaultKeymap]),
+        keymap.of(standardKeymap),
+        keymap.of(defaultKeymap),
         myTheme,
         noctisLilac,
       ],
     });
+
+    if (!editor.current) return;
 
     const view = new EditorView({
       state: state,
@@ -135,6 +137,8 @@ function YjsCodeMirror() {
     <>
       <div>유저 이름 : {userName}</div>
       <div>룸 ID : {roomId}</div>
+      <div>이 방에 있는 유저리스트 : </div>
+
       <div id="editor" ref={editor} style={{ minHeight: '50%' }} />
     </>
   );

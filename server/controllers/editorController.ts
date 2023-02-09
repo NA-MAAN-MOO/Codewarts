@@ -3,7 +3,6 @@ import moment from 'moment';
 import { Request, Response } from 'express';
 
 export const createRoom = async (req: Request, res: Response) => {
-  console.log('dddddddddddddddddddddddddddddddd');
   const { userName = '', redisClient } = req.body;
   const hashField = 'code-mirror';
   const roomId = v4(); // roomID 최초 생성

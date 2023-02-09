@@ -6,10 +6,6 @@ import { useDispatch } from 'react-redux';
 function UserForm() {
   /* state 디스트럭쳐링 */
   const dispatch = useDispatch();
-  // const { setUserName, setRoomId } = useStore(({ setUserName, setRoomId }) => ({
-  //   setUserName,
-  //   setRoomId,
-  // }));
 
   /* ref 생성 */
   const inputRef = useRef<HTMLInputElement>(null);
