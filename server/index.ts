@@ -11,25 +11,21 @@ import mongoose from 'mongoose';
 import { Socket, Server } from 'socket.io'; // Load in socket.io
 import editorServer from './servers/editorServer';
 
+//환경변수 이용
+dotenv.config();
+const port = process.env.PORT || 8080;
+const mongoPassword = process.env.MONGO_PW;
+const { json } = pkg;
+
 const app: Express = express();
+app.use(json());
+app.use(cors());
+// app.use(express.static('../client/build'));
 
 //merge phaser 230209
 const httpServer = http.createServer(app);
 const io = new Server(httpServer); // initialize socket instance (passing httpserver)
 let players: any[]; // Store a list of all the players
-
-//환경변수 이용
-dotenv.config();
-const port = process.env.PORT || 8080;
-const mongoPassword = process.env.MONGO_PW;
-
-const server = http.createServer(app);
-
-const { json } = pkg;
-
-app.use(json());
-app.use(cors());
-// app.use(express.static('../client/build'));
 
 //db connect
 const db = `mongodb+srv://juncheol:${mongoPassword}@cluster0.v0izvl3.mongodb.net/?retryWrites=true&w=majority`;
@@ -38,6 +34,7 @@ mongoose
   .then(() => console.log('MongoDB Connected...'))
   .catch((err) => console.log(err));
 
+//8080 서버 연결
 app.listen(port, () => {
   console.log('server is running');
 });
@@ -99,7 +96,7 @@ io.on('connection', (socket: Socket) => {
     });
   });
 
-  socket.on('movement', (xy) => {
+  socket.on('movement', (xy: { x: number; y: number; motion: string }) => {
     const payLoad = {
       socketId: socket.id,
       x: xy.x,
