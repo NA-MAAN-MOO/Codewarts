@@ -30,7 +30,7 @@ function YjsCodeMirror() {
   const { userName, roomId } = useSelector((state: RootState) => state.editor);
 
   /* roomName 스트링 값 수정하지 말 것(※ 수정할 거면 전부 수정해야 함) */
-  const roomName = `ROOMNAME:${roomId}`;
+  const roomName = `ROOMNAME${roomId}`;
 
   const usercolors = [
     { color: '#30bced', light: '#30bced33' },
