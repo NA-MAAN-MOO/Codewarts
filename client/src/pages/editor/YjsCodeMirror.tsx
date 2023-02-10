@@ -126,7 +126,7 @@ function YjsCodeMirror() {
 
     const view = new EditorView({
       state: state,
-      parent: editor.current,
+      parent: editor.current || undefined,
     });
 
     /* view 중복 생성 방지 */

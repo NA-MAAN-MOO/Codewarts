@@ -1,0 +1,255 @@
+{
+  "frames": {
+    "down-0": {
+      "frame": {
+        "x": 0,
+        "y": 5,
+        "w": 48,
+        "h": 72
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 5,
+        "w": 48,
+        "h": 72
+      },
+      "sourceSize": {
+        "w": 576,
+        "h": 576
+      }
+    },
+    "down-1": {
+      "frame": {
+        "x": 48,
+        "y": 5,
+        "w": 48,
+        "h": 72
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 48,
+        "y": 5,
+        "w": 48,
+        "h": 72
+      },
+      "sourceSize": {
+        "w": 576,
+        "h": 576
+      }
+    },
+    "down-2": {
+      "frame": {
+        "x": 96,
+        "y": 5,
+        "w": 48,
+        "h": 72
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 96,
+        "y": 5,
+        "w": 48,
+        "h": 72
+      },
+      "sourceSize": {
+        "w": 576,
+        "h": 576
+      }
+    },
+    "left-0": {
+      "frame": {
+        "x": 0,
+        "y": 77,
+        "w": 48,
+        "h": 72
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 77,
+        "w": 48,
+        "h": 72
+      },
+      "sourceSize": {
+        "w": 576,
+        "h": 576
+      }
+    },
+    "left-1": {
+      "frame": {
+        "x": 48,
+        "y": 77,
+        "w": 48,
+        "h": 72
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 48,
+        "y": 77,
+        "w": 48,
+        "h": 72
+      },
+      "sourceSize": {
+        "w": 576,
+        "h": 576
+      }
+    },
+    "left-2": {
+      "frame": {
+        "x": 96,
+        "y": 77,
+        "w": 48,
+        "h": 72
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 96,
+        "y": 77,
+        "w": 48,
+        "h": 72
+      },
+      "sourceSize": {
+        "w": 576,
+        "h": 576
+      }
+    },
+    "right-0": {
+      "frame": {
+        "x": 0,
+        "y": 149,
+        "w": 48,
+        "h": 72
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 149,
+        "w": 48,
+        "h": 72
+      },
+      "sourceSize": {
+        "w": 576,
+        "h": 576
+      }
+    },
+    "right-1": {
+      "frame": {
+        "x": 48,
+        "y": 149,
+        "w": 48,
+        "h": 72
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 48,
+        "y": 149,
+        "w": 48,
+        "h": 72
+      },
+      "sourceSize": {
+        "w": 576,
+        "h": 576
+      }
+    },
+    "right-2": {
+      "frame": {
+        "x": 96,
+        "y": 149,
+        "w": 48,
+        "h": 72
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 96,
+        "y": 149,
+        "w": 48,
+        "h": 72
+      },
+      "sourceSize": {
+        "w": 576,
+        "h": 576
+      }
+    },
+    "up-0": {
+      "frame": {
+        "x": 0,
+        "y": 221,
+        "w": 48,
+        "h": 72
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 221,
+        "w": 48,
+        "h": 72
+      },
+      "sourceSize": {
+        "w": 576,
+        "h": 576
+      }
+    },
+    "up-1": {
+      "frame": {
+        "x": 48,
+        "y": 221,
+        "w": 48,
+        "h": 72
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 48,
+        "y": 221,
+        "w": 48,
+        "h": 72
+      },
+      "sourceSize": {
+        "w": 576,
+        "h": 576
+      }
+    },
+    "up-2": {
+      "frame": {
+        "x": 96,
+        "y": 221,
+        "w": 48,
+        "h": 72
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 96,
+        "y": 221,
+        "w": 48,
+        "h": 72
+      },
+      "sourceSize": {
+        "w": 576,
+        "h": 576
+      }
+    }
+  },
+  "meta": {
+    "app": "sprite-sheet-to-json",
+    "version": "1.0.0",
+    "image": "villager-males.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 576,
+      "h": 576
+    },
+    "scale": "1"
+  }
+}

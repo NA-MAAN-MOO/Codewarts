@@ -18,7 +18,9 @@
     "moment": "^2.29.4",
     "mongodb": "5.0",
     "mongoose": "^6.9.0",
+    "phaser": "^3.55.2",
     "redis": "^4.6.4",
+    "socket.io": "^4.6.0",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
