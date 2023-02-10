@@ -1,7 +1,7 @@
 import { v4 } from 'uuid';
 import moment from 'moment';
 import { Request, Response } from 'express';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 export const createRoom = async (req: Request, res: Response) => {
   const { userName = '', redisClient } = req.body;
@@ -43,7 +43,7 @@ export const compileCode = async (req: Request, res: Response) => {
     url: 'https://api.jdoodle.com/v1/execute',
     data: program,
   })
-    .then((response: Response) => {
+    .then((response: AxiosResponse) => {
       console.log('statusCode:', response.status);
       console.log('body:', response.data);
       res.status(response.status).send(response.data);

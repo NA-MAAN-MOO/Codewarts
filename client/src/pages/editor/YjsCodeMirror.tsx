@@ -133,8 +133,9 @@ function YjsCodeMirror() {
 
   /* 유저가 작성한 코드를 컴파일하기 위해 서버로 보냄 */
   const runCode = async () => {
+    if (!inputStdin.current) return;
+
     try {
-      // axios.post 앞에 await 추가해야할 지 검토할 것
       const { data } = await axios.post(`http://localhost:3001/run-code`, {
         codeToRun: ytext.toString(),
         stdin: inputStdin.current.value,
@@ -158,7 +159,7 @@ function YjsCodeMirror() {
       <div>이 방에 있는 유저리스트 : </div>
 
       <div id="editor" ref={editor} style={{ minHeight: '50%' }} />
-      <div id="compiler" style={{ border: '1px solid black' }}>
+      <div id="compiler" style={{ border: '2px solid black' }}>
         <div>
           <button onClick={runCode}>코드 실행</button>
           <div>
