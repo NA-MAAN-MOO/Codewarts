@@ -17,10 +17,13 @@ const { json } = pkg;
 const app: Express = express();
 app.use(json());
 app.use(cors());
-app.use(express.static('../client/build'));
-app.get('/', function (req, res) {
-  res.sendFile('../client/build/index.html');
-});
+
+//빌드할 때 주석 해제
+// app.use(express.static('../client/build'));
+// app.get('/', function (req, res) {
+//   res.sendFile('../client/build/index.html');
+// });
+
 //db connect
 const db = `mongodb+srv://juncheol:${mongoPassword}@cluster0.v0izvl3.mongodb.net/?retryWrites=true&w=majority`;
 mongoose
@@ -32,14 +35,11 @@ mongoose
 const httpServer = http.createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: [`http://localhost:${port}`],
+    origin: [`http://localhost:3000`],
     credentials: true,
   },
 }); // initialize socket instance (passing ioServer)
 
-// app.listen(port, () => {
-//   console.log('server is running');
-// });
 app.use('/', basicRouter);
 
 let players: any[] = []; // Store a list of all the players
