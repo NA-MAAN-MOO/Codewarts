@@ -2,11 +2,10 @@ import { createCharacterAnims } from '../anims/CharacterAnims';
 import OtherPlayer from '../objects/OtherPlayer';
 import Player from '../objects/Player';
 import Resource from '../objects/Resources';
-import { io } from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
 
 export default class MainScene extends Phaser.Scene {
-  socket: any;
-  playerId: any;
+  socket: Socket | undefined;
   x: any;
   y: any;
   socketId: any;
@@ -19,10 +18,9 @@ export default class MainScene extends Phaser.Scene {
 
   init() {
     // socket-io와 링크 스타~트!
-    this.socket = io();
+    this.socket = io('http://localhost:8080');
     console.log(typeof this.socket);
 
-    this.playerId = null;
     this.x = null;
     this.y = null;
     this.socket.on('start', (payLoad: any) => {
@@ -78,31 +76,32 @@ export default class MainScene extends Phaser.Scene {
     createCharacterAnims(this.anims);
 
     this.otherPlayers = [];
+    if (this.socket) {
+      this.socket.emit('currentPlayers');
 
-    this.socket.emit('currentPlayers');
-
-    this.socket.on('currentPlayers', (payLoad: any) => {
-      const socketId = payLoad.socketId;
-      const x = payLoad.x;
-      const y = payLoad.y;
-      this.addOtherPlayers({ x: x, y: y, socketId: socketId });
-    });
-
-    this.socket.on('newPlayer', (payLoad: any) => {
-      this.addOtherPlayers({
-        x: payLoad.x,
-        y: payLoad.y,
-        socketId: payLoad.socketId,
+      this.socket.on('currentPlayers', (payLoad: any) => {
+        const socketId = payLoad.socketId;
+        const x = payLoad.x;
+        const y = payLoad.y;
+        this.addOtherPlayers({ x: x, y: y, socketId: socketId });
       });
-    });
 
-    this.socket.on('playerDisconnect', (socketId: any) => {
-      this.removePlayer(socketId);
-    });
+      this.socket.on('newPlayer', (payLoad: any) => {
+        this.addOtherPlayers({
+          x: payLoad.x,
+          y: payLoad.y,
+          socketId: payLoad.socketId,
+        });
+      });
 
-    this.socket.on('updateLocation', (payLoad: any) => {
-      this.updateLocation(payLoad);
-    });
+      this.socket.on('playerDisconnect', (socketId: any) => {
+        this.removePlayer(socketId);
+      });
+
+      this.socket.on('updateLocation', (payLoad: any) => {
+        this.updateLocation(payLoad);
+      });
+    }
   }
 
   update() {
