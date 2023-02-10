@@ -3,6 +3,8 @@ import OtherPlayer from '../objects/OtherPlayer';
 import Player from '../objects/Player';
 import Resource from '../objects/Resources';
 import { io, Socket } from 'socket.io-client';
+import store from 'stores';
+import { GAME_STATUS } from 'utils/Constants';
 
 export default class MainScene extends Phaser.Scene {
   socket: Socket | undefined;
@@ -12,8 +14,11 @@ export default class MainScene extends Phaser.Scene {
   player: any;
   map: any;
   otherPlayers: any;
+  isKeyDisable: boolean;
+
   constructor() {
     super('MainScene');
+    this.isKeyDisable = false;
   }
 
   init() {
@@ -105,9 +110,15 @@ export default class MainScene extends Phaser.Scene {
   }
 
   update() {
-    // if (!this.player) {
-    //     return;
-    // }
+    if (store.getState().mode.status !== GAME_STATUS.GAME) {
+      this.input.keyboard.disableGlobalCapture();
+      this.isKeyDisable = true;
+      return;
+    }
+    if (this.isKeyDisable) {
+      this.input.keyboard.enableGlobalCapture();
+      this.isKeyDisable = false;
+    }
     this.player.update();
   }
 
