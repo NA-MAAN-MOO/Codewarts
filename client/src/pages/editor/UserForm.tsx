@@ -29,7 +29,7 @@ function UserForm() {
     try {
       /* "방 만들기" 서버에게 요청 */
       const { data } = await axios.post(`http://localhost:3001/create-room`, {
-        username: nameInputValue,
+        userName: nameInputValue,
       });
 
       dispatch(setRoomId(data.roomId));

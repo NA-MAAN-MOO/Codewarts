@@ -4,6 +4,7 @@ import { useRef, useEffect, useState } from 'react';
 /* lib */
 import * as random from 'lib0/random';
 import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
 
 /* yjs */
 import * as Y from 'yjs';
@@ -28,7 +29,9 @@ import { RootState } from 'stores';
 function YjsCodeMirror() {
   /* local state 디스트럭쳐링 */
   const { userName, roomId } = useSelector((state: RootState) => state.editor);
-  let [content, setContent] = useState('');
+  let [compileOutput, setCompileOutput] = useState('');
+  let [cpuTime, setCpuTime] = useState('');
+  let [memory, setMemory] = useState('');
 
   /* roomName 스트링 값 수정하지 말 것(※ 수정할 거면 전부 수정해야 함) */
   const roomName = `ROOMNAME${roomId}`;
@@ -82,6 +85,7 @@ function YjsCodeMirror() {
   // });
 
   const editor = useRef(null);
+  const inputStdin = useRef(null);
 
   useEffect(() => {
     /* editor theme 설정 */
@@ -127,9 +131,24 @@ function YjsCodeMirror() {
     return () => view?.destroy();
   }, []);
 
-  function runCode() {
-    console.log(ytext.toString());
-  }
+  /* 유저가 작성한 코드를 컴파일하기 위해 서버로 보냄 */
+  const runCode = async () => {
+    try {
+      // axios.post 앞에 await 추가해야할 지 검토할 것
+      const { data } = await axios.post(`http://localhost:3001/run-code`, {
+        codeToRun: ytext.toString(),
+        stdin: inputStdin.current.value,
+      });
+      console.log(data); // 전체 reponse body (output, statusCode, memory, cpuTime)
+      // console.log(data.output);
+      setCompileOutput(data.output);
+      setMemory(data.memory);
+      setCpuTime(data.cpuTime);
+    } catch (error) {
+      console.error(error);
+      alert('코드 서버로 보내기 실패');
+    }
+  };
 
   // todo: 컴파일러에 useRef 넣어주기
   return (
@@ -143,7 +162,15 @@ function YjsCodeMirror() {
         <div>
           <button onClick={runCode}>코드 실행</button>
           <div>
-            <div id="result"></div>
+            <textarea
+              id="stdin"
+              ref={inputStdin}
+              placeholder="인풋값 입력"
+            ></textarea>
+            {/* <div id="compiled-result"></div> */}
+            <div id="compiled-output">OUTPUT : {compileOutput}</div>
+            <div id="compiled-cputime">CPU TIME : {cpuTime}</div>
+            <div id="compiled-memory">MEMORY : {memory}</div>
           </div>
         </div>
       </div>

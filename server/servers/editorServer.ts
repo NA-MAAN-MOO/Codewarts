@@ -25,10 +25,12 @@ redisClient
     console.error('Error connecting to redis');
   });
 
+/* 미들웨어 설정(express 레퍼런스 참조) 
+app.use('/')로 가기 전에 redisClient 설정 */
 app.use((req, res, next) => {
   try {
     req.body.redisClient = redisClient;
-    next();
+    next(); // app.use('/')로 이동
   } catch (e) {
     console.log(e);
   }
