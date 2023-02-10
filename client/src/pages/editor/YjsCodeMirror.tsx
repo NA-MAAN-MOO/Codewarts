@@ -1,5 +1,5 @@
 /* react */
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 
 /* lib */
 import * as random from 'lib0/random';
@@ -28,6 +28,7 @@ import { RootState } from 'stores';
 function YjsCodeMirror() {
   /* local state 디스트럭쳐링 */
   const { userName, roomId } = useSelector((state: RootState) => state.editor);
+  let [content, setContent] = useState('');
 
   /* roomName 스트링 값 수정하지 말 것(※ 수정할 거면 전부 수정해야 함) */
   const roomName = `ROOMNAME${roomId}`;
@@ -100,13 +101,6 @@ function YjsCodeMirror() {
       },
     });
 
-    // const fixedHeightEditor = EditorView.theme({
-    //   '&': { height: '300px' },
-    //   '.cm-scroller': { overflow: 'auto' },
-    // });
-
-    // const minHeightEditor = EditorView.theme({});
-
     /* editor instance 생성; state, view 생성 */
     const state = EditorState.create({
       doc: ytext.toString(),
@@ -131,8 +125,13 @@ function YjsCodeMirror() {
 
     /* view 중복 생성 방지 */
     return () => view?.destroy();
-  });
+  }, []);
 
+  function runCode() {
+    console.log(ytext.toString());
+  }
+
+  // todo: 컴파일러에 useRef 넣어주기
   return (
     <>
       <div>유저 이름 : {userName}</div>
@@ -140,6 +139,14 @@ function YjsCodeMirror() {
       <div>이 방에 있는 유저리스트 : </div>
 
       <div id="editor" ref={editor} style={{ minHeight: '50%' }} />
+      <div id="compiler" style={{ border: '1px solid black' }}>
+        <div>
+          <button onClick={runCode}>코드 실행</button>
+          <div>
+            <div id="result"></div>
+          </div>
+        </div>
+      </div>
     </>
   );
 }
