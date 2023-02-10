@@ -19,7 +19,6 @@ nodemon : 서버 코드를 변경할 때마다 서버를 재시작해줘야 변�
     |-- models
     |-- routes
     |-- middlewares
-    |-- services
     `-- uitls
 
 ### controllers
