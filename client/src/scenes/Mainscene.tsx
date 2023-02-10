@@ -37,9 +37,9 @@ export default class MainScene extends Phaser.Scene {
 
   preload() {
     // 미리 로드하는 메서드, 이미지 등을 미리 로드한다.
-    Player.preload(this);
+    // Player.preload(this);
     Resource.preload(this);
-    OtherPlayer.preload(this);
+    // OtherPlayer.preload(this);
     this.load.image('ground', 'assets/images/ground.png');
     this.load.tilemapTiledJSON('groundTile', 'assets/images/ground.json');
   }
