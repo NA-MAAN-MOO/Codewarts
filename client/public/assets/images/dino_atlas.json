@@ -1,0 +1,320 @@
+{
+    "frames": [
+        {
+            "filename": "dinosprites_doux_0",
+            "frame": {
+                "w": 24,
+                "h": 24,
+                "x": 0,
+                "y": 0
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "dinosprites_doux_1",
+            "frame": {
+                "w": 24,
+                "h": 24,
+                "x": 24,
+                "y": 0
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "dinosprites_doux_2",
+            "frame": {
+                "w": 24,
+                "h": 24,
+                "x": 0,
+                "y": 24
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "dinosprites_doux_3",
+            "frame": {
+                "w": 24,
+                "h": 24,
+                "x": 24,
+                "y": 24
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "dinosprites_doux_4",
+            "frame": {
+                "w": 24,
+                "h": 24,
+                "x": 48,
+                "y": 0
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "dinosprites_doux_5",
+            "frame": {
+                "w": 24,
+                "h": 24,
+                "x": 48,
+                "y": 24
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "dinosprites_doux_6",
+            "frame": {
+                "w": 24,
+                "h": 24,
+                "x": 0,
+                "y": 48
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "dinosprites_doux_7",
+            "frame": {
+                "w": 24,
+                "h": 24,
+                "x": 24,
+                "y": 48
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "dinosprites_doux_8",
+            "frame": {
+                "w": 24,
+                "h": 24,
+                "x": 48,
+                "y": 48
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "dinosprites_doux_9",
+            "frame": {
+                "w": 24,
+                "h": 24,
+                "x": 72,
+                "y": 0
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "dinosprites_doux_10",
+            "frame": {
+                "w": 24,
+                "h": 24,
+                "x": 72,
+                "y": 24
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "dinosprites_doux_11",
+            "frame": {
+                "w": 24,
+                "h": 24,
+                "x": 72,
+                "y": 48
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "dinosprites_doux_12",
+            "frame": {
+                "w": 24,
+                "h": 24,
+                "x": 0,
+                "y": 72
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "dinosprites_doux_13",
+            "frame": {
+                "w": 24,
+                "h": 24,
+                "x": 24,
+                "y": 72
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "dinosprites_doux_14",
+            "frame": {
+                "w": 24,
+                "h": 24,
+                "x": 48,
+                "y": 72
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "dinosprites_doux_15",
+            "frame": {
+                "w": 24,
+                "h": 24,
+                "x": 72,
+                "y": 72
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "dinosprites_doux_16",
+            "frame": {
+                "w": 24,
+                "h": 24,
+                "x": 96,
+                "y": 0
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "dinosprites_doux_17",
+            "frame": {
+                "w": 24,
+                "h": 24,
+                "x": 96,
+                "y": 24
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "dinosprites_doux_18",
+            "frame": {
+                "w": 24,
+                "h": 24,
+                "x": 96,
+                "y": 48
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "dinosprites_doux_19",
+            "frame": {
+                "w": 24,
+                "h": 24,
+                "x": 96,
+                "y": 72
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "dinosprites_doux_20",
+            "frame": {
+                "w": 24,
+                "h": 24,
+                "x": 0,
+                "y": 96
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "dinosprites_doux_21",
+            "frame": {
+                "w": 24,
+                "h": 24,
+                "x": 24,
+                "y": 96
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "dinosprites_doux_22",
+            "frame": {
+                "w": 24,
+                "h": 24,
+                "x": 48,
+                "y": 96
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "dinosprites_doux_23",
+            "frame": {
+                "w": 24,
+                "h": 24,
+                "x": 72,
+                "y": 96
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        }
+    ],
+    "meta": {
+        "description": "Atlas generado con Atlas Packer Gamma V2",
+        "web": "https://gammafp.github.io/atlas-packer-phaser/"
+    }
+}

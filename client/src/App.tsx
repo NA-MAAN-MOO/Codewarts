@@ -1,26 +1,49 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from 'react';
+import { GAME_STATUS } from 'utils/Constants';
+import styled from 'styled-components';
+import { useSelector, useDispatch } from 'react-redux';
+import type { RootState } from 'stores';
+import Game from 'pages/Game';
+import Start from 'pages/Start';
+import Editor from 'pages/Editor';
+import { openEditor, openGame } from 'stores/modeSlice';
+import './codeuk';
 
 function App() {
+  const mode = process.env.REACT_APP_MODE;
+  const { MAIN, GAME, EDITOR } = GAME_STATUS;
+  const status = useSelector((state: RootState) => state.mode.status);
+  const dispatch = useDispatch();
+  let loadFlag = false;
+
+  useEffect(() => {
+    if (mode === EDITOR) {
+      dispatch(openEditor());
+    } else if (mode === GAME) {
+      dispatch(openGame());
+    }
+    loadFlag = true;
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    loadFlag || (
+      <HoverDiv>
+        {status === MAIN ? (
+          <Start></Start>
+        ) : status === GAME ? (
+          <Game></Game>
+        ) : (
+          <Editor></Editor>
+        )}
+      </HoverDiv>
+    )
   );
 }
 
 export default App;
+
+const HoverDiv = styled.div`
+  position: absolute;
+  height: 100%;
+  width: 100%;
+`;

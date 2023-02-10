@@ -1,14 +1,42 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { useSelector, useDispatch } from "react-redux";
-import { openGame } from "../stores/modeSlice";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { useSelector, useDispatch } from 'react-redux';
+import { openGame } from '../stores/modeSlice';
+import YjsCodeMirror from './editor/YjsCodeMirror';
+import UserForm from './editor/UserForm';
+import { RootState } from '../stores';
+
+const Editor = () => {
+  const { userName } = useSelector((state: RootState) => state.editor);
+  const dispatch = useDispatch();
+  return (
+    <EditorDiv>
+      <h1>Do Codeuk!</h1>
+      {userName ? (
+        <div>
+          <YjsCodeMirror />
+        </div>
+      ) : (
+        <div>
+          <UserForm />
+        </div>
+      )}
+      <BtnDiv>
+        <button type="button" onClick={() => dispatch(openGame())}>
+          돌아가기
+        </button>
+      </BtnDiv>
+    </EditorDiv>
+  );
+};
+
+export default Editor;
 
 const EditorDiv = styled.div`
   width: 100%;
   height: 100%;
   background-color: white;
   position: absolute;
-  border: 2px solid blue;
   top: 0;
   left: 0;
 `;
@@ -21,19 +49,3 @@ const BtnDiv = styled.div`
   right: 10px;
   bottom: 10px;
 `;
-
-const Editor = () => {
-  const dispatch = useDispatch();
-  return (
-    <EditorDiv>
-      에디터
-      <BtnDiv>
-        <button type="button" onClick={() => dispatch(openGame())}>
-          돌아가기
-        </button>
-      </BtnDiv>
-    </EditorDiv>
-  );
-};
-
-export default Editor;
