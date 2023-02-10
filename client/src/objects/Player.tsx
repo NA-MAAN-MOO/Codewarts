@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import MainScene from '../scenes/Mainscene';
+
 export default class Player extends Phaser.Physics.Matter.Sprite {
   socketId!: string;
   playerTexture!: string;
