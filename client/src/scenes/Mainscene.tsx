@@ -41,26 +41,42 @@ export default class MainScene extends Phaser.Scene {
     Player.preload(this);
     Resource.preload(this);
     // OtherPlayer.preload(this);
-    this.load.image('ground', 'assets/images/ground.png');
-    this.load.tilemapTiledJSON('groundTile', 'assets/images/ground.json');
+    // this.load.image('ground', 'assets/images/ground.png');
+    // this.load.tilemapTiledJSON('groundTile', 'assets/images/ground.json');
+    this.load.image('room_map', 'assets/room/room_map.png');
+    this.load.tilemapTiledJSON('room_map_tile', 'assets/room/room_map.json');
   }
   create() {
     // 생성해야 하는 것, 게임 오브젝트 등
+    /* Setting room map ground */
+    this.map = this.make.tilemap({ key: 'room_map_tile' }); //Json file key (1st parameter in tilemapTiledJSON)
+    const room_map_tileset = this.map.addTilesetImage('room_map', 'room_map'); // 1st param: tilesets.name in Json file
+    const bglayer = this.map.createLayer('bg', room_map_tileset, 0, 0);
+    bglayer.setCollisionByProperty({ collides: true });
+    this.matter.world.convertTilemapLayer(bglayer);
 
-    this.map = this.make.tilemap({ key: 'groundTile' });
-    const tileset = this.map.addTilesetImage('ground', 'ground');
+    /* Extracting objects' polygons from TiledJson */
+    const polygons = this.map.tilesets.reduce((acc, obj) => {
+      let polygonArray = Object.entries(obj.tileData)[0][1].objectgroup
+        .objects[0].polygon;
+      let key = obj.name;
+      acc[key] = polygonArray;
+      return acc;
+    }, {});
 
-    const floorLayer = this.map.createStaticLayer('tilelayer', tileset, 0, 0);
-    floorLayer.setCullPadding(8, 8);
-    floorLayer.setCollisionByProperty({ collides: true });
-    this.matter.world.convertTilemapLayer(floorLayer);
+    /* Adding Object Layers from TiledJSON */
+    this.map.objects.forEach((objLayer) => {
+      objLayer.objects.forEach((objs) => {
+        new Resource({
+          scene: this,
+          resource: objs,
+          polygon: polygons[objs.name],
+        });
+      });
+    });
 
-    // this.map.getObjectLayer("Resources").objects.forEach((resource) => {
-    //     new Resource({ scene: this, resource });
-    // });
-
-    this.x = this.map.widthInPixels / 1.4;
-    this.y = this.map.heightInPixels / 3.5;
+    this.x = this.map.widthInPixels / 2;
+    this.y = this.map.heightInPixels / 2;
     this.player = new Player({
       scene: this,
       x: this.x,
