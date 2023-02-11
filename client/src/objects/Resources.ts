@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import Player from './Player';
 
 export default class Resource extends Phaser.Physics.Matter.Sprite {
   macBookSensor!: any;
@@ -22,23 +23,21 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
     const Body = this.scene.matter.body;
     const Bodies = this.scene.matter.bodies;
 
-    console.log(polygon);
-
     let verticeCollider = Bodies.fromVertices(this.x, this.y, polygon);
     if (
       resource.name === 'macbook_back_closed' ||
       resource.name === 'macbook_front_closed'
     ) {
-      let macBookSensor = Bodies.circle(this.x, this.y, 90, {
+      let macBookSensorAdd = Bodies.circle(this.x, this.y, 70, {
         isSensor: true,
         label: 'macBookSensor',
       });
+
       const compoundBody = Body.create({
-        parts: [verticeCollider, macBookSensor],
+        parts: [verticeCollider, macBookSensorAdd],
         frictionAir: 0.35,
       });
-      this.CreateCollisions(macBookSensor);
-
+      this.CreateCollisions(macBookSensorAdd);
       this.setExistingBody(compoundBody);
     } else {
       this.setExistingBody(verticeCollider);
@@ -106,67 +105,26 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
     );
   }
 
-  // constructor(data: any) {
-  //   let { scene, resource } = data;
-  //   super(
-  //     scene.matter.world,
-  //     resource.x,
-  //     resource.y,
-  //     'resources',
-  //     resource.properties.find((p: any) => p.name === 'type').value
-  //   );
-  //   this.scene.add.existing(this);
-  //   // let yOrigin = resource.properties.find(
-  //   //     (p) => p.name == "yOrigin"
-  //   // ).value; // #1 오브젝트 collider를 원형으로 적용할 시 사용
-  //   this.name = resource.properties.find((p: any) => p.name === 'type').value;
-  //   this.x += this.width / 2;
-  //   this.y -= this.height / 2;
-  //   // this.y = this.y + this.height * (yOrigin - 0.5); // #1 오브젝트 collider를 원형으로 적용할 시 사용
-  //   // const { Body, Bodies } = Phaser.Physics.Matter.Matter;
-  //   const Body = this.scene.matter.body;
-  //   const Bodies = this.scene.matter.bodies;
-  //   let circleCollider = Bodies.circle(this.x, this.y, 12, {
-  //     isSensor: false,
-  //     label: 'collider',
-  //   });
-  //   // this.setExistingBody(circleCollider); // #1 오브젝트 collider를 원형으로 적용할 시 사용
-  //   this.setStatic(true);
-  //   // this.setOrigin(0.5, yOrigin); // #1 오브젝트 collider를 원형으로 적용할 시 사용
-  // }
-
-  update(...args: any[]): void {
-    if (this.buttonEditor) {
-      this.buttonEditor.setPosition(this.x, this.y); // 버튼 위치 업데이트 시켜주는 것
-    }
-  }
-
   CreateCollisions(macBookSensor: any) {
     this.scene.matterCollision.addOnCollideStart({
       objectA: [macBookSensor],
       callback: (other: any) => {
         // console.log("from player: ", other);
-        if (other.bodyB.isSensor) {
+        if (other.bodyB.isSensor && other.bodyB.gameObject instanceof Player) {
           this.buttonEditor = new Phaser.GameObjects.Sprite(
             this.scene,
-            0,
-            0,
+            this.x,
+            this.y,
             'book',
             0
           );
-          console.log(this.buttonEditor);
           this.buttonEditor.setScale(0.8);
-          this.buttonEditor.setOrigin(0, 2);
+          this.buttonEditor.setOrigin(0.5, 0.8);
           this.buttonEditor.setInteractive(); // 이거 해줘야 function 들어감!!!!! 3시간 버린듯;
           this.scene.add.existing(this.buttonEditor);
           this.buttonEditor.on('pointerdown', () => console.log('ok'));
           this.buttonEditor.setDepth(6000);
         }
-        // this.touching.push(other.gameObjectB);
-
-        // //button -> 이후에 resource에 생겨야한다.
-
-        // console.log(this.touching.length, other.gameObjectB.name);
       },
       context: this.scene,
     });
@@ -174,9 +132,6 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
     this.scene.matterCollision.addOnCollideEnd({
       objectA: [macBookSensor],
       callback: (other: any) => {
-        // this.touching = this.touching.filter(
-        //   (gameObject) => gameObject !== other.gameObjectB
-        // );
         if (this.buttonEditor) {
           this.buttonEditor.destroy();
         }
