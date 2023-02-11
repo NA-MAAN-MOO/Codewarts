@@ -5,6 +5,7 @@ import { openMain, openEditor } from '../stores/modeSlice';
 
 const Game = () => {
   const dispatch = useDispatch();
+
   return (
     <BackgroundDiv>
       <BtnDiv>
