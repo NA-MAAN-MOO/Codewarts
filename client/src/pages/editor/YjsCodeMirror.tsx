@@ -29,6 +29,7 @@ import { RootState } from 'stores';
 
 /* UI */
 import { Switch, Space, Button, Input } from 'antd';
+import { DownCircleOutlined } from '@ant-design/icons';
 
 function YjsCodeMirror() {
   /* local state 디스트럭쳐링 */
@@ -168,9 +169,24 @@ function YjsCodeMirror() {
   // todo: 컴파일러에 useRef 넣어주기
   return (
     <>
-      <div>유저 이름 : {userName}</div>
-      <div>룸 ID : {roomId}</div>
-      <div>이 방에 있는 유저리스트 : </div>
+      <div className="algo-input">
+        <Input placeholder="문제 번호 입력" />
+        <DownCircleOutlined
+          onClick={() => {
+            alert('문제 입력 완료!!');
+          }}
+        />
+        <div style={{ border: '5px solid black' }}>
+          문제 정보가 나타날 곳입니다
+        </div>
+      </div>
+
+      <div className="user-info">
+        <div>유저 이름 : {userName}</div>
+        <div>룸 ID : {roomId}</div>
+        <div>이 방에 있는 유저리스트 : </div>
+      </div>
+
       <Space direction="vertical">
         <Switch
           checkedChildren="Dark"
@@ -181,24 +197,18 @@ function YjsCodeMirror() {
           }}
         />
       </Space>
+
       <div id="editor" ref={editor} style={{ minHeight: '50%' }} />
+
       <div id="compiler">
-        <div>
-          <Button onClick={runCode} type="primary">
-            코드 실행
-          </Button>
-          <div>
-            <TextArea
-              id="stdin"
-              rows={5}
-              placeholder="Input"
-              ref={inputStdin}
-            />
-            {/* <div id="compiled-result"></div> */}
-            <div id="compiled-output">OUTPUT : {compileOutput}</div>
-            <div id="compiled-cputime">CPU TIME : {cpuTime}</div>
-            <div id="compiled-memory">MEMORY : {memory}</div>
-          </div>
+        <Button onClick={runCode} type="primary">
+          코드 실행
+        </Button>
+        <TextArea id="stdin" rows={5} placeholder="Input" ref={inputStdin} />
+        <div className="compiled-result">
+          <div id="compiled-output">OUTPUT : {compileOutput}</div>
+          <div id="compiled-cputime">CPU TIME : {cpuTime}</div>
+          <div id="compiled-memory">MEMORY : {memory}</div>
         </div>
       </div>
     </>
