@@ -15,6 +15,7 @@ export default class MainScene extends Phaser.Scene {
   map: any;
   otherPlayers: any;
   isKeyDisable: boolean;
+  charKey!: string;
 
   constructor() {
     super('MainScene');
@@ -28,10 +29,10 @@ export default class MainScene extends Phaser.Scene {
 
     this.x = null;
     this.y = null;
+    this.charKey = '';
     this.socket.on('start', (payLoad: any) => {
       this.socketId = payLoad.socketId;
-      this.x = payLoad.x;
-      this.y = payLoad.y;
+      this.charKey = payLoad.charKey;
     });
   }
 
@@ -58,11 +59,13 @@ export default class MainScene extends Phaser.Scene {
     //     new Resource({ scene: this, resource });
     // });
 
+    this.x = this.map.widthInPixels / 1.4;
+    this.y = this.map.heightInPixels / 3.5;
     this.player = new Player({
       scene: this,
-      x: this.map.widthInPixels / 1.4,
-      y: this.map.heightInPixels / 3.5,
-      texture: 'male1', // 이미지 이름
+      x: this.x,
+      y: this.y,
+      texture: this.charKey, // 이미지 이름
       id: this.socketId,
       frame: 'down-1', // atlas.json의 첫번째 filename
     });
@@ -78,24 +81,33 @@ export default class MainScene extends Phaser.Scene {
     camera.setLerp(0.1, 0.1);
     // camera.setBounds(0, 0, this.game.config.width, this.game.config.height);
 
-    createCharacterAnims(this.anims);
+    createCharacterAnims(this.charKey, this.anims);
 
     this.otherPlayers = [];
     if (this.socket) {
+      this.socket.emit('loadNewPlayer', { x: this.x, y: this.y });
+
+      // 기존 유저 그려줘! 하고 요청하기
       this.socket.emit('currentPlayers');
 
       this.socket.on('currentPlayers', (payLoad: any) => {
-        const socketId = payLoad.socketId;
-        const x = payLoad.x;
-        const y = payLoad.y;
-        this.addOtherPlayers({ x: x, y: y, socketId: socketId });
+        console.log('기존 유저들을 그려줄게');
+        this.addOtherPlayers({
+          x: payLoad.x,
+          y: payLoad.y,
+          charKey: payLoad.charKey,
+          socketId: payLoad.socketId,
+          state: payLoad.state,
+        });
       });
 
       this.socket.on('newPlayer', (payLoad: any) => {
         this.addOtherPlayers({
           x: payLoad.x,
           y: payLoad.y,
+          charKey: payLoad.charKey,
           socketId: payLoad.socketId,
+          state: payLoad.state,
         });
       });
 
@@ -105,6 +117,27 @@ export default class MainScene extends Phaser.Scene {
 
       this.socket.on('updateLocation', (payLoad: any) => {
         this.updateLocation(payLoad);
+      });
+      this.game.events.on('pause', () => {
+        this.socket?.emit('pauseCharacter');
+      });
+      this.socket.on('pauseCharacter', (socketId: any) => {
+        this.otherPlayers.forEach((otherPlayer: any) => {
+          if (otherPlayer.socketId === socketId) {
+            otherPlayer.setStatic(true);
+          }
+        });
+      });
+
+      this.game.events.on('resume', () => {
+        this.socket?.emit('resumeCharacter');
+      });
+      this.socket.on('resumeCharacter', (socketId: any) => {
+        this.otherPlayers.forEach((otherPlayer: any) => {
+          if (otherPlayer.socketId === socketId) {
+            otherPlayer.setStatic(false);
+          }
+        });
       });
     }
   }
@@ -127,12 +160,15 @@ export default class MainScene extends Phaser.Scene {
       // playerInfo를 바탕으로 새로운 플레이어 객체를 그려준다.
       // 해당 플레이어 객체를 움직이려면 어쩔까?
       scene: this,
-      x: playerInfo.y,
-      y: playerInfo.x,
-      texture: 'male1', // 이미지 이름
+      x: playerInfo.x,
+      y: playerInfo.y,
+      texture: playerInfo.charKey, // 이미지 이름
       id: playerInfo.socketId,
       frame: 'down-1', // atlas.json의 첫번째 filename
     });
+    if (playerInfo.state === 'paused') {
+      otherPlayer.setStatic(true);
+    }
     otherPlayer.socketId = playerInfo.socketId;
     this.otherPlayers.push(otherPlayer);
   }
