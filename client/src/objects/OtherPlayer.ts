@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-
+import { createCharacterAnims } from 'anims/CharacterAnims';
 export default class OtherPlayer extends Phaser.Physics.Matter.Sprite {
   socketId!: string;
   playerTexture!: string;
@@ -31,6 +31,23 @@ export default class OtherPlayer extends Phaser.Physics.Matter.Sprite {
     });
     this.setExistingBody(compoundBody);
     this.setFixedRotation();
+
+    createCharacterAnims(this.playerTexture, this.anims);
+  }
+
+  static preload(scene: any) {
+    scene.load.atlas(
+      'male1',
+      'assets/images/villager-males.png',
+      'assets/images/male1.json'
+    );
+    for (let i = 0; i <= 27; i++) {
+      scene.load.atlas(
+        `char${i}`,
+        `assets/characters/char${i}.png`,
+        `assets/characters/char${i}.json`
+      );
+    }
   }
 
   get velocity() {
