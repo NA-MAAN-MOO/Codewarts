@@ -8,6 +8,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
   inputKeys!: any;
   showingIcon!: any;
   spriteIcon!: any;
+  buttonEditor!: any;
 
   constructor(data: any) {
     let { scene, x, y, texture, id, frame } = data;
@@ -17,18 +18,16 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     this.socketId = id;
     this.playerTexture = texture;
     this.touching = [];
-    console.log('1');
     this.scene.add.existing(this); // 플레이어 객체가 생기는 시점.
-    console.log('2');
 
     // const { Body, Bodies } = Phaser.Physics.Matter.Matter;
     const Body = this.scene.matter.body;
     const Bodies = this.scene.matter.bodies;
-    let playerCollider = Bodies.circle(this.x, this.y, 24, {
+    let playerCollider = Bodies.circle(this.x, this.y, 20, {
       isSensor: false,
       label: 'playerCollider',
     });
-    let playerSensor = Bodies.circle(this.x, this.y, 24, {
+    let playerSensor = Bodies.circle(this.x, this.y, 30, {
       isSensor: true,
       label: 'playerSensor',
     });
@@ -36,6 +35,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
       parts: [playerCollider, playerSensor],
       frictionAir: 0.35,
     });
+    this.CreateCollisions(playerSensor);
     this.setExistingBody(compoundBody);
     this.setFixedRotation();
   }
@@ -60,6 +60,10 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
   }
 
   update() {
+    if (this.buttonEditor) {
+      this.buttonEditor.setPosition(this.x, this.y); // 버튼 위치 업데이트 시켜주는 것
+    }
+
     // 초마다 60프레임마다(?) 호출되는 것, 매 틱마다 업데이트 되야하는 것인듯.
     const speed = 5;
     let playerVelocity = new Phaser.Math.Vector2(); //  2D 벡터
@@ -98,16 +102,6 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     playerVelocity.normalize(); // 대각선인 경우 1.4의 속도이기 때문에 정규화(normalize)를 통해 속도를 1로 만든다. 이 주석에서 속도란, speed가 아니라 좌표 변화량을 뜻한다.
     playerVelocity.scale(speed);
     this.setVelocity(playerVelocity.x, playerVelocity.y); // 실제로 player오브젝트를 움직인다.
-    // if (
-    //     Math.abs(this.velocity.x) > 0.1 ||
-    //     Math.abs(this.velocity.y) > 0.1
-    // ) {
-    //     this.anims.play("walk", true); // anim.json 에 설정된 key 값
-    //     motion = "walk";
-    // } else {
-    //     this.anims.play("idle", true); // anim.json 에 설정된 key 값
-    //     motion = "idle";
-    // }
 
     const { socket } = this.scene as MainScene;
     if (!socket) {
@@ -122,31 +116,29 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     // this.showIcon();
   }
 
-  showIcon() {
-    let pointer = this.scene.input.activePointer;
-    if (pointer.isDown) {
-      this.showingIcon += 6;
-    } else {
-      this.showingIcon = 0;
-    }
-    if (this.showingIcon > 100) {
-      this.showingIcon = 0;
-    }
-    if (this.flipX) {
-      this.spriteIcon.setAngle(-this.showingIcon);
-    } else {
-      this.spriteIcon.setAngle(this.showingIcon);
-    }
-  }
-
-  CreateMiningCollisions(playerSensor: any) {
+  CreateCollisions(playerSensor: any) {
     this.scene.matterCollision.addOnCollideStart({
       objectA: [playerSensor],
       callback: (other: any) => {
         // console.log("from player: ", other);
         if (other.bodyB.isSensor) return;
         this.touching.push(other.gameObjectB);
-        // console.log(this.touching.length, other.gameObjectB.name);
+
+        // //button -> 이후에 resource에 생겨야한다.
+        this.buttonEditor = new Phaser.GameObjects.Sprite(
+          this.scene,
+          0,
+          0,
+          'items',
+          5
+        );
+        this.buttonEditor.setScale(0.8);
+        this.buttonEditor.setOrigin(0, 2);
+        this.buttonEditor.setInteractive(); // 이거 해줘야 function 들어감!!!!! 3시간 버린듯;
+        this.scene.add.existing(this.buttonEditor);
+        this.buttonEditor.on('pointerdown', () => console.log('ok'));
+
+        console.log(this.touching.length, other.gameObjectB.name);
       },
       context: this.scene,
     });
@@ -157,7 +149,8 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         this.touching = this.touching.filter(
           (gameObject) => gameObject !== other.gameObjectB
         );
-        // console.log(this.touching.length);
+
+        this.buttonEditor.destroy();
       },
       context: this.scene,
     });

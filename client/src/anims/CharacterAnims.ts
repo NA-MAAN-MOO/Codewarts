@@ -1,31 +1,31 @@
 /* Character Animation function */
-const createCharacterAnims = (anims: any) => {
+const createCharacterAnims = (charKey: string, anims: any) => {
   const animsFrameRate = 10;
 
   /* male1 animation */
   anims.create({
-    key: 'male1-idle-down',
-    frames: [{ key: 'male1', frame: 'down-1' }],
+    key: `${charKey}-idle-down`,
+    frames: [{ key: `${charKey}`, frame: 'down-1' }],
   });
 
   anims.create({
-    key: 'male1-idle-up',
-    frames: [{ key: 'male1', frame: 'up-2' }],
+    key: `${charKey}-idle-up`,
+    frames: [{ key: `${charKey}`, frame: 'up-2' }],
   });
 
   anims.create({
-    key: 'male1-idle-left',
-    frames: [{ key: 'male1', frame: 'left-1' }],
+    key: `${charKey}-idle-left`,
+    frames: [{ key: `${charKey}`, frame: 'left-1' }],
   });
 
   anims.create({
-    key: 'male1-idle-right',
-    frames: [{ key: 'male1', frame: 'right-1' }],
+    key: `${charKey}-idle-right`,
+    frames: [{ key: `${charKey}`, frame: 'right-1' }],
   });
 
   anims.create({
-    key: 'male1-walk-down',
-    frames: anims.generateFrameNames('male1', {
+    key: `${charKey}-walk-down`,
+    frames: anims.generateFrameNames(`${charKey}`, {
       start: 0,
       end: 2,
       prefix: 'down-',
@@ -35,8 +35,8 @@ const createCharacterAnims = (anims: any) => {
   });
 
   anims.create({
-    key: 'male1-walk-left',
-    frames: anims.generateFrameNames('male1', {
+    key: `${charKey}-walk-left`,
+    frames: anims.generateFrameNames(`${charKey}`, {
       start: 0,
       end: 2,
       prefix: 'left-',
@@ -46,8 +46,8 @@ const createCharacterAnims = (anims: any) => {
   });
 
   anims.create({
-    key: 'male1-walk-right',
-    frames: anims.generateFrameNames('male1', {
+    key: `${charKey}-walk-right`,
+    frames: anims.generateFrameNames(`${charKey}`, {
       start: 0,
       end: 2,
       prefix: 'right-',
@@ -57,8 +57,8 @@ const createCharacterAnims = (anims: any) => {
   });
 
   anims.create({
-    key: 'male1-walk-up',
-    frames: anims.generateFrameNames('male1', {
+    key: `${charKey}-walk-up`,
+    frames: anims.generateFrameNames(`${charKey}`, {
       start: 0,
       end: 2,
       prefix: 'up-',
