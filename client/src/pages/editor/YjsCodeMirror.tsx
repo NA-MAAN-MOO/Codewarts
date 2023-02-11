@@ -78,7 +78,7 @@ function YjsCodeMirror() {
   /* provider의 정보 출력 */
   // console.log(provider.awareness.getLocalState());
   // console.log('클라이언트ID ' + provider.awareness.clientID);
-  console.log(provider.awareness.states); // 모든 client의 state
+  console.log(provider.awareness.states.values().next().value['name']); // 모든 client의 state
   // console.log(provider.awareness.getStates().get(2127960527).user.name); // get(clientID)
   // provider.awareness.getStates().forEach((key, value) => {
   //   console.log(key, value);
@@ -138,6 +138,7 @@ function YjsCodeMirror() {
     try {
       const { data } = await axios.post(`http://localhost:3001/run-code`, {
         codeToRun: ytext.toString(),
+        //@ts-ignore
         stdin: inputStdin.current.value,
       });
       console.log(data); // 전체 reponse body (output, statusCode, memory, cpuTime)
