@@ -3,7 +3,7 @@ import { useRef, useEffect, useState } from 'react';
 
 /* lib */
 import * as random from 'lib0/random';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
 
 /* yjs */
@@ -24,7 +24,11 @@ import {
   standardKeymap,
 } from '@codemirror/commands';
 import { noctisLilac } from '@uiw/codemirror-theme-noctis-lilac';
+import { okaidia } from '@uiw/codemirror-theme-okaidia';
 import { RootState } from 'stores';
+
+/* UI */
+import { Switch, Space, Button, Input } from 'antd';
 
 function YjsCodeMirror() {
   /* local state 디스트럭쳐링 */
@@ -32,6 +36,8 @@ function YjsCodeMirror() {
   let [compileOutput, setCompileOutput] = useState('');
   let [cpuTime, setCpuTime] = useState('');
   let [memory, setMemory] = useState('');
+  let [editorTheme, setEditorTheme] = useState(okaidia);
+  const { TextArea } = Input;
 
   /* roomName 스트링 값 수정하지 말 것(※ 수정할 거면 전부 수정해야 함) */
   const roomName = `ROOMNAME${roomId}`;
@@ -89,14 +95,13 @@ function YjsCodeMirror() {
 
   useEffect(() => {
     /* editor theme 설정 */
-    let myTheme = EditorView.theme({
+    let basicTheme = EditorView.theme({
       // '.cm-gutter': { minHeight: '50%' },
       // '&': {
       // fontFamily: 'Cascadia Code',
       // height: '50%',
       // },
       '.cm-content': {
-        caretColor: '#0e9',
         fontFamily: 'Cascadia Code',
         fontSize: 'large',
       },
@@ -115,8 +120,8 @@ function YjsCodeMirror() {
         keymap.of([indentWithTab]),
         keymap.of(standardKeymap),
         keymap.of(defaultKeymap),
-        myTheme,
-        noctisLilac,
+        basicTheme,
+        editorTheme,
       ],
     });
 
@@ -129,7 +134,7 @@ function YjsCodeMirror() {
 
     /* view 중복 생성 방지 */
     return () => view?.destroy();
-  }, []);
+  }, [editorTheme]);
 
   /* 유저가 작성한 코드를 컴파일하기 위해 서버로 보냄 */
   const runCode = async () => {
@@ -138,10 +143,10 @@ function YjsCodeMirror() {
     try {
       const { data } = await axios.post(`http://localhost:3001/run-code`, {
         codeToRun: ytext.toString(),
+        //@ts-ignore
         stdin: inputStdin.current.value,
       });
       console.log(data); // 전체 reponse body (output, statusCode, memory, cpuTime)
-      // console.log(data.output);
       setCompileOutput(data.output);
       setMemory(data.memory);
       setCpuTime(data.cpuTime);
@@ -151,23 +156,44 @@ function YjsCodeMirror() {
     }
   };
 
+  /* 다크/라이트 모드 테마 토글 */
+  function switchTheme(checked: boolean) {
+    if (editorTheme === okaidia) {
+      setEditorTheme(noctisLilac);
+    } else {
+      setEditorTheme(okaidia);
+    }
+  }
+
   // todo: 컴파일러에 useRef 넣어주기
   return (
     <>
       <div>유저 이름 : {userName}</div>
       <div>룸 ID : {roomId}</div>
       <div>이 방에 있는 유저리스트 : </div>
-
+      <Space direction="vertical">
+        <Switch
+          checkedChildren="Dark"
+          unCheckedChildren="Lavender"
+          defaultChecked
+          onChange={(checked) => {
+            switchTheme(checked);
+          }}
+        />
+      </Space>
       <div id="editor" ref={editor} style={{ minHeight: '50%' }} />
-      <div id="compiler" style={{ border: '2px solid black' }}>
+      <div id="compiler">
         <div>
-          <button onClick={runCode}>코드 실행</button>
+          <Button onClick={runCode} type="primary">
+            코드 실행
+          </Button>
           <div>
-            <textarea
+            <TextArea
               id="stdin"
+              rows={5}
+              placeholder="Input"
               ref={inputStdin}
-              placeholder="인풋값 입력"
-            ></textarea>
+            />
             {/* <div id="compiled-result"></div> */}
             <div id="compiled-output">OUTPUT : {compileOutput}</div>
             <div id="compiled-cputime">CPU TIME : {cpuTime}</div>
