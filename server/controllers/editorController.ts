@@ -1,6 +1,7 @@
 import { v4 } from 'uuid';
 import moment from 'moment';
 import { Request, Response } from 'express';
+import axios, { AxiosResponse } from 'axios';
 
 export const createRoom = async (req: Request, res: Response) => {
   const { userName = '', redisClient } = req.body;
@@ -24,7 +25,34 @@ export const createRoom = async (req: Request, res: Response) => {
   res.status(201).send({ roomId }); // return success & the room ID
 };
 
+/* get response for compiled code */
+export const compileCode = async (req: Request, res: Response) => {
+  const { codeToRun = '', stdin = '', redisClient } = req.body;
+
+  const program = {
+    script: codeToRun,
+    stdin: stdin,
+    language: 'python3',
+    versionIndex: '4',
+    clientId: `${process.env.JDOODLE_CLIENT_ID}`,
+    clientSecret: `${process.env.JDOODLE_CLIENT_SECRET}`,
+  };
+
+  axios({
+    method: 'post',
+    url: 'https://api.jdoodle.com/v1/execute',
+    data: program,
+  })
+    .then((response: AxiosResponse) => {
+      console.log('statusCode:', response.status);
+      console.log('body:', response.data);
+      res.status(response.status).send(response.data);
+    })
+    .catch((error: Error) => {
+      console.log('error:', error);
+    });
+};
+
 export const origin = (req: Request, res: Response) => {
-  console.log('dd');
   res.send({ msg: "I'm alive" });
 };

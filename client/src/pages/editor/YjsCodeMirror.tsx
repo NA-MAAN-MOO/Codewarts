@@ -1,9 +1,10 @@
 /* react */
-import { useEffect, useRef } from 'react';
+import { useRef, useEffect, useState } from 'react';
 
 /* lib */
 import * as random from 'lib0/random';
 import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
 
 /* yjs */
 import * as Y from 'yjs';
@@ -28,6 +29,9 @@ import { RootState } from 'stores';
 function YjsCodeMirror() {
   /* local state 디스트럭쳐링 */
   const { userName, roomId } = useSelector((state: RootState) => state.editor);
+  let [compileOutput, setCompileOutput] = useState('');
+  let [cpuTime, setCpuTime] = useState('');
+  let [memory, setMemory] = useState('');
 
   /* roomName 스트링 값 수정하지 말 것(※ 수정할 거면 전부 수정해야 함) */
   const roomName = `ROOMNAME${roomId}`;
@@ -81,6 +85,7 @@ function YjsCodeMirror() {
   // });
 
   const editor = useRef(null);
+  const inputStdin = useRef(null);
 
   useEffect(() => {
     /* editor theme 설정 */
@@ -100,13 +105,6 @@ function YjsCodeMirror() {
       },
     });
 
-    // const fixedHeightEditor = EditorView.theme({
-    //   '&': { height: '300px' },
-    //   '.cm-scroller': { overflow: 'auto' },
-    // });
-
-    // const minHeightEditor = EditorView.theme({});
-
     /* editor instance 생성; state, view 생성 */
     const state = EditorState.create({
       doc: ytext.toString(),
@@ -122,6 +120,8 @@ function YjsCodeMirror() {
       ],
     });
 
+    if (!editor.current) return;
+
     const view = new EditorView({
       state: state,
       parent: editor.current || undefined,
@@ -129,13 +129,52 @@ function YjsCodeMirror() {
 
     /* view 중복 생성 방지 */
     return () => view?.destroy();
-  });
+  }, []);
 
+  /* 유저가 작성한 코드를 컴파일하기 위해 서버로 보냄 */
+  const runCode = async () => {
+    if (!inputStdin.current) return;
+
+    try {
+      const { data } = await axios.post(`http://localhost:3001/run-code`, {
+        codeToRun: ytext.toString(),
+        stdin: inputStdin.current.value,
+      });
+      console.log(data); // 전체 reponse body (output, statusCode, memory, cpuTime)
+      // console.log(data.output);
+      setCompileOutput(data.output);
+      setMemory(data.memory);
+      setCpuTime(data.cpuTime);
+    } catch (error) {
+      console.error(error);
+      alert('코드 서버로 보내기 실패');
+    }
+  };
+
+  // todo: 컴파일러에 useRef 넣어주기
   return (
     <>
       <div>유저 이름 : {userName}</div>
       <div>룸 ID : {roomId}</div>
+      <div>이 방에 있는 유저리스트 : </div>
+
       <div id="editor" ref={editor} style={{ minHeight: '50%' }} />
+      <div id="compiler" style={{ border: '2px solid black' }}>
+        <div>
+          <button onClick={runCode}>코드 실행</button>
+          <div>
+            <textarea
+              id="stdin"
+              ref={inputStdin}
+              placeholder="인풋값 입력"
+            ></textarea>
+            {/* <div id="compiled-result"></div> */}
+            <div id="compiled-output">OUTPUT : {compileOutput}</div>
+            <div id="compiled-cputime">CPU TIME : {cpuTime}</div>
+            <div id="compiled-memory">MEMORY : {memory}</div>
+          </div>
+        </div>
+      </div>
     </>
   );
 }
