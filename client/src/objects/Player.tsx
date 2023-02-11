@@ -40,6 +40,21 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     this.setFixedRotation();
   }
 
+  static preload(scene: any) {
+    scene.load.atlas(
+      'male1',
+      'assets/images/villager-males.png',
+      'assets/images/male1.json'
+    );
+    for (let i = 0; i <= 27; i++) {
+      scene.load.atlas(
+        `char${i}`,
+        `assets/characters/char${i}.png`,
+        `assets/characters/char${i}.json`
+      );
+    }
+  }
+
   get velocity() {
     return this.body.velocity;
   }

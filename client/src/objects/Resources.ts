@@ -7,18 +7,6 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
       'assets/images/furniture.png',
       'assets/images/furniture_atlas.json'
     );
-    scene.load.atlas(
-      'male1',
-      'assets/images/villager-males.png',
-      'assets/images/male1.json'
-    );
-    for (let i = 0; i <= 27; i++) {
-      scene.load.atlas(
-        `char${i}`,
-        `assets/characters/char${i}.png`,
-        `assets/characters/char${i}.json`
-      );
-    }
   }
 
   constructor(data: any) {
