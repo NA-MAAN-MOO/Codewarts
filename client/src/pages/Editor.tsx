@@ -6,6 +6,7 @@ import YjsCodeMirror from './editor/YjsCodeMirror';
 import UserForm from './editor/UserForm';
 import { RootState } from '../stores';
 
+/* 유저 네임이 존재하면 에디터, 존재하지 않으면 userform을 보여줌 */
 const Editor = () => {
   const { userName } = useSelector((state: RootState) => state.editor);
   const dispatch = useDispatch();
