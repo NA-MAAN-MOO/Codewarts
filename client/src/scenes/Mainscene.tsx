@@ -50,6 +50,7 @@ export default class MainScene extends Phaser.Scene {
     this.load.tilemapTiledJSON('room_map_tile', 'assets/room/room_map.json');
   }
   create() {
+    console.log(this.socket);
     // 생성해야 하는 것, 게임 오브젝트 등
     /* Setting room map ground */
     this.map = this.make.tilemap({ key: 'room_map_tile' }); //Json file key (1st parameter in tilemapTiledJSON)
@@ -60,6 +61,7 @@ export default class MainScene extends Phaser.Scene {
 
     /* Extracting objects' polygons from TiledJson */
     const polygons = this.map.tilesets.reduce((acc: any, obj: any) => {
+      //@ts-ignore
       let polygonArray = Object.entries(obj.tileData)[0][1].objectgroup
         .objects[0].polygon;
       let key = obj.name;
@@ -68,7 +70,9 @@ export default class MainScene extends Phaser.Scene {
     }, {});
 
     /* Adding Object Layers from TiledJSON */
+    //@ts-ignore
     this.map.objects.forEach((objLayer) => {
+      //@ts-ignore
       objLayer.objects.forEach((objs) => {
         new Resource({
           scene: this,
