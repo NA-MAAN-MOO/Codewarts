@@ -1,11 +1,14 @@
 import Phaser from 'phaser';
 import Player from './Player';
+import Button from './Button';
+import Table from './Table';
 
 export default class Resource extends Phaser.Physics.Matter.Sprite {
-  macBookSensor!: any;
+  tableSensor!: any;
   buttonEditor!: any;
+
   constructor(data: any) {
-    let { scene, resource, polygon } = data;
+    let { scene, resource, polygon, index } = data;
     super(
       scene.matter.world,
       resource.x + resource.width / 2,
@@ -24,24 +27,48 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
     const Bodies = this.scene.matter.bodies;
 
     let verticeCollider = Bodies.fromVertices(this.x, this.y, polygon);
-    if (
-      resource.name === 'macbook_back_closed' ||
-      resource.name === 'macbook_front_closed'
-    ) {
-      let macBookSensorAdd = Bodies.circle(this.x, this.y, 70, {
+
+    /* Disable chair collision */
+    if (resource.name === 'chair_back' || resource.name === 'chair_front') {
+      verticeCollider = Bodies.fromVertices(this.x, this.y, polygon, {
         isSensor: true,
-        label: 'macBookSensor',
       });
+    }
+    this.setExistingBody(verticeCollider);
+
+    /* Add table interaction */
+    if (resource.name === 'table') {
+      // @ts-ignore
+      let tableCollider = Bodies.circle(this.x - 10, this.y + 10, 100, {
+        isSensor: true,
+        label: 'tableSensor',
+      });
+      // console.log();
 
       const compoundBody = Body.create({
-        parts: [verticeCollider, macBookSensorAdd],
+        parts: [verticeCollider, tableCollider],
         frictionAir: 0.35,
       });
-      this.CreateCollisions(macBookSensorAdd);
+
+      scene.tableMap.set(index, new Table(this, compoundBody.id));
+      console.log(scene.tableMap);
+      // console.log(compoundBody.id);
+      this.CreateCollisions(tableCollider);
       this.setExistingBody(compoundBody);
-    } else {
-      this.setExistingBody(verticeCollider);
+      // let macBookSensorAdd = Bodies.circle(this.x, this.y, 70, {
+      // isSensor: true,
+      // label: 'macBookSensor',
     }
+
+    // const compoundBody = Body.create({
+    // parts: [verticeCollider, macBookSensorAdd],
+    // frictionAir: 0.35,
+    // });
+    // this.CreateCollisions(macBookSensorAdd);
+    // this.setExistingBody(compoundBody);
+    // } else {
+
+    // }
 
     // if (
     // resource.name !== 'chair_front' &&
@@ -96,41 +123,51 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
     scene.load.image('plant_short', 'assets/room/plant_short.png');
     scene.load.image('teapot', 'assets/room/teapot.png');
     scene.load.image('wall_candle', 'assets/room/wall_candle.png');
-    scene.load.image('table_left', 'assets/room/table_left.png');
-    scene.load.image('table_right', 'assets/room/table_right.png');
-    scene.load.atlas(
-      'table',
-      'assets/room/tables.png',
-      'assets/room/tables.json'
-    );
+    scene.load.image('table', 'assets/room/table.png');
   }
 
-  CreateCollisions(macBookSensor: any) {
+  CreateCollisions(tableSensor: any) {
     this.scene.matterCollision.addOnCollideStart({
-      objectA: [macBookSensor],
+      objectA: [tableSensor],
       callback: (other: any) => {
+        console.log(this.body);
         // console.log("from player: ", other);
+
         if (other.bodyB.isSensor && other.bodyB.gameObject instanceof Player) {
-          this.buttonEditor = new Phaser.GameObjects.Sprite(
-            this.scene,
-            this.x,
-            this.y,
-            'book',
-            0
-          );
-          this.buttonEditor.setScale(0.8);
-          this.buttonEditor.setOrigin(0.5, 0.8);
+          this.buttonEditor = new Button({
+            scene: this.scene,
+            x: this.x,
+            y: this.y - 20,
+            text: 'E를 눌러 참여하기',
+            style: {
+              fontSize: '20px',
+              backgroundColor: 'white',
+              color: 'black',
+            },
+          }).getBtn();
+          // this.buttonEditor = new Phaser.GameObjects.Sprite(
+          //   this.scene,
+          //   this.x,
+          //   this.y,
+          //   'book',
+          //   0
+
+          // this.buttonEditor.setScale(0.8);
+          // this.buttonEditor.setOrigin(0.5, 0.8);
           this.buttonEditor.setInteractive(); // 이거 해줘야 function 들어감!!!!! 3시간 버린듯;
-          this.scene.add.existing(this.buttonEditor);
+          // this.scene.add.existing(this.buttonEditor);
           this.buttonEditor.on('pointerdown', () => console.log('ok'));
-          this.buttonEditor.setDepth(6000);
+          // this.buttonEditor.setDepth(6000);
+
+          //TODO: 여기에서 사용자가 키보드 누르면 상호작용 하도록 만듦
+          // redux로 상태 바꿔서 component 보이게? Table 클래스 내의 정보 이용해서 자리별 사용 여부, user count 등 띄우기
         }
       },
       context: this.scene,
     });
 
     this.scene.matterCollision.addOnCollideEnd({
-      objectA: [macBookSensor],
+      objectA: [tableSensor],
       callback: (other: any) => {
         if (this.buttonEditor) {
           this.buttonEditor.destroy();
