@@ -35,7 +35,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
       parts: [playerCollider, playerSensor],
       frictionAir: 0.35,
     });
-    this.CreateCollisions(playerSensor);
+    // this.CreateCollisions(playerSensor);
     this.setExistingBody(compoundBody);
     this.setFixedRotation();
   }
@@ -60,9 +60,9 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
   }
 
   update() {
-    if (this.buttonEditor) {
-      this.buttonEditor.setPosition(this.x, this.y); // 버튼 위치 업데이트 시켜주는 것
-    }
+    // if (this.buttonEditor) {
+    //   this.buttonEditor.setPosition(this.x, this.y); // 버튼 위치 업데이트 시켜주는 것
+    // }
 
     // 초마다 60프레임마다(?) 호출되는 것, 매 틱마다 업데이트 되야하는 것인듯.
     const speed = 5;
@@ -116,43 +116,44 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     // this.showIcon();
   }
 
-  CreateCollisions(playerSensor: any) {
-    this.scene.matterCollision.addOnCollideStart({
-      objectA: [playerSensor],
-      callback: (other: any) => {
-        // console.log("from player: ", other);
-        if (other.bodyB.isSensor) return;
-        this.touching.push(other.gameObjectB);
+  // CreateCollisions(playerSensor: any) {
+  //   this.scene.matterCollision.addOnCollideStart({
+  //     objectA: [playerSensor],
+  //     callback: (other: any) => {
+  //       // console.log("from player: ", other);
+  //       if (other.bodyB.isSensor) return;
+  //       this.touching.push(other.gameObjectB);
 
-        // //button -> 이후에 resource에 생겨야한다.
-        this.buttonEditor = new Phaser.GameObjects.Sprite(
-          this.scene,
-          0,
-          0,
-          'items',
-          5
-        );
-        this.buttonEditor.setScale(0.8);
-        this.buttonEditor.setOrigin(0, 2);
-        this.buttonEditor.setInteractive(); // 이거 해줘야 function 들어감!!!!! 3시간 버린듯;
-        this.scene.add.existing(this.buttonEditor);
-        this.buttonEditor.on('pointerdown', () => console.log('ok'));
+  //       // //button -> 이후에 resource에 생겨야한다.
+  //       this.buttonEditor = new Phaser.GameObjects.Sprite(
+  //         this.scene,
+  //         0,
+  //         0,
+  //         'items',
+  //         5
+  //       );
+  //       this.buttonEditor.setScale(0.8);
+  //       this.buttonEditor.setOrigin(0, 2);
+  //       this.buttonEditor.setInteractive(); // 이거 해줘야 function 들어감!!!!! 3시간 버린듯;
+  //       this.scene.add.existing(this.buttonEditor);
+  //       this.buttonEditor.on('pointerdown', () => console.log('ok'));
 
-        console.log(this.touching.length, other.gameObjectB.name);
-      },
-      context: this.scene,
-    });
+  //       console.log(this.touching.length, other.gameObjectB.name);
+  //     },
+  //     context: this.scene,
+  //   });
 
-    this.scene.matterCollision.addOnCollideEnd({
-      objectA: [playerSensor],
-      callback: (other: any) => {
-        this.touching = this.touching.filter(
-          (gameObject) => gameObject !== other.gameObjectB
-        );
-
-        this.buttonEditor.destroy();
-      },
-      context: this.scene,
-    });
-  }
+  //   this.scene.matterCollision.addOnCollideEnd({
+  //     objectA: [playerSensor],
+  //     callback: (other: any) => {
+  //       this.touching = this.touching.filter(
+  //         (gameObject) => gameObject !== other.gameObjectB
+  //       );
+  //       if (this.buttonEditor) {
+  //         this.buttonEditor.destroy();
+  //       }
+  //     },
+  //     context: this.scene,
+  //   });
+  // }
 }
