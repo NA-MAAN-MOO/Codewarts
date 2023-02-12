@@ -31,32 +31,26 @@ import { RootState } from 'stores';
 import { Switch, Space, Button, Input } from 'antd';
 import { DownCircleOutlined } from '@ant-design/icons';
 
-/* LeetCode API */
-import { LeetCode, Credential } from 'leetcode-query';
-
 function YjsCodeMirror() {
+  /* states */
   const { userName, roomId } = useSelector((state: RootState) => state.editor);
   let [compileOutput, setCompileOutput] = useState('');
   let [cpuTime, setCpuTime] = useState('');
   let [memory, setMemory] = useState('');
   let [editorTheme, setEditorTheme] = useState(okaidia);
+  let [leetUserData, setLeetUserData] = useState();
+  let [leetProbData, setLeetProbData] = useState();
+
+  /* ref */
+  const editor = useRef(null);
+  const inputStdin = useRef(null);
+  const leetUserNameRef = useRef(null);
+  const leetProbDataRef = useRef(null);
 
   /* for UI */
   const { TextArea } = Input;
 
   /* LeetCode user info */
-  const parsing = async () => {
-    let cook =
-      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfYXV0aF91c2VyX2lkIjoiODc1NzIwNiIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImFsbGF1dGguYWNjb3VudC5hdXRoX2JhY2tlbmRzLkF1dGhlbnRpY2F0aW9uQmFja2VuZCIsIl9hdXRoX3VzZXJfaGFzaCI6IjY4MmEyMDhjMmZkY2NmM2ZmYzUxNDNiZDMwNmJhMjgyOTA4NWIzY2UiLCJpZCI6ODc1NzIwNiwiZW1haWwiOiIxMDBtZ21sQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiZ2NvdW50ODUiLCJ1c2VyX3NsdWciOiJnY291bnQ4NSIsImF2YXRhciI6Imh0dHBzOi8vYXNzZXRzLmxlZXRjb2RlLmNvbS91c2Vycy9hdmF0YXJzL2F2YXRhcl8xNjc2MTg2MDIyLnBuZyIsInJlZnJlc2hlZF9hdCI6MTY3NjE4NjI5NSwiaXAiOiIxNzUuMTI2LjEwNy4xOCIsImlkZW50aXR5IjoiMmNlMWZkNjc0ODVjZmU5MmFkZjcwMGQ3MTZlOWYyOWYiLCJzZXNzaW9uX2lkIjozNTEwNTE1NX0.q38rBb-6fPrHHxxNacc_qI1p24BXLB7Ff0RhJdsGfO4';
-
-    const credential = new Credential();
-    await credential.init(cook);
-
-    const leetcode = new LeetCode(credential);
-    // const user = await leetcode.user('username');
-
-    console.log(await leetcode.submissions({ limit: 100, offset: 0 }));
-  };
 
   /* roomName 스트링 값 수정하지 말 것(※ 수정할 거면 전부 수정해야 함) */
   const roomName = `ROOMNAME${roomId}`;
@@ -109,9 +103,6 @@ function YjsCodeMirror() {
   //   console.log(key, value);
   // });
 
-  const editor = useRef(null);
-  const inputStdin = useRef(null);
-
   useEffect(() => {
     /* editor theme 설정 */
     let basicTheme = EditorView.theme({
@@ -154,6 +145,7 @@ function YjsCodeMirror() {
     /* view 중복 생성 방지 */
     return () => view?.destroy();
   }, [editorTheme]);
+
   /* 유저가 작성한 코드를 컴파일하기 위해 서버로 보냄 */
   const runCode = async () => {
     if (!inputStdin.current) return;
@@ -172,6 +164,7 @@ function YjsCodeMirror() {
       alert('코드 서버로 보내기 실패');
     }
   };
+
   /* 다크/라이트 모드 테마 토글 */
   function switchTheme(checked: boolean) {
     if (editorTheme === okaidia) {
@@ -181,25 +174,178 @@ function YjsCodeMirror() {
     }
   }
 
+  /* 문제 정보 가져오기 */
+  const fetchProbInfo = async () => {
+    if (leetProbDataRef.current === null) return;
+
+    /* 문제 정보 query */
+    const problemQuery = `
+    query ($titleSlug: String!) {
+      question(titleSlug: $titleSlug) {
+          questionId
+          questionFrontendId
+          title
+          titleSlug
+          content
+          difficulty
+          likes
+          dislikes
+          exampleTestcases
+          topicTags {
+              name
+              slug
+              translatedName
+          }
+          codeSnippets {
+              lang
+              langSlug
+              code
+          }
+          stats
+          metaData
+          enableRunCode
+          enableTestMode
+          enableDebugger
+      }
+    }
+    `;
+
+    const problemQueryVariable = {
+      //@ts-ignore
+      titleSlug: leetProbDataRef.current.value,
+    };
+
+    try {
+      const response = await axios.post(
+        'https://cors-anywhere.herokuapp.com/https://leetcode.com/graphql',
+        {
+          query: problemQuery,
+          variables: problemQueryVariable,
+        }
+      );
+
+      let probData = response.data;
+      console.log(probData.data);
+      setLeetProbData(probData.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  /* leetcode 유저 정보 가져오기 */
+  const fetchUserData = async () => {
+    if (leetUserNameRef.current === null) return;
+
+    //@ts-ignore
+    let leetUserName = leetUserNameRef.current.value;
+    console.log(leetUserName);
+
+    const userInfoQuery = `
+    query ($username: String!) {
+      matchedUser(username: $username) {
+          username
+          socialAccounts
+          githubUrl
+          profile {
+              realName
+  
+              ranking
+          }
+          submitStats {
+              acSubmissionNum {
+                  difficulty
+                  count
+              }
+              totalSubmissionNum {
+                  difficulty
+                  count
+                  # submissions
+              }
+          }
+          badges {
+              id
+              displayName
+              icon
+              creationDate
+          }
+      }
+      recentSubmissionList(username: $username, limit: 20) {
+          title
+          titleSlug
+          timestamp
+          statusDisplay
+          lang
+      }
+    }
+    `;
+
+    const userQueryVariable = {
+      //@ts-ignore
+      username: leetUserName,
+    };
+
+    try {
+      const response = await axios.post(
+        'https://cors-anywhere.herokuapp.com/https://leetcode.com/graphql',
+        {
+          query: userInfoQuery,
+          variables: userQueryVariable,
+        }
+      );
+
+      let userData = response.data;
+      console.log(userData.data);
+      setLeetUserData(userData.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <>
-      <div className="algo-input">
-        <Input placeholder="문제 번호 입력" />
-        <DownCircleOutlined
-          onClick={() => {
-            alert('문제 입력 완료!!');
-          }}
-        />
-        <div id="leetcode-info">
-          <input placeholder="leetcode/백준 아이디 입력하세요"> </input>
+      <div className="algo-info">
+        <div id="algo-user-input">
+          <input
+            ref={leetUserNameRef}
+            placeholder="leetcode나 백준 아이디 입력하세요"
+          />
+          <DownCircleOutlined onClick={fetchUserData} />
         </div>
-        <div id="problem-info" style={{ border: '5px solid black' }}>
-          <div>title : {userName}</div>
-          <div>difficulty : {roomId}</div>
+
+        <div className="algo-user-info">
+          <div>깃헙 주소 :{leetUserData?.matchedUser.githubUrl}</div>
+          <div>ranking : {leetUserData?.matchedUser.profile.ranking}</div>
+          <div>
+            총 맞춘 문제수 :
+            {leetUserData?.matchedUser.submitStats.acSubmissionNum[0].count}
+          </div>
+        </div>
+
+        <div className="algo-problem-input">
+          <input
+            ref={leetProbDataRef}
+            placeholder="leetcode title slug 입력!"
+          />
+          <DownCircleOutlined onClick={fetchProbInfo} />
+        </div>
+
+        <div id="algo-problem-info" style={{ border: '5px solid black' }}>
+          <div>
+            답안 제출하러 가기 : https://leetcode.com/problems/
+            {leetProbDataRef.current.value}/
+          </div>
+          <div>문제 title : {leetProbData?.question.title}</div>
+          <div>문제 번호 : {leetProbData?.question.questionId}</div>
+          <div>문제 정보 : {leetProbData?.question.content}</div>
+          <div>예제 : {leetProbData?.question.exampleTestcases}</div>
+          <div>difficulty : {leetProbData?.question.difficulty}</div>
+          <div>
+            code snippets : {leetProbData?.question.codeSnippets[3].code}
+          </div>
         </div>
       </div>
 
-      <div className="user-info">
+      <div className="room-user-info">
         <div>유저 이름 : {userName}</div>
         <div>룸 ID : {roomId}</div>
         <div>이 방에 있는 유저리스트 : </div>
