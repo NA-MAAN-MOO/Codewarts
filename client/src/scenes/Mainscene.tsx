@@ -7,6 +7,7 @@ import store from 'stores';
 import { GAME_STATUS } from 'utils/Constants';
 
 export default class MainScene extends Phaser.Scene {
+  // class 속성 명시는 constructor 이전에 명시하면 되는듯
   socket: Socket | undefined;
   x: any;
   y: any;
@@ -18,6 +19,7 @@ export default class MainScene extends Phaser.Scene {
   charKey!: string;
 
   constructor() {
+    // Scene의 key값은 MainScene
     super('MainScene');
     this.isKeyDisable = false;
   }
@@ -27,10 +29,11 @@ export default class MainScene extends Phaser.Scene {
     this.socket = io('http://localhost:8080');
     console.log(typeof this.socket);
 
-    this.x = null;
+    this.x = null; // 유저의 좌표값
     this.y = null;
-    this.charKey = '';
+    this.charKey = ''; // 이후 캐릭터 값이 들어간다
     this.socket.on('start', (payLoad: any) => {
+      // Server에서 보내주는 고유 값을 받는다.
       this.socketId = payLoad.socketId;
       this.charKey = payLoad.charKey;
     });
