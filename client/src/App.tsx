@@ -6,6 +6,7 @@ import type { RootState } from 'stores';
 import Game from 'pages/Game';
 import Start from 'pages/Start';
 import Editor from 'pages/Editor';
+import Voice from 'pages/Voice';
 import { openEditor, openGame } from 'stores/modeSlice';
 import './codeuk';
 
@@ -29,7 +30,7 @@ function App() {
     loadFlag || (
       <HoverDiv>
         {status === MAIN ? (
-          <Start></Start>
+          <Voice></Voice>
         ) : status === GAME ? (
           <Game></Game>
         ) : (

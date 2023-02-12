@@ -7,6 +7,7 @@ import mongoose from 'mongoose';
 import { Socket, Server } from 'socket.io'; // Load in socket.io
 import editorServer from './servers/editorServer';
 import basicRouter from './routes/basicRouter';
+import voiceServer from './servers/voiceServer';
 
 //환경변수 이용
 dotenv.config();
@@ -148,9 +149,13 @@ io.on('connection', (socket: Socket) => {
 
 //8080 서버 연결
 httpServer.listen(port, () => {
-  console.log(`Server running on ${port}`);
+  console.log(`Game Server running on ${port}`);
 });
 /* 에디터 서버 포트: 3001 */
 editorServer.listen(3001, () => {
-  console.log('Server listening on *:3001');
+  console.log('Editor Server listening on *:3001');
+});
+/* 보이스챗 서버 포트: 3001 */
+voiceServer.listen(5000, () => {
+  console.log('Voice Server listening on *:5000');
 });
