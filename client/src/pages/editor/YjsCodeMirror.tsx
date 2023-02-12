@@ -31,14 +31,32 @@ import { RootState } from 'stores';
 import { Switch, Space, Button, Input } from 'antd';
 import { DownCircleOutlined } from '@ant-design/icons';
 
+/* LeetCode API */
+import { LeetCode, Credential } from 'leetcode-query';
+
 function YjsCodeMirror() {
-  /* local state 디스트럭쳐링 */
   const { userName, roomId } = useSelector((state: RootState) => state.editor);
   let [compileOutput, setCompileOutput] = useState('');
   let [cpuTime, setCpuTime] = useState('');
   let [memory, setMemory] = useState('');
   let [editorTheme, setEditorTheme] = useState(okaidia);
+
+  /* for UI */
   const { TextArea } = Input;
+
+  /* LeetCode user info */
+  const parsing = async () => {
+    let cook =
+      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfYXV0aF91c2VyX2lkIjoiODc1NzIwNiIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImFsbGF1dGguYWNjb3VudC5hdXRoX2JhY2tlbmRzLkF1dGhlbnRpY2F0aW9uQmFja2VuZCIsIl9hdXRoX3VzZXJfaGFzaCI6IjY4MmEyMDhjMmZkY2NmM2ZmYzUxNDNiZDMwNmJhMjgyOTA4NWIzY2UiLCJpZCI6ODc1NzIwNiwiZW1haWwiOiIxMDBtZ21sQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiZ2NvdW50ODUiLCJ1c2VyX3NsdWciOiJnY291bnQ4NSIsImF2YXRhciI6Imh0dHBzOi8vYXNzZXRzLmxlZXRjb2RlLmNvbS91c2Vycy9hdmF0YXJzL2F2YXRhcl8xNjc2MTg2MDIyLnBuZyIsInJlZnJlc2hlZF9hdCI6MTY3NjE4NjI5NSwiaXAiOiIxNzUuMTI2LjEwNy4xOCIsImlkZW50aXR5IjoiMmNlMWZkNjc0ODVjZmU5MmFkZjcwMGQ3MTZlOWYyOWYiLCJzZXNzaW9uX2lkIjozNTEwNTE1NX0.q38rBb-6fPrHHxxNacc_qI1p24BXLB7Ff0RhJdsGfO4';
+
+    const credential = new Credential();
+    await credential.init(cook);
+
+    const leetcode = new LeetCode(credential);
+    // const user = await leetcode.user('username');
+
+    console.log(await leetcode.submissions({ limit: 100, offset: 0 }));
+  };
 
   /* roomName 스트링 값 수정하지 말 것(※ 수정할 거면 전부 수정해야 함) */
   const roomName = `ROOMNAME${roomId}`;
@@ -162,7 +180,7 @@ function YjsCodeMirror() {
       setEditorTheme(okaidia);
     }
   }
-  // todo: 컴파일러에 useRef 넣어주기
+
   return (
     <>
       <div className="algo-input">
@@ -172,8 +190,12 @@ function YjsCodeMirror() {
             alert('문제 입력 완료!!');
           }}
         />
-        <div style={{ border: '5px solid black' }}>
-          문제 정보가 나타날 곳입니다
+        <div id="leetcode-info">
+          <input placeholder="leetcode/백준 아이디 입력하세요"> </input>
+        </div>
+        <div id="problem-info" style={{ border: '5px solid black' }}>
+          <div>title : {userName}</div>
+          <div>difficulty : {roomId}</div>
         </div>
       </div>
 
