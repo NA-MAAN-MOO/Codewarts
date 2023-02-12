@@ -1,6 +1,6 @@
 /* react */
 import { useRef, useEffect, useState } from 'react';
-
+//dkjasklfjlskjdf?
 /* lib */
 import * as random from 'lib0/random';
 import { useSelector } from 'react-redux';
@@ -84,7 +84,7 @@ function YjsCodeMirror() {
   /* provider의 정보 출력 */
   // console.log(provider.awareness.getLocalState());
   // console.log('클라이언트ID ' + provider.awareness.clientID);
-  console.log(provider.awareness.states.values().next().value['name']); // 모든 client의 state
+  // console.log(provider.awareness.states.values().next().value['name']); // 모든 client의 state
   // console.log(provider.awareness.getStates().get(2127960527).user.name); // get(clientID)
   // provider.awareness.getStates().forEach((key, value) => {
   //   console.log(key, value);
@@ -135,11 +135,9 @@ function YjsCodeMirror() {
     /* view 중복 생성 방지 */
     return () => view?.destroy();
   }, [editorTheme]);
-
   /* 유저가 작성한 코드를 컴파일하기 위해 서버로 보냄 */
   const runCode = async () => {
     if (!inputStdin.current) return;
-
     try {
       const { data } = await axios.post(`http://localhost:3001/run-code`, {
         codeToRun: ytext.toString(),
@@ -155,7 +153,6 @@ function YjsCodeMirror() {
       alert('코드 서버로 보내기 실패');
     }
   };
-
   /* 다크/라이트 모드 테마 토글 */
   function switchTheme(checked: boolean) {
     if (editorTheme === okaidia) {
@@ -164,7 +161,6 @@ function YjsCodeMirror() {
       setEditorTheme(okaidia);
     }
   }
-
   // todo: 컴파일러에 useRef 넣어주기
   return (
     <>
