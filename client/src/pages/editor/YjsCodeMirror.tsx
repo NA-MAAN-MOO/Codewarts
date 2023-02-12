@@ -102,7 +102,6 @@ function YjsCodeMirror() {
       // height: '50%',
       // },
       '.cm-content': {
-        caretColor: '#0e9',
         fontFamily: 'Cascadia Code',
         fontSize: 'large',
       },
@@ -148,7 +147,6 @@ function YjsCodeMirror() {
         stdin: inputStdin.current.value,
       });
       console.log(data); // 전체 reponse body (output, statusCode, memory, cpuTime)
-      // console.log(data.output);
       setCompileOutput(data.output);
       setMemory(data.memory);
       setCpuTime(data.cpuTime);
@@ -173,7 +171,6 @@ function YjsCodeMirror() {
       <div>유저 이름 : {userName}</div>
       <div>룸 ID : {roomId}</div>
       <div>이 방에 있는 유저리스트 : </div>
-
       <Space direction="vertical">
         <Switch
           checkedChildren="Dark"
@@ -184,7 +181,6 @@ function YjsCodeMirror() {
           }}
         />
       </Space>
-
       <div id="editor" ref={editor} style={{ minHeight: '50%' }} />
       <div id="compiler">
         <div>
