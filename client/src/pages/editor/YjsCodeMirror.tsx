@@ -1,6 +1,6 @@
 /* react */
 import { useRef, useEffect, useState } from 'react';
-//dkjasklfjlskjdf?
+
 /* lib */
 import * as random from 'lib0/random';
 import { useSelector } from 'react-redux';
@@ -28,8 +28,9 @@ import { okaidia } from '@uiw/codemirror-theme-okaidia';
 import { RootState } from 'stores';
 
 /* UI */
-import { Switch, Space, Button, Input } from 'antd';
+import { Switch, Space, Button, Input, Radio } from 'antd';
 import { DownCircleOutlined } from '@ant-design/icons';
+import type { RadioChangeEvent } from 'antd';
 
 function YjsCodeMirror() {
   /* states */
@@ -345,76 +346,115 @@ function YjsCodeMirror() {
     }
   };
 
+  /* 백준, 리트코드 선택 */
+  const [algoSelect, setAlgoSelect] = useState(1);
+  const platformChange = (e: RadioChangeEvent) => {
+    setAlgoSelect(e.target.value);
+  };
+
   return (
     <>
-      <div className="algo-info">
-        <div id="algo-user-input">
-          <input ref={leetUserNameRef} placeholder="leetcode 아이디 입력" />
-          <DownCircleOutlined onClick={fetchLeetUserData} />
-          <input ref={bojUserNameRef} placeholder="백준 아이디 입력" />
-          <DownCircleOutlined onClick={fetchBojUserData} />
-        </div>
-
-        <div className="algo-user-info">
-          <div className="leet-user-info">
-            <div>깃헙 주소 :{leetUserData?.matchedUser?.githubUrl}</div>
-            <div>ranking : {leetUserData?.matchedUser?.profile?.ranking}</div>
-            <div>
-              leetcode 총 맞춘 문제수 :
-              {
-                leetUserData?.matchedUser?.submitStats?.acSubmissionNum?.[0]
-                  ?.count
-              }
-            </div>
-          </div>
-
-          <div className="boj-user-info">
-            <div>백준 티어 : {bojUserData?.items[0].tier}</div>
-            <div>백준 푼 문제 수 : {bojUserData?.items[0].solvedCount}</div>
-          </div>
-        </div>
-
-        <div className="algo-problem-input">
-          <input
-            ref={leetProbDataRef}
-            placeholder="leetcode title slug 입력!"
-          />
-          <DownCircleOutlined onClick={fetchLeetProbInfo} />
-          <input ref={bojProbDataRef} placeholder="백준 문제 번호 입력!" />
-          <DownCircleOutlined onClick={fetchBojProbInfo} />
-        </div>
-
-        <div id="algo-problem-info" style={{ border: '5px solid black' }}>
-          <div className="leet-prob-info">
-            <div>
-              답안 제출하러 가기 : https://leetcode.com/problems/
-              {leetProbData?.question.titleSlug}
-            </div>
-            <div>문제 title : {leetProbData?.question.title}</div>
-            <div>문제 번호 : {leetProbData?.question.questionId}</div>
-            <div>문제 정보 : {leetProbData?.question.content}</div>
-            <div>예제 : {leetProbData?.question.exampleTestcases}</div>
-            <div>difficulty : {leetProbData?.question.difficulty}</div>
-            <div>
-              code snippets : {leetProbData?.question.codeSnippets[3].code}
-            </div>
-          </div>
-
-          <div className="boj-prob-info">
-            <div>
-              답안 제출하러 가기 : https://acmicpc.net/problem/
-              {bojProbData?.problemId}
-            </div>
-            <div>문제 title : {bojProbData?.titleKo}</div>
-            <div>difficulty : {bojProbData?.level}</div>
-          </div>
-        </div>
-      </div>
-
       <div className="room-user-info">
         <div>유저 이름 : {userName}</div>
         <div>룸 ID : {roomId}</div>
-        <div>이 방에 있는 유저리스트 : </div>
+        {/* <div>이 방에 있는 유저리스트 : </div> */}
+      </div>
+
+      <div className="algo-info">
+        <div className="algo-user-input">
+          <Radio.Group onChange={platformChange} value={algoSelect}>
+            <Radio value={1}>LeetCode</Radio>
+            <Radio value={2}>백준</Radio>
+          </Radio.Group>
+
+          {algoSelect === 1 ? (
+            <div className="leet-user-input">
+              <input ref={leetUserNameRef} placeholder="leetcode 아이디 입력" />
+              <DownCircleOutlined onClick={fetchLeetUserData} />
+            </div>
+          ) : (
+            <div className="boj-user-input">
+              <input ref={bojUserNameRef} placeholder="백준 아이디 입력" />
+              <DownCircleOutlined onClick={fetchBojUserData} />
+            </div>
+          )}
+        </div>
+
+        <div className="algo-user-info">
+          {algoSelect === 1 ? (
+            <div className="leet-user-info">
+              <div>깃헙 주소 :{leetUserData?.matchedUser?.githubUrl}</div>
+              <div>ranking : {leetUserData?.matchedUser?.profile?.ranking}</div>
+              <div>
+                leetcode 총 맞춘 문제수 :
+                {
+                  leetUserData?.matchedUser?.submitStats?.acSubmissionNum?.[0]
+                    ?.count
+                }
+              </div>
+            </div>
+          ) : (
+            <div className="boj-user-info">
+              <div>백준 티어 : {bojUserData?.items[0].tier}</div>
+              <div>백준 푼 문제 수 : {bojUserData?.items[0].solvedCount}</div>
+            </div>
+          )}
+        </div>
+
+        <div className="algo-problem-input">
+          {algoSelect === 1 ? (
+            <div className="leet-problem-input">
+              <input
+                ref={leetProbDataRef}
+                placeholder="LeetCode 문제의 title slug를 입력!"
+              />
+              <DownCircleOutlined onClick={fetchLeetProbInfo} />
+            </div>
+          ) : (
+            <div className="boj-problem-input">
+              <input ref={bojProbDataRef} placeholder="백준 문제 번호 입력!" />
+              <DownCircleOutlined onClick={fetchBojProbInfo} />
+            </div>
+          )}
+        </div>
+
+        <div
+          className="algo-problem-info"
+          style={{ border: '5px solid black' }}
+        >
+          {algoSelect === 1 ? (
+            <div className="leet-prob-info">
+              <a
+                href={`https://leetcode.com/problems/${leetProbData?.question.titleSlug}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                LeetCode에 답안 제출하러 가기
+              </a>
+
+              <div>문제 title : {leetProbData?.question.title}</div>
+              <div>문제 번호 : {leetProbData?.question.questionId}</div>
+              <div>문제 정보 : {leetProbData?.question.content}</div>
+              <div>예제 : {leetProbData?.question.exampleTestcases}</div>
+              <div>difficulty : {leetProbData?.question.difficulty}</div>
+              <div>
+                code snippets : {leetProbData?.question.codeSnippets[3].code}
+              </div>
+            </div>
+          ) : (
+            <div className="boj-prob-info">
+              <a
+                href={`https://acmicpc.net/problem/${bojProbData?.problemId}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                백준에 답안 제출하러 가기
+              </a>
+              <div>문제 title : {bojProbData?.titleKo}</div>
+              <div>difficulty : {bojProbData?.level}</div>
+            </div>
+          )}
+        </div>
       </div>
 
       <Space direction="vertical">
@@ -428,17 +468,22 @@ function YjsCodeMirror() {
         />
       </Space>
 
-      <div id="editor" ref={editor} style={{ minHeight: '50%' }} />
+      <div className="editor" ref={editor} style={{ minHeight: '50%' }} />
 
-      <div id="compiler">
+      <div className="compiler">
         <Button onClick={runCode} type="primary">
           코드 실행
         </Button>
-        <TextArea id="stdin" rows={5} placeholder="Input" ref={inputStdin} />
+        <TextArea
+          className="stdin"
+          rows={5}
+          placeholder="Input"
+          ref={inputStdin}
+        />
         <div className="compiled-result">
-          <div id="compiled-output">OUTPUT : {compileOutput}</div>
-          <div id="compiled-cputime">CPU TIME : {cpuTime}</div>
-          <div id="compiled-memory">MEMORY : {memory}</div>
+          <div className="compiled-output">OUTPUT : {compileOutput}</div>
+          <div className="compiled-cputime">CPU TIME : {cpuTime}</div>
+          <div className="compiled-memory">MEMORY : {memory}</div>
         </div>
       </div>
     </>
