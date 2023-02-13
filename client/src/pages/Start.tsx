@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { openGame } from "../stores/modeSlice";
-import styled from "styled-components";
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { openLobby } from '../stores/modeSlice';
+import styled from 'styled-components';
 
 const Start = () => {
   const dispatch = useDispatch();
   return (
     <StartDiv>
       <LogoDiv>코득코득</LogoDiv>
-      <LoginBtn type="button" onClick={() => dispatch(openGame())}>
+      <LoginBtn type="button" onClick={() => dispatch(openLobby())}>
         로그인
       </LoginBtn>
     </StartDiv>
