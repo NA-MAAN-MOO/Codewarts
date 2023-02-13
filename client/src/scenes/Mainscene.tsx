@@ -80,7 +80,6 @@ export default class MainScene extends Phaser.Scene {
           scene: this,
           resource: objs,
           polygon: polygons[objs.name],
-          index: i,
         });
       });
     });
@@ -100,6 +99,7 @@ export default class MainScene extends Phaser.Scene {
       down: Phaser.Input.Keyboard.KeyCodes.S,
       left: Phaser.Input.Keyboard.KeyCodes.A,
       right: Phaser.Input.Keyboard.KeyCodes.D,
+      open: Phaser.Input.Keyboard.KeyCodes.E,
     });
     let camera = this.cameras.main;
     camera.zoom = 0.8;
