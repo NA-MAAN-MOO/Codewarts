@@ -4,3 +4,8 @@ export const GAME_STATUS = {
   GAME: 'GAME',
   EDITOR: 'EDITOR',
 };
+
+export const ROOM_TYPE = {
+  GAME: 'GAME',
+  EDITOR: 'EDITOR',
+};

@@ -11,6 +11,6 @@ app.use(json());
 
 const server = http.createServer(app);
 
-app.use('/', voiceRouter);
+app.use('/api', voiceRouter);
 
 export default server;

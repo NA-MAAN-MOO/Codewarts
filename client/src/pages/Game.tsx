@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { openMain, openEditor, openGame, openLobby } from 'stores/modeSlice';
 import game from 'codeuk';
 import Voice from 'pages/Voice';
+import { ROOM_TYPE } from 'utils/Constants';
 
 const Game = () => {
   const dispatch = useDispatch();
@@ -22,7 +23,7 @@ const Game = () => {
   };
   return (
     <BackgroundDiv>
-      <Voice />
+      <Voice roomType={ROOM_TYPE.GAME} />
       <BtnDiv>
         <button type="button" onClick={handleEditorClick}>
           에디터 키기
