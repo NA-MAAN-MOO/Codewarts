@@ -40,12 +40,16 @@ function YjsCodeMirror() {
   let [editorTheme, setEditorTheme] = useState(okaidia);
   let [leetUserData, setLeetUserData] = useState();
   let [leetProbData, setLeetProbData] = useState();
+  let [bojUserData, setBojUserData] = useState();
+  let [bojProbData, setBojProbData] = useState();
 
   /* ref */
   const editor = useRef(null);
   const inputStdin = useRef(null);
   const leetUserNameRef = useRef(null);
   const leetProbDataRef = useRef(null);
+  const bojUserNameRef = useRef(null);
+  const bojProbDataRef = useRef(null);
 
   /* for UI */
   const { TextArea } = Input;
@@ -172,8 +176,8 @@ function YjsCodeMirror() {
     }
   }
 
-  /* 문제 정보 가져오기 */
-  const fetchProbInfo = async () => {
+  /* leetcode 문제 정보 가져오기 */
+  const fetchLeetProbInfo = async () => {
     if (leetProbDataRef.current === null) return;
 
     // 문제 정보 쿼리
@@ -230,8 +234,29 @@ function YjsCodeMirror() {
     }
   };
 
+  /* 백준 문제 정보 가져오기 */
+  const fetchBojProbInfo = async () => {
+    if (bojProbDataRef.current === null) return;
+
+    //@ts-ignore
+    let probId = bojProbDataRef.current.value;
+    console.log(probId);
+
+    try {
+      const response = await axios.get(
+        `https://solved.ac/api/v3/problem/show?problemId=${probId}`
+      );
+
+      let probData = response.data;
+      console.log(probData);
+      setBojProbData(probData);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   /* leetcode 유저 정보 가져오기 */
-  const fetchUserData = async () => {
+  const fetchLeetUserData = async () => {
     if (leetUserNameRef.current === null) return;
 
     //@ts-ignore
@@ -299,26 +324,53 @@ function YjsCodeMirror() {
     }
   };
 
+  /* 백준 유저 정보 가져오기 */
+  const fetchBojUserData = async () => {
+    if (bojUserNameRef.current === null) return;
+
+    //@ts-ignore
+    let bojUserName = bojUserNameRef.current.value;
+    console.log(bojUserName);
+
+    try {
+      const response = await axios.get(
+        `https://solved.ac/api/v3/search/user?query=${bojUserName}`
+      );
+
+      let userData = response.data;
+      console.log(userData);
+      setBojUserData(userData);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <>
       <div className="algo-info">
         <div id="algo-user-input">
-          <input
-            ref={leetUserNameRef}
-            placeholder="leetcode나 백준 아이디 입력하세요"
-          />
-          <DownCircleOutlined onClick={fetchUserData} />
+          <input ref={leetUserNameRef} placeholder="leetcode 아이디 입력" />
+          <DownCircleOutlined onClick={fetchLeetUserData} />
+          <input ref={bojUserNameRef} placeholder="백준 아이디 입력" />
+          <DownCircleOutlined onClick={fetchBojUserData} />
         </div>
 
         <div className="algo-user-info">
-          <div>깃헙 주소 :{leetUserData?.matchedUser?.githubUrl}</div>
-          <div>ranking : {leetUserData?.matchedUser?.profile?.ranking}</div>
-          <div>
-            총 맞춘 문제수 :
-            {
-              leetUserData?.matchedUser?.submitStats?.acSubmissionNum?.[0]
-                ?.count
-            }
+          <div className="leet-user-info">
+            <div>깃헙 주소 :{leetUserData?.matchedUser?.githubUrl}</div>
+            <div>ranking : {leetUserData?.matchedUser?.profile?.ranking}</div>
+            <div>
+              leetcode 총 맞춘 문제수 :
+              {
+                leetUserData?.matchedUser?.submitStats?.acSubmissionNum?.[0]
+                  ?.count
+              }
+            </div>
+          </div>
+
+          <div className="boj-user-info">
+            <div>백준 티어 : {bojUserData?.items[0].tier}</div>
+            <div>백준 푼 문제 수 : {bojUserData?.items[0].solvedCount}</div>
           </div>
         </div>
 
@@ -327,21 +379,34 @@ function YjsCodeMirror() {
             ref={leetProbDataRef}
             placeholder="leetcode title slug 입력!"
           />
-          <DownCircleOutlined onClick={fetchProbInfo} />
+          <DownCircleOutlined onClick={fetchLeetProbInfo} />
+          <input ref={bojProbDataRef} placeholder="백준 문제 번호 입력!" />
+          <DownCircleOutlined onClick={fetchBojProbInfo} />
         </div>
 
         <div id="algo-problem-info" style={{ border: '5px solid black' }}>
-          <div>
-            답안 제출하러 가기 : https://leetcode.com/problems/
-            {leetProbData?.question.titleSlug}/
+          <div className="leet-prob-info">
+            <div>
+              답안 제출하러 가기 : https://leetcode.com/problems/
+              {leetProbData?.question.titleSlug}
+            </div>
+            <div>문제 title : {leetProbData?.question.title}</div>
+            <div>문제 번호 : {leetProbData?.question.questionId}</div>
+            <div>문제 정보 : {leetProbData?.question.content}</div>
+            <div>예제 : {leetProbData?.question.exampleTestcases}</div>
+            <div>difficulty : {leetProbData?.question.difficulty}</div>
+            <div>
+              code snippets : {leetProbData?.question.codeSnippets[3].code}
+            </div>
           </div>
-          <div>문제 title : {leetProbData?.question.title}</div>
-          <div>문제 번호 : {leetProbData?.question.questionId}</div>
-          <div>문제 정보 : {leetProbData?.question.content}</div>
-          <div>예제 : {leetProbData?.question.exampleTestcases}</div>
-          <div>difficulty : {leetProbData?.question.difficulty}</div>
-          <div>
-            code snippets : {leetProbData?.question.codeSnippets[3].code}
+
+          <div className="boj-prob-info">
+            <div>
+              답안 제출하러 가기 : https://acmicpc.net/problem/
+              {bojProbData?.problemId}
+            </div>
+            <div>문제 title : {bojProbData?.titleKo}</div>
+            <div>difficulty : {bojProbData?.level}</div>
           </div>
         </div>
       </div>
