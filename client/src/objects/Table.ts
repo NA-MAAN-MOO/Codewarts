@@ -10,41 +10,85 @@ const tableInfoModel = {
 };
 
 export default class Table {
+  scene: Phaser.Scene;
   tableObject: Resource;
   tableId: number;
   usercount: number;
   //   tableInfo: tableStateType;
   tableInfo: any = new Map();
   buttonToEditor: any;
+  editorListDialog!: Phaser.GameObjects.Container;
+  editorBtnList!: any;
 
-  constructor(tableObject: Resource, tableId: number) {
+  constructor(scene: Phaser.Scene, tableObject: Resource, tableId: number) {
     this.usercount = 0;
     for (let i = 0; i < 4; i++) {
       this.tableInfo.set(i, tableInfoModel);
     }
     this.tableObject = tableObject;
     this.tableId = tableId;
+    this.scene = scene;
+    this.editorBtnList = [];
+  }
+
+  openEditorList() {
+    this.editorListDialog = this.scene.add.container().setDepth(20);
+    this.editorListDialog.add(
+      this.scene.add
+        .graphics()
+        .fillStyle(0xeeeeee, 1)
+        .fillRoundedRect(
+          this.tableObject.x - 100,
+          this.tableObject.y - 150,
+          200,
+          220
+        )
+    );
+
+    for (let i = 0; i < 4; i++) {
+      let str: string = ``;
+      if (this.tableInfo.get(i).username) {
+        str = `${this.tableInfo[i].username} IDE 열기`;
+      } else {
+        str = `${i + 1}번 방 들어가기`;
+      }
+      let editorButton = this.scene.add
+        .text(0, 0, str)
+        .setStyle({ fontSize: '20px', color: '#ff6f00' });
+      this.editorBtnList.push(editorButton);
+      this.editorListDialog.add(
+        editorButton.setPosition(
+          this.tableObject.x - 80,
+          this.tableObject.y - 120 + 30 * i
+        )
+      );
+    }
+    let backButton = this.scene.add
+      .text(0, 0, '돌아가기')
+      .setStyle({ fontSize: '20px', color: 'black', align: 'center' })
+      .setPosition(this.tableObject.x - 80, this.tableObject.y + 30);
+    this.editorBtnList.push(backButton);
+    this.editorListDialog.add(backButton);
+  }
+
+  clearEditorList() {
+    this.editorBtnList = [];
+    this.editorListDialog.removeAll(true);
   }
 
   /* Add current user to a table (Open my Editor room) */
-  addCurrentUser(username: string, roomId: any) {
+  addCurrentUser(editorIdx: number, username: string, roomId: any) {
     if (this.usercount >= 4) {
       return;
     }
-    for (let i = 0; i < 4; i++) {
-      // Add user if there's no user using laptop
-      //@ts-ignore
-      if (!this.tableState[i].username) {
-        this.tableInfo[i] = {
-          ...this.tableInfo[i],
-          username: username,
-          roomId: roomId,
-        };
-        this.usercount++;
-        // 맥북 texture 바꾸기
-        // this.updateLaptopImage(i);
-        break;
-      }
+    //@ts-ignore
+    if (!this.tableInfo.get(editorIdx).username) {
+      let targetPlace = this.tableInfo.get(editorIdx);
+      targetPlace[username] = username;
+      targetPlace[roomId] = roomId;
+      this.usercount++;
+      // 맥북 texture 바꾸기
+      // this.updateLaptopImage(i);
     }
   }
 
@@ -55,9 +99,10 @@ export default class Table {
     }
     for (let i = 0; i < 4; i++) {
       //@ts-ignore
-      if (this.tableState[i].username === username) {
+      if (this.tableInfo.get(i).username === username) {
         //@ts-ignore
-        this.tableState[i].username = undefined;
+        this.tableInfo.get(i).username = undefined;
+        // 에디터에 썼던 내용은 저장해두기?
       }
       this.usercount--;
     }
@@ -71,13 +116,13 @@ export default class Table {
 
   registerLaptops(laptops: any) {
     for (let i = 0; i < 4; i++) {
-      this.tableInfo[i].laptop = laptops[i];
+      this.tableInfo.get(i)['laptop'] = laptops[i];
     }
   }
 
   registerChairs(chairs: any) {
     for (let i = 0; i < 4; i++) {
-      this.tableInfo[i].chair = chairs[i];
+      this.tableInfo.get(i)['chair'] = chairs[i];
     }
   }
 
@@ -91,9 +136,9 @@ export default class Table {
     }
 
     if (!this.tableInfo[index].username) {
-      this.tableInfo[index].laptop.setTexture(`${texture}open.png`);
+      this.tableInfo.get(index)['laptop'].setTexture(`${texture}open.png`);
     } else {
-      this.tableInfo[index].laptop.setTexture(`${texture}closed.png`);
+      this.tableInfo.get(index)['laptop'].setTexture(`${texture}closed.png`);
     }
   }
 

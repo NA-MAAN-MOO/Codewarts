@@ -38,6 +38,10 @@ export default class MainScene extends Phaser.Scene {
     this.load.tilemapTiledJSON('room_map_tile', 'assets/room/room_map.json');
   }
   create() {
+    // this.game.events.addListener(Phaser.Core.Events.HIDDEN, () => {
+    //   this.player.setStatic();
+    //   console.log('hidden');
+    // });
     // 생성해야 하는 것, 게임 오브젝트 등
     /* Setting room map ground */
     this.map = this.make.tilemap({ key: 'room_map_tile' }); //Json file key (1st parameter in tilemapTiledJSON)
@@ -181,16 +185,24 @@ export default class MainScene extends Phaser.Scene {
       this.isKeyDisable = false;
     }
     if (this.watchTable) {
-      if (Phaser.Input.Keyboard.JustDown(this.idxDown) && this.editorIdx > 0) {
-        this.editorIdx -= 1;
-      }
-      if (Phaser.Input.Keyboard.JustDown(this.idxUp) && this.editorIdx < 4) {
+      if (Phaser.Input.Keyboard.JustDown(this.idxDown) && this.editorIdx < 4) {
         this.editorIdx += 1;
+      }
+      if (Phaser.Input.Keyboard.JustDown(this.idxUp) && this.editorIdx > 0) {
+        this.editorIdx -= 1;
       }
       if (Phaser.Input.Keyboard.JustDown(this.idxEnter)) {
         console.log(this.editorIdx);
         switch (this.editorIdx) {
           case 0:
+            break;
+          case 1:
+            break;
+          case 2:
+            break;
+          case 3:
+            break;
+          case 4:
             this.input.keyboard.disableGlobalCapture();
             this.player.inputKeys = this.input.keyboard.addKeys({
               up: Phaser.Input.Keyboard.KeyCodes.UP,
@@ -200,51 +212,61 @@ export default class MainScene extends Phaser.Scene {
               open: Phaser.Input.Keyboard.KeyCodes.E,
             });
             this.watchTable = false;
-            break;
-          case 1:
-            break;
-          case 2:
-            break;
-          case 3:
-            break;
-          case 4:
+            this.tableMap
+              .get(this.player.touching[0].body.id)
+              ?.clearEditorList();
             break;
         }
       }
+      // 돌아가기 눌러서 table의 editorList 없어졌을 때 버그 안 생기도록 추가한 라인
+      if (!this.watchTable) return;
 
       for (let i = 0; i < 5; i++) {
         if (i === this.editorIdx) {
-          this.player.touching[0].macbookList[i].setStyle({
-            backgroundColor: 'white',
-          });
+          this.tableMap
+            .get(this.player.touching[0].body.id)
+            ?.editorBtnList[i].setStyle({
+              backgroundColor: '#ff6f00',
+              color: 'white',
+            });
         } else {
-          this.player.touching[0].macbookList[i].setStyle({
-            backgroundColor: 'transparent',
-          });
+          this.tableMap
+            .get(this.player.touching[0].body.id)
+            ?.editorBtnList[i].setStyle({
+              backgroundColor: 'transparent',
+              color: '#ff6f00',
+            });
         }
       }
+
       return;
     }
+    // 키보드 E키를 눌렀을 때
     if (Phaser.Input.Keyboard.JustDown(this.player.inputKeys.open)) {
       console.log('하이');
 
       if (this.player.touching.length !== 0) {
-        this.editorIdx = 4;
-        console.log(this.player.touching[0]);
+        this.editorIdx = 0;
+        console.log(this.player.touching[0].body.id);
         this.watchTable = true;
-        this.player.touching[0].macbookList.forEach((mac: any) => {
-          mac.setVisible(true);
-          this.input.keyboard.disableGlobalCapture();
-          this.idxDown = this.input.keyboard.addKey(
-            Phaser.Input.Keyboard.KeyCodes.DOWN
-          );
-          this.idxUp = this.input.keyboard.addKey(
-            Phaser.Input.Keyboard.KeyCodes.UP
-          );
-          this.idxEnter = this.input.keyboard.addKey(
-            Phaser.Input.Keyboard.KeyCodes.E
-          );
-        });
+
+        let tableId = this.player.touching[0].body.id;
+        let tableInstance = this.tableMap.get(tableId);
+        tableInstance?.openEditorList();
+
+        // this.player.touching[0].macbookList.forEach((mac: any) => {
+        //   mac.setVisible(true);
+        this.input.keyboard.disableGlobalCapture();
+        this.idxDown = this.input.keyboard.addKey(
+          Phaser.Input.Keyboard.KeyCodes.DOWN
+        );
+        this.idxUp = this.input.keyboard.addKey(
+          Phaser.Input.Keyboard.KeyCodes.UP
+        );
+        this.idxEnter = this.input.keyboard.addKey(
+          Phaser.Input.Keyboard.KeyCodes.E
+        );
+        // });
       }
     }
     this.player.update();

@@ -55,7 +55,10 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
         frictionAir: 0.35,
       });
 
-      scene.tableMap.set(compoundBody.id, new Table(this, compoundBody.id));
+      scene.tableMap.set(
+        compoundBody.id,
+        new Table(this.mainScene, this, compoundBody.id)
+      );
       console.log(scene.tableMap);
       // console.log(compoundBody.id);
       this.CreateCollisions(tableCollider);
