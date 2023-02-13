@@ -6,15 +6,18 @@ import Table from './Table';
 export default class Resource extends Phaser.Physics.Matter.Sprite {
   tableSensor!: any;
   buttonEditor!: any;
+  mainScene: Phaser.Scene;
 
   constructor(data: any) {
-    let { scene, resource, polygon, index } = data;
+    let { scene, resource, polygon } = data;
     super(
       scene.matter.world,
       resource.x + resource.width / 2,
       resource.y - resource.height / 2,
       resource.name
     );
+
+    this.mainScene = scene;
 
     scene.add.existing(this);
     // let yOrigin = resource.properties.find(
@@ -23,8 +26,8 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
 
     // this.y = this.y + this.height * (yOrigin - 0.5); // #1 오브젝트 collider를 원형으로 적용할 시 사용
     // const { Body, Bodies } = Phaser.Physics.Matter.Matter;
-    const Body = this.scene.matter.body;
-    const Bodies = this.scene.matter.bodies;
+    const Body = scene.matter.body;
+    const Bodies = scene.matter.bodies;
 
     let verticeCollider = Bodies.fromVertices(this.x, this.y, polygon);
 
@@ -50,7 +53,7 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
         frictionAir: 0.35,
       });
 
-      scene.tableMap.set(index, new Table(this, compoundBody.id));
+      scene.tableMap.set(compoundBody.id, new Table(this, compoundBody.id));
       console.log(scene.tableMap);
       // console.log(compoundBody.id);
       this.CreateCollisions(tableCollider);
@@ -156,7 +159,14 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
           // this.buttonEditor.setOrigin(0.5, 0.8);
           this.buttonEditor.setInteractive(); // 이거 해줘야 function 들어감!!!!! 3시간 버린듯;
           // this.scene.add.existing(this.buttonEditor);
-          this.buttonEditor.on('pointerdown', () => console.log('ok'));
+
+          // TODO: E누르면 한 번 overlap된 모든 table이 찍히는 현상 해결하기
+          // 딱 하나만 볼 수 있게하기
+          const table = this.mainScene.tableMap.get(this.body.id);
+          this.mainScene.input.keyboard.on('keydown-E', () =>
+            console.log(table.tableId)
+          );
+
           // this.buttonEditor.setDepth(6000);
 
           //TODO: 여기에서 사용자가 키보드 누르면 상호작용 하도록 만듦
