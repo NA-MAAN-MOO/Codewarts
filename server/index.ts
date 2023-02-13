@@ -43,6 +43,7 @@ const io = new Server(httpServer, {
 app.use('/', basicRouter);
 
 let players: any[] = []; // 모든 '접속 중' 유저들을 저장하는 리스트
+let tables: any[] = []; // 모든 '사용 중' 테이블 데이터를 저장하는 리스트
 
 io.on('connection', (socket: Socket) => {
   // socket이 연결됩니다~ 이 안에서 서버는 연결된 클라이언트와 소통할 준비가 됨
@@ -62,7 +63,11 @@ io.on('connection', (socket: Socket) => {
   };
 
   // Send back the payload to the client and set its initial position
-  socket.emit('start', { socketID: socket.id, charKey: charKey }); // 연결된 유저에게 고유 데이터를 전달한다.
+  socket.emit('start', {
+    socketID: socket.id,
+    charKey: charKey,
+    userName: userName,
+  }); // 연결된 유저에게 고유 데이터를 전달한다.
 
   // Send back the payload to the client and set its initial position
   socket.on('loadNewPlayer', (payLoad) => {
@@ -138,11 +143,44 @@ io.on('connection', (socket: Socket) => {
   });
 
   socket.on('resumeCharacter', () => {
+    console.log('이거 찍히면 안되는데...');
     // '내'가 다시 탭을 띄우면 캐릭터가 활성화된다.
     playerInfo.state = 'resume';
     players.forEach((player) => {
       player.socket.emit('resumeCharacter', socket.id);
     });
+  });
+
+  socket.on('addEditor', (payLoad) => {
+    console.log('addEditor');
+    // 누군가 editor에 들어가면 해당 table ID값과 자리(인덱스)값을 업데이트 한다.
+    tables.push([payLoad.id, payLoad.idx, playerInfo.userName]);
+    let payLoad2 = {
+      id: payLoad.id,
+      idx: payLoad.idx,
+      userName: playerInfo.userName,
+      // socketId: playerInfo.socketId,
+    };
+    socket.broadcast.emit('updateEditor', payLoad2);
+  });
+
+  socket.on('currentEditors', () => {
+    console.log('currentEditors');
+    // 이미 사용중인 테이블 데이터를 업데이트한다.
+    tables.forEach((table: any) => {
+      let payLoad = {
+        id: table[0],
+        idx: table[1],
+        userName: table[2],
+      };
+      socket.emit('updateEditor', payLoad);
+    });
+  });
+
+  socket.on('removeEditor', (payLoad) => {
+    console.log('removeEditor');
+    tables.filter((table) => table !== payLoad);
+    socket.broadcast.emit('removeEditor', payLoad);
   });
 });
 

@@ -48,7 +48,8 @@ export default class Table {
     for (let i = 0; i < 4; i++) {
       let str: string = ``;
       if (this.tableInfo.get(i).username) {
-        str = `${this.tableInfo[i].username} IDE 열기`;
+        console.log(this.tableInfo.get(i));
+        str = `${this.tableInfo.get(i).username} IDE 열기`;
       } else {
         str = `${i + 1}번 방 들어가기`;
       }
@@ -142,5 +143,12 @@ export default class Table {
     }
   }
 
+  updateTable(idx: number, userName: string) {
+    console.log('이거 몇번 호출됨?');
+    console.log('이전', this.tableInfo);
+    this.tableInfo.get(idx)['username'] = userName;
+    this.tableInfo.get(idx)['roomId'] = userName;
+    console.log('이후', this.tableInfo);
+  }
   /* Change chair sprite texture */
 }

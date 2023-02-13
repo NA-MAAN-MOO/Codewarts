@@ -1,3 +1,4 @@
+import phaserGame from 'codeuk';
 import Phaser from 'phaser';
 import MainScene from '../scenes/Mainscene';
 import Button from './Button';
@@ -101,11 +102,11 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     playerVelocity.scale(speed);
     this.setVelocity(playerVelocity.x, playerVelocity.y); // 실제로 player오브젝트를 움직인다.
 
-    const { socket } = this.scene as MainScene;
-    if (!socket) {
-      return;
-    }
-    socket.emit('movement', {
+    // const { socket } = this.scene as MainScene;
+    // if (!socket) {
+    //   return;
+    // }
+    phaserGame.socket.emit('movement', {
       x: this.x,
       y: this.y,
       motion: motion,

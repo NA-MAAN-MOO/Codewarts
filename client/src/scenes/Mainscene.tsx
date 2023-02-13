@@ -4,6 +4,8 @@ import Player from '../objects/Player';
 import Resource from '../objects/Resources';
 import { io, Socket } from 'socket.io-client';
 import store from 'stores';
+import { openEditor } from 'stores/modeSlice';
+import { setRoomId, setUserName } from 'stores/editorSlice';
 import { GAME_STATUS } from 'utils/Constants';
 import Table from 'objects/Table';
 import phaserGame from 'codeuk';
@@ -171,6 +173,14 @@ export default class MainScene extends Phaser.Scene {
           }
         });
       });
+
+      //@ts-ignore
+      phaserGame.socket.on('updateEditor', (payLoad: any) => {
+        console.log('updateEditor');
+        this.tableMap
+          .get(payLoad.id)
+          .updateTable(payLoad.idx, payLoad.userName);
+      });
     }
   }
 
@@ -185,23 +195,17 @@ export default class MainScene extends Phaser.Scene {
       this.isKeyDisable = false;
     }
     if (this.watchTable) {
+      // this.player.setStatic(true);
       if (Phaser.Input.Keyboard.JustDown(this.idxDown) && this.editorIdx < 4) {
         this.editorIdx += 1;
       }
       if (Phaser.Input.Keyboard.JustDown(this.idxUp) && this.editorIdx > 0) {
         this.editorIdx -= 1;
       }
+      // @ts-ignore
       if (Phaser.Input.Keyboard.JustDown(this.idxEnter)) {
         console.log(this.editorIdx);
         switch (this.editorIdx) {
-          case 0:
-            break;
-          case 1:
-            break;
-          case 2:
-            break;
-          case 3:
-            break;
           case 4:
             this.input.keyboard.disableGlobalCapture();
             this.player.inputKeys = this.input.keyboard.addKeys({
@@ -212,6 +216,22 @@ export default class MainScene extends Phaser.Scene {
               open: Phaser.Input.Keyboard.KeyCodes.E,
             });
             this.watchTable = false;
+            this.tableMap
+              .get(this.player.touching[0].body.id)
+              ?.clearEditorList();
+            break;
+          default:
+            this.input.keyboard.disableGlobalCapture();
+            this.player.inputKeys = this.input.keyboard.addKeys({
+              up: Phaser.Input.Keyboard.KeyCodes.UP,
+              down: Phaser.Input.Keyboard.KeyCodes.DOWN,
+              left: Phaser.Input.Keyboard.KeyCodes.LEFT,
+              right: Phaser.Input.Keyboard.KeyCodes.RIGHT,
+              open: Phaser.Input.Keyboard.KeyCodes.E,
+            });
+            this.watchTable = false;
+            this.enterEditor(this.player.touching[0].body.id, this.editorIdx);
+            console.log(this.player.touching[0]);
             this.tableMap
               .get(this.player.touching[0].body.id)
               ?.clearEditorList();
@@ -243,12 +263,11 @@ export default class MainScene extends Phaser.Scene {
     }
     // 키보드 E키를 눌렀을 때
     if (Phaser.Input.Keyboard.JustDown(this.player.inputKeys.open)) {
-      console.log('하이');
-
       if (this.player.touching.length !== 0) {
         this.editorIdx = 0;
         console.log(this.player.touching[0].body.id);
         this.watchTable = true;
+        this.player.setStatic(true);
 
         let tableId = this.player.touching[0].body.id;
         let tableInstance = this.tableMap.get(tableId);
@@ -269,6 +288,7 @@ export default class MainScene extends Phaser.Scene {
         // });
       }
     }
+    this.player.setStatic(false);
     this.player.update();
   }
 
@@ -326,5 +346,31 @@ export default class MainScene extends Phaser.Scene {
         }
       }
     });
+  }
+
+  enterEditor(tableId: any, idx: number) {
+    if (!this.tableMap.get(tableId).username) {
+      console.log(phaserGame.userName);
+      // 실제로 에디터 창 열어주는 부분
+      this.tableMap.get(tableId).updateTable(idx, phaserGame.userName);
+      let payLoad = {
+        id: tableId,
+        idx: idx,
+      };
+      phaserGame.socket.emit('addEditor', payLoad);
+      //@ts-ignore
+      store.dispatch(setRoomId(phaserGame.userName));
+      //@ts-ignore
+      store.dispatch(setUserName(phaserGame.userName));
+      // 에디터 창 열기
+      store.dispatch(openEditor());
+    } else {
+      // //@ts-ignore
+      // store.dispatch(setRoomId(editorOwner));
+      // //@ts-ignore
+      // store.dispatch(setUserName(phaserGame.userName));
+      // // 에디터 창 열기
+      // store.dispatch(openEditor());
+    }
   }
 }

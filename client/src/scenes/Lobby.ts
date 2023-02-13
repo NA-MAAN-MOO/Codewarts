@@ -51,6 +51,7 @@ export default class Lobby extends Phaser.Scene {
       phaserGame.socketId = payLoad.socketId;
       //@ts-ignore
       phaserGame.charKey = payLoad.charKey;
+      phaserGame.userName = payLoad.userName;
     });
   }
 
