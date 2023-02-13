@@ -36,14 +36,15 @@ import type { RadioChangeEvent } from 'antd';
 function YjsCodeMirror() {
   /* states */
   const { userName, roomId } = useSelector((state: RootState) => state.editor);
-  let [compileOutput, setCompileOutput] = useState('');
-  let [cpuTime, setCpuTime] = useState('');
-  let [memory, setMemory] = useState('');
+  let [compileOutput, setCompileOutput] = useState();
+  let [cpuTime, setCpuTime] = useState();
+  let [memory, setMemory] = useState();
   let [editorTheme, setEditorTheme] = useState(okaidia);
   let [leetUserData, setLeetUserData] = useState();
   let [leetProbData, setLeetProbData] = useState();
   let [bojUserData, setBojUserData] = useState();
   let [bojProbData, setBojProbData] = useState();
+  let [bojProbFullData, setBojProbFullData] = useState();
 
   /* ref */
   const editor = useRef(null);
@@ -252,30 +253,28 @@ function YjsCodeMirror() {
       let probData = response.data;
       console.log(probData);
       setBojProbData(probData);
+      fetchBojProbFullData(probId);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const fetchBojProbContent = async () => {
+  /* 스크래핑 서버에 백준 문제 정보 요청 */
+  async function fetchBojProbFullData(probId: string) {
     if (bojProbDataRef.current === null) return;
-
-    //@ts-ignore
-    let probId = bojProbDataRef.current.value;
-    console.log(probId);
 
     try {
       const response = await axios.get(
         `http://localhost:5000/data?probId=${probId}`
       );
 
-      let probData = response.data;
-      console.log(probData);
-      setBojProbData(probData);
+      let probFullData = response.data;
+      console.log(probFullData);
+      setBojProbFullData(probFullData);
     } catch (error) {
       console.error(error);
     }
-  };
+  }
 
   /* leetcode 유저 정보 가져오기 */
   const fetchLeetUserData = async () => {
@@ -484,6 +483,35 @@ function YjsCodeMirror() {
               </a>
               <div>문제 제목 : {bojProbData?.titleKo}</div>
               <div>난이도(등급) : {bojProbData?.level}</div>
+              <h3>문제 내용</h3>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: bojProbFullData?.prob_desc,
+                }}
+              />
+              <h3>입력</h3>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: bojProbFullData?.prob_input,
+                }}
+              />
+              <h3>출력</h3>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: bojProbFullData?.prob_output,
+                }}
+              />
+              <h3>예제 1</h3>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: bojProbFullData?.samples?.[1].input,
+                }}
+              />
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: bojProbFullData?.samples?.[1].output,
+                }}
+              />
             </div>
           )}
         </div>
