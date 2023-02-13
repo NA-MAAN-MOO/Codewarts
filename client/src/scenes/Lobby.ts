@@ -4,6 +4,7 @@ import store from 'stores';
 import Player from 'objects/Player';
 import Button from 'objects/Button';
 import { createCharacterAnims } from '../anims/CharacterAnims';
+import phaserGame from 'codeuk';
 
 /* Parallax Scrolling */
 const createAligned = (
@@ -22,7 +23,7 @@ const createAligned = (
   }
 };
 
-export default class extends Phaser.Scene {
+export default class Lobby extends Phaser.Scene {
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private player!: Phaser.Physics.Matter.Sprite;
   private buttonForList!: Phaser.GameObjects.Text;
@@ -39,16 +40,17 @@ export default class extends Phaser.Scene {
 
   init() {
     // socket-io와 링크 스타~트!
-    this.socket = io('http://localhost:8080');
-    console.log(typeof this.socket);
-
-    // this.x = null; // 유저의 좌표값
-    // this.y = null;
-    this.charKey = ''; // 이후 캐릭터 값이 들어간다
-    this.socket.on('start', (payLoad: any) => {
+    //@ts-ignore
+    phaserGame.socket = io('http://localhost:8080');
+    //@ts-ignore
+    phaserGame.charKey = ''; // 이후 캐릭터 값이 들어간다
+    //@ts-ignore
+    phaserGame.socket.on('start', (payLoad: any) => {
       // Server에서 보내주는 고유 값을 받는다.
-      this.socketId = payLoad.socketId;
-      this.charKey = payLoad.charKey;
+      //@ts-ignore
+      phaserGame.socketId = payLoad.socketId;
+      //@ts-ignore
+      phaserGame.charKey = payLoad.charKey;
     });
   }
 
@@ -62,13 +64,10 @@ export default class extends Phaser.Scene {
   }
 
   create() {
-    console.log(this.socket);
     /* Add Lobby background */
     for (let i = 11; i >= 0; i--) {
       createAligned(this, 3, `lobby${i}`, i % 5);
     }
-
-    console.log(this.socketId, this.charKey);
 
     /* Add a house used as a room list */
     this.houseForList = this.matter.add
@@ -83,8 +82,10 @@ export default class extends Phaser.Scene {
       scene: this,
       x: this.scale.width / 10,
       y: this.scale.height * 0.85,
-      texture: this.charKey,
-      id: this.socketId,
+      //@ts-ignore
+      texture: phaserGame.charKey,
+      //@ts-ignore
+      id: phaserGame.socketId,
       frame: 'down-1',
     });
 
@@ -92,12 +93,12 @@ export default class extends Phaser.Scene {
     this.inputKeys = this.input.keyboard.addKeys({
       //   up: Phaser.Input.Keyboard.KeyCodes.W,
       //   down: Phaser.Input.Keyboard.KeyCodes.S,
-      left: Phaser.Input.Keyboard.KeyCodes.A,
-      right: Phaser.Input.Keyboard.KeyCodes.D,
+      left: Phaser.Input.Keyboard.KeyCodes.LEFT,
+      right: Phaser.Input.Keyboard.KeyCodes.RIGHT,
       enter: Phaser.Input.Keyboard.KeyCodes.E,
     });
-
-    createCharacterAnims(this.charKey, this.anims);
+    //@ts-ignore
+    createCharacterAnims(phaserGame.charKey, phaserGame.anims);
 
     /* Add button for houseForList */
     this.buttonForList = new Button({
@@ -111,10 +112,6 @@ export default class extends Phaser.Scene {
         fontSize: '20px',
         borderRadius: '10px',
       },
-      //   callback: () => {
-      //     this.scene.stop();
-      //     this.scene.start('room');
-      //   },
     }).getBtn();
     this.buttonForList.setScrollFactor(0);
 
@@ -127,29 +124,29 @@ export default class extends Phaser.Scene {
   }
 
   update() {
-    // this.player.update();
     /* Control Player Movement */
     const speed = 5;
     let playerVelocity = new Phaser.Math.Vector2(); //  2D 벡터
     let motion = 'idle';
     if (this.inputKeys.left.isDown) {
       playerVelocity.x = -1;
-      this.player.play(`${this.charKey}-walk-left`, true);
+      //@ts-ignore
+      this.player.play(`${phaserGame.charKey}-walk-left`, true);
       motion = 'left';
       // parallax scrolling
-      this.cameras.main.scrollX -= 0.5;
-      // this.houseForList.setVelocityX(-0.5);
+      // this.cameras.main.scrollX -= 0.5;
     } else if (this.inputKeys.right.isDown) {
       playerVelocity.x = 1;
-      this.player.play(`${this.charKey}-walk-right`, true);
+      //@ts-ignore
+      this.player.play(`${phaserGame.charKey}-walk-right`, true);
       motion = 'right';
       // parallax scrolling
-      this.cameras.main.scrollX += 0.5;
-      // this.houseForList.setVelocityX(0.5);
+      // this.cameras.main.scrollX += 0.5;
     }
     // this.y += speed;
     if (motion === 'idle') {
-      this.anims.play(`${this.charKey}-idle-down`, this.player);
+      //@ts-ignore
+      this.anims.play(`${phaserGame.charKey}-idle-down`, this.player);
       // this.houseForList.setVelocity(0, 0);
     }
 
@@ -167,7 +164,7 @@ export default class extends Phaser.Scene {
       )
     ) {
       this.buttonForList.setVisible(true);
-      console.log('맞닿음');
+      // console.log('맞닿음');
       // Press E to Enter Classroom
       if (this.inputKeys.enter.isDown) {
         // this.scene.stop();

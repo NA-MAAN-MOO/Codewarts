@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import MainScene from '../scenes/Mainscene';
+import Button from './Button';
 
 export default class Player extends Phaser.Physics.Matter.Sprite {
   socketId!: string;
@@ -60,14 +61,11 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
   }
 
   update() {
-    // if (this.buttonEditor) {
-    //   this.buttonEditor.setPosition(this.x, this.y); // 버튼 위치 업데이트 시켜주는 것
-    // }
-
     // 초마다 60프레임마다(?) 호출되는 것, 매 틱마다 업데이트 되야하는 것인듯.
     const speed = 5;
     let playerVelocity = new Phaser.Math.Vector2(); //  2D 벡터
     let motion = 'idle';
+
     if (this.inputKeys.left.isDown) {
       playerVelocity.x = -1;
       this.anims.play(`${this.playerTexture}-walk-left`, true);
@@ -112,48 +110,50 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
       y: this.y,
       motion: motion,
     });
+
     // this.spriteIcon.setPosition(this.x, this.y);
     // this.showIcon();
   }
 
-  // CreateCollisions(playerSensor: any) {
-  //   this.scene.matterCollision.addOnCollideStart({
-  //     objectA: [playerSensor],
-  //     callback: (other: any) => {
-  //       // console.log("from player: ", other);
-  //       if (other.bodyB.isSensor) return;
-  //       this.touching.push(other.gameObjectB);
+  CreateCollisions(playerSensor: any) {
+    this.scene.matterCollision.addOnCollideStart({
+      objectA: [playerSensor],
+      callback: (other: any) => {
+        // console.log("from player: ", other);
+        if (
+          other.gameObjectB['texture'] &&
+          other.gameObjectB.texture.key === 'table'
+        ) {
+          this.touching.push(other.gameObjectB);
 
-  //       // //button -> 이후에 resource에 생겨야한다.
-  //       this.buttonEditor = new Phaser.GameObjects.Sprite(
-  //         this.scene,
-  //         0,
-  //         0,
-  //         'items',
-  //         5
-  //       );
-  //       this.buttonEditor.setScale(0.8);
-  //       this.buttonEditor.setOrigin(0, 2);
-  //       this.buttonEditor.setInteractive(); // 이거 해줘야 function 들어감!!!!! 3시간 버린듯;
-  //       this.scene.add.existing(this.buttonEditor);
-  //       this.buttonEditor.on('pointerdown', () => console.log('ok'));
+          this.buttonEditor = new Button({
+            scene: this.scene,
+            x: other.gameObjectB.x,
+            y: other.gameObjectB.y - 20,
+            text: 'E를 눌러 참여하기',
+            style: {
+              fontSize: '20px',
+              backgroundColor: 'white',
+              color: 'black',
+            },
+          }).getBtn();
+          this.buttonEditor.setInteractive(); // 이거 해줘야 function 들어감!!!!! 3시간 버린듯;v
+        }
+      },
+      context: this.scene,
+    });
 
-  //       console.log(this.touching.length, other.gameObjectB.name);
-  //     },
-  //     context: this.scene,
-  //   });
-
-  //   this.scene.matterCollision.addOnCollideEnd({
-  //     objectA: [playerSensor],
-  //     callback: (other: any) => {
-  //       this.touching = this.touching.filter(
-  //         (gameObject) => gameObject !== other.gameObjectB
-  //       );
-  //       if (this.buttonEditor) {
-  //         this.buttonEditor.destroy();
-  //       }
-  //     },
-  //     context: this.scene,
-  //   });
-  // }
+    this.scene.matterCollision.addOnCollideEnd({
+      objectA: [playerSensor],
+      callback: (other: any) => {
+        this.touching = this.touching.filter(
+          (gameObject) => gameObject !== other.gameObjectB
+        );
+        if (this.buttonEditor) {
+          this.buttonEditor.destroy();
+        }
+      },
+      context: this.scene,
+    });
+  }
 }

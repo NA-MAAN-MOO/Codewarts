@@ -6,6 +6,8 @@ import { io, Socket } from 'socket.io-client';
 import store from 'stores';
 import { GAME_STATUS } from 'utils/Constants';
 import Table from 'objects/Table';
+import phaserGame from 'codeuk';
+import { NONE } from 'phaser';
 
 export default class MainScene extends Phaser.Scene {
   // class 속성 명시는 constructor 이전에 명시하면 되는듯
@@ -19,6 +21,8 @@ export default class MainScene extends Phaser.Scene {
   isKeyDisable: boolean;
   charKey!: string;
   tableMap = new Map<number, Table>();
+  watchTable!: boolean;
+  editorIdx!: number;
 
   constructor() {
     // Scene의 key값은 MainScene
@@ -26,33 +30,14 @@ export default class MainScene extends Phaser.Scene {
     this.isKeyDisable = false;
   }
 
-  init() {
-    // socket-io와 링크 스타~트!
-    this.socket = io('http://localhost:8080');
-    console.log(typeof this.socket);
-
-    this.x = null; // 유저의 좌표값
-    this.y = null;
-    this.charKey = ''; // 이후 캐릭터 값이 들어간다
-    this.socket.on('start', (payLoad: any) => {
-      // Server에서 보내주는 고유 값을 받는다.
-      this.socketId = payLoad.socketId;
-      this.charKey = payLoad.charKey;
-    });
-  }
-
   preload() {
     // 미리 로드하는 메서드, 이미지 등을 미리 로드한다.
     Player.preload(this);
     Resource.preload(this);
-    // OtherPlayer.preload(this);
-    // this.load.image('ground', 'assets/images/ground.png');
-    // this.load.tilemapTiledJSON('groundTile', 'assets/images/ground.json');
     this.load.image('room_map', 'assets/room/room_map.png');
     this.load.tilemapTiledJSON('room_map_tile', 'assets/room/room_map.json');
   }
   create() {
-    console.log(this.socket);
     // 생성해야 하는 것, 게임 오브젝트 등
     /* Setting room map ground */
     this.map = this.make.tilemap({ key: 'room_map_tile' }); //Json file key (1st parameter in tilemapTiledJSON)
@@ -90,33 +75,45 @@ export default class MainScene extends Phaser.Scene {
       scene: this,
       x: this.x,
       y: this.y,
-      texture: this.charKey, // 이미지 이름
-      id: this.socketId,
+      // Lobby에서 받은 값으로 유저 생성
+      //@ts-ignore
+      texture: phaserGame.charKey, // 이미지 이름
+      //@ts-ignore
+      id: phaserGame.socketId,
       frame: 'down-1', // atlas.json의 첫번째 filename
     });
     this.player.inputKeys = this.input.keyboard.addKeys({
-      up: Phaser.Input.Keyboard.KeyCodes.W,
-      down: Phaser.Input.Keyboard.KeyCodes.S,
-      left: Phaser.Input.Keyboard.KeyCodes.A,
-      right: Phaser.Input.Keyboard.KeyCodes.D,
+      up: Phaser.Input.Keyboard.KeyCodes.UP,
+      down: Phaser.Input.Keyboard.KeyCodes.DOWN,
+      left: Phaser.Input.Keyboard.KeyCodes.LEFT,
+      right: Phaser.Input.Keyboard.KeyCodes.RIGHT,
       open: Phaser.Input.Keyboard.KeyCodes.E,
     });
+    this.watchTable = false;
+    this.editorIdx = 4;
+
+    // this.input.keyboard.on('keydown-E', () => {
+
+    // });
     let camera = this.cameras.main;
     camera.zoom = 0.8;
     camera.startFollow(this.player);
     camera.setLerp(0.1, 0.1);
     // camera.setBounds(0, 0, this.game.config.width, this.game.config.height);
-
-    createCharacterAnims(this.charKey, this.anims);
+    //@ts-ignore
+    createCharacterAnims(phaserGame.charKey, phaserGame.anims);
 
     this.otherPlayers = [];
-    if (this.socket) {
-      this.socket.emit('loadNewPlayer', { x: this.x, y: this.y });
+    //@ts-ignore
+    if (phaserGame.socket) {
+      //@ts-ignore
+      phaserGame.socket.emit('loadNewPlayer', { x: this.x, y: this.y });
 
       // 기존 유저 그려줘! 하고 요청하기
-      this.socket.emit('currentPlayers');
-
-      this.socket.on('currentPlayers', (payLoad: any) => {
+      //@ts-ignore
+      phaserGame.socket.emit('currentPlayers');
+      //@ts-ignore
+      phaserGame.socket.on('currentPlayers', (payLoad: any) => {
         console.log('기존 유저들을 그려줄게');
         this.addOtherPlayers({
           x: payLoad.x,
@@ -126,8 +123,8 @@ export default class MainScene extends Phaser.Scene {
           state: payLoad.state,
         });
       });
-
-      this.socket.on('newPlayer', (payLoad: any) => {
+      //@ts-ignore
+      phaserGame.socket.on('newPlayer', (payLoad: any) => {
         this.addOtherPlayers({
           x: payLoad.x,
           y: payLoad.y,
@@ -136,18 +133,21 @@ export default class MainScene extends Phaser.Scene {
           state: payLoad.state,
         });
       });
-
-      this.socket.on('playerDisconnect', (socketId: any) => {
+      //@ts-ignore
+      phaserGame.socket.on('playerDisconnect', (socketId: any) => {
         this.removePlayer(socketId);
       });
-
-      this.socket.on('updateLocation', (payLoad: any) => {
+      //@ts-ignore
+      phaserGame.socket.on('updateLocation', (payLoad: any) => {
         this.updateLocation(payLoad);
       });
+      //@ts-ignore
       this.game.events.on('pause', () => {
-        this.socket?.emit('pauseCharacter');
+        //@ts-ignore
+        phaserGame.socket?.emit('pauseCharacter');
       });
-      this.socket.on('pauseCharacter', (socketId: any) => {
+      //@ts-ignore
+      phaserGame.socket.on('pauseCharacter', (socketId: any) => {
         this.otherPlayers.forEach((otherPlayer: any) => {
           if (otherPlayer.socketId === socketId) {
             otherPlayer.setStatic(true);
@@ -156,9 +156,11 @@ export default class MainScene extends Phaser.Scene {
       });
 
       this.game.events.on('resume', () => {
-        this.socket?.emit('resumeCharacter');
+        //@ts-ignore
+        phaserGame.socket?.emit('resumeCharacter');
       });
-      this.socket.on('resumeCharacter', (socketId: any) => {
+      //@ts-ignore
+      phaserGame.socket.on('resumeCharacter', (socketId: any) => {
         this.otherPlayers.forEach((otherPlayer: any) => {
           if (otherPlayer.socketId === socketId) {
             otherPlayer.setStatic(false);
@@ -177,6 +179,73 @@ export default class MainScene extends Phaser.Scene {
     if (this.isKeyDisable) {
       this.input.keyboard.enableGlobalCapture();
       this.isKeyDisable = false;
+    }
+    if (this.watchTable) {
+      if (Phaser.Input.Keyboard.JustDown(this.idxDown) && this.editorIdx > 0) {
+        this.editorIdx -= 1;
+      }
+      if (Phaser.Input.Keyboard.JustDown(this.idxUp) && this.editorIdx < 4) {
+        this.editorIdx += 1;
+      }
+      if (Phaser.Input.Keyboard.JustDown(this.idxEnter)) {
+        console.log(this.editorIdx);
+        switch (this.editorIdx) {
+          case 0:
+            this.input.keyboard.disableGlobalCapture();
+            this.player.inputKeys = this.input.keyboard.addKeys({
+              up: Phaser.Input.Keyboard.KeyCodes.UP,
+              down: Phaser.Input.Keyboard.KeyCodes.DOWN,
+              left: Phaser.Input.Keyboard.KeyCodes.LEFT,
+              right: Phaser.Input.Keyboard.KeyCodes.RIGHT,
+              open: Phaser.Input.Keyboard.KeyCodes.E,
+            });
+            this.watchTable = false;
+            break;
+          case 1:
+            break;
+          case 2:
+            break;
+          case 3:
+            break;
+          case 4:
+            break;
+        }
+      }
+
+      for (let i = 0; i < 5; i++) {
+        if (i === this.editorIdx) {
+          this.player.touching[0].macbookList[i].setStyle({
+            backgroundColor: 'white',
+          });
+        } else {
+          this.player.touching[0].macbookList[i].setStyle({
+            backgroundColor: 'transparent',
+          });
+        }
+      }
+      return;
+    }
+    if (Phaser.Input.Keyboard.JustDown(this.player.inputKeys.open)) {
+      console.log('하이');
+
+      if (this.player.touching.length !== 0) {
+        this.editorIdx = 4;
+        console.log(this.player.touching[0]);
+        this.watchTable = true;
+        this.player.touching[0].macbookList.forEach((mac: any) => {
+          mac.setVisible(true);
+          this.input.keyboard.disableGlobalCapture();
+          this.idxDown = this.input.keyboard.addKey(
+            Phaser.Input.Keyboard.KeyCodes.DOWN
+          );
+          this.idxUp = this.input.keyboard.addKey(
+            Phaser.Input.Keyboard.KeyCodes.UP
+          );
+          this.idxEnter = this.input.keyboard.addKey(
+            Phaser.Input.Keyboard.KeyCodes.E
+          );
+        });
+      }
     }
     this.player.update();
   }

@@ -15,28 +15,13 @@ export default class Table {
   usercount: number;
   //   tableInfo: tableStateType;
   tableInfo: any = new Map();
+  buttonToEditor: any;
 
   constructor(tableObject: Resource, tableId: number) {
     this.usercount = 0;
-    // this.tableInfo = {
-    //   0: tableInfoModel,
-    //   1: tableInfoModel,
-    //   2: tableInfoModel,
-    //   3: tableInfoModel,
-    // };
     for (let i = 0; i < 4; i++) {
       this.tableInfo.set(i, tableInfoModel);
     }
-    // this.tableInfo.set(
-    //   0,
-    //   tableInfoModel,
-    //   1,
-    //   tableInfoModel,
-    //   2,
-    //   tableInfoModel,
-    //   3,
-    //   tableInfoModel
-    // );
     this.tableObject = tableObject;
     this.tableId = tableId;
   }
