@@ -5,109 +5,38 @@ import {
   StreamManager,
   SessionEventMap,
 } from 'openvidu-browser';
-import { Event, SessionEvent } from 'types';
+import { SessionInfo } from 'types';
 import axios from 'axios';
-import Audio from 'components/Audio';
-import { ROOM_TYPE } from 'utils/Constants';
-import { VoiceInfo } from 'types';
 
 const APPLICATION_SERVER_URL = 'http://localhost:5000/api';
 
-export const getSessionFromClient = (roomKey: string): string => {
-  const voiceRoomList = localStorage.getItem('VoiceRoomList');
-  if (!voiceRoomList) return '';
+export const initSession = () => {
+  // 1. openvidu 객체 생성
+  const newOV = new OpenVidu();
 
-  const sessionId = JSON.parse(voiceRoomList)[roomKey];
-  return sessionId;
+  // socket 통신 과정에서 많은 log를 남기게 되는데 필요하지 않은 log를 띄우지 않게 하는 모드
+  newOV.enableProdMode();
+
+  // 2. initSession 생성
+  const newSession = newOV.initSession();
+  return { OV: newOV, session: newSession };
 };
 
-//Room Key를 통해 세션 가져오기.
-//세션이 생성될 때 클라이언트 로컬스토리지에 저장되므로, 로컬스토리지를 먼저 검사하고 없을 때 서버를 통해 받아오기
-export const getSessionInfo = async (roomKey: string) => {
-  const savedId = getSessionFromClient(roomKey);
-  const savedInfo = localStorage.getItem('VoiceSessionInfo');
-  if (!savedInfo) return;
-
-  const roomInfo = JSON.parse(savedInfo)[roomKey];
-  if (!roomInfo) return;
-
-  if (savedId) {
-    // 클라이언트에 저장된 세션 정보가 있으면
-    // 서버에 아직 이 세션 살아있나 확인
-    const { data } = await axios.get(
-      `${APPLICATION_SERVER_URL}/check-session`,
-      {
-        params: {
-          sessionId: savedId,
-        },
-      }
-    );
-    if (data) {
-      return roomInfo;
-    } else {
-      return await getSessionFromServer(roomKey);
-    }
-  }
-};
-
-export const getSessionFromServer = async (roomKey: string) => {
+export const createSession = async (sessionId: string) => {
   try {
-    const { data: sessionId } = await axios.get(
-      `${APPLICATION_SERVER_URL}/get-session`,
-      {
-        params: {
-          roomKey,
-        },
-      }
-    );
-
-    if (!sessionId) return null;
-    const sessionInfo = localStorage.getItem(sessionId);
-    if (!sessionInfo) return null;
-    return JSON.parse(sessionInfo);
-  } catch (err) {
-    console.log(err);
-    return null;
-  }
-};
-
-export const createSession = async (roomKey: string) => {
-  try {
-    const session = await getSessionInfo(roomKey);
-    //현재 세션 있으면 리턴
-    if (!!session) return session;
-
-    // 1. openvidu 객체 생성
-    const newOV = new OpenVidu();
-
-    // socket 통신 과정에서 많은 log를 남기게 되는데 필요하지 않은 log를 띄우지 않게 하는 모드
-    newOV.enableProdMode();
-
-    // 2. initSession 생성
-    const newSession = newOV.initSession();
-
-    const { data: sessionId } = await axios.post(
+    const data = await axios.post(
       APPLICATION_SERVER_URL + '/create-session',
       {
-        roomKey,
-        customSessionId: newSession.sessionId,
-        session: newSession,
-        OV: newOV,
+        customSessionId: sessionId,
       },
       {
         headers: { 'Content-Type': 'application/json' },
       }
     );
-    localStorage.setItem(
-      sessionId,
-      JSON.stringify({
-        OV: newOV,
-        session: newSession,
-        sessionId: sessionId,
-      })
-    );
-    return { OV: newOV, session: newSession, sessionId: sessionId }; // The sessionId
+    //return sessionId
+    return data;
   } catch (err) {
+    console.log('createSession error');
     console.log(err);
   }
 };
@@ -123,10 +52,7 @@ export const getToken = async (sessionId: string) => {
 
 export const createToken = async (sessionId: string) => {
   const response = await axios.post(
-    APPLICATION_SERVER_URL +
-      'api/create-connection/' +
-      sessionId +
-      '/connections',
+    APPLICATION_SERVER_URL + '/create-connection/' + sessionId + '/connections',
     {},
     {
       headers: { 'Content-Type': 'application/json' },
@@ -137,10 +63,11 @@ export const createToken = async (sessionId: string) => {
 
 export const registerSession = async (
   session: Session | undefined,
+  sessionId: string,
   addSubscriber: Function,
   deleteSubscriber: Function,
   OV: OpenVidu | undefined,
-  myUserName: String
+  userName: String
 ) => {
   try {
     if (!session) return;
@@ -173,10 +100,10 @@ export const registerSession = async (
     // --- 4) Connect to the session with a valid user token ---
 
     // Get a token from the OpenVidu deployment
-    const token = await getToken(session.sessionId);
+    const token = await getToken(sessionId);
     // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
     // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
-    await mySession.connect(token, { clientData: myUserName });
+    await mySession.connect(token, { clientData: userName });
     if (!OV) return;
     // Init a passing undefined as targetElement (we don't want OpenVidu to insert a video
     // element: we will manage it on our own) and with the desired properties

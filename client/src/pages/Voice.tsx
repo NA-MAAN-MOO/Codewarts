@@ -10,25 +10,19 @@ import { Event, SessionEvent } from 'types';
 import axios from 'axios';
 import Audio from 'components/Audio';
 import {
-  getSessionInfo,
   createSession,
   disconnectSession,
-  getToken,
-  createToken,
   registerSession,
+  initSession,
 } from 'hooks/useVoice';
 import { VoiceProp } from 'types';
 
 const APPLICATION_SERVER_URL = 'http://localhost:5000/';
 
 //Voice 방 컴포넌트
-const Voice = ({ roomKey }: VoiceProp) => {
+const Voice = ({ roomKey, userName }: VoiceProp) => {
   const [OV, setOV] = useState<OpenVidu>();
   const [session, setSession] = useState<Session>();
-  const [initUserData, setInitUserData] = useState({
-    mySessionId: '',
-    myUserName: '',
-  });
   const [subscribers, setSubscribers] = useState<Array<StreamManager>>([]);
 
   const onBeforeUnload = (e: BeforeUnloadEvent) => {
@@ -38,31 +32,21 @@ const Voice = ({ roomKey }: VoiceProp) => {
   useEffect(() => {
     (async () => {
       window.addEventListener('beforeunload', onBeforeUnload);
-      const nowSession = await getSessionInfo(roomKey);
-      if (!nowSession) {
-        await createSession(roomKey);
-      }
-      setSession(nowSession);
+
+      //새 세션을 만든다.
+      const { OV, session } = initSession();
+
+      //roomKey를 바탕으로 sessionId를 가져온다.
+      //가져온 sessionId와 만든 세션을 서버에서 생성한다.
+      await createSession(roomKey);
+      setSession(session);
+      setOV(OV);
 
       return function cleanup() {
         window.removeEventListener('beforeunload', onBeforeUnload);
       };
     })();
   }, []);
-
-  const handleChangeSessionId = (e: Event) => {
-    setInitUserData({
-      ...initUserData,
-      mySessionId: e.target.value,
-    });
-  };
-
-  const handleChangeUserName = (e: Event) => {
-    setInitUserData({
-      ...initUserData,
-      myUserName: e.target.value,
-    });
-  };
 
   const deleteSubscriber = (streamManager: StreamManager) => {
     let subNow = subscribers;
@@ -85,19 +69,16 @@ const Voice = ({ roomKey }: VoiceProp) => {
     setOV(undefined);
     setSession(undefined);
     setSubscribers([]);
-    setInitUserData({
-      mySessionId: 'SessionA',
-      myUserName: 'Participant' + Math.floor(Math.random() * 100),
-    });
   };
 
   useEffect(() => {
     registerSession(
       session,
+      roomKey,
       addSubscriber,
       deleteSubscriber,
       OV,
-      initUserData.myUserName
+      userName
     );
   }, [session]);
 
@@ -114,7 +95,6 @@ const Voice = ({ roomKey }: VoiceProp) => {
       {session !== undefined ? (
         <div id="session">
           <div id="session-header">
-            <h1 id="session-title">{initUserData.mySessionId}</h1>
             <input
               className="btn btn-large btn-danger"
               type="button"

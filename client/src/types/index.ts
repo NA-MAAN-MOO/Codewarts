@@ -1,4 +1,3 @@
-import { ROOM_TYPE } from 'utils/Constants';
 import {
   OpenVidu,
   Session,
@@ -29,17 +28,11 @@ export type SessionEvent =
 
 export type VoiceProp = {
   roomKey: string;
+  userName: string;
 };
 
-export type VoiceInfo = {
-  VoiceRoomList: Record<string, string>;
-  VoiceSessionInfo: Record<
-    string,
-    {
-      OV: OpenVidu;
-      session: Session;
-      mySessionId: string;
-      myUserName: string;
-    }
-  >;
+export type SessionInfo = {
+  OV: OpenVidu;
+  session: Session;
+  sessionId: string;
 };
