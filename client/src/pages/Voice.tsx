@@ -9,7 +9,7 @@ import { Event, SessionEvent } from 'types';
 import axios from 'axios';
 import Audio from 'components/Audio';
 
-const APPLICATION_SERVER_URL = 'https://demos.openvidu.io/';
+const APPLICATION_SERVER_URL = 'http://localhost:5000/';
 
 const Voice = () => {
   const [OV, setOV] = useState<OpenVidu>();

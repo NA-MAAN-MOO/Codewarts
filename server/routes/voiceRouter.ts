@@ -6,7 +6,7 @@ import {
 
 const router = express.Router();
 
-router.post('sessions', createSession);
-router.post('sessions/:sessionId/connections', createConnection);
+router.post('/api/sessions', createSession);
+router.post('/api/sessions/:sessionId/connections', createConnection);
 
 export default router;

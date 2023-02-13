@@ -13,6 +13,7 @@ const openvidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
 export const createSession = async (req: Request, res: Response) => {
   try {
     const session = await openvidu.createSession(req.body);
+    console.log(`session created : ${session.sessionId}`);
     res.send(session.sessionId);
   } catch (err) {
     console.log(err);
@@ -29,6 +30,7 @@ export const createConnection = async (req: Request, res: Response) => {
       res.status(404).send();
     } else {
       const connection = await session.createConnection(req.body);
+      console.log(`connection created`);
       res.send(connection.token);
     }
   } catch (err) {
