@@ -25,6 +25,8 @@ export default class MainScene extends Phaser.Scene {
   tableMap = new Map<number, Table>();
   watchTable!: boolean;
   editorIdx!: number;
+  openMyEditor!: boolean;
+  getOut!: boolean;
 
   constructor() {
     // Scene의 key값은 MainScene
@@ -40,10 +42,8 @@ export default class MainScene extends Phaser.Scene {
     this.load.tilemapTiledJSON('room_map_tile', 'assets/room/room_map.json');
   }
   create() {
-    // this.game.events.addListener(Phaser.Core.Events.HIDDEN, () => {
-    //   this.player.setStatic();
-    //   console.log('hidden');
-    // });
+    this.getOut = false;
+    this.openMyEditor = false;
     // 생성해야 하는 것, 게임 오브젝트 등
     /* Setting room map ground */
     this.map = this.make.tilemap({ key: 'room_map_tile' }); //Json file key (1st parameter in tilemapTiledJSON)
@@ -174,23 +174,39 @@ export default class MainScene extends Phaser.Scene {
         });
       });
 
+      phaserGame.socket.emit('currentEditors');
       //@ts-ignore
+      // TODO: 강제로 해당 tableMap.get(id)를 새로 그리라고 해야한다. 02.14
       phaserGame.socket.on('updateEditor', (payLoad: any) => {
         console.log('updateEditor');
         this.tableMap
           .get(payLoad.id)
           .updateTable(payLoad.idx, payLoad.userName);
       });
+
+      // TODO: 강제로 보고있는 다른 유저들 강퇴 (상태값 바꿔야함 - 게임모드로)
+      phaserGame.socket.on('removeEditor', (payLoad: any) => {
+        this.tableMap.get(payLoad[0]).removeCurrentUser(payLoad[1]);
+      });
     }
   }
 
   update() {
     if (store.getState().mode.status !== GAME_STATUS.GAME) {
+      if (this.openMyEditor) {
+        console.log('1차관문, 여기 왔으면 내 에디터 열었다는 뜻');
+        this.getOut = true;
+      }
       this.input.keyboard.disableGlobalCapture();
       this.isKeyDisable = true;
       return;
     }
     if (this.isKeyDisable) {
+      if (this.getOut) {
+        console.log('2차관문, 여기오면 내 에디터 닫았다는 뜻');
+        phaserGame.socket.emit('removeEditor');
+      }
+      this.openMyEditor = false;
       this.input.keyboard.enableGlobalCapture();
       this.isKeyDisable = false;
     }
@@ -269,7 +285,6 @@ export default class MainScene extends Phaser.Scene {
 
         let tableId = this.player.touching[0].body.id;
         let tableInstance = this.tableMap.get(tableId);
-        console.log(tableInstance);
         tableInstance?.openEditorList();
 
         // this.player.touching[0].macbookList.forEach((mac: any) => {
@@ -348,9 +363,7 @@ export default class MainScene extends Phaser.Scene {
   }
 
   enterEditor(tableId: any, idx: number) {
-    console.log('이거 왜 불러');
     if (!this.tableMap.get(tableId).tableInfo.get(idx).username) {
-      console.log(this.tableMap);
       // 실제로 에디터 창 열어주는 부분
       // this.tableMap.get(tableId).tableInfo[idx].username = phaserGame.userName;
       this.tableMap.get(tableId).updateTable(idx, phaserGame.userName);
@@ -359,6 +372,8 @@ export default class MainScene extends Phaser.Scene {
         id: tableId,
         idx: idx,
       };
+      this.openMyEditor = true;
+      console.log(this.openMyEditor);
       phaserGame.socket.emit('addEditor', payLoad);
       //@ts-ignore
       store.dispatch(setRoomId(phaserGame.userName));
@@ -368,12 +383,13 @@ export default class MainScene extends Phaser.Scene {
       store.dispatch(openEditor());
       // console.log(this.tableMap.get(tableId).tableInfo.get(idx).username);
     } else {
-      // //@ts-ignore
-      // store.dispatch(setRoomId(editorOwner));
-      // //@ts-ignore
-      // store.dispatch(setUserName(phaserGame.userName));
-      // // 에디터 창 열기
-      // store.dispatch(openEditor());
+      let editorOwner = this.tableMap.get(tableId).tableInfo.get(idx).username;
+      //@ts-ignore
+      store.dispatch(setRoomId(editorOwner));
+      //@ts-ignore
+      store.dispatch(setUserName(phaserGame.userName));
+      // 에디터 창 열기
+      store.dispatch(openEditor());
     }
   }
 }

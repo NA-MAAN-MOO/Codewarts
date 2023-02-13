@@ -96,19 +96,9 @@ export default class Table {
   }
 
   /* Remove current user from a table (Delete my info from a table) */
-  removeCurrentUser(username: string) {
-    if (this.usercount <= 0) {
-      return;
-    }
-    for (let i = 0; i < 4; i++) {
-      //@ts-ignore
-      if (this.tableInfo.get(i).username === username) {
-        //@ts-ignore
-        this.tableInfo.get(i).username = undefined;
-        // 에디터에 썼던 내용은 저장해두기?
-      }
-      this.usercount--;
-    }
+  removeCurrentUser(idx: number) {
+    this.tableInfo.get(idx).username = undefined;
+    this.tableInfo.get(idx).roomId = undefined;
   }
 
   /* Join an Editor room in a Table (other user's Editor room) */
@@ -146,11 +136,8 @@ export default class Table {
   }
 
   updateTable(idx: number, userName: string) {
-    console.log('이거 몇번 호출됨?');
-    console.log('이전', this.tableInfo);
     this.tableInfo.get(idx)['username'] = userName;
     this.tableInfo.get(idx)['roomId'] = userName;
-    console.log('이후', this.tableInfo);
   }
   /* Change chair sprite texture */
 }

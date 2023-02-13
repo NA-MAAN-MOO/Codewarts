@@ -7,6 +7,7 @@ import mongoose from 'mongoose';
 import { Socket, Server } from 'socket.io'; // Load in socket.io
 import editorServer from './servers/editorServer';
 import basicRouter from './routes/basicRouter';
+import { table } from 'console';
 
 //환경변수 이용
 dotenv.config();
@@ -89,6 +90,7 @@ io.on('connection', (socket: Socket) => {
     players.push(playerInfo);
   });
 
+  // TODO: 만약 에디터 켠 상대로 나가면 에디터 꺼야됨
   socket.on('disconnect', () => {
     // socket이 연결 해제됩니다~
     console.log('user disconnected!!!');
@@ -143,7 +145,6 @@ io.on('connection', (socket: Socket) => {
   });
 
   socket.on('resumeCharacter', () => {
-    console.log('이거 찍히면 안되는데...');
     // '내'가 다시 탭을 띄우면 캐릭터가 활성화된다.
     playerInfo.state = 'resume';
     players.forEach((player) => {
@@ -177,10 +178,17 @@ io.on('connection', (socket: Socket) => {
     });
   });
 
-  socket.on('removeEditor', (payLoad) => {
+  socket.on('removeEditor', () => {
     console.log('removeEditor');
-    tables.filter((table) => table !== payLoad);
-    socket.broadcast.emit('removeEditor', payLoad);
+    tables.forEach((table) => {
+      if (table[2] === playerInfo.userName) {
+        socket.broadcast.emit('removeEditor', table);
+        socket.emit('removeEditor', table);
+      }
+    });
+    tables.filter((table) => {
+      table[2] !== playerInfo.userName;
+    });
   });
 });
 
