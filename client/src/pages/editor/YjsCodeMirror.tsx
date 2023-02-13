@@ -257,6 +257,26 @@ function YjsCodeMirror() {
     }
   };
 
+  const fetchBojProbContent = async () => {
+    if (bojProbDataRef.current === null) return;
+
+    //@ts-ignore
+    let probId = bojProbDataRef.current.value;
+    console.log(probId);
+
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/data?probId=${probId}`
+      );
+
+      let probData = response.data;
+      console.log(probData);
+      setBojProbData(probData);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   /* leetcode 유저 정보 가져오기 */
   const fetchLeetUserData = async () => {
     if (leetUserNameRef.current === null) return;
@@ -434,7 +454,6 @@ function YjsCodeMirror() {
               >
                 LeetCode에 답안 제출하러 가기
               </a>
-
               <div>문제 제목 : {leetProbData?.question.title}</div>
               <div>문제 번호 : {leetProbData?.question.questionId}</div>
               <h3>문제 내용</h3>
