@@ -1,5 +1,6 @@
 /* react */
 import { useRef, useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 
 /* lib */
 import * as random from 'lib0/random';
@@ -384,7 +385,9 @@ function YjsCodeMirror() {
           {algoSelect === 1 ? (
             <div className="leet-user-info">
               <div>깃헙 주소 :{leetUserData?.matchedUser?.githubUrl}</div>
-              <div>ranking : {leetUserData?.matchedUser?.profile?.ranking}</div>
+              <div>
+                leetcode 랭킹 : {leetUserData?.matchedUser?.profile?.ranking}
+              </div>
               <div>
                 leetcode 총 맞춘 문제수 :
                 {
@@ -432,13 +435,23 @@ function YjsCodeMirror() {
                 LeetCode에 답안 제출하러 가기
               </a>
 
-              <div>문제 title : {leetProbData?.question.title}</div>
+              <div>문제 제목 : {leetProbData?.question.title}</div>
               <div>문제 번호 : {leetProbData?.question.questionId}</div>
-              <div>문제 정보 : {leetProbData?.question.content}</div>
-              <div>예제 : {leetProbData?.question.exampleTestcases}</div>
-              <div>difficulty : {leetProbData?.question.difficulty}</div>
+              <h3>문제 내용</h3>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: leetProbData?.question.content,
+                }}
+              />
+              <h3>예제</h3>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: leetProbData?.question.exampleTestcases,
+                }}
+              />
+              <div>난이도 : {leetProbData?.question.difficulty}</div>
               <div>
-                code snippets : {leetProbData?.question.codeSnippets[3].code}
+                파이썬 스니펫 : {leetProbData?.question.codeSnippets[3].code}
               </div>
             </div>
           ) : (
@@ -450,8 +463,8 @@ function YjsCodeMirror() {
               >
                 백준에 답안 제출하러 가기
               </a>
-              <div>문제 title : {bojProbData?.titleKo}</div>
-              <div>difficulty : {bojProbData?.level}</div>
+              <div>문제 제목 : {bojProbData?.titleKo}</div>
+              <div>난이도(등급) : {bojProbData?.level}</div>
             </div>
           )}
         </div>
