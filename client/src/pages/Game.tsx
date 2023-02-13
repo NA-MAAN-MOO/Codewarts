@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { openMain, openEditor, openGame, openLobby } from 'stores/modeSlice';
 import game from 'codeuk';
+import Voice from 'pages/Voice';
 
 const Game = () => {
   const dispatch = useDispatch();
@@ -21,6 +22,7 @@ const Game = () => {
   };
   return (
     <BackgroundDiv>
+      <Voice />
       <BtnDiv>
         <button type="button" onClick={handleEditorClick}>
           에디터 키기

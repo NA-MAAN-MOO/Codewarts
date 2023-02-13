@@ -7,7 +7,6 @@ import Game from 'pages/Game';
 import Start from 'pages/Start';
 import Editor from 'pages/Editor';
 import Lobby from 'pages/Lobby';
-import Voice from 'pages/Voice';
 import { openEditor, openGame } from 'stores/modeSlice';
 import './codeuk';
 
