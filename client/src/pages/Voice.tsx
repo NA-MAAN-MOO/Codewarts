@@ -5,6 +5,7 @@ import {
   StreamManager,
   SessionEventMap,
   Subscriber,
+  Publisher,
 } from 'openvidu-browser';
 import { Event, SessionEvent } from 'types';
 import axios from 'axios';
@@ -25,7 +26,7 @@ const Voice = ({ roomKey, userName }: VoiceProp) => {
   const [OV, setOV] = useState<OpenVidu>();
   const [session, setSession] = useState<Session>();
   const [subscribers, setSubscribers] = useState<Array<StreamManager>>([]);
-
+  const [publisher, setPublisher] = useState<Publisher>();
   const onBeforeUnload = (e: BeforeUnloadEvent) => {
     leaveSession();
   };
@@ -62,6 +63,10 @@ const Voice = ({ roomKey, userName }: VoiceProp) => {
     setSubscribers([...subscribers, newScriber]);
   };
 
+  const handlePublisher = (newPub: Publisher) => {
+    setPublisher(newPub);
+  };
+
   const leaveSession = () => {
     // --- 7) Leave the session by calling 'disconnect' method over the Session object ---
     disconnectSession(session);
@@ -70,17 +75,19 @@ const Voice = ({ roomKey, userName }: VoiceProp) => {
     setOV(undefined);
     setSession(undefined);
     setSubscribers([]);
+    setPublisher(undefined);
   };
 
   useEffect(() => {
-    registerSession(
+    registerSession({
       session,
-      roomKey,
+      sessionId: roomKey,
       addSubscriber,
       deleteSubscriber,
+      handlePublisher,
       OV,
-      userName
-    );
+      userName,
+    });
   }, [session]);
 
   return roomKey === 'MAIN' ? (
@@ -88,6 +95,7 @@ const Voice = ({ roomKey, userName }: VoiceProp) => {
       session={session}
       subscribers={subscribers}
       leaveSession={leaveSession}
+      publisher={publisher}
     />
   ) : (
     <div>에디터화면</div>

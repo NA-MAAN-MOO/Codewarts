@@ -1,27 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Audio from 'components/Audio';
 import styled from 'styled-components';
 import { ReactComponent as MicOff } from 'assets/icons/mic_off.svg';
 import { ReactComponent as MicOn } from 'assets/icons/mic_on.svg';
 import { ReactComponent as VolOff } from 'assets/icons/volume_off.svg';
 import { ReactComponent as VolOn } from 'assets/icons/volume_on.svg';
-import { Session, StreamManager } from 'openvidu-browser';
+import {
+  Session,
+  StreamManager,
+  Publisher,
+  Subscriber,
+} from 'openvidu-browser';
 import { LoadingOutlined } from '@ant-design/icons';
 
 type GameVoiceType = {
   session: Session | undefined;
-  subscribers: StreamManager[];
+  subscribers: Subscriber[];
+  publisher: Publisher | undefined;
   leaveSession: () => void;
 };
 
-const GameVoice = ({ session, subscribers, leaveSession }: GameVoiceType) => {
+const GameVoice = ({
+  session,
+  subscribers,
+  publisher,
+  leaveSession,
+}: GameVoiceType) => {
   const [volumeOn, setVolumeOn] = useState(true);
   const [micOn, setMicOn] = useState(true);
 
   const handleVolume = () => {
+    subscribers.map((sm) => {
+      sm.subscribeToAudio(!volumeOn);
+    });
     setVolumeOn(!volumeOn);
   };
   const handleMic = () => {
+    if (!!publisher) publisher.publishAudio(!micOn);
     setMicOn(!micOn);
   };
 
@@ -56,6 +71,7 @@ const GameVoice = ({ session, subscribers, leaveSession }: GameVoiceType) => {
                 height="30px"
                 fill="white"
                 onClick={handleMic}
+                style={{ transform: 'scaleX(-1)' }}
               />
             ) : (
               <MicOff
@@ -63,6 +79,7 @@ const GameVoice = ({ session, subscribers, leaveSession }: GameVoiceType) => {
                 height="30px"
                 fill="white"
                 onClick={handleMic}
+                style={{ transform: 'scaleX(-1)' }}
               />
             )}
             {/* <div id="session-header">

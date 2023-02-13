@@ -35,7 +35,7 @@ export const createConnection = async (req: Request, res: Response) => {
       res.status(404).send();
     } else {
       const connection = await session.createConnection(req.body);
-      console.log(`connection created`);
+      console.log('connection created', connection);
       res.send(connection.token);
     }
   } catch (err) {

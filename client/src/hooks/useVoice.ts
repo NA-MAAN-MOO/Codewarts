@@ -61,14 +61,24 @@ export const createToken = async (sessionId: string) => {
   return response.data; // The token
 };
 
-export const registerSession = async (
-  session: Session | undefined,
-  sessionId: string,
-  addSubscriber: Function,
-  deleteSubscriber: Function,
-  OV: OpenVidu | undefined,
-  userName: String
-) => {
+export const registerSession = async (props: {
+  session: Session | undefined;
+  sessionId: string;
+  addSubscriber: Function;
+  deleteSubscriber: Function;
+  handlePublisher: Function;
+  OV: OpenVidu | undefined;
+  userName: String;
+}) => {
+  const {
+    session,
+    sessionId,
+    addSubscriber,
+    deleteSubscriber,
+    OV,
+    userName,
+    handlePublisher,
+  } = props;
   try {
     if (!session) return;
     const mySession = session;
@@ -121,6 +131,7 @@ export const registerSession = async (
     // --- 6) Publish your stream ---
 
     mySession.publish(pubNow);
+    handlePublisher(pubNow);
   } catch (error) {
     console.log(error);
   }
