@@ -16,6 +16,7 @@ import {
   initSession,
 } from 'hooks/useVoice';
 import { VoiceProp } from 'types';
+import GameVoice from 'components/voice/GameVoice';
 
 const APPLICATION_SERVER_URL = 'http://localhost:5000/';
 
@@ -82,39 +83,14 @@ const Voice = ({ roomKey, userName }: VoiceProp) => {
     );
   }, [session]);
 
-  return (
-    <div className="container">
-      {session === undefined ? (
-        <div id="join">
-          <div id="join-dialog" style={{ color: 'white' }}>
-            Loading...
-          </div>
-        </div>
-      ) : null}
-
-      {session !== undefined ? (
-        <div id="session">
-          <div id="session-header">
-            <input
-              className="btn btn-large btn-danger"
-              type="button"
-              id="buttonLeaveSession"
-              onClick={leaveSession}
-              value="Leave session"
-            />
-          </div>
-
-          <div id="video-container" className="col-md-6">
-            {subscribers.map((sub, i) => (
-              <div key={sub.id} className="stream-container col-md-6 col-xs-6">
-                <span>{sub.id}</span>
-                <Audio streamManager={sub} />
-              </div>
-            ))}
-          </div>
-        </div>
-      ) : null}
-    </div>
+  return roomKey === 'MAIN' ? (
+    <GameVoice
+      session={session}
+      subscribers={subscribers}
+      leaveSession={leaveSession}
+    />
+  ) : (
+    <div>에디터화면</div>
   );
 };
 
