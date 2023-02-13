@@ -19,3 +19,11 @@
    server : npm run dev
 
    client : npm start
+
+6. **voice chat deploy server 실행**
+
+   커맨드에 다음 입력
+
+   docker run -p 4443:4443 --rm -e OPENVIDU_SECRET=MY_SECRET openvidu/openvidu-dev:2.25.0
+
+   (개발용이기 때문에 배포 시 새로 파야 함)

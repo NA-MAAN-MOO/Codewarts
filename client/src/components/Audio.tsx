@@ -5,15 +5,15 @@ type AudioType = null | MediaStreamTrack;
 
 const Audio = (props: { streamManager: StreamManager }) => {
   const { streamManager } = props;
-  const audioRef = useRef();
+  const audioRef = useRef(null);
 
   useEffect(() => {
-    if (!!streamManager && !!audioRef) {
+    if (!!streamManager && !!audioRef && !!audioRef.current) {
       streamManager.addVideoElement(audioRef.current);
     }
   }, [props]);
 
-  return <video autoPlay={true} ref={audioRef} />;
+  return <audio autoPlay={true} ref={audioRef} />;
 };
 
 export default Audio;
