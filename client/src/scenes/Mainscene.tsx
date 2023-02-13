@@ -204,7 +204,6 @@ export default class MainScene extends Phaser.Scene {
       }
       // @ts-ignore
       if (Phaser.Input.Keyboard.JustDown(this.idxEnter)) {
-        console.log(this.editorIdx);
         switch (this.editorIdx) {
           case 4:
             this.input.keyboard.disableGlobalCapture();
@@ -231,7 +230,6 @@ export default class MainScene extends Phaser.Scene {
             });
             this.watchTable = false;
             this.enterEditor(this.player.touching[0].body.id, this.editorIdx);
-            console.log(this.player.touching[0]);
             this.tableMap
               .get(this.player.touching[0].body.id)
               ?.clearEditorList();
@@ -271,6 +269,7 @@ export default class MainScene extends Phaser.Scene {
 
         let tableId = this.player.touching[0].body.id;
         let tableInstance = this.tableMap.get(tableId);
+        console.log(tableInstance);
         tableInstance?.openEditorList();
 
         // this.player.touching[0].macbookList.forEach((mac: any) => {
@@ -349,10 +348,13 @@ export default class MainScene extends Phaser.Scene {
   }
 
   enterEditor(tableId: any, idx: number) {
-    if (!this.tableMap.get(tableId).username) {
-      console.log(phaserGame.userName);
+    console.log('이거 왜 불러');
+    if (!this.tableMap.get(tableId).tableInfo.get(idx).username) {
+      console.log(this.tableMap);
       // 실제로 에디터 창 열어주는 부분
+      // this.tableMap.get(tableId).tableInfo[idx].username = phaserGame.userName;
       this.tableMap.get(tableId).updateTable(idx, phaserGame.userName);
+
       let payLoad = {
         id: tableId,
         idx: idx,
@@ -364,6 +366,7 @@ export default class MainScene extends Phaser.Scene {
       store.dispatch(setUserName(phaserGame.userName));
       // 에디터 창 열기
       store.dispatch(openEditor());
+      // console.log(this.tableMap.get(tableId).tableInfo.get(idx).username);
     } else {
       // //@ts-ignore
       // store.dispatch(setRoomId(editorOwner));

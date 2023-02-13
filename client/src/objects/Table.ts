@@ -3,8 +3,8 @@ import Resource from './Resources';
 
 // type tableStateType = { [index: number]: object };
 const tableInfoModel = {
-  username: undefined,
-  roomId: undefined,
+  username: '',
+  roomId: 0,
   laptop: undefined,
   chair: undefined,
 };
@@ -23,7 +23,7 @@ export default class Table {
   constructor(scene: Phaser.Scene, tableObject: Resource, tableId: number) {
     this.usercount = 0;
     for (let i = 0; i < 4; i++) {
-      this.tableInfo.set(i, tableInfoModel);
+      this.tableInfo.set(i, { ...tableInfoModel });
     }
     this.tableObject = tableObject;
     this.tableId = tableId;
@@ -38,9 +38,9 @@ export default class Table {
         .graphics()
         .fillStyle(0xeeeeee, 1)
         .fillRoundedRect(
-          this.tableObject.x - 100,
+          this.tableObject.x - 135,
           this.tableObject.y - 150,
-          200,
+          270,
           220
         )
     );
@@ -55,11 +55,12 @@ export default class Table {
       }
       let editorButton = this.scene.add
         .text(0, 0, str)
-        .setStyle({ fontSize: '20px', color: '#ff6f00' });
+        .setStyle({ fontSize: '20px', color: '#ff6f00' })
+        .setOrigin(0.5, 0.5);
       this.editorBtnList.push(editorButton);
       this.editorListDialog.add(
         editorButton.setPosition(
-          this.tableObject.x - 80,
+          this.tableObject.x,
           this.tableObject.y - 120 + 30 * i
         )
       );
@@ -67,7 +68,8 @@ export default class Table {
     let backButton = this.scene.add
       .text(0, 0, '돌아가기')
       .setStyle({ fontSize: '20px', color: 'black', align: 'center' })
-      .setPosition(this.tableObject.x - 80, this.tableObject.y + 30);
+      .setPosition(this.tableObject.x, this.tableObject.y + 30)
+      .setOrigin(0.5, 0.5);
     this.editorBtnList.push(backButton);
     this.editorListDialog.add(backButton);
   }
