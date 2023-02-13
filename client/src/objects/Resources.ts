@@ -162,6 +162,7 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
 
           // TODO: E누르면 한 번 overlap된 모든 table이 찍히는 현상 해결하기
           // 딱 하나만 볼 수 있게하기
+          //@ts-ignore
           const table = this.mainScene.tableMap.get(this.body.id);
           this.mainScene.input.keyboard.on('keydown-E', () =>
             console.log(table.tableId)
