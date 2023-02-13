@@ -5,6 +5,7 @@ import Resource from '../objects/Resources';
 import { io, Socket } from 'socket.io-client';
 import store from 'stores';
 import { GAME_STATUS } from 'utils/Constants';
+import Table from 'objects/Table';
 
 export default class MainScene extends Phaser.Scene {
   // class 속성 명시는 constructor 이전에 명시하면 되는듯
@@ -17,6 +18,7 @@ export default class MainScene extends Phaser.Scene {
   otherPlayers: any;
   isKeyDisable: boolean;
   charKey!: string;
+  tableMap = new Map<number, Table>();
 
   constructor() {
     // Scene의 key값은 MainScene
@@ -73,7 +75,7 @@ export default class MainScene extends Phaser.Scene {
     //@ts-ignore
     this.map.objects.forEach((objLayer) => {
       //@ts-ignore
-      objLayer.objects.forEach((objs) => {
+      objLayer.objects.forEach((objs, i) => {
         new Resource({
           scene: this,
           resource: objs,
@@ -97,6 +99,7 @@ export default class MainScene extends Phaser.Scene {
       down: Phaser.Input.Keyboard.KeyCodes.S,
       left: Phaser.Input.Keyboard.KeyCodes.A,
       right: Phaser.Input.Keyboard.KeyCodes.D,
+      open: Phaser.Input.Keyboard.KeyCodes.E,
     });
     let camera = this.cameras.main;
     camera.zoom = 0.8;
