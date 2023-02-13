@@ -50,8 +50,6 @@ function YjsCodeMirror() {
   /* for UI */
   const { TextArea } = Input;
 
-  /* LeetCode user info */
-
   /* roomName 스트링 값 수정하지 말 것(※ 수정할 거면 전부 수정해야 함) */
   const roomName = `ROOMNAME${roomId}`;
 
@@ -178,7 +176,7 @@ function YjsCodeMirror() {
   const fetchProbInfo = async () => {
     if (leetProbDataRef.current === null) return;
 
-    /* 문제 정보 query */
+    // 문제 정보 쿼리
     const problemQuery = `
     query ($titleSlug: String!) {
       question(titleSlug: $titleSlug) {
@@ -206,8 +204,8 @@ function YjsCodeMirror() {
           enableRunCode
           enableTestMode
           enableDebugger
+        }
       }
-    }
     `;
 
     const problemQueryVariable = {
@@ -313,11 +311,14 @@ function YjsCodeMirror() {
         </div>
 
         <div className="algo-user-info">
-          <div>깃헙 주소 :{leetUserData?.matchedUser.githubUrl}</div>
-          <div>ranking : {leetUserData?.matchedUser.profile.ranking}</div>
+          <div>깃헙 주소 :{leetUserData?.matchedUser?.githubUrl}</div>
+          <div>ranking : {leetUserData?.matchedUser?.profile?.ranking}</div>
           <div>
             총 맞춘 문제수 :
-            {leetUserData?.matchedUser.submitStats.acSubmissionNum[0].count}
+            {
+              leetUserData?.matchedUser?.submitStats?.acSubmissionNum?.[0]
+                ?.count
+            }
           </div>
         </div>
 
@@ -332,7 +333,7 @@ function YjsCodeMirror() {
         <div id="algo-problem-info" style={{ border: '5px solid black' }}>
           <div>
             답안 제출하러 가기 : https://leetcode.com/problems/
-            {leetProbDataRef.current.value}/
+            {leetProbData?.question.titleSlug}/
           </div>
           <div>문제 title : {leetProbData?.question.title}</div>
           <div>문제 번호 : {leetProbData?.question.questionId}</div>
