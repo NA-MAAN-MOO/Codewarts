@@ -122,7 +122,7 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
     }
 
     this.setStatic(true);
-    this.setOrigin(0.53, 0.5);
+    this.setOrigin(0.5, 0.5);
   }
 
   static preload(scene: any) {
@@ -133,6 +133,7 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
     scene.load.image('bookshelf_right', 'assets/room/bookshelf_right.png');
     scene.load.image('chair_back', 'assets/room/chair_back.png');
     scene.load.image('chair_front', 'assets/room/chair_front.png');
+    scene.load.image('whiteboard', 'assets/room/whiteboard.png');
     scene.load.image('chalkboard', 'assets/room/chalkboard.png');
     scene.load.image('cupboard', 'assets/room/cupboard.png');
     scene.load.image('flower', 'assets/room/flower.png');
