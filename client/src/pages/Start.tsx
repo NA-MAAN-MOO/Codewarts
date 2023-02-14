@@ -7,6 +7,8 @@ import { setCharactorModel, setNickName } from 'stores/characterSlice';
 import SelectBox from 'objects/SelectBox';
 // import '../../public/assets/characters'
 
+//const {nickName, characterModel} = useSelector((state:RootState)=> state.charactor); 필요한곳에 쓰면됨
+
 const Start = () => {
   const dispatch = useDispatch();
   const [nameInput, setNameInput] = useState('');

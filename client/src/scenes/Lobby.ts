@@ -33,6 +33,8 @@ export default class extends Phaser.Scene {
 
   socket: Socket | undefined;
 
+  // const {nickName, characterModel} = useSelector((state:RootState)=> state.charactor);
+
   constructor() {
     super('Lobby');
   }
