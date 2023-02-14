@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { openGame } from '../stores/modeSlice';
 import styled from 'styled-components';
 import { RootState } from '../stores';
-import { setCharactorModel, setNickName } from 'stores/characterSlice';
 import SelectBox from 'objects/SelectBox';
 import LoginDialog from './LoginDialog';
 // import '../../public/assets/characters'

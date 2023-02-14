@@ -122,66 +122,37 @@ const Warning = styled.div`
   gap: 3px;
 `;
 
-// const avatars = [
-//   { name: 'char0', img: characters.char0 },
-//   { name: 'char1', img: characters.char1 },
-//   { name: 'char2', img: characters.char2 },
-//   { name: 'char3', img: characters.char3 },
-//   { name: 'char4', img: characters.char4 },
-//   { name: 'char5', img: characters.char5 },
-//   { name: 'char6', img: characters.char6 },
-//   { name: 'char7', img: characters.char7 },
-//   { name: 'char8', img: characters.char8 },
-//   { name: 'char9', img: characters.char9 },
-//   { name: 'char10', img: characters.char10 },
-//   { name: 'char11', img: characters.char11 },
-//   { name: 'char12', img: characters.char12 },
-//   { name: 'char13', img: characters.char13 },
-//   { name: 'char14', img: characters.char14 },
-//   { name: 'char15', img: characters.char15 },
-//   { name: 'char16', img: characters.char16 },
-//   { name: 'char17', img: characters.char17 },
-//   { name: 'char18', img: characters.char18 },
-//   { name: 'char19', img: characters.char19 },
-//   { name: 'char20', img: characters.char20 },
-//   { name: 'char21', img: characters.char21 },
-//   { name: 'char22', img: characters.char22 },
-//   { name: 'char23', img: characters.char23 },
-//   { name: 'char24', img: characters.char24 },
-//   { name: 'char25', img: characters.char25 },
-//   { name: 'char26', img: characters.char26 },
-//   { name: 'char27', img: characters.char27 },
-// ];
 const avatars = [
   { name: 'char0', img: characters.char0 },
   { name: 'char1', img: characters.char1 },
   { name: 'char2', img: characters.char2 },
   { name: 'char3', img: characters.char3 },
   { name: 'char4', img: characters.char4 },
-  // { name: 'char5', img: char5 },
-  // { name: 'char6', img: char6 },
-  // { name: 'char7', img: char7 },
-  // { name: 'char8', img: char8 },
-  // { name: 'char9', img: char9 },
-  // { name: 'char10', img: char10 },
-  // { name: 'char11', img: char11 },
-  // { name: 'char12', img: char12 },
-  // { name: 'char13', img: char13 },
-  // { name: 'char14', img: char14 },
-  // { name: 'char15', img: char15 },
-  // { name: 'char16', img: char16 },
-  // { name: 'char17', img: char17 },
-  // { name: 'char18', img: char18 },
-  // { name: 'char19', img: char19 },
-  // { name: 'char20', img: char20 },
-  // { name: 'char21', img: char21 },
-  // { name: 'char22', img: char22 },
-  // { name: 'char23', img: char23 },
-  // { name: 'char24', img: char24 },
-  // { name: 'char25', img: char25 },
-  // { name: 'char26', img: char26 },
-  // { name: 'char27', img: char27 },
+  { name: 'char5', img: characters.char5 },
+  { name: 'char6', img: characters.char6 },
+  { name: 'char7', img: characters.char7 },
+  { name: 'char8', img: characters.char8 },
+  { name: 'char9', img: characters.char9 },
+  { name: 'char10', img: characters.char10 },
+  { name: 'char11', img: characters.char11 },
+  { name: 'char12', img: characters.char12 },
+  { name: 'char13', img: characters.char13 },
+  { name: 'char14', img: characters.char14 },
+  { name: 'char15', img: characters.char15 },
+  { name: 'char16', img: characters.char16 },
+  { name: 'char17', img: characters.char17 },
+  { name: 'char18', img: characters.char18 },
+  { name: 'char19', img: characters.char19 },
+  { name: 'char20', img: characters.char20 },
+  { name: 'char21', img: characters.char21 },
+  { name: 'char22', img: characters.char22 },
+  { name: 'char23', img: characters.char23 },
+  { name: 'char24', img: characters.char24 },
+  { name: 'char25', img: characters.char25 },
+  { name: 'char26', img: characters.char26 },
+  { name: 'char27', img: characters.char27 },
 ];
+
 const colorArr = [
   '#7bf1a8',
   '#ff7e50',
@@ -249,7 +220,11 @@ export default function LoginDialog() {
           >
             {avatars.map((avatar) => (
               <SwiperSlide key={avatar.name}>
-                <img src={avatar.img} alt={avatar.name} />
+                <img
+                  style={{ left: '25%', clipPath: 'rect(0px 30px 30px 0px)' }}
+                  src={avatar.img}
+                  alt={avatar.name}
+                />
               </SwiperSlide>
             ))}
           </Swiper>

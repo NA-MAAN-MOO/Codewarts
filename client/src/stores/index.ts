@@ -1,13 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import modeReducer from './modeSlice';
 import editorReducer from './editorSlice';
-import charactorReducer from './characterSlice';
+import userReducer from './userSlice';
 
 export const store = configureStore({
   reducer: {
     mode: modeReducer,
     editor: editorReducer,
-    charactor: charactorReducer,
+    user: userReducer,
   },
 });
 
