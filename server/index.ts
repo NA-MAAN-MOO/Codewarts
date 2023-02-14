@@ -49,7 +49,7 @@ let tables: any[] = []; // 모든 '사용 중' 테이블 데이터를 저장하�
 io.on('connection', (socket: Socket) => {
   // socket이 연결됩니다~ 이 안에서 서버는 연결된 클라이언트와 소통할 준비가 됨
   console.log('a user connected'); // 유저와 소켓 연결 성공
-  console.log(players.length); // '현재 접속을 시도한 유저'를 제외한 접속인원 수 ( 이하 '나' 라고 지칭하겠습니다. )
+  // console.log(players.length); // '현재 접속을 시도한 유저'를 제외한 접속인원 수 ( 이하 '나' 라고 지칭하겠습니다. )
   const charKey = `char${Math.floor(Math.random() * 27)}`; // 랜덤으로 캐릭터 값을 지정해준다. 이후 캐릭터 선택하는 화면이 생기면, 그때 선택한 캐릭터 값을 charKey에 넣어주면 됨!
   const userName = `원숭이${Math.floor(Math.random() * 2000)}`; // 유저 이름. 유저 위에 떠야한다.
   let playerInfo = {
@@ -94,6 +94,20 @@ io.on('connection', (socket: Socket) => {
   socket.on('disconnect', () => {
     // socket이 연결 해제됩니다~
     console.log('user disconnected!!!');
+    // tables에 '내' 에디터가 있는지 검사하고, 있다면 삭제
+    // FIXME: removeEditor를 클라이언트에 쏴주면 클라에서 나오게?
+    // 그러면 '내가 누구 꺼 보는지'를 알아야겠다.
+    console.log('removeEditor');
+    tables.forEach((table) => {
+      if (table[2] === playerInfo.userName) {
+        socket.broadcast.emit('removeEditor', table);
+        socket.emit('removeEditor', table);
+      }
+    });
+    tables = tables.filter((table) => {
+      table[2] !== playerInfo.userName;
+    });
+    console.log(tables);
     // '내'가 나가면 다른 유저들에게 '내' 정보를 지우기 위한 통신을 한다.
     players.forEach((player) => {
       if (player.socketId !== socket.id) {
@@ -156,6 +170,7 @@ io.on('connection', (socket: Socket) => {
     console.log('addEditor');
     // 누군가 editor에 들어가면 해당 table ID값과 자리(인덱스)값을 업데이트 한다.
     tables.push([payLoad.id, payLoad.idx, playerInfo.userName]);
+    console.log(tables);
     let payLoad2 = {
       id: payLoad.id,
       idx: payLoad.idx,
@@ -186,9 +201,11 @@ io.on('connection', (socket: Socket) => {
         socket.emit('removeEditor', table);
       }
     });
-    tables.filter((table) => {
-      table[2] !== playerInfo.userName;
+    tables = tables.filter((table) => {
+      // 조건식에 return 붙여야한다.
+      return table[2] !== playerInfo.userName;
     });
+    console.log(tables);
   });
 });
 
