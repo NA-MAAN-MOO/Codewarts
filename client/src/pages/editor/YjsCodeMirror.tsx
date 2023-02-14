@@ -163,7 +163,7 @@ function YjsCodeMirror() {
       });
 
       console.log(data); // 전체 reponse body (output, statusCode, memory, cpuTime)
-      setCompileOutput(data.output);
+      setCompileOutput(data.output.replace(/\n/g, '<br>'));
       setMemory(data.memory);
       setCpuTime(data.cpuTime);
     } catch (error) {
@@ -456,6 +456,7 @@ function YjsCodeMirror() {
               </a>
               <div>문제 제목 : {leetProbData?.question.title}</div>
               <div>문제 번호 : {leetProbData?.question.questionId}</div>
+              <div>난이도 : {leetProbData?.question.difficulty}</div>
               <h3>문제 내용</h3>
               <div
                 dangerouslySetInnerHTML={{
@@ -471,9 +472,7 @@ function YjsCodeMirror() {
                   ),
                 }}
               />
-              <div>난이도 : {leetProbData?.question.difficulty}</div>
               <h3>파이썬 스니펫</h3>
-
               <div
                 dangerouslySetInnerHTML={{
                   __html: leetProbData?.question.codeSnippets[3].code.replace(
@@ -569,7 +568,14 @@ function YjsCodeMirror() {
           코드 실행
         </Button>
         <div className="compiled-result">
-          <div className="compiled-output">OUTPUT : {compileOutput}</div>
+          <h3>OUTPUT</h3>
+          <div
+            style={{ border: '1px solid black' }}
+            className="compiled-output"
+            dangerouslySetInnerHTML={{
+              __html: compileOutput,
+            }}
+          ></div>
           <div className="compiled-cputime">CPU TIME : {cpuTime}</div>
           <div className="compiled-memory">MEMORY : {memory}</div>
         </div>
