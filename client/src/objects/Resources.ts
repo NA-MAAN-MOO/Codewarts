@@ -7,6 +7,8 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
   tableSensor!: any;
   buttonEditor!: any;
   mainScene: Phaser.Scene;
+  buttonToEditor!: any;
+  macbookList!: any[];
 
   constructor(data: any) {
     let { scene, resource, polygon } = data;
@@ -38,7 +40,7 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
       });
     }
     this.setExistingBody(verticeCollider);
-
+    this.macbookList = [];
     /* Add table interaction */
     if (resource.name === 'table') {
       // @ts-ignore
@@ -53,52 +55,57 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
         frictionAir: 0.35,
       });
 
-      scene.tableMap.set(compoundBody.id, new Table(this, compoundBody.id));
+      scene.tableMap.set(
+        compoundBody.id,
+        new Table(this.mainScene, this, compoundBody.id)
+      );
       console.log(scene.tableMap);
       // console.log(compoundBody.id);
       this.CreateCollisions(tableCollider);
       this.setExistingBody(compoundBody);
-      // let macBookSensorAdd = Bodies.circle(this.x, this.y, 70, {
-      // isSensor: true,
-      // label: 'macBookSensor',
+
+      for (let i = 0; i < 5; i++) {
+        if (i !== 0) {
+          this.buttonToEditor = new Button({
+            scene: this.scene,
+            x: this.x,
+            y: this.y - 30 - 30 * i,
+            text: `${5 - i}번 자리 앉기`,
+            style: {
+              fontSize: '20px',
+              // backgroundColor: 'white',
+              color: '#de77ae',
+              stroke: '#de77aa',
+              strokeThickness: 2,
+            },
+          })
+            .getBtn()
+            .setDepth(300)
+            .setShadow(2, 2, '#333333', 2, false, true);
+        } else {
+          this.buttonToEditor = new Button({
+            scene: this.scene,
+            x: this.x,
+            y: this.y - 30 - 30 * i,
+            text: `돌아가기`,
+            style: {
+              fontSize: '20px',
+              backgroundColor: 'white',
+              color: 'black',
+            },
+          })
+            .getBtn()
+            .setDepth(300);
+        }
+        this.buttonToEditor.setVisible(false);
+        this.macbookList.push(this.buttonToEditor);
+      }
     }
-
-    // const compoundBody = Body.create({
-    // parts: [verticeCollider, macBookSensorAdd],
-    // frictionAir: 0.35,
-    // });
-    // this.CreateCollisions(macBookSensorAdd);
-    // this.setExistingBody(compoundBody);
-    // } else {
-
-    // }
-
-    // if (
-    // resource.name !== 'chair_front' &&
-    // resource.name !== 'chair_back' &&
-    // resource.name !== 'wall_candle'
-    // ) {
-    // this.setExistingBody(verticeCollider);
-    // }
-
     this.setStatic(true);
     this.setOrigin(0.53, 0.5);
-    // this.setSensor(true);
-    // let circleCollider = Bodies.circle(this.x, this.y, 12, {
-    // isSensor: false,
-    // label: 'collider',
-    // });
-    // this.setExistingBody(circleCollider); // #1 오브젝트 collider를 원형으로 적용할 시 사용
-    // this.setStatic(true);
-    // this.setOrigin(0.5, yOrigin); // #1 오브젝트 collider를 원형으로 적용할 시 사용
   }
 
   static preload(scene: any) {
-    // scene.load.atlas(
-    //   'resources',
-    //   'assets/images/furniture.png',
-    //   'assets/images/furniture_atlas.json'
-    // );
     /* Props */
     scene.load.image('book', 'assets/room/book.png');
     scene.load.image('bookshelf_corner', 'assets/room/bookshelf_corner.png');
@@ -133,7 +140,7 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
     this.scene.matterCollision.addOnCollideStart({
       objectA: [tableSensor],
       callback: (other: any) => {
-        console.log(this.body);
+        // console.log(this.body.id);
         // console.log("from player: ", other);
 
         if (other.bodyB.isSensor && other.bodyB.gameObject instanceof Player) {
@@ -148,28 +155,10 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
               color: 'black',
             },
           }).getBtn();
-          // this.buttonEditor = new Phaser.GameObjects.Sprite(
-          //   this.scene,
-          //   this.x,
-          //   this.y,
-          //   'book',
-          //   0
-
-          // this.buttonEditor.setScale(0.8);
-          // this.buttonEditor.setOrigin(0.5, 0.8);
           this.buttonEditor.setInteractive(); // 이거 해줘야 function 들어감!!!!! 3시간 버린듯;
-          // this.scene.add.existing(this.buttonEditor);
 
-          // TODO: E누르면 한 번 overlap된 모든 table이 찍히는 현상 해결하기
-          // 딱 하나만 볼 수 있게하기
-          const table = this.mainScene.tableMap.get(this.body.id);
-          this.mainScene.input.keyboard.on('keydown-E', () =>
-            console.log(table.tableId)
-          );
-
-          // this.buttonEditor.setDepth(6000);
-
-          //TODO: 여기에서 사용자가 키보드 누르면 상호작용 하도록 만듦
+          //@ts-ignore
+          this.scene.player.touching.push(this);
           // redux로 상태 바꿔서 component 보이게? Table 클래스 내의 정보 이용해서 자리별 사용 여부, user count 등 띄우기
         }
       },
@@ -180,6 +169,10 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
       objectA: [tableSensor],
       callback: (other: any) => {
         if (this.buttonEditor) {
+          //@ts-ignore
+          this.scene.player.touching = this.scene.player.touching.filter(
+            (button: any) => button !== this
+          );
           this.buttonEditor.destroy();
         }
       },
