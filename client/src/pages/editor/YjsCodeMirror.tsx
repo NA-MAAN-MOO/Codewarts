@@ -374,6 +374,13 @@ function YjsCodeMirror() {
     setAlgoSelect(e.target.value);
   };
 
+  /* 문제 예제 인풋을 실행 인풋 창으로 복사 */
+  // todo: 인덱스를 인수로 받고, 해당하는 예제 복사하기
+  const copyToInput = () => {
+    if (inputStdin.current === undefined) return;
+    inputStdin.current.value = bojProbFullData?.samples?.[1].input;
+  };
+
   return (
     <>
       <div className="room-user-info">
@@ -511,23 +518,30 @@ function YjsCodeMirror() {
                   __html: bojProbFullData?.prob_output.replace(/\n/g, '<br>'),
                 }}
               />
-              <h3>예제 1</h3>
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: bojProbFullData?.samples?.[1].input.replace(
-                    /\n/g,
-                    '<br>'
-                  ),
-                }}
-              />
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: bojProbFullData?.samples?.[1].output.replace(
-                    /\n/g,
-                    '<br>'
-                  ),
-                }}
-              />
+              <div className="prob-samples">
+                <h3>예제 1</h3>
+                <span onClick={copyToInput}>input창으로 복사하기</span>
+                <div className="prob-sample-input1">
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: bojProbFullData?.samples?.[1].input.replace(
+                        /\n/g,
+                        '<br>'
+                      ),
+                    }}
+                  />
+                </div>
+                <div className="prob-sample-output1">
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: bojProbFullData?.samples?.[1].output.replace(
+                        /\n/g,
+                        '<br>'
+                      ),
+                    }}
+                  />
+                </div>
+              </div>
             </div>
           )}
         </div>
