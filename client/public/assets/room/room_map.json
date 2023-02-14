@@ -18,7 +18,7 @@
         {
          "draworder":"topdown",
          "id":7,
-         "name":"chairs_front",
+         "name":"chair_front",
          "objects":[
                 {
                  "class":"",
@@ -782,245 +782,6 @@
     
         {
          "draworder":"topdown",
-         "id":11,
-         "name":"macbook_front_closed",
-         "objects":[
-                {
-                 "class":"",
-                 "gid":5,
-                 "height":32,
-                 "id":74,
-                 "name":"macbook_front_closed",
-                 "properties":[
-                        {
-                         "name":"noCollision",
-                         "type":"bool",
-                         "value":true
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":32,
-                 "x":863.129,
-                 "y":450.84
-                },
-            
-                {
-                 "class":"",
-                 "gid":5,
-                 "height":32,
-                 "id":75,
-                 "name":"macbook_front_closed",
-                 "properties":[
-                        {
-                         "name":"noCollision",
-                         "type":"bool",
-                         "value":true
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":32,
-                 "x":927.635,
-                 "y":482.332
-                },
-            
-                {
-                 "class":"",
-                 "gid":5,
-                 "height":32,
-                 "id":76,
-                 "name":"macbook_front_closed",
-                 "properties":[
-                        {
-                         "name":"noCollision",
-                         "type":"bool",
-                         "value":true
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":32,
-                 "x":1120.71,
-                 "y":580.25
-                },
-            
-                {
-                 "class":"",
-                 "gid":5,
-                 "height":32,
-                 "id":77,
-                 "name":"macbook_front_closed",
-                 "properties":[
-                        {
-                         "name":"noCollision",
-                         "type":"bool",
-                         "value":true
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":32,
-                 "x":1185.21,
-                 "y":611.742
-                },
-            
-                {
-                 "class":"",
-                 "gid":5,
-                 "height":32,
-                 "id":78,
-                 "name":"macbook_front_closed",
-                 "properties":[
-                        {
-                         "name":"noCollision",
-                         "type":"bool",
-                         "value":true
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":32,
-                 "x":630.344,
-                 "y":567.624
-                },
-            
-                {
-                 "class":"",
-                 "gid":5,
-                 "height":32,
-                 "id":79,
-                 "name":"macbook_front_closed",
-                 "properties":[
-                        {
-                         "name":"noCollision",
-                         "type":"bool",
-                         "value":true
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":32,
-                 "x":694.851,
-                 "y":599.116
-                },
-            
-                {
-                 "class":"",
-                 "gid":5,
-                 "height":32,
-                 "id":80,
-                 "name":"macbook_front_closed",
-                 "properties":[
-                        {
-                         "name":"noCollision",
-                         "type":"bool",
-                         "value":true
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":32,
-                 "x":887.919,
-                 "y":697.034
-                },
-            
-                {
-                 "class":"",
-                 "gid":5,
-                 "height":32,
-                 "id":81,
-                 "name":"macbook_front_closed",
-                 "properties":[
-                        {
-                         "name":"noCollision",
-                         "type":"bool",
-                         "value":true
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":32,
-                 "x":952.429,
-                 "y":728.526
-                },
-            
-                {
-                 "class":"",
-                 "gid":5,
-                 "height":32,
-                 "id":82,
-                 "name":"macbook_front_closed",
-                 "properties":[
-                        {
-                         "name":"noCollision",
-                         "type":"bool",
-                         "value":true
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":32,
-                 "x":382.501,
-                 "y":691.86
-                },
-            
-                {
-                 "class":"",
-                 "gid":5,
-                 "height":32,
-                 "id":83,
-                 "name":"macbook_front_closed",
-                 "properties":[
-                        {
-                         "name":"noCollision",
-                         "type":"bool",
-                         "value":true
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":32,
-                 "x":447.008,
-                 "y":723.352
-                },
-            
-                {
-                 "class":"",
-                 "gid":5,
-                 "height":32,
-                 "id":84,
-                 "name":"macbook_front_closed",
-                 "properties":[
-                        {
-                         "name":"noCollision",
-                         "type":"bool",
-                         "value":true
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":32,
-                 "x":640.076,
-                 "y":821.27
-                },
-            
-                {
-                 "class":"",
-                 "gid":5,
-                 "height":32,
-                 "id":85,
-                 "name":"macbook_front_closed",
-                 "properties":[
-                        {
-                         "name":"noCollision",
-                         "type":"bool",
-                         "value":true
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":32,
-                 "x":704.586,
-                 "y":852.762
-                }],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "x":0,
-         "y":0
-        },
-    
-        {
-         "draworder":"topdown",
          "id":12,
          "name":"mackbook_back_closed",
          "objects":[
@@ -1250,6 +1011,245 @@
                  "width":32,
                  "x":738.637,
                  "y":833.343
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        },
+    
+        {
+         "draworder":"topdown",
+         "id":11,
+         "name":"macbook_front_closed",
+         "objects":[
+                {
+                 "class":"",
+                 "gid":5,
+                 "height":32,
+                 "id":74,
+                 "name":"macbook_front_closed",
+                 "properties":[
+                        {
+                         "name":"noCollision",
+                         "type":"bool",
+                         "value":true
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":32,
+                 "x":863.129,
+                 "y":450.84
+                },
+            
+                {
+                 "class":"",
+                 "gid":5,
+                 "height":32,
+                 "id":75,
+                 "name":"macbook_front_closed",
+                 "properties":[
+                        {
+                         "name":"noCollision",
+                         "type":"bool",
+                         "value":true
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":32,
+                 "x":927.635,
+                 "y":482.332
+                },
+            
+                {
+                 "class":"",
+                 "gid":5,
+                 "height":32,
+                 "id":76,
+                 "name":"macbook_front_closed",
+                 "properties":[
+                        {
+                         "name":"noCollision",
+                         "type":"bool",
+                         "value":true
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":32,
+                 "x":1120.71,
+                 "y":580.25
+                },
+            
+                {
+                 "class":"",
+                 "gid":5,
+                 "height":32,
+                 "id":77,
+                 "name":"macbook_front_closed",
+                 "properties":[
+                        {
+                         "name":"noCollision",
+                         "type":"bool",
+                         "value":true
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":32,
+                 "x":1185.21,
+                 "y":611.742
+                },
+            
+                {
+                 "class":"",
+                 "gid":5,
+                 "height":32,
+                 "id":78,
+                 "name":"macbook_front_closed",
+                 "properties":[
+                        {
+                         "name":"noCollision",
+                         "type":"bool",
+                         "value":true
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":32,
+                 "x":630.344,
+                 "y":567.624
+                },
+            
+                {
+                 "class":"",
+                 "gid":5,
+                 "height":32,
+                 "id":79,
+                 "name":"macbook_front_closed",
+                 "properties":[
+                        {
+                         "name":"noCollision",
+                         "type":"bool",
+                         "value":true
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":32,
+                 "x":694.851,
+                 "y":599.116
+                },
+            
+                {
+                 "class":"",
+                 "gid":5,
+                 "height":32,
+                 "id":80,
+                 "name":"macbook_front_closed",
+                 "properties":[
+                        {
+                         "name":"noCollision",
+                         "type":"bool",
+                         "value":true
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":32,
+                 "x":887.919,
+                 "y":697.034
+                },
+            
+                {
+                 "class":"",
+                 "gid":5,
+                 "height":32,
+                 "id":81,
+                 "name":"macbook_front_closed",
+                 "properties":[
+                        {
+                         "name":"noCollision",
+                         "type":"bool",
+                         "value":true
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":32,
+                 "x":952.429,
+                 "y":728.526
+                },
+            
+                {
+                 "class":"",
+                 "gid":5,
+                 "height":32,
+                 "id":82,
+                 "name":"macbook_front_closed",
+                 "properties":[
+                        {
+                         "name":"noCollision",
+                         "type":"bool",
+                         "value":true
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":32,
+                 "x":382.501,
+                 "y":691.86
+                },
+            
+                {
+                 "class":"",
+                 "gid":5,
+                 "height":32,
+                 "id":83,
+                 "name":"macbook_front_closed",
+                 "properties":[
+                        {
+                         "name":"noCollision",
+                         "type":"bool",
+                         "value":true
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":32,
+                 "x":447.008,
+                 "y":723.352
+                },
+            
+                {
+                 "class":"",
+                 "gid":5,
+                 "height":32,
+                 "id":84,
+                 "name":"macbook_front_closed",
+                 "properties":[
+                        {
+                         "name":"noCollision",
+                         "type":"bool",
+                         "value":true
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":32,
+                 "x":640.076,
+                 "y":821.27
+                },
+            
+                {
+                 "class":"",
+                 "gid":5,
+                 "height":32,
+                 "id":85,
+                 "name":"macbook_front_closed",
+                 "properties":[
+                        {
+                         "name":"noCollision",
+                         "type":"bool",
+                         "value":true
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":32,
+                 "x":704.586,
+                 "y":852.762
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1673,7 +1673,6 @@
                  "objectgroup":
                     {
                      "draworder":"index",
-                     "id":2,
                      "name":"",
                      "objects":[
                             {
@@ -1910,7 +1909,6 @@
                  "objectgroup":
                     {
                      "draworder":"index",
-                     "id":2,
                      "name":"",
                      "objects":[
                             {
@@ -2016,7 +2014,6 @@
                  "objectgroup":
                     {
                      "draworder":"index",
-                     "id":2,
                      "name":"",
                      "objects":[
                             {
@@ -2132,7 +2129,6 @@
                  "objectgroup":
                     {
                      "draworder":"index",
-                     "id":2,
                      "name":"",
                      "objects":[
                             {
@@ -2213,7 +2209,6 @@
                  "objectgroup":
                     {
                      "draworder":"index",
-                     "id":2,
                      "name":"",
                      "objects":[
                             {
@@ -2274,7 +2269,6 @@
                  "objectgroup":
                     {
                      "draworder":"index",
-                     "id":2,
                      "name":"",
                      "objects":[
                             {
@@ -2335,7 +2329,6 @@
                  "objectgroup":
                     {
                      "draworder":"index",
-                     "id":2,
                      "name":"",
                      "objects":[
                             {
@@ -2396,7 +2389,6 @@
                  "objectgroup":
                     {
                      "draworder":"index",
-                     "id":2,
                      "name":"",
                      "objects":[
                             {
@@ -2477,7 +2469,6 @@
                  "objectgroup":
                     {
                      "draworder":"index",
-                     "id":2,
                      "name":"",
                      "objects":[
                             {
@@ -2538,7 +2529,6 @@
                  "objectgroup":
                     {
                      "draworder":"index",
-                     "id":2,
                      "name":"",
                      "objects":[
                             {
@@ -2604,7 +2594,6 @@
                  "objectgroup":
                     {
                      "draworder":"index",
-                     "id":2,
                      "name":"",
                      "objects":[
                             {
@@ -2665,7 +2654,6 @@
                  "objectgroup":
                     {
                      "draworder":"index",
-                     "id":2,
                      "name":"",
                      "objects":[
                             {
@@ -2726,7 +2714,6 @@
                  "objectgroup":
                     {
                      "draworder":"index",
-                     "id":2,
                      "name":"",
                      "objects":[
                             {
@@ -2787,7 +2774,6 @@
                  "objectgroup":
                     {
                      "draworder":"index",
-                     "id":2,
                      "name":"",
                      "objects":[
                             {
@@ -2848,7 +2834,6 @@
                  "objectgroup":
                     {
                      "draworder":"index",
-                     "id":2,
                      "name":"",
                      "objects":[
                             {
@@ -2914,7 +2899,6 @@
                  "objectgroup":
                     {
                      "draworder":"index",
-                     "id":2,
                      "name":"",
                      "objects":[
                             {
@@ -2985,7 +2969,6 @@
                  "objectgroup":
                     {
                      "draworder":"index",
-                     "id":2,
                      "name":"",
                      "objects":[
                             {
@@ -3056,7 +3039,6 @@
                  "objectgroup":
                     {
                      "draworder":"index",
-                     "id":2,
                      "name":"",
                      "objects":[
                             {
@@ -3152,7 +3134,6 @@
                  "objectgroup":
                     {
                      "draworder":"index",
-                     "id":2,
                      "name":"",
                      "objects":[
                             {
@@ -3268,7 +3249,6 @@
                  "objectgroup":
                     {
                      "draworder":"index",
-                     "id":2,
                      "name":"",
                      "objects":[
                             {
