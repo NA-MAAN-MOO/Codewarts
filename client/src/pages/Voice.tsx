@@ -19,7 +19,7 @@ import {
 import { VoiceProp } from 'types';
 import GameVoice from 'components/voice/GameVoice';
 
-const APPLICATION_SERVER_URL = 'http://localhost:5000/';
+const APPLICATION_SERVER_URL = 'http://localhost:3002/';
 
 //Voice 방 컴포넌트
 const Voice = ({ roomKey, userName }: VoiceProp) => {

@@ -8,7 +8,7 @@ import {
 import { SessionInfo } from 'types';
 import axios from 'axios';
 
-const APPLICATION_SERVER_URL = 'http://localhost:5000/api';
+const APPLICATION_SERVER_URL = 'http://localhost:3002/api';
 
 export const initSession = () => {
   // 1. openvidu 객체 생성

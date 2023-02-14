@@ -2,8 +2,6 @@ import { Request, Response } from 'express';
 import { OpenVidu, Session } from 'openvidu-node-client';
 import { IsRoomExist } from '../types/Voice';
 
-// Environment variable: PORT where the node server is listening
-const SERVER_PORT = process.env.SERVER_PORT || 5000;
 // Environment variable: URL where our OpenVidu server is listening
 const OPENVIDU_URL = process.env.OPENVIDU_URL || 'http://localhost:4443';
 // Environment variable: secret shared with our OpenVidu server

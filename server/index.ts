@@ -201,7 +201,7 @@ httpServer.listen(port, () => {
 editorServer.listen(3001, () => {
   console.log('Editor Server listening on *:3001');
 });
-/* 보이스챗 서버 포트: 5000 */
-voiceServer.listen(5000, () => {
-  console.log('Voice Server listening on *:5000');
+/* 보이스챗 서버 포트: 3002 */
+voiceServer.listen(3002, () => {
+  console.log('Voice Server listening on *:3002');
 });
