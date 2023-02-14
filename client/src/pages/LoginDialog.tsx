@@ -221,7 +221,13 @@ export default function LoginDialog() {
             {avatars.map((avatar) => (
               <SwiperSlide key={avatar.name}>
                 <img
-                  style={{ left: '25%', clipPath: 'rect(0px 30px 30px 0px)' }}
+                  style={{
+                    scale: '4.5',
+                    left: '20%',
+                    clipPath: 'inset(0px 36px 102px 40px)',
+                    top: '120%',
+                    position: 'absolute',
+                  }}
                   src={avatar.img}
                   alt={avatar.name}
                 />
