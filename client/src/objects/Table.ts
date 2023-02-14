@@ -121,7 +121,7 @@ export default class Table {
   /* Change laptop sprite texture */
   updateLaptopImage(index: number) {
     let texture: string;
-    if (2 <= index && index < 4) {
+    if (index < 2) {
       texture = 'macbook_back_';
     } else {
       texture = 'macbook_front_';

@@ -55,8 +55,8 @@
    </objectgroup>
   </tile>
  </tileset>
- <tileset firstgid="5" name="chairs_back" tilewidth="148" tileheight="164" tilecount="1" columns="1">
-  <image source="../../나만무/Assets_fixed/Props/chair_back.png" width="148" height="164"/>
+ <tileset firstgid="5" name="chair_back" tilewidth="148" tileheight="164" tilecount="1" columns="1">
+  <image source="chair_back.png" width="148" height="164"/>
   <tile id="0">
    <objectgroup draworder="index" id="2">
     <object id="1" name="chair_back" x="47.3027" y="59.4153">
@@ -66,7 +66,7 @@
   </tile>
  </tileset>
  <tileset firstgid="6" name="bookshelf_corner" tilewidth="148" tileheight="277" tilecount="1" columns="1">
-  <image source="../../나만무/Assets_fixed/Props/bookshelf_corner.png" width="148" height="277"/>
+  <image source="bookshelf_corner.png" width="148" height="277"/>
   <tile id="0">
    <objectgroup draworder="index" id="2">
     <object id="1" name="bookshelf_corner" x="12.7234" y="101.993">
@@ -76,7 +76,7 @@
   </tile>
  </tileset>
  <tileset firstgid="7" name="bookshelf" tilewidth="148" tileheight="277" tilecount="1" columns="1">
-  <image source="../../나만무/Assets_fixed/Props/bookshelf.png" width="148" height="277"/>
+  <image source="bookshelf.png" width="148" height="277"/>
   <tile id="0">
    <objectgroup draworder="index" id="2">
     <object id="1" name="bookshelf" x="16.8278" y="104.455">
@@ -85,13 +85,13 @@
    </objectgroup>
   </tile>
  </tileset>
- <tileset firstgid="8" name="macbook_front_closed" tilewidth="32" tileheight="32" tilecount="1" columns="1">
+ <tileset firstgid="8" name="macbook_front_closed" tilewidth="32" tileheight="32" tilecount="0" columns="1">
   <image source="../../나만무/Assets_fixed/Props/macbook_front_closed.png" width="32" height="32"/>
  </tileset>
- <tileset firstgid="9" name="macbook_back_closed" tilewidth="32" tileheight="32" tilecount="1" columns="1">
+ <tileset firstgid="9" name="macbook_back_closed" tilewidth="32" tileheight="32" tilecount="0" columns="1">
   <image source="../../나만무/Assets_fixed/Props/macbook_back_closed.png" width="32" height="32"/>
  </tileset>
- <tileset firstgid="10" name="candle" tilewidth="148" tileheight="277" tilecount="1" columns="1">
+ <tileset firstgid="10" name="candle" tilewidth="148" tileheight="277" tilecount="0" columns="1">
   <image source="../../나만무/Assets_fixed/Props/wall_candle.png" width="148" height="277"/>
  </tileset>
  <tileset firstgid="11" name="cupboard" tilewidth="148" tileheight="164" tilecount="1" columns="1">
@@ -124,16 +124,16 @@
    </objectgroup>
   </tile>
  </tileset>
- <tileset firstgid="14" name="chalkboard" tilewidth="70" tileheight="105" tilecount="1" columns="1">
+ <tileset firstgid="14" name="chalkboard" tilewidth="70" tileheight="105" tilecount="0" columns="1">
   <image source="../../나만무/Assets_fixed/Props/chalkboard.png" width="70" height="105"/>
  </tileset>
  <tileset firstgid="15" name="book" tilewidth="148" tileheight="164" tilecount="1" columns="1">
-  <image source="../../나만무/Assets_fixed/Props/book.png" width="148" height="164"/>
+  <image source="book.png" width="148" height="164"/>
  </tileset>
- <tileset firstgid="16" name="mug" tilewidth="32" tileheight="32" tilecount="1" columns="1">
+ <tileset firstgid="16" name="mug" tilewidth="32" tileheight="32" tilecount="0" columns="1">
   <image source="../../나만무/Assets_fixed/Props/mug.png" width="32" height="32"/>
  </tileset>
- <tileset firstgid="17" name="teapot" tilewidth="32" tileheight="32" tilecount="1" columns="1">
+ <tileset firstgid="17" name="teapot" tilewidth="32" tileheight="32" tilecount="0" columns="1">
   <image source="../../나만무/Assets_fixed/Props/teapot.png" width="32" height="32"/>
  </tileset>
  <layer id="1" name="bg" width="1" height="1">
