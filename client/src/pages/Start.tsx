@@ -1,16 +1,54 @@
-import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { openGame } from "../stores/modeSlice";
-import styled from "styled-components";
+import React, { ChangeEvent, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { openGame } from '../stores/modeSlice';
+import styled from 'styled-components';
+import { RootState } from '../stores';
+import SelectBox from 'objects/SelectBox';
+import LoginDialog from './LoginDialog';
+// import '../../public/assets/characters'
+
+//const {nickName, characterModel} = useSelector((state:RootState)=> state.charactor); 필요한곳에 쓰면됨
 
 const Start = () => {
   const dispatch = useDispatch();
+  const [nameInput, setNameInput] = useState('');
+  const { userName } = useSelector((state: RootState) => state.editor);
+  const [charactorIamge, setCharatorIamge] = useState('char1');
+  const CHARACTORMODELS = 28;
+
+  function onNameChange(e: ChangeEvent<HTMLInputElement>) {
+    const newName = e.target.value;
+    setNameInput(newName);
+  }
+
+  function onChangeModel(e: ChangeEvent<HTMLOptionElement>) {
+    const newCharactorIamge = e.target.value;
+    setCharatorIamge(newCharactorIamge);
+  }
+
   return (
     <StartDiv>
-      <LogoDiv>코득코득</LogoDiv>
-      <LoginBtn type="button" onClick={() => dispatch(openGame())}>
+      {<LoginDialog />}
+      {/* <LogoDiv>코득코득</LogoDiv>
+      <input
+        id="nickNameInput"
+        type="text"
+        value={nameInput}
+        placeholder="Write your name"
+        onChange={onNameChange}
+      />
+      <SelectBox max={CHARACTORMODELS} onChange={onChangeModel} />
+
+      <LoginBtn
+        type="button"
+        onClick={() => {
+          dispatch(setNickName(nameInput));
+          dispatch(setCharactorModel(charactorIamge));
+          dispatch(openGame());
+        }}
+      >
         로그인
-      </LoginBtn>
+      </LoginBtn> */}
     </StartDiv>
   );
 };

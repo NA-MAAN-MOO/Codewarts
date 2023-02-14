@@ -178,6 +178,17 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
           }).getBtn();
           this.buttonEditor.setInteractive(); // 이거 해줘야 function 들어감!!!!! 3시간 버린듯;
 
+          // TODO: E누르면 한 번 overlap된 모든 table이 찍히는 현상 해결하기
+          // 딱 하나만 볼 수 있게하기
+          //@ts-ignore
+          const table = this.mainScene.tableMap.get(this.body.id);
+          this.mainScene.input.keyboard.on('keydown-E', () =>
+            console.log(table.tableId)
+          );
+
+          // this.buttonEditor.setDepth(6000);
+
+          //TODO: 여기에서 사용자가 키보드 누르면 상호작용 하도록 만듦
           //@ts-ignore
           this.scene.player.touching.push(this);
           // redux로 상태 바꿔서 component 보이게? Table 클래스 내의 정보 이용해서 자리별 사용 여부, user count 등 띄우기
