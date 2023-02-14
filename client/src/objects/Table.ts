@@ -23,6 +23,7 @@ export default class Table {
   constructor(scene: Phaser.Scene, tableObject: Resource, tableId: number) {
     this.usercount = 0;
     for (let i = 0; i < 4; i++) {
+      // 얕은 복사와 깊은 복사 유의해서 처리해야한다. 아니면 하나 변경 시 전부 변경됨 ㅠㅜ
       this.tableInfo.set(i, { ...tableInfoModel });
     }
     this.tableObject = tableObject;
@@ -48,7 +49,7 @@ export default class Table {
     for (let i = 0; i < 4; i++) {
       let str: string = ``;
       if (this.tableInfo.get(i).username) {
-        console.log(this.tableInfo.get(i));
+        // console.log(this.tableInfo.get(i));
         str = `${this.tableInfo.get(i).username} IDE 열기`;
       } else {
         str = `${i + 1}번 방 들어가기`;

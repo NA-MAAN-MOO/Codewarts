@@ -59,7 +59,7 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
         compoundBody.id,
         new Table(this.mainScene, this, compoundBody.id)
       );
-      console.log(scene.tableMap);
+      // console.log(scene.tableMap);
       // console.log(compoundBody.id);
       this.CreateCollisions(tableCollider);
       this.setExistingBody(compoundBody);
