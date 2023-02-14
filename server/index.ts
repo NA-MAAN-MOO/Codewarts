@@ -7,6 +7,7 @@ import mongoose from 'mongoose';
 import { Socket, Server } from 'socket.io'; // Load in socket.io
 import editorServer from './servers/editorServer';
 import basicRouter from './routes/basicRouter';
+import { table } from 'console';
 
 //환경변수 이용
 dotenv.config();
@@ -43,11 +44,12 @@ const io = new Server(httpServer, {
 app.use('/', basicRouter);
 
 let players: any[] = []; // 모든 '접속 중' 유저들을 저장하는 리스트
+let tables: any[] = []; // 모든 '사용 중' 테이블 데이터를 저장하는 리스트
 
 io.on('connection', (socket: Socket) => {
   // socket이 연결됩니다~ 이 안에서 서버는 연결된 클라이언트와 소통할 준비가 됨
   console.log('a user connected'); // 유저와 소켓 연결 성공
-  console.log(players.length); // '현재 접속을 시도한 유저'를 제외한 접속인원 수 ( 이하 '나' 라고 지칭하겠습니다. )
+  // console.log(players.length); // '현재 접속을 시도한 유저'를 제외한 접속인원 수 ( 이하 '나' 라고 지칭하겠습니다. )
   const charKey = `char${Math.floor(Math.random() * 27)}`; // 랜덤으로 캐릭터 값을 지정해준다. 이후 캐릭터 선택하는 화면이 생기면, 그때 선택한 캐릭터 값을 charKey에 넣어주면 됨!
   const userName = `원숭이${Math.floor(Math.random() * 2000)}`; // 유저 이름. 유저 위에 떠야한다.
   let playerInfo = {
@@ -62,7 +64,11 @@ io.on('connection', (socket: Socket) => {
   };
 
   // Send back the payload to the client and set its initial position
-  socket.emit('start', { socketID: socket.id, charKey: charKey }); // 연결된 유저에게 고유 데이터를 전달한다.
+  socket.emit('start', {
+    socketID: socket.id,
+    charKey: charKey,
+    userName: userName,
+  }); // 연결된 유저에게 고유 데이터를 전달한다.
 
   // Send back the payload to the client and set its initial position
   socket.on('loadNewPlayer', (payLoad) => {
@@ -84,9 +90,24 @@ io.on('connection', (socket: Socket) => {
     players.push(playerInfo);
   });
 
+  // TODO: 만약 에디터 켠 상대로 나가면 에디터 꺼야됨
   socket.on('disconnect', () => {
     // socket이 연결 해제됩니다~
     console.log('user disconnected!!!');
+    // tables에 '내' 에디터가 있는지 검사하고, 있다면 삭제
+    // FIXME: removeEditor를 클라이언트에 쏴주면 클라에서 나오게?
+    // 그러면 '내가 누구 꺼 보는지'를 알아야겠다.
+    console.log('removeEditor');
+    tables.forEach((table) => {
+      if (table[2] === playerInfo.userName) {
+        socket.broadcast.emit('removeEditor', table);
+        socket.emit('removeEditor', table);
+      }
+    });
+    tables = tables.filter((table) => {
+      table[2] !== playerInfo.userName;
+    });
+    console.log(tables);
     // '내'가 나가면 다른 유저들에게 '내' 정보를 지우기 위한 통신을 한다.
     players.forEach((player) => {
       if (player.socketId !== socket.id) {
@@ -143,6 +164,48 @@ io.on('connection', (socket: Socket) => {
     players.forEach((player) => {
       player.socket.emit('resumeCharacter', socket.id);
     });
+  });
+
+  socket.on('addEditor', (payLoad) => {
+    console.log('addEditor');
+    // 누군가 editor에 들어가면 해당 table ID값과 자리(인덱스)값을 업데이트 한다.
+    tables.push([payLoad.id, payLoad.idx, playerInfo.userName]);
+    console.log(tables);
+    let payLoad2 = {
+      id: payLoad.id,
+      idx: payLoad.idx,
+      userName: playerInfo.userName,
+      // socketId: playerInfo.socketId,
+    };
+    socket.broadcast.emit('updateEditor', payLoad2);
+  });
+
+  socket.on('currentEditors', () => {
+    console.log('currentEditors');
+    // 이미 사용중인 테이블 데이터를 업데이트한다.
+    tables.forEach((table: any) => {
+      let payLoad = {
+        id: table[0],
+        idx: table[1],
+        userName: table[2],
+      };
+      socket.emit('updateEditor', payLoad);
+    });
+  });
+
+  socket.on('removeEditor', () => {
+    console.log('removeEditor');
+    tables.forEach((table) => {
+      if (table[2] === playerInfo.userName) {
+        socket.broadcast.emit('removeEditor', table);
+        socket.emit('removeEditor', table);
+      }
+    });
+    tables = tables.filter((table) => {
+      // 조건식에 return 붙여야한다.
+      return table[2] !== playerInfo.userName;
+    });
+    console.log(tables);
   });
 });
 

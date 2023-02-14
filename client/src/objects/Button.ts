@@ -8,7 +8,7 @@ export default class Button {
     this.button = scene.add
       .text(x, y, text)
       .setOrigin(0.5)
-      .setPadding(10)
+      .setPadding(3)
       .setStyle(style)
       //   .setInteractive({ useHandCursor: true })
       //   .on('pointerdown', () => callback())

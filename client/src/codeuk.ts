@@ -23,6 +23,8 @@ declare module 'phaser' {
   }
 }
 
+// declare module '*.png';
+
 const config = {
   // width: "100%", //  scene이 그려지는 canvas의 width 값
   // height: "100%", //  scene이 그려지는 canvas의 height 값
@@ -49,4 +51,6 @@ const config = {
   },
 };
 
-new Phaser.Game(config);
+let phaserGame = new Phaser.Game(config);
+
+export default phaserGame;

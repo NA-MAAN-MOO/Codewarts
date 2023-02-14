@@ -12,17 +12,11 @@ import { Navigation } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/navigation';
 
-import Adam from '../images/login/Adam_login.png';
-import Ash from '../images/login/Ash_login.png';
-import Lucy from '../images/login/Lucy_login.png';
-import Nancy from '../images/login/Nancy_login.png';
+import characters from 'assets/characters';
 
-import * as characters from '../../public/assets/characters';
-
-import { setLoggedIn } from '../stores/UserStore';
-import { getAvatarString, getColorByString } from '../util';
+import { setPlayerId, setPlayerTexture } from '../stores/userSlice';
 import { useDispatch } from 'react-redux';
-import { setCharactorModel } from 'stores/characterSlice';
+import { openGame } from 'stores/modeSlice';
 
 const Wrapper = styled.form`
   position: fixed;
@@ -128,36 +122,81 @@ const Warning = styled.div`
   gap: 3px;
 `;
 
+// const avatars = [
+//   { name: 'char0', img: characters.char0 },
+//   { name: 'char1', img: characters.char1 },
+//   { name: 'char2', img: characters.char2 },
+//   { name: 'char3', img: characters.char3 },
+//   { name: 'char4', img: characters.char4 },
+//   { name: 'char5', img: characters.char5 },
+//   { name: 'char6', img: characters.char6 },
+//   { name: 'char7', img: characters.char7 },
+//   { name: 'char8', img: characters.char8 },
+//   { name: 'char9', img: characters.char9 },
+//   { name: 'char10', img: characters.char10 },
+//   { name: 'char11', img: characters.char11 },
+//   { name: 'char12', img: characters.char12 },
+//   { name: 'char13', img: characters.char13 },
+//   { name: 'char14', img: characters.char14 },
+//   { name: 'char15', img: characters.char15 },
+//   { name: 'char16', img: characters.char16 },
+//   { name: 'char17', img: characters.char17 },
+//   { name: 'char18', img: characters.char18 },
+//   { name: 'char19', img: characters.char19 },
+//   { name: 'char20', img: characters.char20 },
+//   { name: 'char21', img: characters.char21 },
+//   { name: 'char22', img: characters.char22 },
+//   { name: 'char23', img: characters.char23 },
+//   { name: 'char24', img: characters.char24 },
+//   { name: 'char25', img: characters.char25 },
+//   { name: 'char26', img: characters.char26 },
+//   { name: 'char27', img: characters.char27 },
+// ];
 const avatars = [
   { name: 'char0', img: characters.char0 },
   { name: 'char1', img: characters.char1 },
   { name: 'char2', img: characters.char2 },
   { name: 'char3', img: characters.char3 },
   { name: 'char4', img: characters.char4 },
-  { name: 'char5', img: characters.char5 },
-  { name: 'char6', img: characters.char6 },
-  { name: 'char7', img: characters.char7 },
-  { name: 'char8', img: characters.char8 },
-  { name: 'char9', img: characters.char9 },
-  { name: 'char10', img: characters.char10 },
-  { name: 'char11', img: characters.char11 },
-  { name: 'char12', img: characters.char12 },
-  { name: 'char13', img: characters.char13 },
-  { name: 'char14', img: characters.char14 },
-  { name: 'char15', img: characters.char15 },
-  { name: 'char16', img: characters.char16 },
-  { name: 'char17', img: characters.char17 },
-  { name: 'char18', img: characters.char18 },
-  { name: 'char19', img: characters.char19 },
-  { name: 'char20', img: characters.char20 },
-  { name: 'char21', img: characters.char21 },
-  { name: 'char22', img: characters.char22 },
-  { name: 'char23', img: characters.char23 },
-  { name: 'char24', img: characters.char24 },
-  { name: 'char25', img: characters.char25 },
-  { name: 'char26', img: characters.char26 },
-  { name: 'char27', img: characters.char27 },
+  // { name: 'char5', img: char5 },
+  // { name: 'char6', img: char6 },
+  // { name: 'char7', img: char7 },
+  // { name: 'char8', img: char8 },
+  // { name: 'char9', img: char9 },
+  // { name: 'char10', img: char10 },
+  // { name: 'char11', img: char11 },
+  // { name: 'char12', img: char12 },
+  // { name: 'char13', img: char13 },
+  // { name: 'char14', img: char14 },
+  // { name: 'char15', img: char15 },
+  // { name: 'char16', img: char16 },
+  // { name: 'char17', img: char17 },
+  // { name: 'char18', img: char18 },
+  // { name: 'char19', img: char19 },
+  // { name: 'char20', img: char20 },
+  // { name: 'char21', img: char21 },
+  // { name: 'char22', img: char22 },
+  // { name: 'char23', img: char23 },
+  // { name: 'char24', img: char24 },
+  // { name: 'char25', img: char25 },
+  // { name: 'char26', img: char26 },
+  // { name: 'char27', img: char27 },
 ];
+const colorArr = [
+  '#7bf1a8',
+  '#ff7e50',
+  '#9acd32',
+  '#daa520',
+  '#ff69b4',
+  '#c085f6',
+  '#1e90ff',
+  '#5f9da0',
+];
+
+// determine name color by first character charCode
+function getColorByString(string: string) {
+  return colorArr[80 % colorArr.length];
+}
 
 export default function LoginDialog() {
   const [name, setName] = useState<string>('');
@@ -169,28 +208,32 @@ export default function LoginDialog() {
     event.preventDefault();
     if (name === '') {
       setNameFieldEmpty(true);
-    } else if (roomJoined) {
+    } else {
       console.log('Join! Name:', name, 'Avatar:', avatars[avatarIndex].name);
 
-      dispatch(setCharactorModel)
-      game.myPlayer.setPlayerName(name);
-      game.myPlayer.setPlayerTexture(avatars[avatarIndex].name);
-      game.network.readyToConnect();
-      dispatch(setLoggedIn(true));
+      dispatch(setPlayerId(name));
+      // game.myPlayer.setPlayerName(name);
+      dispatch(setPlayerTexture(avatars[avatarIndex].name));
+      // game.myPlayer.setPlayerTexture(avatars[avatarIndex].name);
+      // game.network.readyToConnect();
+      // dispatch(setLoggedIn(true));
     }
   };
 
   return (
     <Wrapper onSubmit={handleSubmit}>
-      <Title>Joining</Title>
+      <Title>Welcome Codewarts!</Title>
       <RoomName>
-        <Avatar style={{ background: getColorByString(roomName) }}>
-          {getAvatarString(roomName)}
+        <Avatar
+          style={{ background: getColorByString('roomName와야함 나중에') }}
+        >
+          {'CW'}
         </Avatar>
-        <h3>{roomName}</h3>
+        {/* <h3>{roomName}</h3> */}
+        <h3>{'My Room'}</h3>
       </RoomName>
       <RoomDescription>
-        <ArrowRightIcon /> {roomDescription}
+        <ArrowRightIcon /> {'My roomDescription'}
       </RoomDescription>
       <Content>
         <Left>
@@ -224,7 +267,7 @@ export default function LoginDialog() {
               setName((e.target as HTMLInputElement).value);
             }}
           />
-          {!videoConnected && (
+          {/* {!videoConnected && (
             <Warning>
               <Alert variant="outlined" severity="warning">
                 <AlertTitle>Warning</AlertTitle>
@@ -241,17 +284,20 @@ export default function LoginDialog() {
                 Connect Webcam
               </Button>
             </Warning>
-          )}
+          )} */}
 
-          {videoConnected && (
+          {/* {videoConnected && (
             <Warning>
               <Alert variant="outlined">Webcam connected!</Alert>
             </Warning>
-          )}
+          )} */}
         </Right>
       </Content>
       <Bottom>
         <Button
+          onClick={() => {
+            dispatch(openGame());
+          }}
           variant="contained"
           color="secondary"
           size="large"

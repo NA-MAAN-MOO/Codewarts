@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { RootState } from '../stores';
 import { setCharactorModel, setNickName } from 'stores/characterSlice';
 import SelectBox from 'objects/SelectBox';
+import LoginDialog from './LoginDialog';
 // import '../../public/assets/characters'
 
 //const {nickName, characterModel} = useSelector((state:RootState)=> state.charactor); 필요한곳에 쓰면됨
@@ -28,7 +29,8 @@ const Start = () => {
 
   return (
     <StartDiv>
-      <LogoDiv>코득코득</LogoDiv>
+      {<LoginDialog />}
+      {/* <LogoDiv>코득코득</LogoDiv>
       <input
         id="nickNameInput"
         type="text"
@@ -47,7 +49,7 @@ const Start = () => {
         }}
       >
         로그인
-      </LoginBtn>
+      </LoginBtn> */}
     </StartDiv>
   );
 };
