@@ -28,11 +28,13 @@ export default class MainScene extends Phaser.Scene {
   openMyEditor!: boolean;
   // getOut!: boolean;
   editorOwner!: string;
+  macbookList!: any;
 
   constructor() {
     // Scene의 key값은 MainScene
     super('MainScene');
     this.isKeyDisable = false;
+    this.macbookList = [[], [], [], [], [], []];
   }
 
   preload() {
@@ -73,9 +75,20 @@ export default class MainScene extends Phaser.Scene {
           scene: this,
           resource: objs,
           polygon: polygons[objs.name],
+          index: i,
         });
       });
     });
+
+    /* Register laptops to Tables */
+    let tableKeys = Array.from(this.tableMap.keys());
+    for (let i = 0; i < 6; i++) {
+      for (let j = 0; j < 4; j++) {
+        this.tableMap
+          .get(tableKeys[i])
+          ?.registerLaptop(j, this.macbookList[i][j]);
+      }
+    }
 
     this.x = this.map.widthInPixels / 2;
     this.y = this.map.heightInPixels / 2;
@@ -196,7 +209,9 @@ export default class MainScene extends Phaser.Scene {
           console.log('방 빼요');
           store.dispatch(openGame());
         }
-        this.tableMap.get(payLoad[0]).removeCurrentUser(payLoad[1]);
+        // removeCurrentUser하려면 updateTable(idx, '')하면 됨
+        this.tableMap.get(payLoad[0]).updateTable(payLoad[1], '');
+        // this.tableMap.get(payLoad[0]).removeCurrentUser(payLoad[1]);
       });
     }
   }

@@ -108,10 +108,8 @@ export default class Table {
   /* Leave an Editor room in a Table (other user's Editor room) */
   leave(currentUser: any, roomId: any) {}
 
-  registerLaptops(laptops: any) {
-    for (let i = 0; i < 4; i++) {
-      this.tableInfo.get(i)['laptop'] = laptops[i];
-    }
+  registerLaptop(index: number, laptop: any) {
+    this.tableInfo.get(index)['laptop'] = laptop;
   }
 
   registerChairs(chairs: any) {
@@ -123,20 +121,23 @@ export default class Table {
   /* Change laptop sprite texture */
   updateLaptopImage(index: number) {
     let texture: string;
-    if (index < 2) {
-      texture = 'assets/room/macbook_back_';
+    if (2 <= index && index < 4) {
+      texture = 'macbook_back_';
     } else {
-      texture = 'assets/room/macbook_front_';
+      texture = 'macbook_front_';
     }
 
-    if (!this.tableInfo[index].username) {
-      this.tableInfo.get(index)['laptop'].setTexture(`${texture}open.png`);
+    if (!this.tableInfo.get(index)['username']) {
+      this.tableInfo.get(index)['laptop'].setTexture(`${texture}open`);
     } else {
-      this.tableInfo.get(index)['laptop'].setTexture(`${texture}closed.png`);
+      this.tableInfo.get(index)['laptop'].setTexture(`${texture}closed`);
     }
   }
 
   updateTable(idx: number, userName: string) {
+    console.log(this.tableInfo.get(idx).laptop);
+    this.updateLaptopImage(idx);
+
     this.tableInfo.get(idx)['username'] = userName;
     this.tableInfo.get(idx)['roomId'] = userName;
   }
