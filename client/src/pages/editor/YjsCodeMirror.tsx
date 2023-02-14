@@ -28,9 +28,62 @@ import { okaidia } from '@uiw/codemirror-theme-okaidia';
 import { RootState } from 'stores';
 
 /* UI */
-import { Switch, Space, Button, Input, Radio } from 'antd';
+import { Space, Button, Input, Radio } from 'antd';
 import { DownCircleOutlined } from '@ant-design/icons';
 import type { RadioChangeEvent } from 'antd';
+import { styled } from '@mui/material/styles';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import styledc from 'styled-components';
+import 'styles/fonts.css'; /* FONT */
+
+const MaterialUISwitch = styled(Switch)(({ theme }) => ({
+  width: 62,
+  height: 34,
+  padding: 7,
+  '& .MuiSwitch-switchBase': {
+    margin: 1,
+    padding: 0,
+    transform: 'translateX(6px)',
+    '&.Mui-checked': {
+      color: '#fff',
+      transform: 'translateX(22px)',
+      '& .MuiSwitch-thumb:before': {
+        backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="${encodeURIComponent(
+          '#fff'
+        )}" d="M4.2 2.5l-.7 1.8-1.8.7 1.8.7.7 1.8.6-1.8L6.7 5l-1.9-.7-.6-1.8zm15 8.3a6.7 6.7 0 11-6.6-6.6 5.8 5.8 0 006.6 6.6z"/></svg>')`,
+      },
+      '& + .MuiSwitch-track': {
+        opacity: 1,
+        backgroundColor: theme.palette.mode === 'dark' ? '#8796A5' : '#aab4be',
+      },
+    },
+  },
+  '& .MuiSwitch-thumb': {
+    backgroundColor: theme.palette.mode === 'dark' ? '#003892' : '#001e3c',
+    width: 32,
+    height: 32,
+    '&:before': {
+      content: "''",
+      position: 'absolute',
+      width: '100%',
+      height: '100%',
+      left: 0,
+      top: 0,
+      backgroundRepeat: 'no-repeat',
+      backgroundPosition: 'center',
+      backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="${encodeURIComponent(
+        '#fff'
+      )}" d="M9.305 1.667V3.75h1.389V1.667h-1.39zm-4.707 1.95l-.982.982L5.09 6.072l.982-.982-1.473-1.473zm10.802 0L13.927 5.09l.982.982 1.473-1.473-.982-.982zM10 5.139a4.872 4.872 0 00-4.862 4.86A4.872 4.872 0 0010 14.862 4.872 4.872 0 0014.86 10 4.872 4.872 0 0010 5.139zm0 1.389A3.462 3.462 0 0113.471 10a3.462 3.462 0 01-3.473 3.472A3.462 3.462 0 016.527 10 3.462 3.462 0 0110 6.528zM1.665 9.305v1.39h2.083v-1.39H1.666zm14.583 0v1.39h2.084v-1.39h-2.084zM5.09 13.928L3.616 15.4l.982.982 1.473-1.473-.982-.982zm9.82 0l-.982.982 1.473 1.473.982-.982-1.473-1.473zM9.305 16.25v2.083h1.389V16.25h-1.39z"/></svg>')`,
+    },
+  },
+  '& .MuiSwitch-track': {
+    opacity: 1,
+    backgroundColor: theme.palette.mode === 'dark' ? '#8796A5' : '#aab4be',
+    borderRadius: 20 / 2,
+  },
+}));
 
 function YjsCodeMirror() {
   /* states */
@@ -38,7 +91,7 @@ function YjsCodeMirror() {
   let [compileOutput, setCompileOutput] = useState();
   let [cpuTime, setCpuTime] = useState();
   let [memory, setMemory] = useState();
-  let [editorTheme, setEditorTheme] = useState(okaidia);
+  let [editorThemeMode, setEditorTheme] = useState(okaidia);
   let [leetUserData, setLeetUserData] = useState();
   let [leetProbData, setLeetProbData] = useState();
   let [bojUserData, setBojUserData] = useState();
@@ -109,17 +162,19 @@ function YjsCodeMirror() {
 
   useEffect(() => {
     /* editor theme 설정 */
-    let basicTheme = EditorView.theme({
-      // '.cm-gutter': { minHeight: '50%' },
-      // '&': {
-      // fontFamily: 'Cascadia Code',
-      // height: '50%',
-      // },
+    let basicThemeSet = EditorView.theme({
+      '&': {
+        // fontFamily: 'Cascadia Code',
+        height: '500px',
+        // minHeight: '500px',
+      },
+      '.cm-content, .cm-gutter': { minHeight: '30%' },
       '.cm-content': {
         fontFamily: 'Cascadia Code',
         fontSize: 'large',
       },
       '.cm-gutter': {
+        // minHeight: '50%',
         fontFamily: 'Cascadia Code',
       },
     });
@@ -134,8 +189,8 @@ function YjsCodeMirror() {
         keymap.of([indentWithTab]),
         keymap.of(standardKeymap),
         keymap.of(defaultKeymap),
-        basicTheme,
-        editorTheme,
+        editorThemeMode,
+        basicThemeSet,
       ],
     });
 
@@ -148,7 +203,7 @@ function YjsCodeMirror() {
 
     /* view 중복 생성 방지 */
     return () => view?.destroy();
-  }, [editorTheme]);
+  }, [editorThemeMode]);
 
   /* 유저가 작성한 코드를 컴파일하기 위해 서버로 보냄 */
   const runCode = async () => {
@@ -174,7 +229,7 @@ function YjsCodeMirror() {
 
   /* 다크/라이트 모드 테마 토글 */
   function switchTheme(checked: boolean) {
-    if (editorTheme === okaidia) {
+    if (editorThemeMode === okaidia) {
       setEditorTheme(noctisLilac);
     } else {
       setEditorTheme(okaidia);
@@ -382,7 +437,7 @@ function YjsCodeMirror() {
   };
 
   return (
-    <>
+    <EditorWrapper>
       <div className="room-user-info">
         <div>유저 이름 : {userName}</div>
         <div>룸 ID : {roomId}</div>
@@ -411,7 +466,7 @@ function YjsCodeMirror() {
         <div className="algo-user-info">
           {algoSelect === 1 ? (
             <div className="leet-user-info">
-              <div>깃헙 주소 :{leetUserData?.matchedUser?.githubUrl}</div>
+              {/* <div>깃헙 주소 :{leetUserData?.matchedUser?.githubUrl}</div> */}
               <div>
                 leetcode 랭킹 : {leetUserData?.matchedUser?.profile?.ranking}
               </div>
@@ -547,7 +602,7 @@ function YjsCodeMirror() {
         </div>
       </div>
 
-      <Space direction="vertical">
+      {/* <Space direction="vertical">
         <Switch
           checkedChildren="Dark"
           unCheckedChildren="Lavender"
@@ -556,7 +611,21 @@ function YjsCodeMirror() {
             switchTheme(checked);
           }}
         />
-      </Space>
+      </Space> */}
+      <FormGroup>
+        <FormControlLabel
+          control={
+            <MaterialUISwitch
+              sx={{ m: 1 }}
+              defaultChecked
+              onClick={(checked) => {
+                switchTheme(checked);
+              }}
+            />
+          }
+          label=""
+        />
+      </FormGroup>
 
       <div className="editor" ref={editor} style={{ minHeight: '50%' }} />
 
@@ -594,8 +663,14 @@ function YjsCodeMirror() {
           <div className="compiled-memory">MEMORY : {memory}</div>
         </div>
       </div>
-    </>
+    </EditorWrapper>
   );
 }
 
 export default YjsCodeMirror;
+
+const EditorWrapper = styledc.div`
+  & {
+    font-family: 'Cascadia Code', sans-serif;
+  }
+`;
