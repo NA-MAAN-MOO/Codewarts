@@ -1,6 +1,5 @@
 /* react */
 import { useRef, useEffect, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
 
 /* lib */
 import * as random from 'lib0/random';
@@ -48,14 +47,14 @@ function YjsCodeMirror() {
 
   /* ref */
   const editor = useRef(null);
-  const inputStdin = useRef(null);
+  const inputStdin = useRef();
   const leetUserNameRef = useRef(null);
   const leetProbDataRef = useRef(null);
   const bojUserNameRef = useRef(null);
   const bojProbDataRef = useRef(null);
 
   /* for UI */
-  const { TextArea } = Input;
+  // const { TextArea } = Input;
 
   /* roomName 스트링 값 수정하지 말 것(※ 수정할 거면 전부 수정해야 함) */
   const roomName = `ROOMNAME${roomId}`;
@@ -154,12 +153,15 @@ function YjsCodeMirror() {
   /* 유저가 작성한 코드를 컴파일하기 위해 서버로 보냄 */
   const runCode = async () => {
     if (!inputStdin.current) return;
+    console.log(inputStdin.current.value);
+
     try {
       const { data } = await axios.post(`http://localhost:3001/run-code`, {
         codeToRun: ytext.toString(),
         //@ts-ignore
         stdin: inputStdin.current.value,
       });
+
       console.log(data); // 전체 reponse body (output, statusCode, memory, cpuTime)
       setCompileOutput(data.output);
       setMemory(data.memory);
@@ -377,7 +379,6 @@ function YjsCodeMirror() {
       <div className="room-user-info">
         <div>유저 이름 : {userName}</div>
         <div>룸 ID : {roomId}</div>
-        {/* <div>이 방에 있는 유저리스트 : </div> */}
       </div>
 
       <div className="algo-info">
@@ -464,13 +465,23 @@ function YjsCodeMirror() {
               <h3>예제</h3>
               <div
                 dangerouslySetInnerHTML={{
-                  __html: leetProbData?.question.exampleTestcases,
+                  __html: leetProbData?.question.exampleTestcases.replace(
+                    /\n/g,
+                    '<br>'
+                  ),
                 }}
               />
               <div>난이도 : {leetProbData?.question.difficulty}</div>
-              <div>
-                파이썬 스니펫 : {leetProbData?.question.codeSnippets[3].code}
-              </div>
+              <h3>파이썬 스니펫</h3>
+
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: leetProbData?.question.codeSnippets[3].code.replace(
+                    /\n/g,
+                    '<br>'
+                  ),
+                }}
+              ></div>
             </div>
           ) : (
             <div className="boj-prob-info">
@@ -486,30 +497,36 @@ function YjsCodeMirror() {
               <h3>문제 내용</h3>
               <div
                 dangerouslySetInnerHTML={{
-                  __html: bojProbFullData?.prob_desc,
+                  __html: bojProbFullData?.prob_desc.replace(/\n/g, '<br>'),
                 }}
               />
               <h3>입력</h3>
               <div
                 dangerouslySetInnerHTML={{
-                  __html: bojProbFullData?.prob_input,
+                  __html: bojProbFullData?.prob_input.replace(/\n/g, '<br>'),
                 }}
               />
               <h3>출력</h3>
               <div
                 dangerouslySetInnerHTML={{
-                  __html: bojProbFullData?.prob_output,
+                  __html: bojProbFullData?.prob_output.replace(/\n/g, '<br>'),
                 }}
               />
               <h3>예제 1</h3>
               <div
                 dangerouslySetInnerHTML={{
-                  __html: bojProbFullData?.samples?.[1].input,
+                  __html: bojProbFullData?.samples?.[1].input.replace(
+                    /\n/g,
+                    '<br>'
+                  ),
                 }}
               />
               <div
                 dangerouslySetInnerHTML={{
-                  __html: bojProbFullData?.samples?.[1].output,
+                  __html: bojProbFullData?.samples?.[1].output.replace(
+                    /\n/g,
+                    '<br>'
+                  ),
                 }}
               />
             </div>
@@ -531,15 +548,26 @@ function YjsCodeMirror() {
       <div className="editor" ref={editor} style={{ minHeight: '50%' }} />
 
       <div className="compiler">
+        {/* <div key={inputStdin.current}>
+          <TextArea
+            className="stdin"
+            rows={5}
+            placeholder="Input"
+            defaultValue=""
+            ref={inputStdin}
+          />
+        </div> */}
+        <div>
+          <textarea
+            className="stdin"
+            rows={5}
+            placeholder="Input"
+            ref={inputStdin}
+          />
+        </div>
         <Button onClick={runCode} type="primary">
           코드 실행
         </Button>
-        <TextArea
-          className="stdin"
-          rows={5}
-          placeholder="Input"
-          ref={inputStdin}
-        />
         <div className="compiled-result">
           <div className="compiled-output">OUTPUT : {compileOutput}</div>
           <div className="compiled-cputime">CPU TIME : {cpuTime}</div>
