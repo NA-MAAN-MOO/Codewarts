@@ -1,6 +1,6 @@
 /* react */
 import { useRef, useEffect, useState } from 'react';
-//dkjasklfjlskjdf?
+
 /* lib */
 import * as random from 'lib0/random';
 import { useSelector } from 'react-redux';
@@ -28,31 +28,33 @@ import { okaidia } from '@uiw/codemirror-theme-okaidia';
 import { RootState } from 'stores';
 
 /* UI */
-import { Switch, Space, Button, Input } from 'antd';
+import { Switch, Space, Button, Input, Radio } from 'antd';
 import { DownCircleOutlined } from '@ant-design/icons';
+import type { RadioChangeEvent } from 'antd';
 
 function YjsCodeMirror() {
   /* states */
   const { userName, roomId } = useSelector((state: RootState) => state.editor);
-  let [compileOutput, setCompileOutput] = useState('');
-  let [cpuTime, setCpuTime] = useState('');
-  let [memory, setMemory] = useState('');
+  let [compileOutput, setCompileOutput] = useState();
+  let [cpuTime, setCpuTime] = useState();
+  let [memory, setMemory] = useState();
   let [editorTheme, setEditorTheme] = useState(okaidia);
   let [leetUserData, setLeetUserData] = useState();
   let [leetProbData, setLeetProbData] = useState();
   let [bojUserData, setBojUserData] = useState();
   let [bojProbData, setBojProbData] = useState();
+  let [bojProbFullData, setBojProbFullData] = useState();
 
   /* ref */
   const editor = useRef(null);
-  const inputStdin = useRef(null);
+  const inputStdin = useRef();
   const leetUserNameRef = useRef(null);
   const leetProbDataRef = useRef(null);
   const bojUserNameRef = useRef(null);
   const bojProbDataRef = useRef(null);
 
   /* for UI */
-  const { TextArea } = Input;
+  // const { TextArea } = Input;
 
   /* roomName 스트링 값 수정하지 말 것(※ 수정할 거면 전부 수정해야 함) */
   const roomName = `ROOMNAME${roomId}`;
@@ -151,14 +153,17 @@ function YjsCodeMirror() {
   /* 유저가 작성한 코드를 컴파일하기 위해 서버로 보냄 */
   const runCode = async () => {
     if (!inputStdin.current) return;
+    console.log(inputStdin.current.value);
+
     try {
       const { data } = await axios.post(`http://localhost:3001/run-code`, {
         codeToRun: ytext.toString(),
         //@ts-ignore
         stdin: inputStdin.current.value,
       });
+
       console.log(data); // 전체 reponse body (output, statusCode, memory, cpuTime)
-      setCompileOutput(data.output);
+      setCompileOutput(data.output.replace(/\n/g, '<br>'));
       setMemory(data.memory);
       setCpuTime(data.cpuTime);
     } catch (error) {
@@ -250,10 +255,28 @@ function YjsCodeMirror() {
       let probData = response.data;
       console.log(probData);
       setBojProbData(probData);
+      fetchBojProbFullData(probId);
     } catch (error) {
       console.error(error);
     }
   };
+
+  /* 스크래핑 서버에 백준 문제 정보 요청 */
+  async function fetchBojProbFullData(probId: string) {
+    if (bojProbDataRef.current === null) return;
+
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/data?probId=${probId}`
+      );
+
+      let probFullData = response.data;
+      console.log(probFullData);
+      setBojProbFullData(probFullData);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   /* leetcode 유저 정보 가져오기 */
   const fetchLeetUserData = async () => {
@@ -345,76 +368,183 @@ function YjsCodeMirror() {
     }
   };
 
+  /* 백준, 리트코드 선택 */
+  const [algoSelect, setAlgoSelect] = useState(1);
+  const platformChange = (e: RadioChangeEvent) => {
+    setAlgoSelect(e.target.value);
+  };
+
+  /* 문제 예제 인풋을 실행 인풋 창으로 복사 */
+  // todo: 인덱스를 인수로 받고, 해당하는 예제 복사하기
+  const copyToInput = () => {
+    if (inputStdin.current === undefined) return;
+    inputStdin.current.value = bojProbFullData?.samples?.[1].input;
+  };
+
   return (
     <>
-      <div className="algo-info">
-        <div id="algo-user-input">
-          <input ref={leetUserNameRef} placeholder="leetcode 아이디 입력" />
-          <DownCircleOutlined onClick={fetchLeetUserData} />
-          <input ref={bojUserNameRef} placeholder="백준 아이디 입력" />
-          <DownCircleOutlined onClick={fetchBojUserData} />
-        </div>
-
-        <div className="algo-user-info">
-          <div className="leet-user-info">
-            <div>깃헙 주소 :{leetUserData?.matchedUser?.githubUrl}</div>
-            <div>ranking : {leetUserData?.matchedUser?.profile?.ranking}</div>
-            <div>
-              leetcode 총 맞춘 문제수 :
-              {
-                leetUserData?.matchedUser?.submitStats?.acSubmissionNum?.[0]
-                  ?.count
-              }
-            </div>
-          </div>
-
-          <div className="boj-user-info">
-            <div>백준 티어 : {bojUserData?.items[0].tier}</div>
-            <div>백준 푼 문제 수 : {bojUserData?.items[0].solvedCount}</div>
-          </div>
-        </div>
-
-        <div className="algo-problem-input">
-          <input
-            ref={leetProbDataRef}
-            placeholder="leetcode title slug 입력!"
-          />
-          <DownCircleOutlined onClick={fetchLeetProbInfo} />
-          <input ref={bojProbDataRef} placeholder="백준 문제 번호 입력!" />
-          <DownCircleOutlined onClick={fetchBojProbInfo} />
-        </div>
-
-        <div id="algo-problem-info" style={{ border: '5px solid black' }}>
-          <div className="leet-prob-info">
-            <div>
-              답안 제출하러 가기 : https://leetcode.com/problems/
-              {leetProbData?.question.titleSlug}
-            </div>
-            <div>문제 title : {leetProbData?.question.title}</div>
-            <div>문제 번호 : {leetProbData?.question.questionId}</div>
-            <div>문제 정보 : {leetProbData?.question.content}</div>
-            <div>예제 : {leetProbData?.question.exampleTestcases}</div>
-            <div>difficulty : {leetProbData?.question.difficulty}</div>
-            <div>
-              code snippets : {leetProbData?.question.codeSnippets[3].code}
-            </div>
-          </div>
-
-          <div className="boj-prob-info">
-            <div>
-              답안 제출하러 가기 : https://acmicpc.net/problem/
-              {bojProbData?.problemId}
-            </div>
-            <div>문제 title : {bojProbData?.titleKo}</div>
-            <div>difficulty : {bojProbData?.level}</div>
-          </div>
-        </div>
-      </div>
-
       <div className="room-user-info">
         <div>유저 이름 : {userName}</div>
         <div>룸 ID : {roomId}</div>
-        <div>이 방에 있는 유저리스트 : </div>
+      </div>
+
+      <div className="algo-info">
+        <div className="algo-user-input">
+          <Radio.Group onChange={platformChange} value={algoSelect}>
+            <Radio value={1}>LeetCode</Radio>
+            <Radio value={2}>백준</Radio>
+          </Radio.Group>
+
+          {algoSelect === 1 ? (
+            <div className="leet-user-input">
+              <input ref={leetUserNameRef} placeholder="leetcode 아이디 입력" />
+              <DownCircleOutlined onClick={fetchLeetUserData} />
+            </div>
+          ) : (
+            <div className="boj-user-input">
+              <input ref={bojUserNameRef} placeholder="백준 아이디 입력" />
+              <DownCircleOutlined onClick={fetchBojUserData} />
+            </div>
+          )}
+        </div>
+
+        <div className="algo-user-info">
+          {algoSelect === 1 ? (
+            <div className="leet-user-info">
+              <div>깃헙 주소 :{leetUserData?.matchedUser?.githubUrl}</div>
+              <div>
+                leetcode 랭킹 : {leetUserData?.matchedUser?.profile?.ranking}
+              </div>
+              <div>
+                leetcode 총 맞춘 문제수 :
+                {
+                  leetUserData?.matchedUser?.submitStats?.acSubmissionNum?.[0]
+                    ?.count
+                }
+              </div>
+            </div>
+          ) : (
+            <div className="boj-user-info">
+              <div>백준 티어 : {bojUserData?.items[0].tier}</div>
+              <div>백준 푼 문제 수 : {bojUserData?.items[0].solvedCount}</div>
+            </div>
+          )}
+        </div>
+
+        <div className="algo-problem-input">
+          {algoSelect === 1 ? (
+            <div className="leet-problem-input">
+              <input
+                ref={leetProbDataRef}
+                placeholder="LeetCode 문제의 title slug를 입력!"
+              />
+              <DownCircleOutlined onClick={fetchLeetProbInfo} />
+            </div>
+          ) : (
+            <div className="boj-problem-input">
+              <input ref={bojProbDataRef} placeholder="백준 문제 번호 입력!" />
+              <DownCircleOutlined onClick={fetchBojProbInfo} />
+            </div>
+          )}
+        </div>
+
+        <div
+          className="algo-problem-info"
+          style={{ border: '5px solid black' }}
+        >
+          {algoSelect === 1 ? (
+            <div className="leet-prob-info">
+              <a
+                href={`https://leetcode.com/problems/${leetProbData?.question.titleSlug}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                LeetCode에 답안 제출하러 가기
+              </a>
+              <div>문제 제목 : {leetProbData?.question.title}</div>
+              <div>문제 번호 : {leetProbData?.question.questionId}</div>
+              <div>난이도 : {leetProbData?.question.difficulty}</div>
+              <h3>문제 내용</h3>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: leetProbData?.question.content,
+                }}
+              />
+              <h3>예제</h3>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: leetProbData?.question.exampleTestcases.replace(
+                    /\n/g,
+                    '<br>'
+                  ),
+                }}
+              />
+              <h3>파이썬 스니펫</h3>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: leetProbData?.question.codeSnippets[3].code.replace(
+                    /\n/g,
+                    '<br>'
+                  ),
+                }}
+              ></div>
+            </div>
+          ) : (
+            <div className="boj-prob-info">
+              <a
+                href={`https://acmicpc.net/problem/${bojProbData?.problemId}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                백준에 답안 제출하러 가기
+              </a>
+              <div>문제 제목 : {bojProbData?.titleKo}</div>
+              <div>난이도(등급) : {bojProbData?.level}</div>
+              <h3>문제 내용</h3>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: bojProbFullData?.prob_desc.replace(/\n/g, '<br>'),
+                }}
+              />
+              <h3>입력</h3>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: bojProbFullData?.prob_input.replace(/\n/g, '<br>'),
+                }}
+              />
+              <h3>출력</h3>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: bojProbFullData?.prob_output.replace(/\n/g, '<br>'),
+                }}
+              />
+              <div className="prob-samples">
+                <h3>예제 1</h3>
+                <span onClick={copyToInput}>input창으로 복사하기</span>
+                <div className="prob-sample-input1">
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: bojProbFullData?.samples?.[1].input.replace(
+                        /\n/g,
+                        '<br>'
+                      ),
+                    }}
+                  />
+                </div>
+                <div className="prob-sample-output1">
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: bojProbFullData?.samples?.[1].output.replace(
+                        /\n/g,
+                        '<br>'
+                      ),
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       <Space direction="vertical">
@@ -428,17 +558,40 @@ function YjsCodeMirror() {
         />
       </Space>
 
-      <div id="editor" ref={editor} style={{ minHeight: '50%' }} />
+      <div className="editor" ref={editor} style={{ minHeight: '50%' }} />
 
-      <div id="compiler">
+      <div className="compiler">
+        {/* <div key={inputStdin.current}>
+          <TextArea
+            className="stdin"
+            rows={5}
+            placeholder="Input"
+            defaultValue=""
+            ref={inputStdin}
+          />
+        </div> */}
+        <div>
+          <textarea
+            className="stdin"
+            rows={5}
+            placeholder="Input"
+            ref={inputStdin}
+          />
+        </div>
         <Button onClick={runCode} type="primary">
           코드 실행
         </Button>
-        <TextArea id="stdin" rows={5} placeholder="Input" ref={inputStdin} />
         <div className="compiled-result">
-          <div id="compiled-output">OUTPUT : {compileOutput}</div>
-          <div id="compiled-cputime">CPU TIME : {cpuTime}</div>
-          <div id="compiled-memory">MEMORY : {memory}</div>
+          <h3>OUTPUT</h3>
+          <div
+            style={{ border: '1px solid black' }}
+            className="compiled-output"
+            dangerouslySetInnerHTML={{
+              __html: compileOutput,
+            }}
+          ></div>
+          <div className="compiled-cputime">CPU TIME : {cpuTime}</div>
+          <div className="compiled-memory">MEMORY : {memory}</div>
         </div>
       </div>
     </>

@@ -8,10 +8,10 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
   buttonEditor!: any;
   mainScene: Phaser.Scene;
   buttonToEditor!: any;
-  macbookList!: any[];
+  // macbookList!: any[];
 
   constructor(data: any) {
-    let { scene, resource, polygon } = data;
+    let { scene, resource, polygon, index } = data;
     super(
       scene.matter.world,
       resource.x + resource.width / 2,
@@ -40,7 +40,7 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
       });
     }
     this.setExistingBody(verticeCollider);
-    this.macbookList = [];
+    // this.macbookList = [];
     /* Add table interaction */
     if (resource.name === 'table') {
       // @ts-ignore
@@ -64,45 +64,65 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
       this.CreateCollisions(tableCollider);
       this.setExistingBody(compoundBody);
 
-      for (let i = 0; i < 5; i++) {
-        if (i !== 0) {
-          this.buttonToEditor = new Button({
-            scene: this.scene,
-            x: this.x,
-            y: this.y - 30 - 30 * i,
-            text: `${5 - i}번 자리 앉기`,
-            style: {
-              fontSize: '20px',
-              // backgroundColor: 'white',
-              color: '#de77ae',
-              stroke: '#de77aa',
-              strokeThickness: 2,
-            },
-          })
-            .getBtn()
-            .setDepth(300)
-            .setShadow(2, 2, '#333333', 2, false, true);
-        } else {
-          this.buttonToEditor = new Button({
-            scene: this.scene,
-            x: this.x,
-            y: this.y - 30 - 30 * i,
-            text: `돌아가기`,
-            style: {
-              fontSize: '20px',
-              backgroundColor: 'white',
-              color: 'black',
-            },
-          })
-            .getBtn()
-            .setDepth(300);
-        }
-        this.buttonToEditor.setVisible(false);
-        this.macbookList.push(this.buttonToEditor);
+      // for (let i = 0; i < 5; i++) {
+      //   if (i !== 0) {
+      //     this.buttonToEditor = new Button({
+      //       scene: this.scene,
+      //       x: this.x,
+      //       y: this.y - 30 - 30 * i,
+      //       text: `${5 - i}번 자리 앉기`,
+      //       style: {
+      //         fontSize: '20px',
+      //         // backgroundColor: 'white',
+      //         color: '#de77ae',
+      //         stroke: '#de77aa',
+      //         strokeThickness: 2,
+      //       },
+      //     })
+      //       .getBtn()
+      //       .setDepth(300)
+      //       .setShadow(2, 2, '#333333', 2, false, true);
+      //   } else {
+      //     this.buttonToEditor = new Button({
+      //       scene: this.scene,
+      //       x: this.x,
+      //       y: this.y - 30 - 30 * i,
+      //       text: `돌아가기`,
+      //       style: {
+      //         fontSize: '20px',
+      //         backgroundColor: 'white',
+      //         color: 'black',
+      //       },
+      //     })
+      //       .getBtn()
+      //       .setDepth(300);
+      //   }
+      //   this.buttonToEditor.setVisible(false);
+      //   this.macbookList.push(this.buttonToEditor);
+      // }
+    }
+
+    if (
+      resource.name == 'macbook_front_closed' ||
+      resource.name == 'macbook_back_closed'
+    ) {
+      if (index < 2) {
+        scene.macbookList[0].push(this);
+      } else if (index < 4) {
+        scene.macbookList[1].push(this);
+      } else if (index < 6) {
+        scene.macbookList[2].push(this);
+      } else if (index < 8) {
+        scene.macbookList[3].push(this);
+      } else if (index < 10) {
+        scene.macbookList[4].push(this);
+      } else if (index < 12) {
+        scene.macbookList[5].push(this);
       }
     }
+
     this.setStatic(true);
-    this.setOrigin(0.53, 0.5);
+    this.setOrigin(0.5, 0.5);
   }
 
   static preload(scene: any) {
@@ -113,6 +133,7 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
     scene.load.image('bookshelf_right', 'assets/room/bookshelf_right.png');
     scene.load.image('chair_back', 'assets/room/chair_back.png');
     scene.load.image('chair_front', 'assets/room/chair_front.png');
+    scene.load.image('whiteboard', 'assets/room/whiteboard.png');
     scene.load.image('chalkboard', 'assets/room/chalkboard.png');
     scene.load.image('cupboard', 'assets/room/cupboard.png');
     scene.load.image('flower', 'assets/room/flower.png');
