@@ -1,5 +1,5 @@
 export const GAME_STATUS = {
-  MAIN: 'MAIN',
+  START: 'START',
   LOBBY: 'LOBBY',
   GAME: 'GAME',
   EDITOR: 'EDITOR',

@@ -56,14 +56,14 @@ io.on('connection', (socket: Socket) => {
   // socket이 연결됩니다~ 이 안에서 서버는 연결된 클라이언트와 소통할 준비가 됨
   console.log('a user connected'); // 유저와 소켓 연결 성공
   // console.log(players.length); // '현재 접속을 시도한 유저'를 제외한 접속인원 수 ( 이하 '나' 라고 지칭하겠습니다. )
-  const charKey = `char${Math.floor(Math.random() * 27)}`; // 랜덤으로 캐릭터 값을 지정해준다. 이후 캐릭터 선택하는 화면이 생기면, 그때 선택한 캐릭터 값을 charKey에 넣어주면 됨!
-  const userName = `원숭이${Math.floor(Math.random() * 2000)}`; // 유저 이름. 유저 위에 떠야한다.
+  // const charKey = `char${Math.floor(Math.random() * 27)}`; // 랜덤으로 캐릭터 값을 지정해준다. 이후 캐릭터 선택하는 화면이 생기면, 그때 선택한 캐릭터 값을 charKey에 넣어주면 됨!
+  // const userName = `원숭이${Math.floor(Math.random() * 2000)}`; // 유저 이름. 유저 위에 떠야한다.
   let playerInfo = {
     // '나'의 데이터 값. soket 인스턴스, soket ID값, 캐릭터 값은 변하지 않는다.
     socket: socket,
     socketId: socket.id,
-    charKey: charKey,
-    userName: userName,
+    charKey: '',
+    userName: '',
     state: 'resume',
     x: 0, // 좌표는 phaser에서 초기화되기 때문에 의미없는 0 값을 넣어뒀다.
     y: 0, // 왜 phaser에서 초기화 되는가? -> phaser의 맵 사이즈에 따라 좌표가 결정되기 때문에. ( 어차피 고정된 값이기 때문에 해당 좌표를 직접 찍어봐서 여기서 입력해도 문제는 없을것 같다. )
@@ -72,9 +72,12 @@ io.on('connection', (socket: Socket) => {
   // Send back the payload to the client and set its initial position
   socket.emit('start', {
     socketID: socket.id,
-    charKey: charKey,
-    userName: userName,
   }); // 연결된 유저에게 고유 데이터를 전달한다.
+
+  socket.on('savePlayer', ({ charKey, userName }) => {
+    playerInfo.charKey = charKey;
+    playerInfo.userName = userName;
+  });
 
   // Send back the payload to the client and set its initial position
   socket.on('loadNewPlayer', (payLoad) => {

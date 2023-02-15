@@ -137,6 +137,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
               fontSize: '20px',
               backgroundColor: 'white',
               color: 'black',
+              resolution: 20,
             },
           }).getBtn();
           this.buttonEditor.setInteractive(); // 이거 해줘야 function 들어감!!!!! 3시간 버린듯;v

@@ -1,7 +1,9 @@
-import MainScene from './scenes/Mainscene';
-import Lobby from './scenes/Lobby';
+import MainScene from 'scenes/Mainscene';
+import Lobby from 'scenes/Lobby';
 import Phaser from 'phaser';
 import PhaserMatterCollisionPlugin from 'phaser-matter-collision-plugin';
+import StartScene from 'scenes/StartScene';
+import { PhaserGame } from 'types';
 
 const pluginConfig = {
   // The plugin class:
@@ -28,17 +30,18 @@ declare module 'phaser' {
 const config = {
   // width: "100%", //  scene이 그려지는 canvas의 width 값
   // height: "100%", //  scene이 그려지는 canvas의 height 값
-  // backgroundColor: '#EEEEEE', //  scene이 그려지는 canvas의 backgroundColor 값
+  backgroundColor: '#EEEEEE', //  scene이 그려지는 canvas의 backgroundColor 값
   type: Phaser.AUTO,
   parent: 'codeuk',
-  scene: [Lobby, MainScene],
+  scene: [StartScene, Lobby, MainScene],
   scale: {
     // mode: Phaser.Scale.FIT,
     mode: Phaser.Scale.ScaleModes.RESIZE,
-    width: window.innerWidth,
-    height: window.innerHeight,
+    // width: window.innerWidth,
+    // height: window.innerHeight,
+    width: '100wh',
+    height: '100vh',
   },
-
   physics: {
     default: 'matter',
     matter: {
@@ -51,6 +54,6 @@ const config = {
   },
 };
 
-let phaserGame = new Phaser.Game(config);
+let phaserGame: PhaserGame = new Phaser.Game(config);
 
 export default phaserGame;
