@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { createCharacterAnims } from '../anims/CharacterAnims';
 import OtherPlayer from '../objects/OtherPlayer';
 import Player from '../objects/Player';

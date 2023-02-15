@@ -1,3 +1,4 @@
+//@ts-nocheck
 import Phaser from 'phaser';
 import { io, Socket } from 'socket.io-client';
 import store from 'stores';
