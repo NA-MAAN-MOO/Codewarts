@@ -28,6 +28,7 @@
     "axios": "^1.3.2",
     "body-parser": "^1.20.1",
     "codemirror": "^6.0.1",
+    "dotenv": "^16.0.3",
     "phaser": "^3.55.2",
     "phaser-matter-collision-plugin": "^1.0.0",
     "react": "^18.2.0",

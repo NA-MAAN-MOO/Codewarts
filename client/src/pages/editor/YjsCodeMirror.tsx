@@ -153,7 +153,7 @@ function YjsCodeMirror() {
   });
 
   /* provider의 정보 출력 */
-  // console.log(provider.awareness.getLocalState());
+  console.log(provider.awareness.getLocalState());
   // console.log('클라이언트ID ' + provider.awareness.clientID);
   // console.log(provider.awareness.states.values().next().value['name']); // 모든 client의 state
   // console.log(provider.awareness.getStates().get(2127960527).user.name); // get(clientID)
