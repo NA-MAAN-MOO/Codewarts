@@ -5,10 +5,13 @@ const muiTheme = createTheme({
     // mode: 'dark',
     primary: {
       main: '#B0C4DE',
-      light: '#4682B4',
+      dark: '#4682B4',
+      light: '#B0E0E6',
     },
     secondary: {
-      main: '#B0E0E6',
+      main: '#A52A2A',
+      dark: '#800000',
+      light: '#F5DEB3',
     },
   },
 });

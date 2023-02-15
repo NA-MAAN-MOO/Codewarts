@@ -13,7 +13,6 @@ import chars from 'assets/characters';
 import { styledTheme } from 'styles/theme';
 import { setPlayerId, setPlayerTexture } from '../stores/userSlice';
 import { useDispatch } from 'react-redux';
-import { openLobby } from 'stores/modeSlice';
 import { handleScene } from 'lib/phaserLib';
 import { GAME_STATUS } from 'utils/Constants';
 
@@ -99,7 +98,6 @@ const LoginDialog = () => {
             fullWidth
             label="이름 입력"
             variant="outlined"
-            // color="secondary"
             error={nameFieldEmpty}
             helperText={nameFieldEmpty && '이름을 입력해 주세요.'}
             onInput={(e) => {
@@ -112,7 +110,7 @@ const LoginDialog = () => {
       <Bottom>
         <Button
           variant="contained"
-          color="secondary"
+          color="primary"
           size="large"
           type="submit"
           sx={{ fontFamily: styledTheme.mainFont }}
