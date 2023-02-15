@@ -19,8 +19,9 @@ export const createSession = async (req: Request, res: Response) => {
     isRoomExist[newSession.sessionId] = true;
     res.send(newSession.sessionId);
   } catch (err) {
+    console.log('세션 생성 실패');
     console.log(err);
-    res.status(500);
+    res.status(500).send(err);
   }
 };
 
@@ -30,7 +31,8 @@ export const createConnection = async (req: Request, res: Response) => {
       (s) => s.sessionId === req.params.sessionId
     );
     if (!session) {
-      res.status(404).send();
+      console.log('세션 존재하지 않음');
+      res.status(404).end();
     } else {
       const connection = await session.createConnection(req.body);
       console.log('connection created', connection);
@@ -38,6 +40,6 @@ export const createConnection = async (req: Request, res: Response) => {
     }
   } catch (err) {
     console.log(err);
-    res.status(500);
+    res.status(500).send(err);
   }
 };

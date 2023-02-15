@@ -25,7 +25,7 @@ const APPLICATION_SERVER_URL = 'http://localhost:3002/';
 const Voice = ({ roomKey, userName }: VoiceProp) => {
   const [OV, setOV] = useState<OpenVidu>();
   const [session, setSession] = useState<Session>();
-  const [subscribers, setSubscribers] = useState<Array<StreamManager>>([]);
+  const [subscribers, setSubscribers] = useState<Array<Subscriber>>([]);
   const [publisher, setPublisher] = useState<Publisher>();
   const onBeforeUnload = (e: BeforeUnloadEvent) => {
     leaveSession();
@@ -40,7 +40,10 @@ const Voice = ({ roomKey, userName }: VoiceProp) => {
 
       //roomKey를 바탕으로 sessionId를 가져온다.
       //가져온 sessionId와 만든 세션을 서버에서 생성한다.
-      await createSession(roomKey);
+      const result = await createSession(roomKey);
+      if (!result) {
+        return;
+      }
       setSession(session);
       setOV(OV);
 

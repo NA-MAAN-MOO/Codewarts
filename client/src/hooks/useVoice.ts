@@ -33,11 +33,11 @@ export const createSession = async (sessionId: string) => {
         headers: { 'Content-Type': 'application/json' },
       }
     );
-    //return sessionId
-    return data;
+    return 1;
   } catch (err) {
     console.log('createSession error');
     console.log(err);
+    return 0;
   }
 };
 

@@ -42,7 +42,7 @@ const GameVoice = ({
 
   return (
     <AudioBox>
-      {session !== undefined ? (
+      {!!session ? (
         <>
           {subscribers.map((sub, i) => (
             <div key={sub.id} style={{ display: 'hidden' }}>
