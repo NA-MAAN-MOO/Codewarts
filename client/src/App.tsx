@@ -6,12 +6,13 @@ import type { RootState } from 'stores';
 import Game from 'pages/Game';
 import Start from 'pages/Start';
 import Editor from 'pages/Editor';
+import Lobby from 'pages/Lobby';
 import { openEditor, openGame } from 'stores/modeSlice';
 import './codeuk';
 
 function App() {
   const mode = process.env.REACT_APP_MODE;
-  const { MAIN, GAME, EDITOR } = GAME_STATUS;
+  const { MAIN, LOBBY, GAME, EDITOR } = GAME_STATUS;
   const status = useSelector((state: RootState) => state.mode.status);
   const dispatch = useDispatch();
   let loadFlag = false;
@@ -30,6 +31,8 @@ function App() {
       <HoverDiv>
         {status === MAIN ? (
           <Start></Start>
+        ) : status === LOBBY ? (
+          <Lobby></Lobby>
         ) : status === GAME ? (
           <Game></Game>
         ) : (

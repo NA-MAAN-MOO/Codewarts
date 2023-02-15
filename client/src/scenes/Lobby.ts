@@ -1,6 +1,8 @@
+//@ts-nocheck
 import Phaser from 'phaser';
 import { io, Socket } from 'socket.io-client';
 import store from 'stores';
+import { openGame } from 'stores/modeSlice';
 import Player from 'objects/Player';
 import Button from 'objects/Button';
 import { createCharacterAnims } from '../anims/CharacterAnims';
@@ -176,7 +178,13 @@ export default class Lobby extends Phaser.Scene {
       // Press E to Enter Classroom
       if (this.inputKeys.enter.isDown) {
         // this.scene.stop();
-        this.scene.start('MainScene');
+        store.dispatch(openGame());
+        this.scene.sleep('Lobby');
+        if (this.scene.isSleeping('MainScene')) {
+          this.scene.wake('MainScene');
+        } else {
+          this.scene.start('MainScene');
+        }
       }
     } else {
       this.buttonForList.setVisible(false);
