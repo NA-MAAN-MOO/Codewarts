@@ -15,7 +15,7 @@ const muiTheme = createTheme({
 
 export const styledTheme = {
   logoWidth: '100px',
-  logoHeight: '100px',
+  logoHeight: '130px',
   mainBlue: '#B0C4DE',
   lightBlue: '#B0E0E6',
   darkBlue: '#4682B4',

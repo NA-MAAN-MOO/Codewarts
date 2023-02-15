@@ -9,11 +9,19 @@ import { Navigation } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import logo from 'assets/images/logo.png';
-import characters from 'assets/characters';
+import chars from 'assets/characters';
 import { styledTheme } from 'styles/theme';
 import { setPlayerId, setPlayerTexture } from '../stores/userSlice';
 import { useDispatch } from 'react-redux';
-import { openGame } from 'stores/modeSlice';
+import { openLobby } from 'stores/modeSlice';
+import { handleScene } from 'lib/phaserLib';
+import { GAME_STATUS } from 'utils/Constants';
+
+interface Characters {
+  [key: string]: string;
+}
+
+const characters = chars as Characters;
 
 const avatars: { name: string; img: string }[] = Array.from(
   new Array(28),
@@ -34,9 +42,8 @@ const LoginDialog = () => {
       console.log('Join! Name:', name, 'Avatar:', avatars[avatarIndex].name);
 
       dispatch(setPlayerId(name));
-      // game.myPlayer.setPlayerName(name);
       dispatch(setPlayerTexture(avatars[avatarIndex].name));
-      dispatch(openGame());
+      handleScene(GAME_STATUS.LOBBY);
 
       // game.myPlayer.setPlayerTexture(avatars[avatarIndex].name);
       // game.network.readyToConnect();
@@ -166,7 +173,9 @@ const Left = styled.div`
 
 const Right = styled.div`
   width: 300px;
-  padding-top: 50px;
+  display: flex;
+  align-items: center;
+  // padding-top: 50px;
 `;
 
 const Bottom = styled.div`
