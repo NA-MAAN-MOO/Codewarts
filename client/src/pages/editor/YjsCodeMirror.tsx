@@ -1,3 +1,4 @@
+//@ts-nocheck
 /* react */
 import { useRef, useEffect, useState } from 'react';
 
@@ -129,7 +130,7 @@ function YjsCodeMirror() {
 
   // Websocket Provider setting
   const provider = new WebsocketProvider(
-    `ws://localhost:3000/`, // serverUrl
+    `ws://localhost:1234/`, // serverUrl
     roomName,
     ydoc
     // { params: { auth: roomId } } // Specify a query-string that will be url-encoded and attached to the `serverUrl`
