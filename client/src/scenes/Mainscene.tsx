@@ -4,7 +4,7 @@ import Player from '../objects/Player';
 import Resource from '../objects/Resources';
 import { io, Socket } from 'socket.io-client';
 import store from 'stores';
-import { openEditor } from 'stores/modeSlice';
+import { openEditor, openGame } from 'stores/modeSlice';
 import { setRoomId, setUserName } from 'stores/editorSlice';
 import { GAME_STATUS } from 'utils/Constants';
 import Table from 'objects/Table';
@@ -26,12 +26,15 @@ export default class MainScene extends Phaser.Scene {
   watchTable!: boolean;
   editorIdx!: number;
   openMyEditor!: boolean;
-  getOut!: boolean;
+  // getOut!: boolean;
+  editorOwner!: string;
+  macbookList!: any;
 
   constructor() {
     // Scene의 key값은 MainScene
     super('MainScene');
     this.isKeyDisable = false;
+    this.macbookList = [[], [], [], [], [], []];
   }
 
   preload() {
@@ -42,8 +45,9 @@ export default class MainScene extends Phaser.Scene {
     this.load.tilemapTiledJSON('room_map_tile', 'assets/room/room_map.json');
   }
   create() {
-    this.getOut = false;
+    // this.getOut = false;
     this.openMyEditor = false;
+    this.editorOwner = '';
     // 생성해야 하는 것, 게임 오브젝트 등
     /* Setting room map ground */
     this.map = this.make.tilemap({ key: 'room_map_tile' }); //Json file key (1st parameter in tilemapTiledJSON)
@@ -71,9 +75,20 @@ export default class MainScene extends Phaser.Scene {
           scene: this,
           resource: objs,
           polygon: polygons[objs.name],
+          index: i,
         });
       });
     });
+
+    /* Register laptops to Tables */
+    let tableKeys = Array.from(this.tableMap.keys());
+    for (let i = 0; i < 6; i++) {
+      for (let j = 0; j < 4; j++) {
+        this.tableMap
+          .get(tableKeys[i])
+          ?.registerLaptop(j, this.macbookList[i][j]);
+      }
+    }
 
     this.x = this.map.widthInPixels / 2;
     this.y = this.map.heightInPixels / 2;
@@ -120,7 +135,7 @@ export default class MainScene extends Phaser.Scene {
       phaserGame.socket.emit('currentPlayers');
       //@ts-ignore
       phaserGame.socket.on('currentPlayers', (payLoad: any) => {
-        console.log('기존 유저들을 그려줄게');
+        console.log('currentPlayers');
         this.addOtherPlayers({
           x: payLoad.x,
           y: payLoad.y,
@@ -186,7 +201,17 @@ export default class MainScene extends Phaser.Scene {
 
       // TODO: 강제로 보고있는 다른 유저들 강퇴 (상태값 바꿔야함 - 게임모드로)
       phaserGame.socket.on('removeEditor', (payLoad: any) => {
-        this.tableMap.get(payLoad[0]).removeCurrentUser(payLoad[1]);
+        console.log('방 빼요');
+        if (
+          this.editorOwner === payLoad[2] &&
+          phaserGame.userName !== payLoad[2]
+        ) {
+          console.log('방 빼요');
+          store.dispatch(openGame());
+        }
+        // removeCurrentUser하려면 updateTable(idx, '')하면 됨
+        this.tableMap.get(payLoad[0]).updateTable(payLoad[1], '');
+        // this.tableMap.get(payLoad[0]).removeCurrentUser(payLoad[1]);
       });
     }
   }
@@ -195,17 +220,17 @@ export default class MainScene extends Phaser.Scene {
     if (store.getState().mode.status !== GAME_STATUS.GAME) {
       if (this.openMyEditor) {
         console.log('1차관문, 여기 왔으면 내 에디터 열었다는 뜻');
-        this.getOut = true;
       }
       this.input.keyboard.disableGlobalCapture();
       this.isKeyDisable = true;
       return;
     }
     if (this.isKeyDisable) {
-      if (this.getOut) {
+      if (phaserGame.userName === this.editorOwner) {
         console.log('2차관문, 여기오면 내 에디터 닫았다는 뜻');
         phaserGame.socket.emit('removeEditor');
       }
+      this.editorOwner = '';
       this.openMyEditor = false;
       this.input.keyboard.enableGlobalCapture();
       this.isKeyDisable = false;
@@ -279,7 +304,7 @@ export default class MainScene extends Phaser.Scene {
     if (Phaser.Input.Keyboard.JustDown(this.player.inputKeys.open)) {
       if (this.player.touching.length !== 0) {
         this.editorIdx = 0;
-        console.log(this.player.touching[0].body.id);
+        // console.log(this.player.touching[0].body.id);
         this.watchTable = true;
         this.player.setStatic(true);
 
@@ -373,7 +398,8 @@ export default class MainScene extends Phaser.Scene {
         idx: idx,
       };
       this.openMyEditor = true;
-      console.log(this.openMyEditor);
+      this.editorOwner = phaserGame.userName;
+      // console.log(this.openMyEditor);
       phaserGame.socket.emit('addEditor', payLoad);
       //@ts-ignore
       store.dispatch(setRoomId(phaserGame.userName));
@@ -383,9 +409,10 @@ export default class MainScene extends Phaser.Scene {
       store.dispatch(openEditor());
       // console.log(this.tableMap.get(tableId).tableInfo.get(idx).username);
     } else {
-      let editorOwner = this.tableMap.get(tableId).tableInfo.get(idx).username;
+      this.editorOwner = this.tableMap.get(tableId).tableInfo.get(idx).username;
+      console.log(this.editorOwner);
       //@ts-ignore
-      store.dispatch(setRoomId(editorOwner));
+      store.dispatch(setRoomId(this.editorOwner));
       //@ts-ignore
       store.dispatch(setUserName(phaserGame.userName));
       // 에디터 창 열기

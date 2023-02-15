@@ -5,6 +5,8 @@ import reportWebVitals from './reportWebVitals';
 import { store } from './stores';
 import { Provider } from 'react-redux';
 import './styles/Reset.css';
+import { ThemeProvider } from '@mui/material/styles';
+import muiTheme from './MuiTheme';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -12,7 +14,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <ThemeProvider theme={muiTheme}>
+        <App />/
+      </ThemeProvider>
     </Provider>
   </React.StrictMode>
 );

@@ -1,6 +1,7 @@
+//@ts-nocheck
 /* react */
 import { useRef, useEffect, useState } from 'react';
-//dkjasklfjlskjdf?
+
 /* lib */
 import * as random from 'lib0/random';
 import { useSelector } from 'react-redux';
@@ -28,31 +29,86 @@ import { okaidia } from '@uiw/codemirror-theme-okaidia';
 import { RootState } from 'stores';
 
 /* UI */
-import { Switch, Space, Button, Input } from 'antd';
+import { Space, Button, Input, Radio } from 'antd';
 import { DownCircleOutlined } from '@ant-design/icons';
+import type { RadioChangeEvent } from 'antd';
+import { styled } from '@mui/material/styles';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import styledc from 'styled-components';
+import 'styles/fonts.css'; /* FONT */
+
+const MaterialUISwitch = styled(Switch)(({ theme }) => ({
+  width: 62,
+  height: 34,
+  padding: 7,
+  '& .MuiSwitch-switchBase': {
+    margin: 1,
+    padding: 0,
+    transform: 'translateX(6px)',
+    '&.Mui-checked': {
+      color: '#fff',
+      transform: 'translateX(22px)',
+      '& .MuiSwitch-thumb:before': {
+        backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="${encodeURIComponent(
+          '#fff'
+        )}" d="M4.2 2.5l-.7 1.8-1.8.7 1.8.7.7 1.8.6-1.8L6.7 5l-1.9-.7-.6-1.8zm15 8.3a6.7 6.7 0 11-6.6-6.6 5.8 5.8 0 006.6 6.6z"/></svg>')`,
+      },
+      '& + .MuiSwitch-track': {
+        opacity: 1,
+        backgroundColor: theme.palette.mode === 'dark' ? '#8796A5' : '#aab4be',
+      },
+    },
+  },
+  '& .MuiSwitch-thumb': {
+    backgroundColor: theme.palette.mode === 'dark' ? '#003892' : '#001e3c',
+    width: 32,
+    height: 32,
+    '&:before': {
+      content: "''",
+      position: 'absolute',
+      width: '100%',
+      height: '100%',
+      left: 0,
+      top: 0,
+      backgroundRepeat: 'no-repeat',
+      backgroundPosition: 'center',
+      backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="${encodeURIComponent(
+        '#fff'
+      )}" d="M9.305 1.667V3.75h1.389V1.667h-1.39zm-4.707 1.95l-.982.982L5.09 6.072l.982-.982-1.473-1.473zm10.802 0L13.927 5.09l.982.982 1.473-1.473-.982-.982zM10 5.139a4.872 4.872 0 00-4.862 4.86A4.872 4.872 0 0010 14.862 4.872 4.872 0 0014.86 10 4.872 4.872 0 0010 5.139zm0 1.389A3.462 3.462 0 0113.471 10a3.462 3.462 0 01-3.473 3.472A3.462 3.462 0 016.527 10 3.462 3.462 0 0110 6.528zM1.665 9.305v1.39h2.083v-1.39H1.666zm14.583 0v1.39h2.084v-1.39h-2.084zM5.09 13.928L3.616 15.4l.982.982 1.473-1.473-.982-.982zm9.82 0l-.982.982 1.473 1.473.982-.982-1.473-1.473zM9.305 16.25v2.083h1.389V16.25h-1.39z"/></svg>')`,
+    },
+  },
+  '& .MuiSwitch-track': {
+    opacity: 1,
+    backgroundColor: theme.palette.mode === 'dark' ? '#8796A5' : '#aab4be',
+    borderRadius: 20 / 2,
+  },
+}));
 
 function YjsCodeMirror() {
   /* states */
   const { userName, roomId } = useSelector((state: RootState) => state.editor);
-  let [compileOutput, setCompileOutput] = useState('');
-  let [cpuTime, setCpuTime] = useState('');
-  let [memory, setMemory] = useState('');
-  let [editorTheme, setEditorTheme] = useState(okaidia);
+  let [compileOutput, setCompileOutput] = useState();
+  let [cpuTime, setCpuTime] = useState();
+  let [memory, setMemory] = useState();
+  let [editorThemeMode, setEditorTheme] = useState(okaidia);
   let [leetUserData, setLeetUserData] = useState();
   let [leetProbData, setLeetProbData] = useState();
   let [bojUserData, setBojUserData] = useState();
   let [bojProbData, setBojProbData] = useState();
+  let [bojProbFullData, setBojProbFullData] = useState();
 
   /* ref */
   const editor = useRef(null);
-  const inputStdin = useRef(null);
+  const inputStdin = useRef();
   const leetUserNameRef = useRef(null);
   const leetProbDataRef = useRef(null);
   const bojUserNameRef = useRef(null);
   const bojProbDataRef = useRef(null);
 
   /* for UI */
-  const { TextArea } = Input;
+  // const { TextArea } = Input;
 
   /* roomName 스트링 값 수정하지 말 것(※ 수정할 거면 전부 수정해야 함) */
   const roomName = `ROOMNAME${roomId}`;
@@ -74,7 +130,7 @@ function YjsCodeMirror() {
 
   // Websocket Provider setting
   const provider = new WebsocketProvider(
-    `ws://localhost:3000/`, // serverUrl
+    `ws://localhost:1234/`, // serverUrl
     roomName,
     ydoc
     // { params: { auth: roomId } } // Specify a query-string that will be url-encoded and attached to the `serverUrl`
@@ -97,7 +153,7 @@ function YjsCodeMirror() {
   });
 
   /* provider의 정보 출력 */
-  // console.log(provider.awareness.getLocalState());
+  console.log(provider.awareness.getLocalState());
   // console.log('클라이언트ID ' + provider.awareness.clientID);
   // console.log(provider.awareness.states.values().next().value['name']); // 모든 client의 state
   // console.log(provider.awareness.getStates().get(2127960527).user.name); // get(clientID)
@@ -107,17 +163,19 @@ function YjsCodeMirror() {
 
   useEffect(() => {
     /* editor theme 설정 */
-    let basicTheme = EditorView.theme({
-      // '.cm-gutter': { minHeight: '50%' },
-      // '&': {
-      // fontFamily: 'Cascadia Code',
-      // height: '50%',
-      // },
+    let basicThemeSet = EditorView.theme({
+      '&': {
+        // fontFamily: 'Cascadia Code',
+        height: '500px',
+        // minHeight: '500px',
+      },
+      '.cm-content, .cm-gutter': { minHeight: '30%' },
       '.cm-content': {
         fontFamily: 'Cascadia Code',
         fontSize: 'large',
       },
       '.cm-gutter': {
+        // minHeight: '50%',
         fontFamily: 'Cascadia Code',
       },
     });
@@ -132,8 +190,8 @@ function YjsCodeMirror() {
         keymap.of([indentWithTab]),
         keymap.of(standardKeymap),
         keymap.of(defaultKeymap),
-        basicTheme,
-        editorTheme,
+        editorThemeMode,
+        basicThemeSet,
       ],
     });
 
@@ -146,19 +204,22 @@ function YjsCodeMirror() {
 
     /* view 중복 생성 방지 */
     return () => view?.destroy();
-  }, [editorTheme]);
+  }, [editorThemeMode]);
 
   /* 유저가 작성한 코드를 컴파일하기 위해 서버로 보냄 */
   const runCode = async () => {
     if (!inputStdin.current) return;
+    console.log(inputStdin.current.value);
+
     try {
       const { data } = await axios.post(`http://localhost:3001/run-code`, {
         codeToRun: ytext.toString(),
         //@ts-ignore
         stdin: inputStdin.current.value,
       });
+
       console.log(data); // 전체 reponse body (output, statusCode, memory, cpuTime)
-      setCompileOutput(data.output);
+      setCompileOutput(data.output.replace(/\n/g, '<br>'));
       setMemory(data.memory);
       setCpuTime(data.cpuTime);
     } catch (error) {
@@ -169,7 +230,7 @@ function YjsCodeMirror() {
 
   /* 다크/라이트 모드 테마 토글 */
   function switchTheme(checked: boolean) {
-    if (editorTheme === okaidia) {
+    if (editorThemeMode === okaidia) {
       setEditorTheme(noctisLilac);
     } else {
       setEditorTheme(okaidia);
@@ -250,10 +311,28 @@ function YjsCodeMirror() {
       let probData = response.data;
       console.log(probData);
       setBojProbData(probData);
+      fetchBojProbFullData(probId);
     } catch (error) {
       console.error(error);
     }
   };
+
+  /* 스크래핑 서버에 백준 문제 정보 요청 */
+  async function fetchBojProbFullData(probId: string) {
+    if (bojProbDataRef.current === null) return;
+
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/data?probId=${probId}`
+      );
+
+      let probFullData = response.data;
+      console.log(probFullData);
+      setBojProbFullData(probFullData);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   /* leetcode 유저 정보 가져오기 */
   const fetchLeetUserData = async () => {
@@ -345,79 +424,186 @@ function YjsCodeMirror() {
     }
   };
 
+  /* 백준, 리트코드 선택 */
+  const [algoSelect, setAlgoSelect] = useState(1);
+  const platformChange = (e: RadioChangeEvent) => {
+    setAlgoSelect(e.target.value);
+  };
+
+  /* 문제 예제 인풋을 실행 인풋 창으로 복사 */
+  // todo: 인덱스를 인수로 받고, 해당하는 예제 복사하기
+  const copyToInput = () => {
+    if (inputStdin.current === undefined) return;
+    inputStdin.current.value = bojProbFullData?.samples?.[1].input;
+  };
+
   return (
-    <>
-      <div className="algo-info">
-        <div id="algo-user-input">
-          <input ref={leetUserNameRef} placeholder="leetcode 아이디 입력" />
-          <DownCircleOutlined onClick={fetchLeetUserData} />
-          <input ref={bojUserNameRef} placeholder="백준 아이디 입력" />
-          <DownCircleOutlined onClick={fetchBojUserData} />
-        </div>
-
-        <div className="algo-user-info">
-          <div className="leet-user-info">
-            <div>깃헙 주소 :{leetUserData?.matchedUser?.githubUrl}</div>
-            <div>ranking : {leetUserData?.matchedUser?.profile?.ranking}</div>
-            <div>
-              leetcode 총 맞춘 문제수 :
-              {
-                leetUserData?.matchedUser?.submitStats?.acSubmissionNum?.[0]
-                  ?.count
-              }
-            </div>
-          </div>
-
-          <div className="boj-user-info">
-            <div>백준 티어 : {bojUserData?.items[0].tier}</div>
-            <div>백준 푼 문제 수 : {bojUserData?.items[0].solvedCount}</div>
-          </div>
-        </div>
-
-        <div className="algo-problem-input">
-          <input
-            ref={leetProbDataRef}
-            placeholder="leetcode title slug 입력!"
-          />
-          <DownCircleOutlined onClick={fetchLeetProbInfo} />
-          <input ref={bojProbDataRef} placeholder="백준 문제 번호 입력!" />
-          <DownCircleOutlined onClick={fetchBojProbInfo} />
-        </div>
-
-        <div id="algo-problem-info" style={{ border: '5px solid black' }}>
-          <div className="leet-prob-info">
-            <div>
-              답안 제출하러 가기 : https://leetcode.com/problems/
-              {leetProbData?.question.titleSlug}
-            </div>
-            <div>문제 title : {leetProbData?.question.title}</div>
-            <div>문제 번호 : {leetProbData?.question.questionId}</div>
-            <div>문제 정보 : {leetProbData?.question.content}</div>
-            <div>예제 : {leetProbData?.question.exampleTestcases}</div>
-            <div>difficulty : {leetProbData?.question.difficulty}</div>
-            <div>
-              code snippets : {leetProbData?.question.codeSnippets[3].code}
-            </div>
-          </div>
-
-          <div className="boj-prob-info">
-            <div>
-              답안 제출하러 가기 : https://acmicpc.net/problem/
-              {bojProbData?.problemId}
-            </div>
-            <div>문제 title : {bojProbData?.titleKo}</div>
-            <div>difficulty : {bojProbData?.level}</div>
-          </div>
-        </div>
-      </div>
-
+    <EditorWrapper>
       <div className="room-user-info">
         <div>유저 이름 : {userName}</div>
         <div>룸 ID : {roomId}</div>
-        <div>이 방에 있는 유저리스트 : </div>
       </div>
 
-      <Space direction="vertical">
+      <div className="algo-info">
+        <div className="algo-user-input">
+          <Radio.Group onChange={platformChange} value={algoSelect}>
+            <Radio value={1}>LeetCode</Radio>
+            <Radio value={2}>백준</Radio>
+          </Radio.Group>
+
+          {algoSelect === 1 ? (
+            <div className="leet-user-input">
+              <input ref={leetUserNameRef} placeholder="leetcode 아이디 입력" />
+              <DownCircleOutlined onClick={fetchLeetUserData} />
+            </div>
+          ) : (
+            <div className="boj-user-input">
+              <input ref={bojUserNameRef} placeholder="백준 아이디 입력" />
+              <DownCircleOutlined onClick={fetchBojUserData} />
+            </div>
+          )}
+        </div>
+
+        <div className="algo-user-info">
+          {algoSelect === 1 ? (
+            <div className="leet-user-info">
+              {/* <div>깃헙 주소 :{leetUserData?.matchedUser?.githubUrl}</div> */}
+              <div>
+                leetcode 랭킹 : {leetUserData?.matchedUser?.profile?.ranking}
+              </div>
+              <div>
+                leetcode 총 맞춘 문제수 :
+                {
+                  leetUserData?.matchedUser?.submitStats?.acSubmissionNum?.[0]
+                    ?.count
+                }
+              </div>
+            </div>
+          ) : (
+            <div className="boj-user-info">
+              <div>백준 티어 : {bojUserData?.items[0].tier}</div>
+              <div>백준 푼 문제 수 : {bojUserData?.items[0].solvedCount}</div>
+            </div>
+          )}
+        </div>
+
+        <div className="algo-problem-input">
+          {algoSelect === 1 ? (
+            <div className="leet-problem-input">
+              <input
+                ref={leetProbDataRef}
+                placeholder="LeetCode 문제의 title slug를 입력!"
+              />
+              <DownCircleOutlined onClick={fetchLeetProbInfo} />
+            </div>
+          ) : (
+            <div className="boj-problem-input">
+              <input ref={bojProbDataRef} placeholder="백준 문제 번호 입력!" />
+              <DownCircleOutlined onClick={fetchBojProbInfo} />
+            </div>
+          )}
+        </div>
+
+        <div
+          className="algo-problem-info"
+          style={{ border: '5px solid black' }}
+        >
+          {algoSelect === 1 ? (
+            <div className="leet-prob-info">
+              <a
+                href={`https://leetcode.com/problems/${leetProbData?.question.titleSlug}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                LeetCode에 답안 제출하러 가기
+              </a>
+              <div>문제 제목 : {leetProbData?.question.title}</div>
+              <div>문제 번호 : {leetProbData?.question.questionId}</div>
+              <div>난이도 : {leetProbData?.question.difficulty}</div>
+              <h3>문제 내용</h3>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: leetProbData?.question.content,
+                }}
+              />
+              <h3>예제</h3>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: leetProbData?.question.exampleTestcases.replace(
+                    /\n/g,
+                    '<br>'
+                  ),
+                }}
+              />
+              <h3>파이썬 스니펫</h3>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: leetProbData?.question.codeSnippets[3].code.replace(
+                    /\n/g,
+                    '<br>'
+                  ),
+                }}
+              ></div>
+            </div>
+          ) : (
+            <div className="boj-prob-info">
+              <a
+                href={`https://acmicpc.net/problem/${bojProbData?.problemId}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                백준에 답안 제출하러 가기
+              </a>
+              <div>문제 제목 : {bojProbData?.titleKo}</div>
+              <div>난이도(등급) : {bojProbData?.level}</div>
+              <h3>문제 내용</h3>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: bojProbFullData?.prob_desc.replace(/\n/g, '<br>'),
+                }}
+              />
+              <h3>입력</h3>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: bojProbFullData?.prob_input.replace(/\n/g, '<br>'),
+                }}
+              />
+              <h3>출력</h3>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: bojProbFullData?.prob_output.replace(/\n/g, '<br>'),
+                }}
+              />
+              <div className="prob-samples">
+                <h3>예제 1</h3>
+                <span onClick={copyToInput}>input창으로 복사하기</span>
+                <div className="prob-sample-input1">
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: bojProbFullData?.samples?.[1].input.replace(
+                        /\n/g,
+                        '<br>'
+                      ),
+                    }}
+                  />
+                </div>
+                <div className="prob-sample-output1">
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: bojProbFullData?.samples?.[1].output.replace(
+                        /\n/g,
+                        '<br>'
+                      ),
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* <Space direction="vertical">
         <Switch
           checkedChildren="Dark"
           unCheckedChildren="Lavender"
@@ -426,23 +612,66 @@ function YjsCodeMirror() {
             switchTheme(checked);
           }}
         />
-      </Space>
+      </Space> */}
+      <FormGroup>
+        <FormControlLabel
+          control={
+            <MaterialUISwitch
+              sx={{ m: 1 }}
+              defaultChecked
+              onClick={(checked) => {
+                switchTheme(checked);
+              }}
+            />
+          }
+          label=""
+        />
+      </FormGroup>
 
-      <div id="editor" ref={editor} style={{ minHeight: '50%' }} />
+      <div className="editor" ref={editor} style={{ minHeight: '50%' }} />
 
-      <div id="compiler">
+      <div className="compiler">
+        {/* <div key={inputStdin.current}>
+          <TextArea
+            className="stdin"
+            rows={5}
+            placeholder="Input"
+            defaultValue=""
+            ref={inputStdin}
+          />
+        </div> */}
+        <div>
+          <textarea
+            className="stdin"
+            rows={5}
+            placeholder="Input"
+            ref={inputStdin}
+          />
+        </div>
         <Button onClick={runCode} type="primary">
           코드 실행
         </Button>
-        <TextArea id="stdin" rows={5} placeholder="Input" ref={inputStdin} />
         <div className="compiled-result">
-          <div id="compiled-output">OUTPUT : {compileOutput}</div>
-          <div id="compiled-cputime">CPU TIME : {cpuTime}</div>
-          <div id="compiled-memory">MEMORY : {memory}</div>
+          <h3>OUTPUT</h3>
+          <div
+            style={{ border: '1px solid black' }}
+            className="compiled-output"
+            dangerouslySetInnerHTML={{
+              __html: compileOutput,
+            }}
+          ></div>
+          <div className="compiled-cputime">CPU TIME : {cpuTime}</div>
+          <div className="compiled-memory">MEMORY : {memory}</div>
         </div>
       </div>
-    </>
+    </EditorWrapper>
   );
 }
 
 export default YjsCodeMirror;
+
+const EditorWrapper = styledc.div`
+  & {
+    font-family: 'Cascadia Code', sans-serif;
+  }
+`;
