@@ -185,6 +185,8 @@ export default function LoginDialog() {
       dispatch(setPlayerId(name));
       // game.myPlayer.setPlayerName(name);
       dispatch(setPlayerTexture(avatars[avatarIndex].name));
+      dispatch(openGame());
+
       // game.myPlayer.setPlayerTexture(avatars[avatarIndex].name);
       // game.network.readyToConnect();
       // dispatch(setLoggedIn(true));
@@ -276,9 +278,11 @@ export default function LoginDialog() {
       </Content>
       <Bottom>
         <Button
-          onClick={() => {
-            dispatch(openGame());
-          }}
+          // onClick={() => {  submit보다 먼저 작동해서 문제가 있었음
+          //   if (!nameFieldEmpty) {
+          //     dispatch(openGame());
+          //   }
+          // }}
           variant="contained"
           color="secondary"
           size="large"
