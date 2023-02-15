@@ -53,7 +53,7 @@ const Voice = ({ roomKey, userName }: VoiceProp) => {
     })();
   }, []);
 
-  const deleteSubscriber = (streamManager: StreamManager) => {
+  const deleteSubscriber = (streamManager: Subscriber) => {
     let subNow = subscribers;
     let index = subNow.indexOf(streamManager, 0);
     if (index > -1) {
