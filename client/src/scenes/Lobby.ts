@@ -31,7 +31,7 @@ export default class Lobby extends Phaser.Scene {
   private player!: Phaser.Physics.Matter.Sprite;
   private buttonForList!: Phaser.GameObjects.Text;
   private houseForList!: Phaser.Physics.Matter.Sprite;
-  inputKeys!: any;
+  inputKeys!: object;
   socketId: any;
 
   socket: Socket | undefined;
@@ -80,7 +80,10 @@ export default class Lobby extends Phaser.Scene {
     this.houseForList.setSensor(true);
     this.houseForList.setScrollFactor(0);
 
-    if (!phaserGame.charKey || !phaserGame.socketId) return;
+    console.log(phaserGame.charKey);
+    console.log(phaserGame.socketId);
+    // if (phaserGame.charKey === undefined || phaserGame.socketId === undefined)
+    //   return;
 
     /* Add my player */
     this.player = new Player({
@@ -91,6 +94,7 @@ export default class Lobby extends Phaser.Scene {
       id: phaserGame.socketId,
       frame: 'down-1',
     });
+    console.log(phaserGame.socketId);
 
     /* Add Keyboard keys to enable character animation */
     this.inputKeys = this.input.keyboard.addKeys({
@@ -138,13 +142,13 @@ export default class Lobby extends Phaser.Scene {
 
     let playerVelocity = new Phaser.Math.Vector2(); //  2D 벡터
     let motion = 'idle';
-    if (this.inputKeys.left.isDown) {
+    if (this.inputKeys?.left?.isDown) {
       playerVelocity.x = -1;
       this.player.play(`${phaserGame.charKey}-walk-left`, true);
       motion = 'left';
       // parallax scrolling
       // this.cameras.main.scrollX -= 0.5;
-    } else if (this.inputKeys.right.isDown) {
+    } else if (this.inputKeys?.right?.isDown) {
       playerVelocity.x = 1;
       this.player.play(`${phaserGame.charKey}-walk-right`, true);
       motion = 'right';
@@ -173,7 +177,7 @@ export default class Lobby extends Phaser.Scene {
       this.buttonForList.setVisible(true);
       // console.log('맞닿음');
       // Press E to Enter Classroom
-      if (this.inputKeys.enter.isDown) {
+      if (this.inputKeys?.enter?.isDown) {
         handleScene(GAME_STATUS.GAME);
       }
     } else {
