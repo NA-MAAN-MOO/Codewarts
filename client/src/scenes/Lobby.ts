@@ -7,6 +7,8 @@ import Player from 'objects/Player';
 import Button from 'objects/Button';
 import { createCharacterAnims } from '../anims/CharacterAnims';
 import phaserGame from 'codeuk';
+import { handleScene } from 'lib/phaserLib';
+import { GAME_STATUS } from 'utils/Constants';
 
 /* Parallax Scrolling */
 const createAligned = (
@@ -177,14 +179,7 @@ export default class Lobby extends Phaser.Scene {
       // console.log('맞닿음');
       // Press E to Enter Classroom
       if (this.inputKeys.enter.isDown) {
-        // this.scene.stop();
-        store.dispatch(openGame());
-        this.scene.sleep('Lobby');
-        if (this.scene.isSleeping('MainScene')) {
-          this.scene.wake('MainScene');
-        } else {
-          this.scene.start('MainScene');
-        }
+        handleScene(GAME_STATUS.GAME);
       }
     } else {
       this.buttonForList.setVisible(false);

@@ -7,15 +7,15 @@ export interface ModeState {
 }
 
 const initialState: ModeState = {
-  status: GAME_STATUS.MAIN,
+  status: GAME_STATUS.START,
 };
 
 export const modeSlice = createSlice({
   name: 'mode',
   initialState,
   reducers: {
-    openMain: (state) => {
-      state.status = GAME_STATUS.MAIN;
+    openStart: (state) => {
+      state.status = GAME_STATUS.START;
     },
     openGame: (state) => {
       state.status = GAME_STATUS.GAME;
@@ -33,6 +33,6 @@ export const modeSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { openMain, openGame, openEditor, openLobby } = modeSlice.actions;
+export const { openStart, openGame, openEditor, openLobby } = modeSlice.actions;
 
 export default modeSlice.reducer;

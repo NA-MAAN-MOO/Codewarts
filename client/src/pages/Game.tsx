@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { openMain, openEditor, openGame, openLobby } from 'stores/modeSlice';
+import { openStart, openEditor, openGame, openLobby } from 'stores/modeSlice';
 import game from 'codeuk';
 import Voice from 'pages/Voice';
 
@@ -12,7 +12,7 @@ const Game = () => {
   };
 
   const handleMainClick = () => {
-    dispatch(openMain());
+    dispatch(openStart());
     game.scene.sleep('MainScene');
     if (game.scene.isSleeping('Lobby')) {
       game.scene.wake('Lobby');
