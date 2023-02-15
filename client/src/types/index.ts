@@ -40,9 +40,19 @@ export type SessionInfo = {
   sessionId: string;
 };
 
-export type PhaserGame = Game & {
+export type GameType = Game & {
   socket?: Socket;
   socketId?: string;
   charKey?: string;
   userName?: string;
 };
+
+export interface PlayerInterface {
+  socketId: string;
+  playerTexture: string;
+  touching: any[];
+  inputKeys: any;
+  showingIcon: any;
+  spriteIcon: any;
+  buttonEditor: any;
+}

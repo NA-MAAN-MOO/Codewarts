@@ -80,6 +80,8 @@ export default class Lobby extends Phaser.Scene {
     this.houseForList.setSensor(true);
     this.houseForList.setScrollFactor(0);
 
+    if (!phaserGame.charKey || !phaserGame.socketId) return;
+
     /* Add my player */
     this.player = new Player({
       scene: this,

@@ -1,4 +1,5 @@
 //@ts-nocheck
+
 import { createCharacterAnims } from '../anims/CharacterAnims';
 import OtherPlayer from '../objects/OtherPlayer';
 import Player from '../objects/Player';
@@ -15,12 +16,12 @@ import { NONE } from 'phaser';
 export default class MainScene extends Phaser.Scene {
   // class 속성 명시는 constructor 이전에 명시하면 되는듯
   socket: Socket | undefined;
-  x: any;
-  y: any;
-  socketId: any;
-  player: any;
-  map: any;
-  otherPlayers: any;
+  x?: number;
+  y?: number;
+  socketId?: string;
+  player?: Player;
+  map?: Phaser.Tilemaps.Tilemap;
+  otherPlayers: OtherPlayer[];
   isKeyDisable: boolean;
   charKey!: string;
   tableMap = new Map<number, Table>();
@@ -29,13 +30,14 @@ export default class MainScene extends Phaser.Scene {
   openMyEditor!: boolean;
   // getOut!: boolean;
   editorOwner!: string;
-  macbookList!: any;
+  macbookList!: Array<[]>;
 
   constructor() {
     // Scene의 key값은 MainScene
     super('MainScene');
     this.isKeyDisable = false;
     this.macbookList = [[], [], [], [], [], []];
+    this.otherPlayers = [];
   }
 
   preload() {
@@ -58,19 +60,19 @@ export default class MainScene extends Phaser.Scene {
     this.matter.world.convertTilemapLayer(bglayer);
 
     /* Extracting objects' polygons from TiledJson */
-    const polygons = this.map.tilesets.reduce((acc: any, obj: any) => {
-      //@ts-ignore
-      let polygonArray = Object.entries(obj.tileData)[0][1].objectgroup
-        .objects[0].polygon;
-      let key = obj.name;
-      acc[key] = polygonArray;
-      return acc;
-    }, {});
+    const polygons = this.map.tilesets.reduce(
+      (acc: Record<string, any[]>, obj: Phaser.Tilemaps.Tileset) => {
+        let polygonArray = Object.entries(obj.tileData)[0][1].objectgroup
+          .objects[0].polygon;
+        let key = obj.name;
+        acc[key] = polygonArray;
+        return acc;
+      },
+      {}
+    );
 
     /* Adding Object Layers from TiledJSON */
-    //@ts-ignore
     this.map.objects.forEach((objLayer) => {
-      //@ts-ignore
       objLayer.objects.forEach((objs, i) => {
         new Resource({
           scene: this,
@@ -98,9 +100,7 @@ export default class MainScene extends Phaser.Scene {
       x: this.x,
       y: this.y,
       // Lobby에서 받은 값으로 유저 생성
-      //@ts-ignore
       texture: phaserGame.charKey, // 이미지 이름
-      //@ts-ignore
       id: phaserGame.socketId,
       frame: 'down-1', // atlas.json의 첫번째 filename
     });
@@ -122,19 +122,15 @@ export default class MainScene extends Phaser.Scene {
     camera.startFollow(this.player);
     camera.setLerp(0.1, 0.1);
     // camera.setBounds(0, 0, this.game.config.width, this.game.config.height);
-    //@ts-ignore
-    createCharacterAnims(phaserGame.charKey, phaserGame.anims);
+    if (!!phaserGame.charKey) {
+      createCharacterAnims(phaserGame.charKey, phaserGame.anims);
+    }
 
-    this.otherPlayers = [];
-    //@ts-ignore
     if (phaserGame.socket) {
-      //@ts-ignore
       phaserGame.socket.emit('loadNewPlayer', { x: this.x, y: this.y });
 
       // 기존 유저 그려줘! 하고 요청하기
-      //@ts-ignore
       phaserGame.socket.emit('currentPlayers');
-      //@ts-ignore
       phaserGame.socket.on('currentPlayers', (payLoad: any) => {
         console.log('currentPlayers');
         this.addOtherPlayers({
@@ -145,7 +141,6 @@ export default class MainScene extends Phaser.Scene {
           state: payLoad.state,
         });
       });
-      //@ts-ignore
       phaserGame.socket.on('newPlayer', (payLoad: any) => {
         this.addOtherPlayers({
           x: payLoad.x,
@@ -155,20 +150,15 @@ export default class MainScene extends Phaser.Scene {
           state: payLoad.state,
         });
       });
-      //@ts-ignore
       phaserGame.socket.on('playerDisconnect', (socketId: any) => {
         this.removePlayer(socketId);
       });
-      //@ts-ignore
       phaserGame.socket.on('updateLocation', (payLoad: any) => {
         this.updateLocation(payLoad);
       });
-      //@ts-ignore
       this.game.events.on('pause', () => {
-        //@ts-ignore
         phaserGame.socket?.emit('pauseCharacter');
       });
-      //@ts-ignore
       phaserGame.socket.on('pauseCharacter', (socketId: any) => {
         this.otherPlayers.forEach((otherPlayer: any) => {
           if (otherPlayer.socketId === socketId) {
@@ -178,10 +168,8 @@ export default class MainScene extends Phaser.Scene {
       });
 
       this.game.events.on('resume', () => {
-        //@ts-ignore
         phaserGame.socket?.emit('resumeCharacter');
       });
-      //@ts-ignore
       phaserGame.socket.on('resumeCharacter', (socketId: any) => {
         this.otherPlayers.forEach((otherPlayer: any) => {
           if (otherPlayer.socketId === socketId) {
@@ -191,14 +179,16 @@ export default class MainScene extends Phaser.Scene {
       });
 
       phaserGame.socket.emit('currentEditors');
-      //@ts-ignore
       // TODO: 강제로 해당 tableMap.get(id)를 새로 그리라고 해야한다. 02.14
-      phaserGame.socket.on('updateEditor', (payLoad: any) => {
-        console.log('updateEditor');
-        this.tableMap
-          .get(payLoad.id)
-          .updateTable(payLoad.idx, payLoad.userName);
-      });
+      phaserGame.socket.on(
+        'updateEditor',
+        (payLoad: { id: string; idx: number; userName: string }) => {
+          console.log('updateEditor');
+          this.tableMap
+            .get(payLoad.id)
+            .updateTable(payLoad.idx, payLoad.userName);
+        }
+      );
 
       // TODO: 강제로 보고있는 다른 유저들 강퇴 (상태값 바꿔야함 - 게임모드로)
       phaserGame.socket.on('removeEditor', (payLoad: any) => {
@@ -244,7 +234,6 @@ export default class MainScene extends Phaser.Scene {
       if (Phaser.Input.Keyboard.JustDown(this.idxUp) && this.editorIdx > 0) {
         this.editorIdx -= 1;
       }
-      // @ts-ignore
       if (Phaser.Input.Keyboard.JustDown(this.idxEnter)) {
         switch (this.editorIdx) {
           case 4:
@@ -402,9 +391,7 @@ export default class MainScene extends Phaser.Scene {
       this.editorOwner = phaserGame.userName;
       // console.log(this.openMyEditor);
       phaserGame.socket.emit('addEditor', payLoad);
-      //@ts-ignore
       store.dispatch(setRoomId(phaserGame.userName));
-      //@ts-ignore
       store.dispatch(setUserName(phaserGame.userName));
       // 에디터 창 열기
       store.dispatch(openEditor());
@@ -412,9 +399,7 @@ export default class MainScene extends Phaser.Scene {
     } else {
       this.editorOwner = this.tableMap.get(tableId).tableInfo.get(idx).username;
       console.log(this.editorOwner);
-      //@ts-ignore
       store.dispatch(setRoomId(this.editorOwner));
-      //@ts-ignore
       store.dispatch(setUserName(phaserGame.userName));
       // 에디터 창 열기
       store.dispatch(openEditor());

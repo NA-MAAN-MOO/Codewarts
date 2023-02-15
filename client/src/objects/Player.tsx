@@ -1,4 +1,3 @@
-//@ts-nocheck
 import phaserGame from 'codeuk';
 import Phaser from 'phaser';
 import MainScene from '../scenes/Mainscene';
@@ -7,13 +6,20 @@ import Button from './Button';
 export default class Player extends Phaser.Physics.Matter.Sprite {
   socketId!: string;
   playerTexture!: string;
-  touching!: any[];
+  touching!: MatterJS.BodyType[];
   inputKeys!: any;
   showingIcon!: any;
   spriteIcon!: any;
   buttonEditor!: any;
 
-  constructor(data: any) {
+  constructor(data: {
+    scene: Phaser.Scene;
+    x: number;
+    y: number;
+    texture: string;
+    id: string;
+    frame: any;
+  }) {
     let { scene, x, y, texture, id, frame } = data;
 
     super(scene.matter.world, x, y, texture, id, frame);
@@ -107,6 +113,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     // if (!socket) {
     //   return;
     // }
+    if (!phaserGame.socket) return;
     phaserGame.socket.emit('movement', {
       x: this.x,
       y: this.y,
@@ -117,7 +124,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     // this.showIcon();
   }
 
-  CreateCollisions(playerSensor: any) {
+  CreateCollisions(playerSensor: MatterJS.BodyType) {
     this.scene.matterCollision.addOnCollideStart({
       objectA: [playerSensor],
       callback: (other: any) => {
