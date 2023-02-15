@@ -1,5 +1,8 @@
-import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
+//환경변수 이용(코드 최상단에 위치시킬 것)
+dotenv.config();
+
+import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
 import http from 'http'; // Load in http module
 import pkg from 'body-parser';
@@ -10,8 +13,6 @@ import basicRouter from './routes/basicRouter';
 import { table } from 'console';
 import voiceServer from './servers/voiceServer';
 
-//환경변수 이용
-dotenv.config();
 const port = process.env.PORT || 8080;
 const mongoPassword = process.env.MONGO_PW;
 const { json } = pkg;
@@ -20,7 +21,11 @@ const app: Express = express();
 app.use(json());
 app.use(cors());
 
-//빌드할 때 주석 해제
+//배포 시 주석처리
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
+/*********배포 시 설정들********* */
+//빌드하고 나서 주석 해제
 // app.use(express.static('../client/build'));
 // app.get('/', function (req, res) {
 //   res.sendFile('../client/build/index.html');
