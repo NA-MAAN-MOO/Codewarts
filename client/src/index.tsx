@@ -6,7 +6,9 @@ import { store } from './stores';
 import { Provider } from 'react-redux';
 import './styles/Reset.css';
 import { ThemeProvider } from '@mui/material/styles';
-import muiTheme from './MuiTheme';
+import muiTheme from 'styles/theme';
+import { styledTheme } from 'styles/theme';
+import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -15,7 +17,9 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <ThemeProvider theme={muiTheme}>
-        <App />/
+        <StyledThemeProvider theme={styledTheme}>
+          <App />
+        </StyledThemeProvider>
       </ThemeProvider>
     </Provider>
   </React.StrictMode>

@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { RootState } from '../stores';
 import SelectBox from 'objects/SelectBox';
 import LoginDialog from './LoginDialog';
-// import '../../public/assets/characters'
+import main_background from 'assets/images/main_background.png';
 
 //const {playerId, playerTexture} = useSelector((state:RootState)=> state.user); 리액트 컴포넌트 안에있어야하나봄..
 
@@ -26,7 +26,11 @@ const Start = () => {
     setCharatorIamge(newCharactorIamge);
   }
 
-  return <StartDiv>{<LoginDialog />}</StartDiv>;
+  return (
+    <StartDiv>
+      <LoginDialog />
+    </StartDiv>
+  );
 };
 
 export default Start;
@@ -34,10 +38,6 @@ export default Start;
 const StartDiv = styled.div`
   width: 100%;
   height: 100%;
-  background-color: white;
-  position: absolute;
-  top: 0;
-  left: 0;
   display: flex;
   align-items: center;
   justify-content: center;

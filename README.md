@@ -17,5 +17,7 @@
 5. **server와 client 실행**
 
    server : npm run dev
+   python servers/scrapingserver/app.py => 플라스크 서버
 
-   client : npm start
+   client : npx y-websocket => 에디터 웹소켓 서버
+   npm start
