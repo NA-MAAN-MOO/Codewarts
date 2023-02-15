@@ -7,7 +7,7 @@ import SelectBox from 'objects/SelectBox';
 import LoginDialog from './LoginDialog';
 // import '../../public/assets/characters'
 
-//const {nickName, characterModel} = useSelector((state:RootState)=> state.charactor); 필요한곳에 쓰면됨
+//const {playerId, playerTexture} = useSelector((state:RootState)=> state.user); 리액트 컴포넌트 안에있어야하나봄..
 
 const Start = () => {
   const dispatch = useDispatch();
@@ -26,31 +26,7 @@ const Start = () => {
     setCharatorIamge(newCharactorIamge);
   }
 
-  return (
-    <StartDiv>
-      {<LoginDialog />}
-      {/* <LogoDiv>코득코득</LogoDiv>
-      <input
-        id="nickNameInput"
-        type="text"
-        value={nameInput}
-        placeholder="Write your name"
-        onChange={onNameChange}
-      />
-      <SelectBox max={CHARACTORMODELS} onChange={onChangeModel} />
-
-      <LoginBtn
-        type="button"
-        onClick={() => {
-          dispatch(setNickName(nameInput));
-          dispatch(setCharactorModel(charactorIamge));
-          dispatch(openGame());
-        }}
-      >
-        로그인
-      </LoginBtn> */}
-    </StartDiv>
-  );
+  return <StartDiv>{<LoginDialog />}</StartDiv>;
 };
 
 export default Start;

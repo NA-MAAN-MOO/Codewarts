@@ -129,6 +129,11 @@ export default class Lobby extends Phaser.Scene {
   update() {
     /* Control Player Movement */
     const speed = 5;
+    const playerId = store.getState().user.playerId;
+    if (playerId === '') {
+      this.input.keyboard.disableGlobalCapture();
+    }
+
     let playerVelocity = new Phaser.Math.Vector2(); //  2D 벡터
     let motion = 'idle';
     if (this.inputKeys.left.isDown) {
