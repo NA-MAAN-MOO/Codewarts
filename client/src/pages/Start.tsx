@@ -1,13 +1,11 @@
 import React, { ChangeEvent, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { openGame } from '../stores/modeSlice';
+import { openLobby } from '../stores/modeSlice';
 import styled from 'styled-components';
 import { RootState } from '../stores';
 import SelectBox from 'objects/SelectBox';
 import LoginDialog from './LoginDialog';
 // import '../../public/assets/characters'
-
-//const {playerId, playerTexture} = useSelector((state:RootState)=> state.user); 리액트 컴포넌트 안에있어야하나봄..
 
 const Start = () => {
   const dispatch = useDispatch();

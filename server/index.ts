@@ -1,5 +1,8 @@
-import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
+//환경변수 이용(코드 최상단에 위치시킬 것)
+dotenv.config();
+
+import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
 import http from 'http'; // Load in http module
 import pkg from 'body-parser';
@@ -8,9 +11,8 @@ import { Socket, Server } from 'socket.io'; // Load in socket.io
 import editorServer from './servers/editorServer';
 import basicRouter from './routes/basicRouter';
 import { table } from 'console';
+import voiceServer from './servers/voiceServer';
 
-//환경변수 이용
-dotenv.config();
 const port = process.env.PORT || 8080;
 const mongoPassword = process.env.MONGO_PW;
 const { json } = pkg;
@@ -19,11 +21,15 @@ const app: Express = express();
 app.use(json());
 app.use(cors());
 
+//배포 시 주석처리
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
+/*********배포 시 설정들********* */
 //빌드하고 나서 주석 해제
-app.use(express.static('../client/build'));
-app.get('/', function (req, res) {
-  res.sendFile('../client/build/index.html');
-});
+// app.use(express.static('../client/build'));
+// app.get('/', function (req, res) {
+//   res.sendFile('../client/build/index.html');
+// });
 
 //db connect
 const db = `mongodb+srv://juncheol:${mongoPassword}@cluster0.v0izvl3.mongodb.net/?retryWrites=true&w=majority`;
@@ -211,9 +217,13 @@ io.on('connection', (socket: Socket) => {
 
 //8080 서버 연결
 httpServer.listen(port, () => {
-  console.log(`Server running on ${port}`);
+  console.log(`Game Server running on ${port}`);
 });
 /* 에디터 서버 포트: 3001 */
 editorServer.listen(3001, () => {
-  console.log('Server listening on *:3001');
+  console.log('Editor Server listening on *:3001');
+});
+/* 보이스챗 서버 포트: 3002 */
+voiceServer.listen(3002, () => {
+  console.log('Voice Server listening on *:3002');
 });
