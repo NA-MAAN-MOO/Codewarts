@@ -33,8 +33,8 @@ const config = {
   parent: 'codeuk',
   scene: [Lobby, MainScene],
   scale: {
-    mode: Phaser.Scale.FIT,
-    // mode: Phaser.Scale.ScaleModes.RESIZE,
+    // mode: Phaser.Scale.FIT,
+    mode: Phaser.Scale.ScaleModes.RESIZE,
     width: window.innerWidth,
     height: window.innerHeight,
   },
