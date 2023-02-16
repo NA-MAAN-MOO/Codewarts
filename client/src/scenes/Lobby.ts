@@ -50,10 +50,10 @@ export default class Lobby extends Phaser.Scene {
       phaserGame.socketId = payLoad.socketId;
       phaserGame.charKey = store.getState().user.playerTexture;
       phaserGame.userName = store.getState().user.playerId;
-    });
-    phaserGame.socket.emit('savePlayer', {
-      charKey: phaserGame.charKey,
-      userName: phaserGame.userName,
+      phaserGame.socket?.emit('savePlayer', {
+        charKey: phaserGame.charKey,
+        userName: phaserGame.userName,
+      });
     });
   }
 

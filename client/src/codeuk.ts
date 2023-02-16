@@ -30,7 +30,7 @@ declare module 'phaser' {
 const config = {
   // width: "100%", //  scene이 그려지는 canvas의 width 값
   // height: "100%", //  scene이 그려지는 canvas의 height 값
-  backgroundColor: '#EEEEEE', //  scene이 그려지는 canvas의 backgroundColor 값
+  // backgroundColor: '#EEEEEE', //  scene이 그려지는 canvas의 backgroundColor 값
   type: Phaser.AUTO,
   parent: 'codeuk',
   scene: [StartScene, Lobby, MainScene],
