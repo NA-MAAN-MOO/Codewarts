@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { openStart, openEditor, openGame, openLobby } from 'stores/modeSlice';
 import Voice from 'pages/Voice';
+import PeerVoice from 'pages/PeerVoice';
 import { handleScene } from 'lib/phaserLib';
 import { GAME_STATUS } from 'utils/Constants';
 import Button from '@mui/material/Button';
@@ -19,7 +20,7 @@ const Game = () => {
   };
   return (
     <BackgroundDiv>
-      <Voice roomKey="MAIN" userName="김철수" />
+      <PeerVoice />
       <BtnDiv>
         <Button
           type="button"

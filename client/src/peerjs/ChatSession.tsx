@@ -1,11 +1,11 @@
-//하나의 chat session을 나타내는 클래스
+//하나의 chat session
 
 import Peer from 'peerjs';
-import Network from 'objects/Network';
 import store from 'stores';
 // import { setAudioConnected } from '../stores/UserStore';
 
-export default class ChatSession {
+const ChatSession = () => {
+  const myPeer : Peer;
   private myPeer: Peer;
   private peers = new Map<
     string,
@@ -19,11 +19,9 @@ export default class ChatSession {
   private buttonGrid = document.querySelector('.button-grid');
   private myAudio = document.createElement('audio');
   private myStream?: MediaStream;
-  private network: Network;
 
-  constructor(userId: string, network: Network) {
+  constructor(userId: string) {
     this.myPeer = new Peer(userId);
-    this.network = network;
     console.log('userId:', userId);
     console.log('userId:', userId);
     this.myPeer.on('error', (err) => {
@@ -77,8 +75,6 @@ export default class ChatSession {
         this.myStream = stream;
         this.addAudioStream(this.myAudio, this.myStream);
         // this.setUpButtons();
-        store.dispatch(setAudioConnected(true));
-        this.network.audioConnected();
       })
       .catch((error) => {
         if (alertOnError)
