@@ -44,7 +44,7 @@ export default class Lobby extends Phaser.Scene {
   init() {
     // socket-io와 링크 스타~트!
     phaserGame.socket = io('http://localhost:8080');
-    phaserGame.socket.on('start', (payLoad: any) => {
+    phaserGame.socket.on('start', (payLoad: { socketId: string }) => {
       // Server에서 보내주는 고유 값을 받는다.
       phaserGame.socketId = payLoad.socketId;
       phaserGame.charKey = store.getState().user.playerTexture;
@@ -79,8 +79,12 @@ export default class Lobby extends Phaser.Scene {
     this.houseForList.setSensor(true);
     this.houseForList.setScrollFactor(0);
 
-    // if (phaserGame.charKey === undefined || phaserGame.socketId === undefined)
-    //   return;
+    if (
+      phaserGame.charKey === undefined ||
+      phaserGame.socketId === undefined ||
+      phaserGame.userName === undefined
+    )
+      return;
 
     /* Add my player */
     this.player = new Player({

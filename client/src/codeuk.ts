@@ -3,7 +3,7 @@ import Lobby from 'scenes/Lobby';
 import Phaser from 'phaser';
 import PhaserMatterCollisionPlugin from 'phaser-matter-collision-plugin';
 import StartScene from 'scenes/StartScene';
-import { PhaserGame } from 'types';
+import { GameType } from 'types';
 import Background from './scenes/Background';
 
 const pluginConfig = {
@@ -55,6 +55,6 @@ const config = {
   },
 };
 
-let phaserGame: PhaserGame = new Phaser.Game(config);
+let phaserGame: GameType = new Phaser.Game(config);
 
 export default phaserGame;

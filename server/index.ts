@@ -71,7 +71,7 @@ io.on('connection', (socket: Socket) => {
 
   // Send back the payload to the client and set its initial position
   socket.emit('start', {
-    socketID: socket.id,
+    socketId: socket.id,
   }); // 연결된 유저에게 고유 데이터를 전달한다.
 
   socket.on('savePlayer', ({ charKey, userName }) => {
