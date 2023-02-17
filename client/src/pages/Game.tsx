@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { openMain, openEditor, openGame, openLobby } from 'stores/modeSlice';
-import game from 'codeuk';
+import { openStart, openEditor, openGame, openLobby } from 'stores/modeSlice';
 import Voice from 'pages/Voice';
+import { handleScene } from 'lib/phaserLib';
+import { GAME_STATUS } from 'utils/Constants';
+import Button from '@mui/material/Button';
+import { styledTheme } from 'styles/theme';
 
 const Game = () => {
   const dispatch = useDispatch();
@@ -12,24 +15,30 @@ const Game = () => {
   };
 
   const handleMainClick = () => {
-    dispatch(openMain());
-    game.scene.sleep('MainScene');
-    if (game.scene.isSleeping('Lobby')) {
-      game.scene.wake('Lobby');
-    } else {
-      game.scene.start('Lobby');
-    }
+    handleScene(GAME_STATUS.START);
   };
   return (
     <BackgroundDiv>
       <Voice roomKey="MAIN" userName="김철수" />
       <BtnDiv>
-        <button type="button" onClick={handleEditorClick}>
+        <Button
+          type="button"
+          variant="contained"
+          color="secondary"
+          sx={{ fontFamily: styledTheme.mainFont }}
+          onClick={handleEditorClick}
+        >
           에디터 키기
-        </button>
-        <button type="button" onClick={handleMainClick}>
-          메인으로 가기
-        </button>
+        </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          type="button"
+          sx={{ fontFamily: styledTheme.mainFont }}
+          onClick={handleMainClick}
+        >
+          첫 화면으로 가기
+        </Button>
       </BtnDiv>
     </BackgroundDiv>
   );
@@ -41,7 +50,6 @@ const BackgroundDiv = styled.div`
   width: 100%;
   height: 100%;
   position: relative;
-  border: 4px solid green;
 `;
 const BtnDiv = styled.div`
   display: flex;
@@ -49,6 +57,6 @@ const BtnDiv = styled.div`
   justify-content: center;
   gap: 10px;
   position: absolute;
-  right: 10px;
-  bottom: 10px;
+  right: 20px;
+  bottom: 20px;
 `;

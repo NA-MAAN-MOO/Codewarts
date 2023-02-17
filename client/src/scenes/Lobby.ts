@@ -1,12 +1,13 @@
-//@ts-nocheck
 import Phaser from 'phaser';
 import { io, Socket } from 'socket.io-client';
 import store from 'stores';
-import { openGame } from 'stores/modeSlice';
 import Player from 'objects/Player';
 import Button from 'objects/Button';
 import { createCharacterAnims } from '../anims/CharacterAnims';
 import phaserGame from 'codeuk';
+import { handleScene } from 'lib/phaserLib';
+import { GAME_STATUS } from 'utils/Constants';
+import { styledTheme } from 'styles/theme';
 
 /* Parallax Scrolling */
 const createAligned = (
@@ -30,8 +31,7 @@ export default class Lobby extends Phaser.Scene {
   private player!: Phaser.Physics.Matter.Sprite;
   private buttonForList!: Phaser.GameObjects.Text;
   private houseForList!: Phaser.Physics.Matter.Sprite;
-  private charKey!: string; // character sprite texture
-  inputKeys!: any;
+  inputKeys!: object;
   socketId: any;
 
   socket: Socket | undefined;
@@ -44,18 +44,16 @@ export default class Lobby extends Phaser.Scene {
 
   init() {
     // socket-io와 링크 스타~트!
-    //@ts-ignore
     phaserGame.socket = io('http://localhost:8080');
-    //@ts-ignore
-    phaserGame.charKey = ''; // 이후 캐릭터 값이 들어간다
-    //@ts-ignore
     phaserGame.socket.on('start', (payLoad: any) => {
       // Server에서 보내주는 고유 값을 받는다.
-      //@ts-ignore
       phaserGame.socketId = payLoad.socketId;
-      //@ts-ignore
-      phaserGame.charKey = payLoad.charKey;
-      phaserGame.userName = payLoad.userName;
+      phaserGame.charKey = store.getState().user.playerTexture;
+      phaserGame.userName = store.getState().user.playerId;
+      phaserGame.socket?.emit('savePlayer', {
+        charKey: phaserGame.charKey,
+        userName: phaserGame.userName,
+      });
     });
   }
 
@@ -82,14 +80,15 @@ export default class Lobby extends Phaser.Scene {
     this.houseForList.setSensor(true);
     this.houseForList.setScrollFactor(0);
 
+    // if (phaserGame.charKey === undefined || phaserGame.socketId === undefined)
+    //   return;
+
     /* Add my player */
     this.player = new Player({
       scene: this,
       x: this.scale.width / 10,
       y: this.scale.height * 0.85,
-      //@ts-ignore
       texture: phaserGame.charKey,
-      //@ts-ignore
       id: phaserGame.socketId,
       frame: 'down-1',
     });
@@ -102,8 +101,9 @@ export default class Lobby extends Phaser.Scene {
       right: Phaser.Input.Keyboard.KeyCodes.RIGHT,
       enter: Phaser.Input.Keyboard.KeyCodes.E,
     });
-    //@ts-ignore
-    createCharacterAnims(phaserGame.charKey, phaserGame.anims);
+    if (!!phaserGame.charKey) {
+      createCharacterAnims(phaserGame.charKey, phaserGame.anims);
+    }
 
     /* Add button for houseForList */
     this.buttonForList = new Button({
@@ -112,10 +112,11 @@ export default class Lobby extends Phaser.Scene {
       y: this.houseForList.y / 1.3,
       text: 'E를 누르면 강의실에 들어갈 수 있어요!',
       style: {
+        //https://photonstorm.github.io/phaser3-docs/Phaser.Types.GameObjects.Text.html#.TextStyle
         backgroundColor: '#fff',
         color: '#111',
         fontSize: '20px',
-        borderRadius: '10px',
+        resolution: 20,
       },
     }).getBtn();
     this.buttonForList.setScrollFactor(0);
@@ -140,14 +141,12 @@ export default class Lobby extends Phaser.Scene {
     let motion = 'idle';
     if (this.inputKeys.left.isDown) {
       playerVelocity.x = -1;
-      //@ts-ignore
       this.player.play(`${phaserGame.charKey}-walk-left`, true);
       motion = 'left';
       // parallax scrolling
       // this.cameras.main.scrollX -= 0.5;
     } else if (this.inputKeys.right.isDown) {
       playerVelocity.x = 1;
-      //@ts-ignore
       this.player.play(`${phaserGame.charKey}-walk-right`, true);
       motion = 'right';
       // parallax scrolling
@@ -155,7 +154,6 @@ export default class Lobby extends Phaser.Scene {
     }
     // this.y += speed;
     if (motion === 'idle') {
-      //@ts-ignore
       this.anims.play(`${phaserGame.charKey}-idle-down`, this.player);
       // this.houseForList.setVelocity(0, 0);
     }
@@ -177,14 +175,7 @@ export default class Lobby extends Phaser.Scene {
       // console.log('맞닿음');
       // Press E to Enter Classroom
       if (this.inputKeys.enter.isDown) {
-        // this.scene.stop();
-        store.dispatch(openGame());
-        this.scene.sleep('Lobby');
-        if (this.scene.isSleeping('MainScene')) {
-          this.scene.wake('MainScene');
-        } else {
-          this.scene.start('MainScene');
-        }
+        handleScene(GAME_STATUS.GAME);
       }
     } else {
       this.buttonForList.setVisible(false);
