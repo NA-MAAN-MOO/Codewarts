@@ -12,6 +12,7 @@ import { GAME_STATUS } from 'utils/Constants';
 import Table from 'objects/Table';
 import phaserGame from 'codeuk';
 import { NONE } from 'phaser';
+import ChatSession from 'peerjs/ChatSession';
 
 export default class MainScene extends Phaser.Scene {
   // class 속성 명시는 constructor 이전에 명시하면 되는듯
@@ -31,6 +32,7 @@ export default class MainScene extends Phaser.Scene {
   // getOut!: boolean;
   editorOwner!: string;
   macbookList!: Array<[]>;
+  mainChat: ChatSession;
 
   constructor() {
     // Scene의 key값은 MainScene
@@ -38,6 +40,7 @@ export default class MainScene extends Phaser.Scene {
     this.isKeyDisable = false;
     this.macbookList = [[], [], [], [], [], []];
     this.otherPlayers = [];
+    this.mainChat = new ChatSession();
   }
 
   preload() {
