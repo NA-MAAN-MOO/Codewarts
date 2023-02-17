@@ -11,11 +11,14 @@ import { setRoomId, setUserName } from 'stores/editorSlice';
 import { GAME_STATUS } from 'utils/Constants';
 import Table from 'objects/Table';
 import phaserGame from 'codeuk';
+import { BackgroundMode } from '../../../server/types/BackgroundMode';
+
 import { NONE } from 'phaser';
+import { PlayerType, ServerPlayerType } from 'types';
 
 export default class MainScene extends Phaser.Scene {
   // class 속성 명시는 constructor 이전에 명시하면 되는듯
-  socket: Socket | undefined;
+  socket?: Socket;
   x?: number;
   y?: number;
   socketId?: string;
@@ -44,8 +47,34 @@ export default class MainScene extends Phaser.Scene {
     // 미리 로드하는 메서드, 이미지 등을 미리 로드한다.
     Player.preload(this);
     Resource.preload(this);
+    // this.load.atlas(
+    //   'cloud_day',
+    //   'assets/background/cloud_day.png',
+    //   'assets/background/cloud_day.json'
+    // );
+    // this.load.image('backdrop_day', 'assets/background/backdrop_day.png');
+    // this.load.atlas(
+    //   'cloud_night',
+    //   'assets/background/cloud_night.png',
+    //   'assets/background/cloud_night.json'
+    // );
+    // this.load.image('backdrop_night', 'assets/background/backdrop_night.png');
+    // this.load.image('sun_moon', 'assets/background/sun_moon.png');
+
+    // this.load.on('complete', () => {
+    //   this.launchBackground(store.getState().user.backgroundMode);
+    // });
     this.load.image('room_map', 'assets/room/room_map.png');
     this.load.tilemapTiledJSON('room_map_tile', 'assets/room/room_map.json');
+  }
+
+  private launchBackground(backgroundMode: BackgroundMode) {
+    this.scene.launch('background', { backgroundMode });
+  }
+
+  changeBackgroundMode(backgroundMode: BackgroundMode) {
+    this.scene.stop('background');
+    this.launchBackground(backgroundMode);
   }
   create() {
     // this.getOut = false;
@@ -95,6 +124,9 @@ export default class MainScene extends Phaser.Scene {
 
     this.x = this.map.widthInPixels / 2;
     this.y = this.map.heightInPixels / 2;
+
+    if (!phaserGame.charKey || !phaserGame.socketId) return;
+
     this.player = new Player({
       scene: this,
       x: this.x,
@@ -102,8 +134,10 @@ export default class MainScene extends Phaser.Scene {
       // Lobby에서 받은 값으로 유저 생성
       texture: phaserGame.charKey, // 이미지 이름
       id: phaserGame.socketId,
+      name: phaserGame.userName,
       frame: 'down-1', // atlas.json의 첫번째 filename
     });
+
     this.player.inputKeys = this.input.keyboard.addKeys({
       up: Phaser.Input.Keyboard.KeyCodes.UP,
       down: Phaser.Input.Keyboard.KeyCodes.DOWN,
@@ -114,9 +148,6 @@ export default class MainScene extends Phaser.Scene {
     this.watchTable = false;
     this.editorIdx = 4;
 
-    // this.input.keyboard.on('keydown-E', () => {
-
-    // });
     let camera = this.cameras.main;
     camera.zoom = 0.8;
     camera.startFollow(this.player);
@@ -125,85 +156,86 @@ export default class MainScene extends Phaser.Scene {
     if (!!phaserGame.charKey) {
       createCharacterAnims(phaserGame.charKey, phaserGame.anims);
     }
-    if (phaserGame.socket) {
-      phaserGame.socket.emit('loadNewPlayer', { x: this.x, y: this.y });
 
-      // 기존 유저 그려줘! 하고 요청하기
-      phaserGame.socket.emit('currentPlayers');
-      phaserGame.socket.on('currentPlayers', (payLoad: any) => {
-        console.log('currentPlayers');
-        this.addOtherPlayers({
-          x: payLoad.x,
-          y: payLoad.y,
-          charKey: payLoad.charKey,
-          socketId: payLoad.socketId,
-          state: payLoad.state,
-        });
-      });
-      phaserGame.socket.on('newPlayer', (payLoad: any) => {
-        this.addOtherPlayers({
-          x: payLoad.x,
-          y: payLoad.y,
-          charKey: payLoad.charKey,
-          socketId: payLoad.socketId,
-          state: payLoad.state,
-        });
-      });
-      phaserGame.socket.on('playerDisconnect', (socketId: any) => {
-        this.removePlayer(socketId);
-      });
-      phaserGame.socket.on('updateLocation', (payLoad: any) => {
-        this.updateLocation(payLoad);
-      });
-      this.game.events.on('pause', () => {
-        phaserGame.socket?.emit('pauseCharacter');
-      });
-      phaserGame.socket.on('pauseCharacter', (socketId: any) => {
-        this.otherPlayers.forEach((otherPlayer: any) => {
-          if (otherPlayer.socketId === socketId) {
-            otherPlayer.setStatic(true);
-          }
-        });
-      });
+    if (!phaserGame.socket) return;
 
-      this.game.events.on('resume', () => {
-        phaserGame.socket?.emit('resumeCharacter');
-      });
-      phaserGame.socket.on('resumeCharacter', (socketId: any) => {
-        this.otherPlayers.forEach((otherPlayer: any) => {
-          if (otherPlayer.socketId === socketId) {
-            otherPlayer.setStatic(false);
-          }
-        });
-      });
+    phaserGame.socket.emit('loadNewPlayer', { x: this.x, y: this.y });
 
-      phaserGame.socket.emit('currentEditors');
-      // TODO: 강제로 해당 tableMap.get(id)를 새로 그리라고 해야한다. 02.14
-      phaserGame.socket.on(
-        'updateEditor',
-        (payLoad: { id: string; idx: number; userName: string }) => {
-          console.log('updateEditor');
-          this.tableMap
-            .get(payLoad.id)
-            .updateTable(payLoad.idx, payLoad.userName);
+    // 기존 유저 그려줘! 하고 요청하기
+    phaserGame.socket.emit('currentPlayers');
+    phaserGame.socket.on('currentPlayers', (payLoad: ServerPlayerType) => {
+      console.log('currentPlayers');
+      this.addOtherPlayers({
+        x: payLoad.x,
+        y: payLoad.y,
+        charKey: payLoad.charKey,
+        socketId: payLoad.socketId,
+        state: payLoad.state,
+      });
+    });
+    phaserGame.socket.on('newPlayer', (payLoad: any) => {
+      this.addOtherPlayers({
+        x: payLoad.x,
+        y: payLoad.y,
+        charKey: payLoad.charKey,
+        socketId: payLoad.socketId,
+        state: payLoad.state,
+      });
+    });
+    phaserGame.socket.on('playerDisconnect', (socketId: any) => {
+      this.removePlayer(socketId);
+    });
+    phaserGame.socket.on('updateLocation', (payLoad: any) => {
+      this.updateLocation(payLoad);
+    });
+    this.game.events.on('pause', () => {
+      phaserGame.socket?.emit('pauseCharacter');
+    });
+    phaserGame.socket.on('pauseCharacter', (socketId: any) => {
+      this.otherPlayers.forEach((otherPlayer: any) => {
+        if (otherPlayer.socketId === socketId) {
+          otherPlayer.setStatic(true);
         }
-      );
+      });
+    });
 
-      // TODO: 강제로 보고있는 다른 유저들 강퇴 (상태값 바꿔야함 - 게임모드로)
-      phaserGame.socket.on('removeEditor', (payLoad: any) => {
+    this.game.events.on('resume', () => {
+      phaserGame.socket?.emit('resumeCharacter');
+    });
+    phaserGame.socket.on('resumeCharacter', (socketId: any) => {
+      this.otherPlayers.forEach((otherPlayer: any) => {
+        if (otherPlayer.socketId === socketId) {
+          otherPlayer.setStatic(false);
+        }
+      });
+    });
+
+    phaserGame.socket.emit('currentEditors');
+    // TODO: 강제로 해당 tableMap.get(id)를 새로 그리라고 해야한다. 02.14
+    phaserGame.socket.on(
+      'updateEditor',
+      (payLoad: { id: string; idx: number; userName: string }) => {
+        console.log('updateEditor');
+        this.tableMap
+          .get(payLoad.id)
+          .updateTable(payLoad.idx, payLoad.userName);
+      }
+    );
+
+    // TODO: 강제로 보고있는 다른 유저들 강퇴 (상태값 바꿔야함 - 게임모드로)
+    phaserGame.socket.on('removeEditor', (payLoad: any) => {
+      console.log('방 빼요');
+      if (
+        this.editorOwner === payLoad[2] &&
+        phaserGame.userName !== payLoad[2]
+      ) {
         console.log('방 빼요');
-        if (
-          this.editorOwner === payLoad[2] &&
-          phaserGame.userName !== payLoad[2]
-        ) {
-          console.log('방 빼요');
-          store.dispatch(openGame());
-        }
-        // removeCurrentUser하려면 updateTable(idx, '')하면 됨
-        this.tableMap.get(payLoad[0]).updateTable(payLoad[1], '');
-        // this.tableMap.get(payLoad[0]).removeCurrentUser(payLoad[1]);
-      });
-    }
+        store.dispatch(openGame());
+      }
+      // removeCurrentUser하려면 updateTable(idx, '')하면 됨
+      this.tableMap.get(payLoad[0]).updateTable(payLoad[1], '');
+      // this.tableMap.get(payLoad[0]).removeCurrentUser(payLoad[1]);
+    });
   }
 
   update() {
@@ -320,7 +352,7 @@ export default class MainScene extends Phaser.Scene {
     this.player.update();
   }
 
-  addOtherPlayers(playerInfo: any) {
+  addOtherPlayers(playerInfo: ServerPlayerType) {
     const otherPlayer = new OtherPlayer({
       // playerInfo를 바탕으로 새로운 플레이어 객체를 그려준다.
       // 해당 플레이어 객체를 움직이려면 어쩔까?
