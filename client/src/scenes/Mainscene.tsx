@@ -102,6 +102,7 @@ export default class MainScene extends Phaser.Scene {
       texture: phaserGame.charKey, // 이미지 이름
       //@ts-ignore
       id: phaserGame.socketId,
+      name: phaserGame.userName,
       frame: 'down-1', // atlas.json의 첫번째 filename
     });
     this.player.inputKeys = this.input.keyboard.addKeys({
