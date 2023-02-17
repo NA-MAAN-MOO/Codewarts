@@ -7,11 +7,6 @@ client = MongoClient('mongodb+srv://juncheol:0000@cluster0.v0izvl3.mongodb.net/?
 db = client.codewart
 collection = db.probs
 
-# test for mongoDB
-# data = {"name": "John Doe", "age": 30, "email": "johndoe@example.com"}
-# collection.insert_one(data)
-# collection.delete_one({'name':'John Doe'}) 
-
 # 백준 서버에 요청
 headers = {'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
 s = 25401    # 시작문제넘버
@@ -63,4 +58,3 @@ for num in range(s, e+1):
 
 
 
-# print(json.dumps(crawled_data))
