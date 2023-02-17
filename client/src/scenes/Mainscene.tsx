@@ -134,6 +134,7 @@ export default class MainScene extends Phaser.Scene {
       // Lobby에서 받은 값으로 유저 생성
       texture: phaserGame.charKey, // 이미지 이름
       id: phaserGame.socketId,
+      name: phaserGame.userName,
       frame: 'down-1', // atlas.json의 첫번째 filename
     });
 

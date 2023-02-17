@@ -40,6 +40,7 @@ export type PlayerType = {
   id: string;
   frame?: string;
   state?: string;
+  name: string;
 };
 
 export type ServerPlayerType = {

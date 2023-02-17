@@ -7,18 +7,22 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
   socketId!: string;
   playerTexture!: string;
   touching!: MatterJS.BodyType[];
-  inputKeys!: any;
+  inputKeys!: Phaser.Input.Keyboard.Key;
   showingIcon!: any;
   spriteIcon!: any;
   buttonEditor!: any;
+  playerNameBubble!: Phaser.GameObjects.Text;
+  playerName!: string;
+  // playerNameObject!: any;
 
   constructor(data: PlayerType) {
-    let { scene, x, y, texture, id, frame } = data;
+    let { scene, x, y, texture, id, name, frame } = data;
 
     super(scene.matter.world, x, y, texture, frame);
 
     this.socketId = id;
     this.playerTexture = texture;
+    this.playerName = name;
     this.touching = [];
     this.scene.add.existing(this); // 플레이어 객체가 생기는 시점.
 
@@ -40,6 +44,13 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     // this.CreateCollisions(playerSensor);
     this.setExistingBody(compoundBody);
     this.setFixedRotation();
+
+    this.playerNameBubble = this.scene.add
+      .text(this.x, this.y - this.height - 10, this.playerName)
+      .setStyle({ backgroundColor: 'black', color: 'white', fontSize: '18px' });
+
+    this.playerNameObject = scene.matter.add.gameObject(this.playerNameBubble);
+    this.playerNameObject.setSensor(true);
   }
 
   static preload(scene: any) {
@@ -101,6 +112,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     playerVelocity.normalize(); // 대각선인 경우 1.4의 속도이기 때문에 정규화(normalize)를 통해 속도를 1로 만든다. 이 주석에서 속도란, speed가 아니라 좌표 변화량을 뜻한다.
     playerVelocity.scale(speed);
     this.setVelocity(playerVelocity.x, playerVelocity.y); // 실제로 player오브젝트를 움직인다.
+    this.playerNameBubble.setPosition(this.x, this.y - this.height / 2 - 10);
 
     // const { socket } = this.scene as MainScene;
     // if (!socket) {
