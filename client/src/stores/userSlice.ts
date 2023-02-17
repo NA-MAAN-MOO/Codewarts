@@ -1,12 +1,38 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import MainScene from 'scenes/Mainscene';
+// import { BackgroundMode } from '../../../server/types/BackgroundMode';
+import phaserGame from 'codeuk';
+
+export enum BackgroundMode {
+  DAY,
+  NIGHT,
+}
+
+export function getInitialBackgroundMode() {
+  const currentHour = new Date().getHours();
+  return currentHour > 6 && currentHour <= 18
+    ? BackgroundMode.DAY
+    : BackgroundMode.NIGHT;
+}
 
 export const userSlice = createSlice({
   name: 'user',
   initialState: {
+    backgroundMode: getInitialBackgroundMode(),
     playerId: '',
     playerTexture: 'char0',
   },
   reducers: {
+    toggleBackgroundMode: (state) => {
+      const newMode =
+        state.backgroundMode === BackgroundMode.DAY
+          ? BackgroundMode.NIGHT
+          : BackgroundMode.DAY;
+
+      state.backgroundMode = newMode;
+      const bootstrap = phaserGame.scene.keys.bootstrap as MainScene;
+      bootstrap.changeBackgroundMode(newMode);
+    },
     setPlayerId: (state, action: PayloadAction<string>) => {
       state.playerId = action.payload;
     },
@@ -31,6 +57,7 @@ export const userSlice = createSlice({
   },
 });
 
-export const { setPlayerId, setPlayerTexture } = userSlice.actions;
+export const { toggleBackgroundMode, setPlayerId, setPlayerTexture } =
+  userSlice.actions;
 
 export default userSlice.reducer;
