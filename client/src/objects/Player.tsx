@@ -1,6 +1,6 @@
 import phaserGame from 'codeuk';
 import Phaser from 'phaser';
-import MainScene from '../scenes/Mainscene';
+import { PlayerType } from 'types';
 import Button from './Button';
 
 export default class Player extends Phaser.Physics.Matter.Sprite {
@@ -12,17 +12,10 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
   spriteIcon!: any;
   buttonEditor!: any;
 
-  constructor(data: {
-    scene: Phaser.Scene;
-    x: number;
-    y: number;
-    texture: string;
-    id: string;
-    frame: any;
-  }) {
+  constructor(data: PlayerType) {
     let { scene, x, y, texture, id, frame } = data;
 
-    super(scene.matter.world, x, y, texture, id, frame);
+    super(scene.matter.world, x, y, texture, frame);
 
     this.socketId = id;
     this.playerTexture = texture;
