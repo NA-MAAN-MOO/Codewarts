@@ -13,7 +13,9 @@ import './codeuk';
 function App() {
   const mode = process.env.REACT_APP_MODE;
   const { START, LOBBY, GAME, EDITOR } = GAME_STATUS;
-  const status = useSelector((state: RootState) => state.mode.status);
+  const { status, users } = useSelector((state: RootState) => {
+    return { ...state.mode, ...state.chat };
+  });
   const dispatch = useDispatch();
   let loadFlag = false;
 
@@ -29,6 +31,16 @@ function App() {
   return (
     loadFlag || (
       <HoverDiv>
+        <div
+          style={{
+            border: '1px solid red',
+            width: '100%',
+            height: '20px',
+            backgroundColor: 'white',
+          }}
+        >
+          {users}
+        </div>
         {status === START ? (
           <Start></Start>
         ) : status === LOBBY ? (

@@ -8,6 +8,7 @@ import { io, Socket } from 'socket.io-client';
 import store from 'stores';
 import { openEditor, openGame } from 'stores/modeSlice';
 import { setRoomId, setUserName } from 'stores/editorSlice';
+import { setUsers, addUser } from 'stores/chatSlice';
 import { GAME_STATUS } from 'utils/Constants';
 import Table from 'objects/Table';
 import phaserGame from 'codeuk';
@@ -138,6 +139,8 @@ export default class MainScene extends Phaser.Scene {
       frame: 'down-1', // atlas.json의 첫번째 filename
     });
 
+    store.dispatch(addUser(phaserGame.userName));
+
     this.player.inputKeys = this.input.keyboard.addKeys({
       up: Phaser.Input.Keyboard.KeyCodes.UP,
       down: Phaser.Input.Keyboard.KeyCodes.DOWN,
@@ -172,8 +175,11 @@ export default class MainScene extends Phaser.Scene {
         socketId: payLoad.socketId,
         state: payLoad.state,
       });
+      store.dispatch(addUser());
     });
+
     phaserGame.socket.on('newPlayer', (payLoad: any) => {
+      //새 플레이어가 들어옴
       this.addOtherPlayers({
         x: payLoad.x,
         y: payLoad.y,
@@ -181,6 +187,7 @@ export default class MainScene extends Phaser.Scene {
         socketId: payLoad.socketId,
         state: payLoad.state,
       });
+      store.dispatch(addUser(payLoad.charKey));
     });
     phaserGame.socket.on('playerDisconnect', (socketId: any) => {
       this.removePlayer(socketId);
