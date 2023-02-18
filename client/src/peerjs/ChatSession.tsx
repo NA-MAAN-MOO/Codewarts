@@ -1,70 +1,65 @@
 //하나의 chat session
 
+import { useEffect, useState } from 'react';
 import Peer from 'peerjs';
 import store from 'stores';
 // import { setAudioConnected } from '../stores/UserStore';
 
-const ChatSession = () => {
-  const myPeer : Peer;
-  private myPeer: Peer;
-  private peers = new Map<
-    string,
-    { call: Peer.MediaConnection; audio: HTMLAudioElement }
-  >();
-  private onCalledPeers = new Map<
-    string,
-    { call: Peer.MediaConnection; audio: HTMLAudioElement }
-  >();
-  private audioGrid = document.querySelector('.audio-grid');
-  private buttonGrid = document.querySelector('.button-grid');
-  private myAudio = document.createElement('audio');
-  private myStream?: MediaStream;
+const ChatSession = ({ userId }: { userId: string }) => {
+  const [myPeer, setMyPeer] = useState<Peer>();
+  const [peers, setPeers] = useState<
+    Map<string, { call: Peer.MediaConnection; audio: HTMLAudioElement }>
+  >(new Map());
+  const [onCalledPeers, setOnCalledPeers] = useState<
+    Map<string, { call: Peer.MediaConnection; audio: HTMLAudioElement }>
+  >(new Map());
+  const [myStream, setMyStream] = useState<MediaStream>();
+  const [myAudio, setMyAudio] = useState<HTMLAudioElement>(
+    document.createElement('audio')
+  );
+  const [audios, setAudios] = useState<HTMLAudioElement[]>([]);
 
-  constructor(userId: string) {
-    this.myPeer = new Peer(userId);
+  useEffect(() => {
+    setMyPeer(new Peer(userId));
     console.log('userId:', userId);
-    console.log('userId:', userId);
-    this.myPeer.on('error', (err) => {
-      console.log(err.type);
-      console.error(err);
-    });
 
     // mute your own audio stream (you don't want to hear yourself)
-    this.myAudio.muted = true;
-
-    // config peerJS
-    this.initialize();
-  }
+    myAudio.muted = true;
+  }, []);
 
   // PeerJS throws invalid_id error if it contains some characters such as that colyseus generates.
   // https://peerjs.com/docs.html#peer-id
 
-  initialize() {
+  useEffect(() => {
+    if (!myPeer) return;
+    myPeer.on('error', (err) => {
+      console.log(err);
+    });
+
     //외부 peer에서 내 peer로 call 시도를 할 때
-    this.myPeer.on('call', (call) => {
-      if (!this.onCalledPeers.has(call.peer)) {
-        call.answer(this.myStream);
+    myPeer.on('call', (call) => {
+      if (!onCalledPeers.has(call.peer)) {
+        call.answer(myStream);
         const audio = document.createElement('audio');
-        this.onCalledPeers.set(call.peer, { call, audio });
+        onCalledPeers.set(call.peer, { call, audio });
 
         //외부 peer가 stream을 add했을 때
         call.on('stream', (userStream) => {
-          this.addAudioStream(audio, userStream);
+          addAudioStream(audio, userStream);
         });
       }
-      // on close is triggered manually with deleteOnCalledAudioStream()
     });
-  }
+  }, [myPeer]);
 
   // check if permission has been granted before
-  checkPreviousPermission() {
+  const checkPreviousPermission = () => {
     const permissionName = 'microphone' as PermissionName;
     navigator.permissions?.query({ name: permissionName }).then((result) => {
-      if (result.state === 'granted') this.getUserMedia(false);
+      if (result.state === 'granted') getUserMedia(false);
     });
-  }
+  };
 
-  getUserMedia(alertOnError = true) {
+  const getUserMedia = (alertOnError = true) => {
     // ask the browser to get user media
     navigator.mediaDevices
       ?.getUserMedia({
@@ -72,8 +67,8 @@ const ChatSession = () => {
         audio: true,
       })
       .then((stream) => {
-        this.myStream = stream;
-        this.addAudioStream(this.myAudio, this.myStream);
+        setMyStream(stream);
+        addAudioStream(myAudio, stream);
         // this.setUpButtons();
       })
       .catch((error) => {
@@ -82,54 +77,54 @@ const ChatSession = () => {
             'No webcam or microphone found, or permission is blocked'
           );
       });
-  }
+  };
 
   // method to call a peer
-  connectToNewUser(userId: string) {
-    if (this.myStream) {
-      if (!this.peers.has(userId)) {
+  const connectToNewUser = (userId: string) => {
+    if (myStream) {
+      if (!peers.has(userId)) {
         console.log('calling', userId);
-        const call = this.myPeer.call(userId, this.myStream);
+        const call = myPeer.call(userId, myStream);
         const audio = document.createElement('audio');
-        this.peers.set(userId, { call, audio });
+        peers.set(userId, { call, audio });
 
         call.on('stream', (userStream) => {
-          this.addAudioStream(audio, userStream);
+          addAudioStream(audio, userStream);
         });
 
         // on close is triggered manually with deleteAudioStream()
       }
     }
-  }
+  };
 
   // method to add new audio stream to audioGrid div
-  addAudioStream(audio: HTMLAudioElement, stream: MediaStream) {
+  const addAudioStream = (audio: HTMLAudioElement, stream: MediaStream) => {
     audio.srcObject = stream;
     audio.addEventListener('loadedmetadata', () => {
       audio.play();
     });
-    if (this.audioGrid) this.audioGrid.append(audio);
-  }
+    setAudios([...audios, audio]);
+  };
 
   // method to remove audio stream (when we are the host of the call)
-  deleteAudioStream(userId: string) {
-    if (this.peers.has(userId)) {
-      const peer = this.peers.get(userId);
+  const deleteAudioStream = (userId: string) => {
+    if (peers.has(userId)) {
+      const peer = peers.get(userId);
       peer?.call.close();
       peer?.audio.remove();
-      this.peers.delete(userId);
+      peers.delete(userId);
     }
-  }
+  };
 
   // method to remove audio stream (when we are the guest of the call)
-  deleteOnCalledAudioStream(userId: string) {
-    if (this.onCalledPeers.has(userId)) {
-      const onCalledPeer = this.onCalledPeers.get(userId);
+  const deleteOnCalledAudioStream = (userId: string) => {
+    if (onCalledPeers.has(userId)) {
+      const onCalledPeer = onCalledPeers.get(userId);
       onCalledPeer?.call.close();
       onCalledPeer?.audio.remove();
-      this.onCalledPeers.delete(userId);
+      onCalledPeers.delete(userId);
     }
-  }
+  };
 
   // method to set up mute/unmute and audio on/off buttons
   // setUpButtons() {
@@ -164,4 +159,4 @@ const ChatSession = () => {
   //   this.buttonGrid?.append(audioButton);
   //   this.buttonGrid?.append(audioButton);
   // }
-}
+};
