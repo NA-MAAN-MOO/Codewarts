@@ -36,6 +36,7 @@
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",
     "react-scripts": "5.0.1",
+    "react-svg": "^16.1.2",
     "socket.io-client": "^4.6.0",
     "styled-components": "^5.3.6",
     "swiper": "^9.0.5",

@@ -1,6 +1,6 @@
 //@ts-nocheck
 /* react */
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useMemo } from 'react';
 
 /* lib */
 import * as random from 'lib0/random';
@@ -29,7 +29,7 @@ import { okaidia } from '@uiw/codemirror-theme-okaidia';
 import { RootState } from 'stores';
 
 /* UI */
-import { Space, Button, Input, Radio } from 'antd';
+import { Button, Radio } from 'antd';
 import { DownCircleOutlined } from '@ant-design/icons';
 import type { RadioChangeEvent } from 'antd';
 import { styled } from '@mui/material/styles';
@@ -38,6 +38,9 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import styledc from 'styled-components';
 import 'styles/fonts.css'; /* FONT */
+
+/* solvedAC badge svg */
+import RenderSvg from 'components/Svg';
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   width: 62,
@@ -481,7 +484,7 @@ function YjsCodeMirror() {
             </div>
           ) : (
             <div className="boj-user-info">
-              <div>백준 티어 : {bojUserData?.items[0].tier}</div>
+              <div>나의 백준 티어 : {bojUserData?.items[0].tier}</div>
               <div>백준 푼 문제 수 : {bojUserData?.items[0].solvedCount}</div>
             </div>
           )}
@@ -547,15 +550,23 @@ function YjsCodeMirror() {
             </div>
           ) : (
             <div className="boj-prob-info">
-              <a
-                href={`https://acmicpc.net/problem/${bojProbData?.problemId}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                백준에 답안 제출하러 가기
-              </a>
-              <div>문제 제목 : {bojProbData?.titleKo}</div>
-              <div>난이도(등급) : {bojProbData?.level}</div>
+              <span>
+                <a
+                  href={`https://acmicpc.net/problem/${bojProbData?.problemId}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  백준에 답안 제출하러 가기
+                </a>
+              </span>
+
+              <span style={{ display: 'flex' }}>
+                {bojProbData?.level ? (
+                  <RenderSvg svgName={bojProbData.level} />
+                ) : null}
+                {bojProbData?.titleKo}
+              </span>
+
               <h3>문제 내용</h3>
               <div
                 dangerouslySetInnerHTML={{
@@ -576,7 +587,7 @@ function YjsCodeMirror() {
               />
               <div className="prob-samples">
                 <h3>예제 1</h3>
-                <span onClick={copyToInput}>input창으로 복사하기</span>
+                <button onClick={copyToInput}>input창으로 복사하기</button>
                 <div className="prob-sample-input1">
                   <div
                     dangerouslySetInnerHTML={{

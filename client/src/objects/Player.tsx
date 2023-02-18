@@ -1,3 +1,4 @@
+//@ts-nocheck
 import phaserGame from 'codeuk';
 import Phaser from 'phaser';
 import { PlayerType } from 'types';
