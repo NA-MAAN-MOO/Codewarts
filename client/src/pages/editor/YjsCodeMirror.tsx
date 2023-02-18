@@ -440,8 +440,8 @@ function YjsCodeMirror() {
   return (
     <EditorWrapper>
       <div className="room-user-info">
-        <div>유저 이름 : {userName}</div>
-        <div>룸 ID : {roomId}</div>
+        <div>내 이름 : {userName}</div>
+        <div>에디터 주인 이름(구 룸ID) : {roomId}</div>
       </div>
 
       <div className="algo-info">
