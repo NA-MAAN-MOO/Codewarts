@@ -1,7 +1,14 @@
+import dotenv from 'dotenv';
+//환경변수 이용(코드 최상단에 위치시킬 것)
+dotenv.config();
+
 import { v4 } from 'uuid';
 import moment from 'moment';
 import { Request, Response } from 'express';
 import axios, { AxiosResponse } from 'axios';
+
+const { MongoClient } = require('mongodb');
+const mongoPassword = process.env.MONGO_PW;
 
 export const createRoom = async (req: Request, res: Response) => {
   const { userName = '', redisClient } = req.body;
@@ -51,6 +58,42 @@ export const compileCode = async (req: Request, res: Response) => {
     .catch((error: Error) => {
       console.log('error:', error);
     });
+};
+
+/* get response for fetching boj problem data */
+export const getBojProbData = async (req: Request, res: Response) => {
+  const uri = `mongodb+srv://juncheol:${mongoPassword}@cluster0.v0izvl3.mongodb.net/?retryWrites=true&w=majority`;
+  const client = new MongoClient(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+
+  async function connect() {
+    try {
+      await client.connect();
+      console.log('Connected to MongoDB Atlas to Get Boj Problem Data');
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  await connect();
+
+  const db = client.db('codewart');
+  const collection = db.collection('probs');
+
+  const data = await collection
+    //@ts-ignore
+    .find({ probId: parseInt(req?.query?.probId) })
+    .toArray();
+
+  console.log(data);
+
+  if (data.length === 0) {
+    res.status(404).send('Problem not found');
+  } else {
+    res.status(200).send(data);
+  }
 };
 
 export const origin = (req: Request, res: Response) => {

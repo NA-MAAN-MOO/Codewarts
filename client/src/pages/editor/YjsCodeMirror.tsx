@@ -1,6 +1,6 @@
 //@ts-nocheck
 /* react */
-import { useRef, useEffect, useState, useMemo } from 'react';
+import { useRef, useEffect, useState } from 'react';
 
 /* lib */
 import * as random from 'lib0/random';
@@ -302,7 +302,6 @@ function YjsCodeMirror() {
   const fetchBojProbInfo = async () => {
     if (bojProbDataRef.current === null) return;
 
-    //@ts-ignore
     let probId = bojProbDataRef.current.value;
     console.log(probId);
 
@@ -320,16 +319,16 @@ function YjsCodeMirror() {
     }
   };
 
-  /* 스크래핑 서버에 백준 문제 정보 요청 */
+  /* 서버로 몽고DB에 저장된 백준 문제 정보 요청 */
   async function fetchBojProbFullData(probId: string) {
     if (bojProbDataRef.current === null) return;
 
     try {
       const response = await axios.get(
-        `http://localhost:5000/data?probId=${probId}`
+        `http://localhost:3001/bojdata?probId=${probId}`
       );
 
-      let probFullData = response.data;
+      let probFullData = response.data[0];
       console.log(probFullData);
       setBojProbFullData(probFullData);
     } catch (error) {
