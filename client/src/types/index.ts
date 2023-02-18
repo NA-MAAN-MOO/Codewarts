@@ -10,39 +10,43 @@ import { Socket } from 'socket.io-client';
 
 export type Event = React.ChangeEvent<HTMLInputElement>;
 
-export type SessionEvent =
-  | 'connectionCreated'
-  | 'connectionDestroyed'
-  | 'connectionPropertyChanged'
-  | 'exception'
-  | 'networkQualityLevelChanged'
-  | 'publisherStartSpeaking'
-  | 'publisherStopSpeaking'
-  | 'reconnected'
-  | 'reconnecting'
-  | 'recordingStarted'
-  | 'recordingStopped'
-  | 'sessionDisconnected'
-  | 'signal'
-  | 'speechToTextMessage'
-  | 'streamCreated'
-  | 'streamDestroyed'
-  | 'streamPropertyChanged';
-
 export type VoiceProp = {
   roomKey: string;
   userName: string;
 };
 
-export type SessionInfo = {
-  OV: OpenVidu;
-  session: Session;
-  sessionId: string;
-};
-
-export type PhaserGame = Game & {
+export type GameType = Game & {
   socket?: Socket;
   socketId?: string;
   charKey?: string;
   userName?: string;
+};
+
+export interface PlayerInterface {
+  socketId: string;
+  playerTexture: string;
+  touching: any[];
+  inputKeys: any;
+  showingIcon: any;
+  spriteIcon: any;
+  buttonEditor: any;
+}
+
+export type PlayerType = {
+  x: number;
+  y: number;
+  scene: Phaser.Scene;
+  texture: string;
+  id: string;
+  frame?: string;
+  state?: string;
+  name: string;
+};
+
+export type ServerPlayerType = {
+  x: number;
+  y: number;
+  charKey: string;
+  socketId: string;
+  state: string;
 };

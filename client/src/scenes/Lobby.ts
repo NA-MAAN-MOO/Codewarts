@@ -31,7 +31,6 @@ export default class Lobby extends Phaser.Scene {
   private player!: Phaser.Physics.Matter.Sprite;
   private buttonForList!: Phaser.GameObjects.Text;
   private houseForList!: Phaser.Physics.Matter.Sprite;
-  inputKeys!: object;
   socketId: any;
 
   socket: Socket | undefined;
@@ -45,7 +44,7 @@ export default class Lobby extends Phaser.Scene {
   init() {
     // socket-io와 링크 스타~트!
     phaserGame.socket = io('http://localhost:8080');
-    phaserGame.socket.on('start', (payLoad: any) => {
+    phaserGame.socket.on('start', (payLoad: { socketId: string }) => {
       // Server에서 보내주는 고유 값을 받는다.
       phaserGame.socketId = payLoad.socketId;
       phaserGame.charKey = store.getState().user.playerTexture;
@@ -80,8 +79,12 @@ export default class Lobby extends Phaser.Scene {
     this.houseForList.setSensor(true);
     this.houseForList.setScrollFactor(0);
 
-    // if (phaserGame.charKey === undefined || phaserGame.socketId === undefined)
-    //   return;
+    if (
+      phaserGame.charKey === undefined ||
+      phaserGame.socketId === undefined ||
+      phaserGame.userName === undefined
+    )
+      return;
 
     /* Add my player */
     this.player = new Player({
@@ -90,17 +93,25 @@ export default class Lobby extends Phaser.Scene {
       y: this.scale.height * 0.85,
       texture: phaserGame.charKey,
       id: phaserGame.socketId,
+      name: phaserGame.userName,
       frame: 'down-1',
     });
 
     /* Add Keyboard keys to enable character animation */
-    this.inputKeys = this.input.keyboard.addKeys({
+    this.player.inputKeys = this.input.keyboard.addKeys({
       //   up: Phaser.Input.Keyboard.KeyCodes.W,
       //   down: Phaser.Input.Keyboard.KeyCodes.S,
+      up: Phaser.Input.Keyboard.KeyCodes.UP,
+      down: Phaser.Input.Keyboard.KeyCodes.DOWN,
       left: Phaser.Input.Keyboard.KeyCodes.LEFT,
       right: Phaser.Input.Keyboard.KeyCodes.RIGHT,
-      enter: Phaser.Input.Keyboard.KeyCodes.E,
+      open: Phaser.Input.Keyboard.KeyCodes.E,
     });
+
+    // Lock specific key (w, s)
+    this.player.inputKeys['up'].enabled = false;
+    this.player.inputKeys['down'].enabled = false;
+
     if (!!phaserGame.charKey) {
       createCharacterAnims(phaserGame.charKey, phaserGame.anims);
     }
@@ -137,29 +148,7 @@ export default class Lobby extends Phaser.Scene {
       this.input.keyboard.disableGlobalCapture();
     }
 
-    let playerVelocity = new Phaser.Math.Vector2(); //  2D 벡터
-    let motion = 'idle';
-    if (this.inputKeys.left.isDown) {
-      playerVelocity.x = -1;
-      this.player.play(`${phaserGame.charKey}-walk-left`, true);
-      motion = 'left';
-      // parallax scrolling
-      // this.cameras.main.scrollX -= 0.5;
-    } else if (this.inputKeys.right.isDown) {
-      playerVelocity.x = 1;
-      this.player.play(`${phaserGame.charKey}-walk-right`, true);
-      motion = 'right';
-      // parallax scrolling
-      // this.cameras.main.scrollX += 0.5;
-    }
-    // this.y += speed;
-    if (motion === 'idle') {
-      this.anims.play(`${phaserGame.charKey}-idle-down`, this.player);
-      // this.houseForList.setVelocity(0, 0);
-    }
-
-    playerVelocity.scale(speed);
-    this.player.setVelocity(playerVelocity.x, playerVelocity.y); // 실제로 player오브젝트를 움직인다.
+    this.player.update();
 
     /* Control Overlapping between player and house */
     let boundPlayer = this.player.getBounds();
@@ -172,9 +161,9 @@ export default class Lobby extends Phaser.Scene {
       )
     ) {
       this.buttonForList.setVisible(true);
-      // console.log('맞닿음');
+
       // Press E to Enter Classroom
-      if (this.inputKeys.enter.isDown) {
+      if (this.player.inputKeys.open.isDown) {
         handleScene(GAME_STATUS.GAME);
       }
     } else {
