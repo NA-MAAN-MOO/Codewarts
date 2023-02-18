@@ -3,7 +3,8 @@ import Lobby from 'scenes/Lobby';
 import Phaser from 'phaser';
 import PhaserMatterCollisionPlugin from 'phaser-matter-collision-plugin';
 import StartScene from 'scenes/StartScene';
-import { PhaserGame } from 'types';
+import { GameType } from 'types';
+import Background from './scenes/Background';
 
 const pluginConfig = {
   // The plugin class:
@@ -33,7 +34,7 @@ const config = {
   // backgroundColor: '#EEEEEE', //  scene이 그려지는 canvas의 backgroundColor 값
   type: Phaser.AUTO,
   parent: 'codeuk',
-  scene: [StartScene, Lobby, MainScene],
+  scene: [Background, StartScene, Lobby, MainScene],
   scale: {
     // mode: Phaser.Scale.FIT,
     mode: Phaser.Scale.ScaleModes.RESIZE,
@@ -54,6 +55,6 @@ const config = {
   },
 };
 
-let phaserGame: PhaserGame = new Phaser.Game(config);
+let phaserGame: GameType = new Phaser.Game(config);
 
 export default phaserGame;

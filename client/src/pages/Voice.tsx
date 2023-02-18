@@ -7,7 +7,6 @@ import {
   Subscriber,
   Publisher,
 } from 'openvidu-browser';
-import { Event, SessionEvent } from 'types';
 import axios from 'axios';
 import Audio from 'components/Audio';
 import {

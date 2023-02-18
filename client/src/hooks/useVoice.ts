@@ -5,7 +5,6 @@ import {
   StreamManager,
   SessionEventMap,
 } from 'openvidu-browser';
-import { SessionInfo } from 'types';
 import axios from 'axios';
 
 const APPLICATION_SERVER_URL = 'http://localhost:3002/api';

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const Lobby = () => {
-  return <BackgroundDiv></BackgroundDiv>;
+  return <></>; // <BackgroundDiv></BackgroundDiv>;
 };
 
 export default Lobby;
