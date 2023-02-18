@@ -87,7 +87,7 @@ export const getBojProbData = async (req: Request, res: Response) => {
     .find({ probId: parseInt(req?.query?.probId) })
     .toArray();
 
-  console.log(data);
+  // console.log(data);
 
   if (data.length === 0) {
     res.status(404).send('Problem not found');
