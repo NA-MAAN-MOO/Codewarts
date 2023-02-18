@@ -1,3 +1,4 @@
+//@ts-nocheck
 import phaserGame from 'codeuk';
 import Phaser from 'phaser';
 import { PlayerType } from 'types';
@@ -7,7 +8,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
   socketId!: string;
   playerTexture!: string;
   touching!: MatterJS.BodyType[];
-  inputKeys!: Phaser.Input.Keyboard.Key;
+  inputKeys!: Phaser.Input.Keyboard.Key | {};
   showingIcon!: any;
   spriteIcon!: any;
   buttonEditor!: any;
@@ -132,7 +133,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
   CreateCollisions(playerSensor: MatterJS.BodyType) {
     this.scene.matterCollision.addOnCollideStart({
       objectA: [playerSensor],
-      callback: (other: any) => {
+      callback: (other) => {
         // console.log("from player: ", other);
         if (
           other.gameObjectB['texture'] &&
