@@ -1,7 +1,7 @@
 //@ts-nocheck
 /* react */
 import { useRef, useEffect, useState } from 'react';
-
+import './YjsCodeMirror.css';
 /* lib */
 import * as random from 'lib0/random';
 import { useSelector } from 'react-redux';
