@@ -49,4 +49,5 @@ export type ServerPlayerType = {
   charKey: string;
   socketId: string;
   state: string;
+  userName: string;
 };

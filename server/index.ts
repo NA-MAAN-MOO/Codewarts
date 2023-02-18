@@ -12,6 +12,7 @@ import editorServer from './servers/editorServer';
 import basicRouter from './routes/basicRouter';
 import { table } from 'console';
 import voiceServer from './servers/voiceServer';
+import { PlayerType, TableType } from './types/Game';
 
 const port = process.env.PORT || 8080;
 const mongoPassword = process.env.MONGO_PW;
@@ -49,8 +50,8 @@ const io = new Server(httpServer, {
 
 app.use('/', basicRouter);
 
-let players: any[] = []; // 모든 '접속 중' 유저들을 저장하는 리스트
-let tables: any[] = []; // 모든 '사용 중' 테이블 데이터를 저장하는 리스트
+let players: PlayerType[] = []; // 모든 '접속 중' 유저들을 저장하는 리스트
+let tables: TableType[] = []; // 모든 '사용 중' 테이블 데이터를 저장하는 리스트
 
 io.on('connection', (socket: Socket) => {
   // socket이 연결됩니다~ 이 안에서 서버는 연결된 클라이언트와 소통할 준비가 됨
@@ -58,7 +59,7 @@ io.on('connection', (socket: Socket) => {
   // console.log(players.length); // '현재 접속을 시도한 유저'를 제외한 접속인원 수 ( 이하 '나' 라고 지칭하겠습니다. )
   // const charKey = `char${Math.floor(Math.random() * 27)}`; // 랜덤으로 캐릭터 값을 지정해준다. 이후 캐릭터 선택하는 화면이 생기면, 그때 선택한 캐릭터 값을 charKey에 넣어주면 됨!
   // const userName = `원숭이${Math.floor(Math.random() * 2000)}`; // 유저 이름. 유저 위에 떠야한다.
-  let playerInfo = {
+  let playerInfo: PlayerType = {
     // '나'의 데이터 값. soket 인스턴스, soket ID값, 캐릭터 값은 변하지 않는다.
     socket: socket,
     socketId: socket.id,
@@ -92,6 +93,7 @@ io.on('connection', (socket: Socket) => {
         charKey: playerInfo.charKey,
         x: playerInfo.x,
         y: playerInfo.y,
+        userName: playerInfo.userName,
       };
       // 기존의 유저들에게 '나'의 데이터를 보낸다.
       player.socket.emit('newPlayer', payLoad);
@@ -135,6 +137,7 @@ io.on('connection', (socket: Socket) => {
           charKey: player.charKey,
           x: player.x,
           y: player.y,
+          userName: player.userName,
         };
         // socket.emit은 "나"에게 통신하는 것
         socket.emit('currentPlayers', payLoad);
@@ -192,7 +195,7 @@ io.on('connection', (socket: Socket) => {
   socket.on('currentEditors', () => {
     console.log('currentEditors');
     // 이미 사용중인 테이블 데이터를 업데이트한다.
-    tables.forEach((table: any) => {
+    tables.forEach((table: TableType) => {
       let payLoad = {
         id: table[0],
         idx: table[1],
@@ -204,13 +207,13 @@ io.on('connection', (socket: Socket) => {
 
   socket.on('removeEditor', () => {
     console.log('removeEditor');
-    tables.forEach((table) => {
+    tables.forEach((table: TableType) => {
       if (table[2] === playerInfo.userName) {
         socket.broadcast.emit('removeEditor', table);
         socket.emit('removeEditor', table);
       }
     });
-    tables = tables.filter((table) => {
+    tables = tables.filter((table: TableType) => {
       // 조건식에 return 붙여야한다.
       return table[2] !== playerInfo.userName;
     });

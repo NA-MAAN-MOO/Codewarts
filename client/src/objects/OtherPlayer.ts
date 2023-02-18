@@ -4,6 +4,7 @@ export default class OtherPlayer extends Phaser.Physics.Matter.Sprite {
   socketId!: string;
   playerTexture!: string;
   touching!: [];
+  userName!: string;
 
   constructor(data: any) {
     let { scene, x, y, texture, id, frame } = data;
