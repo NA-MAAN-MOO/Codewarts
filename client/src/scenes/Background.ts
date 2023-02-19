@@ -1,6 +1,7 @@
 import { ColumnWidthOutlined } from '@ant-design/icons';
 import Phaser from 'phaser';
 // import { BackgroundMode } from '../../../server/types/BackgroundMode';
+// import { BackgroundMode } from '../../../server/types/BackgroundMode';
 
 export enum BackgroundMode {
   DAY,
@@ -101,5 +102,14 @@ export default class Background extends Phaser.Scene {
       let velocity = Phaser.Math.RND.between(1, 3);
       cloud.setVelocity(velocity, 0);
     });
+  }
+
+  private launchBackground(backgroundMode: BackgroundMode) {
+    this.scene.launch('background', { backgroundMode });
+  }
+
+  changeBackgroundMode(backgroundMode: BackgroundMode) {
+    this.scene.stop('background');
+    this.launchBackground(backgroundMode);
   }
 }
