@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { createCharacterAnims } from '../anims/CharacterAnims';
 import OtherPlayer from '../objects/OtherPlayer';
 import Player from '../objects/Player';
@@ -7,6 +6,7 @@ import { io, Socket } from 'socket.io-client';
 import store from 'stores';
 import { openEditor, openGame } from 'stores/modeSlice';
 import { setRoomId, setUserName } from 'stores/editorSlice';
+import { setUsers, addUser, removeUser } from 'stores/chatSlice';
 import { GAME_STATUS } from 'utils/Constants';
 import Table from 'objects/Table';
 import phaserGame from 'codeuk';
@@ -130,7 +130,7 @@ export default class MainScene extends Phaser.Scene {
     if (!phaserGame.charKey || !phaserGame.socketId || !phaserGame.userName)
       return;
 
-    this.player = new Player({
+    const playerInfo = {
       scene: this,
       x: this.x,
       y: this.y,
@@ -139,7 +139,11 @@ export default class MainScene extends Phaser.Scene {
       id: phaserGame.socketId,
       name: phaserGame.userName,
       frame: 'down-1', // atlas.json의 첫번째 filename
-    });
+    };
+
+    this.player = new Player(playerInfo);
+
+    store.dispatch(addUser(playerInfo));
 
     this.player.inputKeys = this.input.keyboard.addKeys({
       up: Phaser.Input.Keyboard.KeyCodes.UP,
@@ -177,7 +181,9 @@ export default class MainScene extends Phaser.Scene {
         userName: payLoad.userName,
       });
     });
+
     phaserGame.socket.on('newPlayer', (payLoad: ServerPlayerType) => {
+      //새 플레이어가 들어옴
       this.addOtherPlayers({
         x: payLoad.x,
         y: payLoad.y,
@@ -186,6 +192,7 @@ export default class MainScene extends Phaser.Scene {
         state: payLoad.state,
         userName: payLoad.userName,
       });
+      store.dispatch(addUser(payLoad.charKey));
     });
     phaserGame.socket.on('playerDisconnect', (socketId) => {
       this.removePlayer(socketId);
@@ -250,7 +257,7 @@ export default class MainScene extends Phaser.Scene {
   update() {
     if (store.getState().mode.status !== GAME_STATUS.GAME) {
       if (this.openMyEditor) {
-        console.log('1차관문, 여기 왔으면 내 에디터 열었다는 뜻');
+        // console.log('1차관문, 여기 왔으면 내 에디터 열었다는 뜻');
       }
       this.input.keyboard.disableGlobalCapture();
       this.isKeyDisable = true;
@@ -376,17 +383,20 @@ export default class MainScene extends Phaser.Scene {
   }
 
   addOtherPlayers(playerInfo: ServerPlayerType) {
-    const otherPlayer = new OtherPlayer({
+    const otherPlayerInfo = {
       // playerInfo를 바탕으로 새로운 플레이어 객체를 그려준다.
       // 해당 플레이어 객체를 움직이려면 어쩔까?
       scene: this,
       x: playerInfo.x,
       y: playerInfo.y,
-      userName: playerInfo.userName,
+      name: playerInfo.userName,
       texture: playerInfo.charKey, // 이미지 이름
       id: playerInfo.socketId,
       frame: 'down-1', // atlas.json의 첫번째 filename
-    });
+    };
+    const otherPlayer = new OtherPlayer(otherPlayerInfo);
+    store.dispatch(addUser(otherPlayerInfo));
+
     if (playerInfo.state === 'paused') {
       otherPlayer.setStatic(true);
     }
@@ -394,12 +404,13 @@ export default class MainScene extends Phaser.Scene {
     this.otherPlayers.push(otherPlayer);
   }
 
-  removePlayer(res: any) {
+  removePlayer(res: string) {
     this.otherPlayers.forEach((player: any) => {
       if (player.socketId === res) {
         player.destroy();
       }
     });
+    store.dispatch(removeUser(res));
     this.otherPlayers.filter((player: any) => player.socketId !== res);
   }
 

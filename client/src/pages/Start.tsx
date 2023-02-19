@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import LoginDialog from './LoginDialog';
+import LoginDialog from '../components/LoginDialog';
 
 const Start = () => {
   return (
