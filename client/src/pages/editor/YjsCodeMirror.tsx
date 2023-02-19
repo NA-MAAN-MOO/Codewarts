@@ -30,6 +30,8 @@ import { okaidia } from '@uiw/codemirror-theme-okaidia';
 import { RootState } from 'stores';
 
 /* UI */
+import styledc from 'styled-components';
+import 'styles/fonts.css'; /* FONT */
 // import { Radio } from 'antd';
 import { DownCircleOutlined } from '@ant-design/icons';
 // import type { RadioChangeEvent } from 'antd';
@@ -41,9 +43,11 @@ import Switch from '@mui/material/Switch';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Unstable_Grid2';
 import TextField from '@mui/material/TextField';
-import styledc from 'styled-components';
-import 'styles/fonts.css'; /* FONT */
+import Tooltip from '@mui/material/Tooltip';
+import Divider from '@mui/material/Divider';
 
 /* solvedAC badge svg */
 import RenderSvg from 'components/Svg';
@@ -110,6 +114,14 @@ const buttonTheme = createTheme({
     },
   },
 });
+
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
 
 function YjsCodeMirror() {
   /* ref */
@@ -234,6 +246,7 @@ function YjsCodeMirror() {
   /* 유저가 작성한 코드를 컴파일하기 위해 서버로 보냄 */
   const runCode = async () => {
     if (!inputStdin.current) return;
+
     console.log(inputStdin.current.value);
 
     try {
@@ -545,7 +558,7 @@ function YjsCodeMirror() {
             </Header>
 
             <ProbInfo>
-              <div style={{ color: '#000000' }}>
+              <div id="algo-user-info" style={{ color: '#ffefd5' }}>
                 내정보 : [Tier]
                 {algoSelect === 0
                   ? bojUserData?.items[0].tier
@@ -724,9 +737,11 @@ function YjsCodeMirror() {
 
       <MiddleWrapper>
         <ThemeProvider>
-          <Button onClick={runCode} color="primary" theme={buttonTheme}>
-            RUN
-          </Button>
+          <Tooltip title="코드 실행하기!" arrow>
+            <Button onClick={runCode} color="primary" theme={buttonTheme}>
+              RUN
+            </Button>
+          </Tooltip>
         </ThemeProvider>
         <FormGroup>
           <FormControlLabel
@@ -745,47 +760,107 @@ function YjsCodeMirror() {
       </MiddleWrapper>
 
       <div
-        className="editor"
         ref={editor}
         style={{
           minHeight: '50%',
           // boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)',
           filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25)',
+          // marginTop: '10px',
+          marginBottom: '10px',
         }}
       />
 
-      <div className="compiler">
-        {/* <div key={inputStdin.current}>
-          <TextArea
-            className="stdin"
-            rows={5}
-            placeholder="Input"
-            defaultValue=""
-            ref={inputStdin}
-          />
-        </div> */}
-        <div>
-          <textarea
-            className="stdin"
-            rows={5}
-            placeholder="Input"
-            ref={inputStdin}
-          />
-        </div>
+      <Divider light="true"></Divider>
 
-        <div className="compiled-result">
-          <h3>OUTPUT</h3>
-          <div
-            style={{ border: '1px solid black' }}
-            className="compiled-output"
-            dangerouslySetInnerHTML={{
-              __html: compileOutput,
-            }}
-          ></div>
-          <div className="compiled-cputime">CPU TIME : {cpuTime}</div>
-          <div className="compiled-memory">MEMORY : {memory}</div>
-        </div>
-      </div>
+      <Box sx={{ flexGrow: 1, marginTop: '10px' }}>
+        <Grid container spacing={1.5} columns={16}>
+          <Grid
+            xs={8}
+            // smOffset="auto"
+            // display="flex"
+            // justifyContent="center"
+            // alignItems="center"
+          >
+            <Item>
+              <TextField
+                id="standard-multiline-static"
+                label="INPUT"
+                multiline
+                fullWidth
+                // disabled
+                rows={8}
+                variant="standard"
+                ref={inputStdin}
+              />
+            </Item>
+          </Grid>
+          <Grid
+            xs={8}
+            mdOffset="auto"
+            // display="flex"
+            // justifyContent="center"
+            // alignItems="center"
+          >
+            <Item>
+              <Grid container spacing={1.5} columns={16}>
+                <Grid xs={8}>
+                  <Item>
+                    <TextField
+                      id="standard-read-only-input"
+                      variant="standard"
+                      label="TIME"
+                      size="small"
+                      fullWidth
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                      // helperText="TIME"
+                      value={cpuTime}
+                    />
+                  </Item>
+                </Grid>
+
+                <Grid xs={8} mdOffset="auto">
+                  <Item>
+                    <TextField
+                      id="standard-read-only-input"
+                      variant="standard"
+                      label="MEMORY"
+                      size="small"
+                      fullWidth
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                      value={memory}
+                    />
+                  </Item>
+                </Grid>
+              </Grid>
+              <div>
+                <TextField
+                  id="standard-multiline-static"
+                  label="OUTPUT"
+                  multiline
+                  fullWidth
+                  rows={5}
+                  variant="standard"
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                  value={compileOutput}
+                />
+              </div>
+              {/* <span
+                    style={{ border: '1px solid black' }}
+                    className="compiled-output"
+                    dangerouslySetInnerHTML={{
+                      __html: compileOutput,
+                    }}
+                  ></span> */}
+            </Item>
+          </Grid>
+        </Grid>
+      </Box>
     </EditorWrapper>
   );
 }
