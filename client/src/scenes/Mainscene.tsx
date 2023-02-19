@@ -1,5 +1,4 @@
 //@ts-nocheck
-
 import { createCharacterAnims } from '../anims/CharacterAnims';
 import OtherPlayer from '../objects/OtherPlayer';
 import Player from '../objects/Player';
@@ -13,7 +12,6 @@ import { GAME_STATUS } from 'utils/Constants';
 import Table from 'objects/Table';
 import phaserGame from 'codeuk';
 import { BackgroundMode } from '../../../server/types/BackgroundMode';
-
 import { NONE } from 'phaser';
 import { PlayerType, ServerPlayerType } from 'types';
 
@@ -28,13 +26,16 @@ export default class MainScene extends Phaser.Scene {
   otherPlayers: OtherPlayer[];
   isKeyDisable: boolean;
   charKey!: string;
-  tableMap = new Map<number, Table>();
+  tableMap: Map<string, Table>;
   watchTable!: boolean;
   editorIdx!: number;
   openMyEditor!: boolean;
   // getOut!: boolean;
   editorOwner!: string;
   macbookList!: Array<[]>;
+  idxDown?: Phaser.Input.Keyboard.Key;
+  idxEnter?: Phaser.Input.Keyboard.Key;
+  idxUp?: Phaser.Input.Keyboard.Key;
 
   constructor() {
     // Scene의 key값은 MainScene
@@ -42,6 +43,7 @@ export default class MainScene extends Phaser.Scene {
     this.isKeyDisable = false;
     this.macbookList = [[], [], [], [], [], []];
     this.otherPlayers = [];
+    this.tableMap = new Map<string, Table>();
   }
 
   preload() {
@@ -126,7 +128,8 @@ export default class MainScene extends Phaser.Scene {
     this.x = this.map.widthInPixels / 2;
     this.y = this.map.heightInPixels / 2;
 
-    if (!phaserGame.charKey || !phaserGame.socketId) return;
+    if (!phaserGame.charKey || !phaserGame.socketId || !phaserGame.userName)
+      return;
 
     this.player = new Player({
       scene: this,
@@ -174,11 +177,12 @@ export default class MainScene extends Phaser.Scene {
         charKey: payLoad.charKey,
         socketId: payLoad.socketId,
         state: payLoad.state,
+        userName: payLoad.userName,
       });
       store.dispatch(addUser());
     });
 
-    phaserGame.socket.on('newPlayer', (payLoad: any) => {
+    phaserGame.socket.on('newPlayer', (payLoad: ServerPlayerType) => {
       //새 플레이어가 들어옴
       this.addOtherPlayers({
         x: payLoad.x,
@@ -186,20 +190,21 @@ export default class MainScene extends Phaser.Scene {
         charKey: payLoad.charKey,
         socketId: payLoad.socketId,
         state: payLoad.state,
+        userName: payLoad.userName,
       });
       store.dispatch(addUser(payLoad.charKey));
     });
-    phaserGame.socket.on('playerDisconnect', (socketId: any) => {
+    phaserGame.socket.on('playerDisconnect', (socketId) => {
       this.removePlayer(socketId);
     });
-    phaserGame.socket.on('updateLocation', (payLoad: any) => {
+    phaserGame.socket.on('updateLocation', (payLoad) => {
       this.updateLocation(payLoad);
     });
     this.game.events.on('pause', () => {
       phaserGame.socket?.emit('pauseCharacter');
     });
-    phaserGame.socket.on('pauseCharacter', (socketId: any) => {
-      this.otherPlayers.forEach((otherPlayer: any) => {
+    phaserGame.socket.on('pauseCharacter', (socketId: string) => {
+      this.otherPlayers.forEach((otherPlayer: OtherPlayer) => {
         if (otherPlayer.socketId === socketId) {
           otherPlayer.setStatic(true);
         }
@@ -209,8 +214,8 @@ export default class MainScene extends Phaser.Scene {
     this.game.events.on('resume', () => {
       phaserGame.socket?.emit('resumeCharacter');
     });
-    phaserGame.socket.on('resumeCharacter', (socketId: any) => {
-      this.otherPlayers.forEach((otherPlayer: any) => {
+    phaserGame.socket.on('resumeCharacter', (socketId) => {
+      this.otherPlayers.forEach((otherPlayer) => {
         if (otherPlayer.socketId === socketId) {
           otherPlayer.setStatic(false);
         }
@@ -223,9 +228,10 @@ export default class MainScene extends Phaser.Scene {
       'updateEditor',
       (payLoad: { id: string; idx: number; userName: string }) => {
         console.log('updateEditor');
-        this.tableMap
-          .get(payLoad.id)
-          .updateTable(payLoad.idx, payLoad.userName);
+        const table = this.tableMap.get(payLoad.id);
+        if (table) {
+          table.updateTable(payLoad.idx, payLoad.userName);
+        }
       }
     );
 
@@ -240,7 +246,10 @@ export default class MainScene extends Phaser.Scene {
         store.dispatch(openGame());
       }
       // removeCurrentUser하려면 updateTable(idx, '')하면 됨
-      this.tableMap.get(payLoad[0]).updateTable(payLoad[1], '');
+      const table = this.tableMap.get(payLoad[0]);
+      if (table) {
+        table.updateTable(payLoad[1], '');
+      }
       // this.tableMap.get(payLoad[0]).removeCurrentUser(payLoad[1]);
     });
   }
@@ -248,7 +257,7 @@ export default class MainScene extends Phaser.Scene {
   update() {
     if (store.getState().mode.status !== GAME_STATUS.GAME) {
       if (this.openMyEditor) {
-        console.log('1차관문, 여기 왔으면 내 에디터 열었다는 뜻');
+        // console.log('1차관문, 여기 왔으면 내 에디터 열었다는 뜻');
       }
       this.input.keyboard.disableGlobalCapture();
       this.isKeyDisable = true;
@@ -257,7 +266,9 @@ export default class MainScene extends Phaser.Scene {
     if (this.isKeyDisable) {
       if (phaserGame.userName === this.editorOwner) {
         console.log('2차관문, 여기오면 내 에디터 닫았다는 뜻');
-        phaserGame.socket.emit('removeEditor');
+        if (phaserGame.socket) {
+          phaserGame.socket.emit('removeEditor');
+        }
       }
       this.editorOwner = '';
       this.openMyEditor = false;
@@ -266,16 +277,28 @@ export default class MainScene extends Phaser.Scene {
     }
     if (this.watchTable) {
       // this.player.setStatic(true);
-      if (Phaser.Input.Keyboard.JustDown(this.idxDown) && this.editorIdx < 4) {
+      if (
+        this.idxDown &&
+        Phaser.Input.Keyboard.JustDown(this.idxDown) &&
+        this.editorIdx < 4
+      ) {
         this.editorIdx += 1;
       }
-      if (Phaser.Input.Keyboard.JustDown(this.idxUp) && this.editorIdx > 0) {
+      if (
+        this.idxUp &&
+        Phaser.Input.Keyboard.JustDown(this.idxUp) &&
+        this.editorIdx > 0
+      ) {
         this.editorIdx -= 1;
       }
-      if (Phaser.Input.Keyboard.JustDown(this.idxEnter)) {
+      if (this.idxEnter && Phaser.Input.Keyboard.JustDown(this.idxEnter)) {
+        if (!this.player) {
+          return;
+        }
         switch (this.editorIdx) {
           case 4:
             this.input.keyboard.disableGlobalCapture();
+
             this.player.inputKeys = this.input.keyboard.addKeys({
               up: Phaser.Input.Keyboard.KeyCodes.UP,
               down: Phaser.Input.Keyboard.KeyCodes.DOWN,
@@ -366,6 +389,7 @@ export default class MainScene extends Phaser.Scene {
       scene: this,
       x: playerInfo.x,
       y: playerInfo.y,
+      userName: playerInfo.userName,
       texture: playerInfo.charKey, // 이미지 이름
       id: playerInfo.socketId,
       frame: 'down-1', // atlas.json의 첫번째 filename

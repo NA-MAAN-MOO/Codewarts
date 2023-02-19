@@ -1,7 +1,7 @@
 //@ts-nocheck
 /* react */
 import { useRef, useEffect, useState } from 'react';
-
+import './YjsCodeMirror.css';
 /* lib */
 import * as random from 'lib0/random';
 import { useSelector } from 'react-redux';
@@ -29,7 +29,7 @@ import { okaidia } from '@uiw/codemirror-theme-okaidia';
 import { RootState } from 'stores';
 
 /* UI */
-import { Space, Button, Input, Radio } from 'antd';
+import { Button, Radio } from 'antd';
 import { DownCircleOutlined } from '@ant-design/icons';
 import type { RadioChangeEvent } from 'antd';
 import { styled } from '@mui/material/styles';
@@ -38,6 +38,9 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import styledc from 'styled-components';
 import 'styles/fonts.css'; /* FONT */
+
+/* solvedAC badge svg */
+import RenderSvg from 'components/Svg';
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   width: 62,
@@ -299,7 +302,6 @@ function YjsCodeMirror() {
   const fetchBojProbInfo = async () => {
     if (bojProbDataRef.current === null) return;
 
-    //@ts-ignore
     let probId = bojProbDataRef.current.value;
     console.log(probId);
 
@@ -317,16 +319,16 @@ function YjsCodeMirror() {
     }
   };
 
-  /* 스크래핑 서버에 백준 문제 정보 요청 */
+  /* 서버로 몽고DB에 저장된 백준 문제 정보 요청 */
   async function fetchBojProbFullData(probId: string) {
     if (bojProbDataRef.current === null) return;
 
     try {
       const response = await axios.get(
-        `http://localhost:5000/data?probId=${probId}`
+        `http://localhost:3001/bojdata?probId=${probId}`
       );
 
-      let probFullData = response.data;
+      let probFullData = response.data[0];
       console.log(probFullData);
       setBojProbFullData(probFullData);
     } catch (error) {
@@ -440,8 +442,8 @@ function YjsCodeMirror() {
   return (
     <EditorWrapper>
       <div className="room-user-info">
-        <div>유저 이름 : {userName}</div>
-        <div>룸 ID : {roomId}</div>
+        <div>내 이름 : {userName}</div>
+        <div>에디터 주인 이름(구 룸ID) : {roomId}</div>
       </div>
 
       <div className="algo-info">
@@ -481,7 +483,7 @@ function YjsCodeMirror() {
             </div>
           ) : (
             <div className="boj-user-info">
-              <div>백준 티어 : {bojUserData?.items[0].tier}</div>
+              <div>나의 백준 티어 : {bojUserData?.items[0].tier}</div>
               <div>백준 푼 문제 수 : {bojUserData?.items[0].solvedCount}</div>
             </div>
           )}
@@ -547,15 +549,23 @@ function YjsCodeMirror() {
             </div>
           ) : (
             <div className="boj-prob-info">
-              <a
-                href={`https://acmicpc.net/problem/${bojProbData?.problemId}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                백준에 답안 제출하러 가기
-              </a>
-              <div>문제 제목 : {bojProbData?.titleKo}</div>
-              <div>난이도(등급) : {bojProbData?.level}</div>
+              <span>
+                <a
+                  href={`https://acmicpc.net/problem/${bojProbData?.problemId}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  백준에 답안 제출하러 가기
+                </a>
+              </span>
+
+              <span style={{ display: 'flex' }}>
+                {bojProbData?.level ? (
+                  <RenderSvg svgName={bojProbData.level} />
+                ) : null}
+                {bojProbData?.titleKo}
+              </span>
+
               <h3>문제 내용</h3>
               <div
                 dangerouslySetInnerHTML={{
@@ -576,7 +586,7 @@ function YjsCodeMirror() {
               />
               <div className="prob-samples">
                 <h3>예제 1</h3>
-                <span onClick={copyToInput}>input창으로 복사하기</span>
+                <button onClick={copyToInput}>input창으로 복사하기</button>
                 <div className="prob-sample-input1">
                   <div
                     dangerouslySetInnerHTML={{

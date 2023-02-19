@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npx tsc",
     "start": "node dist/index.js",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\""
+    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\" \"nodemon -q dist/webSocketServer.js\""
   },
   "author": "",
   "license": "ISC",
@@ -24,7 +24,8 @@
     "phaser": "^3.55.2",
     "redis": "^4.6.4",
     "socket.io": "^4.6.0",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "y-websocket": "^1.4.5"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13",
