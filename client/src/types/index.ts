@@ -12,7 +12,6 @@ export type Event = React.ChangeEvent<HTMLInputElement>;
 
 export type VoiceProp = {
   roomKey: string;
-  userName: string;
 };
 
 export type GameType = Game & {
@@ -50,4 +49,11 @@ export type ServerPlayerType = {
   socketId: string;
   state: string;
   userName: string;
+};
+
+export type MotionType = {
+  socketId: string;
+  x: number;
+  y: number;
+  motion: string;
 };

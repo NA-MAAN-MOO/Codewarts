@@ -12,7 +12,7 @@ import Table from 'objects/Table';
 import phaserGame from 'codeuk';
 import { BackgroundMode } from '../../../server/types/BackgroundMode';
 import { NONE } from 'phaser';
-import { PlayerType, ServerPlayerType } from 'types';
+import { MotionType, PlayerType, ServerPlayerType } from 'types';
 
 export default class MainScene extends Phaser.Scene {
   // class 속성 명시는 constructor 이전에 명시하면 되는듯
@@ -143,7 +143,7 @@ export default class MainScene extends Phaser.Scene {
 
     this.player = new Player(playerInfo);
 
-    store.dispatch(addUser(playerInfo));
+    store.dispatch(addUser(phaserGame.userName));
 
     this.player.inputKeys = this.input.keyboard.addKeys({
       up: Phaser.Input.Keyboard.KeyCodes.UP,
@@ -184,15 +184,16 @@ export default class MainScene extends Phaser.Scene {
 
     phaserGame.socket.on('newPlayer', (payLoad: ServerPlayerType) => {
       //새 플레이어가 들어옴
-      this.addOtherPlayers({
+      const otherPlayerInfo = {
         x: payLoad.x,
         y: payLoad.y,
         charKey: payLoad.charKey,
         socketId: payLoad.socketId,
         state: payLoad.state,
         userName: payLoad.userName,
-      });
-      store.dispatch(addUser(payLoad.charKey));
+      };
+      this.addOtherPlayers(otherPlayerInfo);
+      store.dispatch(addUser(payLoad.userName));
     });
     phaserGame.socket.on('playerDisconnect', (socketId) => {
       this.removePlayer(socketId);
@@ -395,7 +396,7 @@ export default class MainScene extends Phaser.Scene {
       frame: 'down-1', // atlas.json의 첫번째 filename
     };
     const otherPlayer = new OtherPlayer(otherPlayerInfo);
-    store.dispatch(addUser(otherPlayerInfo));
+    store.dispatch(addUser(playerInfo.userName));
 
     if (playerInfo.state === 'paused') {
       otherPlayer.setStatic(true);
@@ -405,17 +406,19 @@ export default class MainScene extends Phaser.Scene {
   }
 
   removePlayer(res: string) {
-    this.otherPlayers.forEach((player: any) => {
+    let removingName = '';
+    this.otherPlayers.forEach((player) => {
       if (player.socketId === res) {
+        removingName = player.name;
         player.destroy();
       }
     });
-    store.dispatch(removeUser(res));
-    this.otherPlayers.filter((player: any) => player.socketId !== res);
+    store.dispatch(removeUser(removingName));
+    this.otherPlayers.filter((player) => player.socketId !== res);
   }
 
-  updateLocation(payLoad: any) {
-    this.otherPlayers.forEach((player: any) => {
+  updateLocation(payLoad: MotionType) {
+    this.otherPlayers.forEach((player) => {
       if (player.socketId === payLoad.socketId) {
         switch (payLoad.motion) {
           case 'left':

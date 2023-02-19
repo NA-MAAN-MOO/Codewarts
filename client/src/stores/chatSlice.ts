@@ -1,9 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { GAME_STATUS } from '../utils/Constants';
-import { PlayerType } from 'types';
 export interface ChatState {
-  users: PlayerType[];
+  users: string[];
 }
 
 const initialState: ChatState = {
@@ -21,8 +20,9 @@ export const chatSlice = createSlice({
       state.users = [...state.users, action.payload];
     },
     removeUser: (state, action) => {
-      const targetId = action.payload;
-      state.users = state.users.filter((item) => item.id !== targetId);
+      const targetName = action.payload;
+      if (!targetName) return;
+      state.users = state.users.filter((item) => item !== targetName);
     },
   },
 });
