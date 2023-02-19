@@ -1,6 +1,7 @@
 //@ts-nocheck
 /* react */
 import { useRef, useEffect, useState } from 'react';
+import './YjsCodeMirror.css';
 
 /* lib */
 import * as random from 'lib0/random';
@@ -29,7 +30,7 @@ import { okaidia } from '@uiw/codemirror-theme-okaidia';
 import { RootState } from 'stores';
 
 /* UI */
-import { Space, Button, Input, Radio } from 'antd';
+import { Button, Radio } from 'antd';
 import { DownCircleOutlined } from '@ant-design/icons';
 import type { RadioChangeEvent } from 'antd';
 import { styled } from '@mui/material/styles';
@@ -42,6 +43,10 @@ import Box from '@mui/material/Box';
 import styledc from 'styled-components';
 import 'styles/fonts.css'; /* FONT */
 
+/* solvedAC badge svg */
+import RenderSvg from 'components/Svg';
+
+/* 다크/라이트 토글 스위치 테마 */
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   width: 62,
   height: 34,
@@ -301,7 +306,6 @@ function YjsCodeMirror() {
   const fetchBojProbInfo = async () => {
     if (bojProbDataRef.current === null) return;
 
-    //@ts-ignore
     let probId = bojProbDataRef.current.value;
     console.log(probId);
 
@@ -319,16 +323,16 @@ function YjsCodeMirror() {
     }
   };
 
-  /* 스크래핑 서버에 백준 문제 정보 요청 */
+  /* 서버로 몽고DB에 저장된 백준 문제 정보 요청 */
   async function fetchBojProbFullData(probId: string) {
     if (bojProbDataRef.current === null) return;
 
     try {
       const response = await axios.get(
-        `http://localhost:5000/data?probId=${probId}`
+        `http://localhost:3001/bojdata?probId=${probId}`
       );
 
-      let probFullData = response.data;
+      let probFullData = response.data[0];
       console.log(probFullData);
       setBojProbFullData(probFullData);
     } catch (error) {
@@ -453,10 +457,28 @@ function YjsCodeMirror() {
           <span style={{ fontSize: '10px', color: 'grey' }}>
             내정보: {userName}
           </span>
+          {/* <div className="algo-info">
+        <div className="algo-user-input">
+          <Radio.Group onChange={platformChange} value={algoSelect}>
+            <Radio value={1}>LeetCode</Radio>
+            <Radio value={2}>백준</Radio>
+          </Radio.Group>
+
+          {algoSelect === 1 ? (
+            <div className="leet-user-input">
+              <input ref={leetUserNameRef} placeholder="leetcode 아이디 입력" />
+              <DownCircleOutlined onClick={fetchLeetUserData} />
+            </div>
+          ) : (
+            <div className="boj-user-input">
+              <input ref={bojUserNameRef} placeholder="백준 아이디 입력" />
+              <DownCircleOutlined onClick={fetchBojUserData} />
+            </div>
+          )} */}
         </div>
       </EditorInfo>
 
-      <Algowrapper>
+      <AlgoWrapper>
         <Box sx={{ width: '100%' }}>
           <Box sx={{ bgcolor: '#7f0000' }}>
             <Header>
@@ -509,6 +531,7 @@ function YjsCodeMirror() {
                 </div>
               </InputWrapper>
             </Header>
+
             <ProbInfo>
               <div style={{ color: '#000000' }}>
                 내정보 : [Tier]
@@ -522,12 +545,95 @@ function YjsCodeMirror() {
                       ?.count}
               </div>
             </ProbInfo>
+
             <ProbInfo>
-              {algoSelect === 0 ? (
-                <div style={{ color: '#ffffff' }}>
-                  🎖{bojProbData?.level}
-                  {bojProbData?.problemId} {bojProbData?.titleKo}
-                  <h3>문제 내용</h3>
+              <div style={{ color: '#ffffff' }}>
+                🎖{bojProbData?.level}
+                {bojProbData?.problemId} {bojProbData?.titleKo}
+              </div>
+
+              {/* <div
+          className="algo-problem-info"
+          style={{ border: '5px solid black' }}
+        >
+          {algoSelect === 1 ? (
+            <div className="leet-prob-info">
+              <a
+                href={`https://leetcode.com/problems/${leetProbData?.question.titleSlug}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                LeetCode에 답안 제출하러 가기
+              </a>
+              <div>문제 제목 : {leetProbData?.question.title}</div>
+              <div>문제 번호 : {leetProbData?.question.questionId}</div>
+              <div>난이도 : {leetProbData?.question.difficulty}</div>
+              <h3>문제 내용</h3>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: leetProbData?.question.content,
+                }}
+              />
+              <h3>예제</h3>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: leetProbData?.question.exampleTestcases.replace(
+                    /\n/g,
+                    '<br>'
+                  ),
+                }}
+              />
+              <h3>파이썬 스니펫</h3>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: leetProbData?.question.codeSnippets[3].code.replace(
+                    /\n/g,
+                    '<br>'
+                  ),
+                }}
+              ></div>
+            </div>
+          ) : (
+            <div className="boj-prob-info">
+              <span>
+                <a
+                  href={`https://acmicpc.net/problem/${bojProbData?.problemId}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  백준에 답안 제출하러 가기
+                </a>
+              </span>
+
+              <span style={{ display: 'flex' }}>
+                {bojProbData?.level ? (
+                  <RenderSvg svgName={bojProbData.level} />
+                ) : null}
+                {bojProbData?.titleKo}
+              </span>
+
+              <h3>문제 내용</h3>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: bojProbFullData?.prob_desc.replace(/\n/g, '<br>'),
+                }}
+              />
+              <h3>입력</h3>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: bojProbFullData?.prob_input.replace(/\n/g, '<br>'),
+                }}
+              />
+              <h3>출력</h3>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: bojProbFullData?.prob_output.replace(/\n/g, '<br>'),
+                }}
+              />
+              <div className="prob-samples">
+                <h3>예제 1</h3>
+                <button onClick={copyToInput}>input창으로 복사하기</button>
+                <div className="prob-sample-input1">
                   <div
                     dangerouslySetInnerHTML={{
                       __html: bojProbFullData?.prob_desc.replace(/\n/g, '<br>'),
@@ -596,38 +702,13 @@ function YjsCodeMirror() {
                     LeetCode에 답안 제출하러 가기
                   </a>
                 </div>
-              )}
+              )} */}
             </ProbInfo>
-
-            <div className="probSamples">
-              <h3>예제 1</h3>
-              <span onClick={copyToInput}>input창으로 복사하기</span>
-              <div className="prob-sample-input1">
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: bojProbFullData?.samples?.[1].input.replace(
-                      /\n/g,
-                      '<br>'
-                    ),
-                  }}
-                />
-              </div>
-              <div className="prob-sample-output1">
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: bojProbFullData?.samples?.[1].output.replace(
-                      /\n/g,
-                      '<br>'
-                    ),
-                  }}
-                />
-              </div>
-            </div>
 
             <Box sx={{ p: 3 }} />
           </Box>
         </Box>
-      </Algowrapper>
+      </AlgoWrapper>
 
       <FormGroup>
         <FormControlLabel
@@ -683,13 +764,8 @@ function YjsCodeMirror() {
     </EditorWrapper>
   );
 }
-//   function AlgoTab() {
 
-//     // return (
-
-//     // );
-//   }
-// }
+export default YjsCodeMirror;
 
 const EditorWrapper = styledc.div`
   width: 95%;
@@ -704,7 +780,7 @@ font-weight: 600;
 margin-top: 3%;
 `;
 
-const Algowrapper = styledc.div`
+const AlgoWrapper = styledc.div`
 margin-top: 20px;
 width: 85%;
 `;
@@ -784,5 +860,3 @@ const ProfileInfo = styledc.div`
   martgin-top: 10px;
   font-size: 20px;
 `;
-
-export default YjsCodeMirror;
