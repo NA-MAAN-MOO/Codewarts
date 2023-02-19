@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 /**
  * @type {any}
  */
@@ -31,5 +29,5 @@ server.on('upgrade', (request: any, socket: any, head: any) => {
 });
 
 server.listen(1234, () => {
-  console.log(`running at on port 1234`);
+  console.log(`WebSocket server running at on port 1234`);
 });
