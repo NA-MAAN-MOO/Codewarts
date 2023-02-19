@@ -39,7 +39,7 @@ function App() {
             backgroundColor: 'white',
           }}
         >
-          {users}
+          {users.map((d) => d.name)}
         </div>
         {status === START ? (
           <Start></Start>

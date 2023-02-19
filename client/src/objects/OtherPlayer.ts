@@ -4,15 +4,16 @@ export default class OtherPlayer extends Phaser.Physics.Matter.Sprite {
   socketId!: string;
   playerTexture!: string;
   touching!: [];
-  userName!: string;
+  name!: string;
 
   constructor(data: any) {
-    let { scene, x, y, texture, id, frame } = data;
+    let { scene, x, y, texture, id, frame, name } = data;
     super(scene.matter.world, x, y, texture, id, frame);
 
     this.socketId = id;
     this.playerTexture = texture;
     this.touching = [];
+    this.name = name;
     this.scene.add.existing(this); // 플레이어 객체가 생기는 시점.
 
     // const { Body, Bodies } = Phaser.Physics.Matter.Matter;
