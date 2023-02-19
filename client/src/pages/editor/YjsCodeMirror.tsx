@@ -2,10 +2,7 @@
 /* react */
 import { useRef, useEffect, useState } from 'react';
 import './YjsCodeMirror.css';
-<<<<<<< HEAD
 
-=======
->>>>>>> main
 /* lib */
 import * as random from 'lib0/random';
 import { useSelector } from 'react-redux';
@@ -49,10 +46,7 @@ import 'styles/fonts.css'; /* FONT */
 /* solvedAC badge svg */
 import RenderSvg from 'components/Svg';
 
-<<<<<<< HEAD
 /* 다크/라이트 토글 스위치 테마 */
-=======
->>>>>>> main
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   width: 62,
   height: 34,
@@ -178,10 +172,11 @@ function YjsCodeMirror() {
     /* editor theme 설정 */
     let basicThemeSet = EditorView.theme({
       '&': {
-        // fontFamily: 'Cascadia Code',
         height: '500px',
         // minHeight: '500px',
+        borderRadius: '.5em', // '.cm-gutters'와 같이 조절할 것
       },
+      '.cm-editor': {},
       '.cm-content, .cm-gutter': { minHeight: '30%' },
       '.cm-content': {
         fontFamily: 'Cascadia Code',
@@ -190,6 +185,9 @@ function YjsCodeMirror() {
       '.cm-gutter': {
         // minHeight: '50%',
         fontFamily: 'Cascadia Code',
+      },
+      '.cm-gutters': {
+        borderRadius: '.5em',
       },
     });
 
@@ -225,7 +223,7 @@ function YjsCodeMirror() {
     console.log(inputStdin.current.value);
 
     try {
-      const { data } = await axios.post(`http://localhost:3001/run-code`, {
+      const { data } = await axios.post(`http://localhost:3001/code_to_run`, {
         codeToRun: ytext.toString(),
         //@ts-ignore
         stdin: inputStdin.current.value,
@@ -457,22 +455,13 @@ function YjsCodeMirror() {
 
   return (
     <EditorWrapper>
-<<<<<<< HEAD
       <EditorInfo>
         <div>
-          🧙🏻‍♂️🪄{roomId}님의 IDE{' '}
+          🧙🏻‍♂️{roomId}님의 IDE🪄
           <span style={{ fontSize: '10px', color: 'grey' }}>
             내정보: {userName}
           </span>
           {/* <div className="algo-info">
-=======
-      <div className="room-user-info">
-        <div>내 이름 : {userName}</div>
-        <div>에디터 주인 이름(구 룸ID) : {roomId}</div>
-      </div>
-
-      <div className="algo-info">
->>>>>>> main
         <div className="algo-user-input">
           <Radio.Group onChange={platformChange} value={algoSelect}>
             <Radio value={1}>LeetCode</Radio>
@@ -566,17 +555,6 @@ function YjsCodeMirror() {
                 🎖{bojProbData?.level}
                 {bojProbData?.problemId} {bojProbData?.titleKo}
               </div>
-<<<<<<< HEAD
-=======
-            </div>
-          ) : (
-            <div className="boj-user-info">
-              <div>나의 백준 티어 : {bojUserData?.items[0].tier}</div>
-              <div>백준 푼 문제 수 : {bojUserData?.items[0].solvedCount}</div>
-            </div>
-          )}
-        </div>
->>>>>>> main
 
               {/* <div
           className="algo-problem-info"
