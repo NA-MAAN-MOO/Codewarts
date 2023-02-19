@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import Player from './Player';
+import OtherPlayer from './OtherPlayer';
 import Button from './Button';
 import Table from './Table';
 
@@ -164,7 +165,11 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
         // console.log(this.body.id);
         // console.log("from player: ", other);
 
-        if (other.bodyB.isSensor && other.bodyB.gameObject instanceof Player) {
+        if (
+          other.bodyB.isSensor &&
+          other.bodyB.gameObject instanceof Player &&
+          !(other.bodyB.gameObject instanceof OtherPlayer)
+        ) {
           this.buttonEditor = new Button({
             scene: this.scene,
             x: this.x,
