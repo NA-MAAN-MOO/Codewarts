@@ -102,4 +102,13 @@ export default class Background extends Phaser.Scene {
       cloud.setVelocity(velocity, 0);
     });
   }
+
+  private launchBackground(backgroundMode: BackgroundMode) {
+    this.scene.launch('background', { backgroundMode });
+  }
+
+  changeBackgroundMode(backgroundMode: BackgroundMode) {
+    this.scene.stop('background');
+    this.launchBackground(backgroundMode);
+  }
 }
