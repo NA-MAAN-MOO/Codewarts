@@ -22,9 +22,6 @@ const app: Express = express();
 app.use(json());
 app.use(cors());
 
-//배포 시 주석처리
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-
 /*********배포 시 설정들********* */
 //빌드하고 나서 주석 해제
 // app.use(express.static('../client/build'));
