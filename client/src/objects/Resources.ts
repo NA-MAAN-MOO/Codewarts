@@ -170,7 +170,6 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
           other.bodyB.gameObject instanceof Player &&
           !(other.bodyB.gameObject instanceof OtherPlayer)
         ) {
-          console.log(other.bodyB);
           this.buttonEditor = new Button({
             scene: this.scene,
             x: this.x,
