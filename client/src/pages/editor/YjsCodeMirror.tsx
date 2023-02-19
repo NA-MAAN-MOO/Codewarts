@@ -30,16 +30,18 @@ import { okaidia } from '@uiw/codemirror-theme-okaidia';
 import { RootState } from 'stores';
 
 /* UI */
-import { Button, Radio } from 'antd';
+// import { Radio } from 'antd';
 import { DownCircleOutlined } from '@ant-design/icons';
-import type { RadioChangeEvent } from 'antd';
-import { styled } from '@mui/material/styles';
+// import type { RadioChangeEvent } from 'antd';
+import Button from '@mui/material/Button';
+import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
 import styledc from 'styled-components';
 import 'styles/fonts.css'; /* FONT */
 
@@ -48,11 +50,12 @@ import RenderSvg from 'components/Svg';
 
 /* 다크/라이트 토글 스위치 테마 */
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
+  // 토글 막대기 부분
   width: 62,
   height: 34,
   padding: 7,
   '& .MuiSwitch-switchBase': {
-    margin: 1,
+    margin: 0,
     padding: 0,
     transform: 'translateX(6px)',
     '&.Mui-checked': {
@@ -94,6 +97,20 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
+/* MUI button color theme setting */
+const buttonTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#272822', // 에디터 검정
+    },
+    secondary: {
+      // main: '#FD971F', // 주황
+      main: '#ffefd5', // papayawhip
+      // main: '#11cb5f',
+    },
+  },
+});
+
 function YjsCodeMirror() {
   /* ref */
   const editor = useRef(null);
@@ -113,9 +130,6 @@ function YjsCodeMirror() {
   let [bojUserData, setBojUserData] = useState();
   let [bojProbData, setBojProbData] = useState();
   let [bojProbFullData, setBojProbFullData] = useState();
-
-  /* for UI */
-  // const { TextArea } = Input;
 
   /* roomName 스트링 값 수정하지 말 것(※ 수정할 거면 전부 수정해야 함) */
   const roomName = `ROOMNAME${roomId}`;
@@ -461,30 +475,12 @@ function YjsCodeMirror() {
           <span style={{ fontSize: '10px', color: 'grey' }}>
             내정보: {userName}
           </span>
-          {/* <div className="algo-info">
-        <div className="algo-user-input">
-          <Radio.Group onChange={platformChange} value={algoSelect}>
-            <Radio value={1}>LeetCode</Radio>
-            <Radio value={2}>백준</Radio>
-          </Radio.Group>
-
-          {algoSelect === 1 ? (
-            <div className="leet-user-input">
-              <input ref={leetUserNameRef} placeholder="leetcode 아이디 입력" />
-              <DownCircleOutlined onClick={fetchLeetUserData} />
-            </div>
-          ) : (
-            <div className="boj-user-input">
-              <input ref={bojUserNameRef} placeholder="백준 아이디 입력" />
-              <DownCircleOutlined onClick={fetchBojUserData} />
-            </div>
-          )} */}
         </div>
       </EditorInfo>
 
       <AlgoWrapper>
         <Box sx={{ width: '100%' }}>
-          <Box sx={{ bgcolor: '#7f0000' }}>
+          <Box sx={{ bgcolor: '#272822' }}>
             <Header>
               <StyledTabs
                 value={algoSelect}
@@ -498,15 +494,23 @@ function YjsCodeMirror() {
                 <div style={{ color: '#ffffff' }}>
                   {algoSelect === 0 ? (
                     <div>
-                      <AlgoInput
-                        placeholder="백준 아이디"
+                      <TextField
+                        id="standard-basic"
+                        label="백준 아이디"
+                        variant="standard"
                         ref={bojUserNameRef}
                       />
                       <DownCircleOutlined
                         onClick={fetchBojUserData}
                         style={{ color: '#ffe600' }}
                       />
-                      <AlgoInput placeholder="문제 번호" ref={bojProbDataRef} />
+                      <TextField
+                        id="standard-basic"
+                        label="문제 번호"
+                        variant="standard"
+                        ref={bojProbDataRef}
+                      />
+
                       <DownCircleOutlined
                         onClick={fetchBojProbInfo}
                         style={{ color: '#ffe600' }}
@@ -514,16 +518,20 @@ function YjsCodeMirror() {
                     </div>
                   ) : (
                     <div>
-                      <AlgoInput
-                        placeholder="LeetCode ID"
+                      <TextField
+                        id="standard-basic"
+                        label="LeetCode 아이디"
+                        variant="standard"
                         ref={leetUserNameRef}
                       />
                       <DownCircleOutlined
                         onClick={fetchLeetUserData}
                         style={{ color: '#ffe600' }}
                       />
-                      <AlgoInput
-                        placeholder="Title slug"
+                      <TextField
+                        id="standard-basic"
+                        label="leetcode-title-slug"
+                        variant="standard"
                         ref={leetProbDataRef}
                       />
                       <DownCircleOutlined
@@ -714,22 +722,37 @@ function YjsCodeMirror() {
         </Box>
       </AlgoWrapper>
 
-      <FormGroup>
-        <FormControlLabel
-          control={
-            <MaterialUISwitch
-              sx={{ m: 1 }}
-              defaultChecked
-              onClick={(checked) => {
-                switchTheme(checked);
-              }}
-            />
-          }
-          label=""
-        />
-      </FormGroup>
+      <MiddleWrapper>
+        <ThemeProvider>
+          <Button onClick={runCode} color="primary" theme={buttonTheme}>
+            RUN
+          </Button>
+        </ThemeProvider>
+        <FormGroup>
+          <FormControlLabel
+            control={
+              <MaterialUISwitch
+                sx={{ m: 1 }}
+                defaultChecked
+                onClick={(checked) => {
+                  switchTheme(checked);
+                }}
+              />
+            }
+            label=""
+          />
+        </FormGroup>
+      </MiddleWrapper>
 
-      <div className="editor" ref={editor} style={{ minHeight: '50%' }} />
+      <div
+        className="editor"
+        ref={editor}
+        style={{
+          minHeight: '50%',
+          // boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)',
+          filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25)',
+        }}
+      />
 
       <div className="compiler">
         {/* <div key={inputStdin.current}>
@@ -749,9 +772,7 @@ function YjsCodeMirror() {
             ref={inputStdin}
           />
         </div>
-        <Button onClick={runCode} type="primary">
-          코드 실행
-        </Button>
+
         <div className="compiled-result">
           <h3>OUTPUT</h3>
           <div
@@ -774,7 +795,6 @@ export default YjsCodeMirror;
 const EditorWrapper = styledc.div`
   width: 95%;
   margin: 0 auto;
-  // text-align: center;
   font-family: 'Cascadia Code', sans-serif;
 `;
 
@@ -863,4 +883,11 @@ const ProfileInfo = styledc.div`
   margin-left: 20px;
   martgin-top: 10px;
   font-size: 20px;
+`;
+
+const MiddleWrapper = styledc.div`
+  margin-left: 20px;
+  martgin-top: 10px;
+  font-size: 20px;
+  display: flex;
 `;
