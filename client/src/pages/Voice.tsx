@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import type { RootState } from 'stores';
 import {
   OpenVidu,
   Session,
@@ -7,8 +9,6 @@ import {
   Subscriber,
   Publisher,
 } from 'openvidu-browser';
-import axios from 'axios';
-import Audio from 'components/Audio';
 import {
   createSession,
   disconnectSession,
@@ -17,11 +17,11 @@ import {
 } from 'hooks/useVoice';
 import { VoiceProp } from 'types';
 import GameVoice from 'components/voice/GameVoice';
-
-const APPLICATION_SERVER_URL = 'http://localhost:3002/';
+import { GAME_STATUS } from 'utils/Constants';
+import EditorVoice from 'components/voice/EditorVoice';
 
 //Voice 방 컴포넌트
-const Voice = ({ roomKey, userName }: VoiceProp) => {
+const Voice = ({ roomKey }: VoiceProp) => {
   const [OV, setOV] = useState<OpenVidu>();
   const [session, setSession] = useState<Session>();
   const [subscribers, setSubscribers] = useState<Array<Subscriber>>([]);
@@ -29,22 +29,16 @@ const Voice = ({ roomKey, userName }: VoiceProp) => {
   const onBeforeUnload = (e: BeforeUnloadEvent) => {
     leaveSession();
   };
+  const { playerId, status } = useSelector((state: RootState) => {
+    return { ...state.user, ...state.mode };
+  });
 
   useEffect(() => {
     (async () => {
       window.addEventListener('beforeunload', onBeforeUnload);
 
-      //새 세션을 만든다.
-      const { OV, session } = initSession();
-
-      //roomKey를 바탕으로 sessionId를 가져온다.
-      //가져온 sessionId와 만든 세션을 서버에서 생성한다.
-      const result = await createSession(roomKey);
-      if (!result) {
-        return;
-      }
-      setSession(session);
-      setOV(OV);
+      if (session) return;
+      await joinSession();
 
       return function cleanup() {
         window.removeEventListener('beforeunload', onBeforeUnload);
@@ -80,6 +74,20 @@ const Voice = ({ roomKey, userName }: VoiceProp) => {
     setPublisher(undefined);
   };
 
+  const joinSession = async () => {
+    //새 세션을 만든다.
+    const { OV, session } = initSession();
+
+    //roomKey를 바탕으로 sessionId를 가져온다.
+    //가져온 sessionId와 만든 세션을 서버에서 생성한다.
+    const result = await createSession(roomKey);
+    if (!result) {
+      return;
+    }
+    setSession(session);
+    setOV(OV);
+  };
+
   useEffect(() => {
     registerSession({
       session,
@@ -88,19 +96,26 @@ const Voice = ({ roomKey, userName }: VoiceProp) => {
       deleteSubscriber,
       handlePublisher,
       OV,
-      userName,
+      userName: playerId,
     });
   }, [session]);
 
-  return roomKey === 'MAIN' ? (
+  return status === GAME_STATUS.GAME ? (
     <GameVoice
       session={session}
       subscribers={subscribers}
       leaveSession={leaveSession}
+      joinSession={joinSession}
       publisher={publisher}
     />
   ) : (
-    <div>에디터화면</div>
+    <EditorVoice
+      session={session}
+      subscribers={subscribers}
+      leaveSession={leaveSession}
+      joinSession={joinSession}
+      publisher={publisher}
+    />
   );
 };
 

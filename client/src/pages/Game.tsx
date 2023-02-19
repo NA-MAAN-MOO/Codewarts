@@ -20,7 +20,7 @@ const Game = () => {
   };
   return (
     <BackgroundDiv>
-      <PeerVoice />
+      <Voice roomKey="MAIN" />
       <BtnDiv>
         <Button
           type="button"

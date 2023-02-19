@@ -112,7 +112,7 @@ export const registerSession = async (props: {
     const token = await getToken(sessionId);
     // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
     // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
-    await mySession.connect(token, { clientData: userName });
+    await mySession.connect(token, { user: userName });
     if (!OV) return;
     // Init a passing undefined as targetElement (we don't want OpenVidu to insert a video
     // element: we will manage it on our own) and with the desired properties

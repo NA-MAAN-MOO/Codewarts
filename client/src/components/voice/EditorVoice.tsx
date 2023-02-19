@@ -12,8 +12,6 @@ import {
   Subscriber,
 } from 'openvidu-browser';
 import { LoadingOutlined } from '@ant-design/icons';
-import { useSelector } from 'react-redux';
-import type { RootState } from 'stores';
 
 type GameVoiceType = {
   session: Session | undefined;
@@ -23,7 +21,7 @@ type GameVoiceType = {
   joinSession: () => void;
 };
 
-const GameVoice = ({
+const EditorVoice = ({
   session,
   subscribers,
   publisher,
@@ -32,9 +30,6 @@ const GameVoice = ({
 }: GameVoiceType) => {
   const [volumeOn, setVolumeOn] = useState(true);
   const [micOn, setMicOn] = useState(true);
-  const { playerId } = useSelector((state: RootState) => {
-    return state.user;
-  });
 
   const handleVolume = () => {
     subscribers.map((sm) => {
@@ -51,16 +46,11 @@ const GameVoice = ({
     <AudioBox>
       {!!session ? (
         <>
-          {subscribers.map((sub, i) => {
-            const { user } = JSON.parse(sub.stream.connection.data);
-            return (
-              user !== playerId && (
-                <div key={user} style={{ display: 'hidden' }}>
-                  <Audio streamManager={sub} />
-                </div>
-              )
-            );
-          })}
+          {subscribers.map((sub, i) => (
+            <div key={sub.id} style={{ display: 'hidden' }}>
+              <Audio streamManager={sub} />
+            </div>
+          ))}
           <SvgWrapper>
             {volumeOn ? (
               <VolOn
@@ -122,7 +112,7 @@ const GameVoice = ({
   );
 };
 
-export default GameVoice;
+export default EditorVoice;
 
 const AudioBox = styled.div`
   position: absolute;
