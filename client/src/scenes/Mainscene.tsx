@@ -10,7 +10,6 @@ import { setRoomId, setUserName } from 'stores/editorSlice';
 import { GAME_STATUS } from 'utils/Constants';
 import Table from 'objects/Table';
 import phaserGame from 'codeuk';
-import { BackgroundMode } from '../../../server/types/BackgroundMode';
 import { NONE } from 'phaser';
 import { PlayerType, ServerPlayerType } from 'types';
 
@@ -357,10 +356,10 @@ export default class MainScene extends Phaser.Scene {
       scene: this,
       x: playerInfo.x,
       y: playerInfo.y,
-      userName: playerInfo.userName,
       texture: playerInfo.charKey, // 이미지 이름
       id: playerInfo.socketId,
       frame: 'down-1', // atlas.json의 첫번째 filename
+      name: playerInfo.userName,
     });
     if (playerInfo.state === 'paused') {
       otherPlayer.setStatic(true);
@@ -379,30 +378,30 @@ export default class MainScene extends Phaser.Scene {
   }
 
   updateLocation(payLoad: any) {
-    this.otherPlayers.forEach((player: any) => {
-      if (player.socketId === payLoad.socketId) {
+    this.otherPlayers.forEach((otherPlayer: any) => {
+      if (otherPlayer.socketId === payLoad.socketId) {
         switch (payLoad.motion) {
           case 'left':
-            player.play(`${player.playerTexture}-walk-left`, true);
-            player.setPosition(payLoad.x, payLoad.y);
+            otherPlayer.play(`${otherPlayer.playerTexture}-walk-left`, true);
             break;
           case 'right':
-            player.play(`${player.playerTexture}-walk-right`, true);
-            player.setPosition(payLoad.x, payLoad.y);
+            otherPlayer.play(`${otherPlayer.playerTexture}-walk-right`, true);
             break;
           case 'up':
-            player.play(`${player.playerTexture}-walk-up`, true);
-            player.setPosition(payLoad.x, payLoad.y);
+            otherPlayer.play(`${otherPlayer.playerTexture}-walk-up`, true);
             break;
           case 'down':
-            player.play(`${player.playerTexture}-walk-down`, true);
-            player.setPosition(payLoad.x, payLoad.y);
+            otherPlayer.play(`${otherPlayer.playerTexture}-walk-down`, true);
             break;
           case 'idle':
-            player.play(`${player.playerTexture}-idle-down`, true);
-            player.setPosition(payLoad.x, payLoad.y);
+            otherPlayer.play(`${otherPlayer.playerTexture}-idle-down`, true);
             break;
         }
+        otherPlayer.setPosition(payLoad.x, payLoad.y);
+        otherPlayer.playerNameBubble.setPosition(
+          payLoad.x,
+          payLoad.y - otherPlayer.height / 2 - 10
+        );
       }
     });
   }

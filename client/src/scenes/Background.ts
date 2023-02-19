@@ -1,6 +1,7 @@
 import { ColumnWidthOutlined } from '@ant-design/icons';
 import Phaser from 'phaser';
 // import { BackgroundMode } from '../../../server/types/BackgroundMode';
+// import { BackgroundMode } from '../../../server/types/BackgroundMode';
 
 export enum BackgroundMode {
   DAY,

@@ -24,10 +24,10 @@ app.use(cors());
 
 /*********배포 시 설정들********* */
 //빌드하고 나서 주석 해제
-// app.use(express.static('../client/build'));
-// app.get('/', function (req, res) {
-//   res.sendFile('../client/build/index.html');
-// });
+app.use(express.static('../client/build'));
+app.get('/', function (req, res) {
+  res.sendFile('../client/build/index.html');
+});
 
 //db connect
 const db = `mongodb+srv://juncheol:${mongoPassword}@cluster0.v0izvl3.mongodb.net/?retryWrites=true&w=majority`;
