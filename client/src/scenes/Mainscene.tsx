@@ -250,7 +250,7 @@ export default class MainScene extends Phaser.Scene {
   update() {
     if (store.getState().mode.status !== GAME_STATUS.GAME) {
       if (this.openMyEditor) {
-        console.log('1차관문, 여기 왔으면 내 에디터 열었다는 뜻');
+        // console.log('1차관문, 여기 왔으면 내 에디터 열었다는 뜻');
       }
       this.input.keyboard.disableGlobalCapture();
       this.isKeyDisable = true;

@@ -2,7 +2,6 @@ import express, { Express, Request, Response } from 'express';
 import http from 'http';
 import cors from 'cors';
 import { createClient } from 'redis';
-// import chalk from 'chalk';
 import editorRouter from '../routes/editorRouter';
 import pkg from 'body-parser';
 
