@@ -247,13 +247,14 @@ function YjsCodeMirror() {
   const runCode = async () => {
     if (!inputStdin.current) return;
 
-    console.log(inputStdin.current.value);
+    console.log(inputStdin.current?.value);
 
     try {
       const { data } = await axios.post(`http://localhost:3001/code_to_run`, {
         codeToRun: ytext.toString(),
         //@ts-ignore
-        stdin: inputStdin.current.value,
+        // stdin: inputStdin.current.value,
+        stdin: inputStdin.current?.value,
       });
 
       console.log(data); // 전체 reponse body (output, statusCode, memory, cpuTime)
@@ -511,7 +512,7 @@ function YjsCodeMirror() {
                         id="standard-basic"
                         label="백준 아이디"
                         variant="standard"
-                        ref={bojUserNameRef}
+                        inputRef={bojUserNameRef}
                       />
                       <DownCircleOutlined
                         onClick={fetchBojUserData}
@@ -521,7 +522,7 @@ function YjsCodeMirror() {
                         id="standard-basic"
                         label="문제 번호"
                         variant="standard"
-                        ref={bojProbDataRef}
+                        inputRef={bojProbDataRef}
                       />
 
                       <DownCircleOutlined
@@ -535,7 +536,7 @@ function YjsCodeMirror() {
                         id="standard-basic"
                         label="LeetCode 아이디"
                         variant="standard"
-                        ref={leetUserNameRef}
+                        inputRef={leetUserNameRef}
                       />
                       <DownCircleOutlined
                         onClick={fetchLeetUserData}
@@ -545,7 +546,7 @@ function YjsCodeMirror() {
                         id="standard-basic"
                         label="leetcode-title-slug"
                         variant="standard"
-                        ref={leetProbDataRef}
+                        inputRef={leetProbDataRef}
                       />
                       <DownCircleOutlined
                         onClick={fetchLeetProbInfo}
@@ -790,7 +791,7 @@ function YjsCodeMirror() {
                 // disabled
                 rows={8}
                 variant="standard"
-                ref={inputStdin}
+                inputRef={inputStdin}
               />
             </Item>
           </Grid>
