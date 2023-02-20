@@ -9,15 +9,15 @@ export const handleScene = (statusTo: string) => {
       store.dispatch(openStart());
       for (let scene of phaserGame.scene.getScenes()) {
         const sceneKey = scene.scene.key;
-        if (phaserGame.scene.isActive(sceneKey)) {
+        if (sceneKey !== 'background' && phaserGame.scene.isActive(sceneKey)) {
           phaserGame.scene.sleep(sceneKey);
         }
       }
-      if (phaserGame.scene.isSleeping('Start')) {
-        phaserGame.scene.wake('Start');
-      } else {
-        phaserGame.scene.start('Start');
-      }
+      // if (phaserGame.scene.isSleeping('Start')) {
+      //   phaserGame.scene.wake('Start');
+      // } else {
+      //   phaserGame.scene.start('Start');
+      // }
       break;
     case GAME_STATUS.LOBBY:
       store.dispatch(openLobby());
