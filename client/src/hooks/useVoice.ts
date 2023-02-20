@@ -7,7 +7,7 @@ import {
 } from 'openvidu-browser';
 import axios from 'axios';
 
-const APPLICATION_SERVER_URL = 'http://localhost:3002/api';
+const APPLICATION_SERVER_URL = 'http://localhost:3002';
 
 export const initSession = () => {
   // 1. openvidu 객체 생성
@@ -118,7 +118,7 @@ export const registerSession = async (props: {
     // element: we will manage it on our own) and with the desired properties
     let pubNow = await OV.initPublisherAsync(undefined, {
       audioSource: undefined, // The source of audio. If undefined default microphone
-      videoSource: undefined, // The source of video. If undefined default webcam
+      videoSource: false, // The source of video. If undefined default webcam
       publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
       publishVideo: false, // Whether you want to start publishing with your video enabled or not
       resolution: '640x480', // The resolution of your video

@@ -22,7 +22,7 @@ const Game = () => {
     <BackgroundDiv>
       <Voice roomKey="MAIN" />
       <BtnDiv>
-        <Button
+        {/* <Button
           type="button"
           variant="contained"
           color="secondary"
@@ -30,7 +30,7 @@ const Game = () => {
           onClick={handleEditorClick}
         >
           에디터 키기
-        </Button>
+        </Button> */}
         <Button
           variant="contained"
           color="secondary"

@@ -1,3 +1,4 @@
+import axios, { AxiosError } from 'axios';
 import { Request, Response } from 'express';
 import { OpenVidu, Session } from 'openvidu-node-client';
 import { IsRoomExist } from '../types/Voice';
@@ -40,6 +41,33 @@ export const createConnection = async (req: Request, res: Response) => {
     }
   } catch (err) {
     console.log(err);
+    res.status(500).send(err);
+  }
+};
+
+export const getConnection = async (req: Request, res: Response) => {
+  try {
+    console.log('들어옴');
+    const { sessionId } = req.query;
+    const authCode = Buffer.from(`OPENVIDUAPP:${OPENVIDU_SECRET}`).toString(
+      'base64'
+    );
+    console.log(sessionId);
+    const data = await axios.get(
+      `${OPENVIDU_URL}/openvidu/api/sessions/${sessionId}/connection`,
+      {
+        headers: {
+          Authorization: `Basic ${authCode}`,
+        },
+      }
+    );
+    console.log(data);
+  } catch (err: unknown) {
+    if (err instanceof AxiosError && err.response?.status === 404) {
+      // 아직 세션 만들어지지 않은 상태임
+      res.send({ numberOfElements: 0, content: [] });
+      return;
+    }
     res.status(500).send(err);
   }
 };

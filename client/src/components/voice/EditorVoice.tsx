@@ -12,6 +12,12 @@ import {
   Subscriber,
 } from 'openvidu-browser';
 import { LoadingOutlined } from '@ant-design/icons';
+import { useSelector } from 'react-redux';
+import type { RootState } from 'stores';
+import FloatingButton from 'components/FloatingButton';
+import Drawer from 'components/Drawer';
+import PeopleIcon from '@mui/icons-material/People';
+import CurrentPlayer from 'components/CurrentPlayer';
 
 type GameVoiceType = {
   session: Session | undefined;
@@ -30,6 +36,10 @@ const EditorVoice = ({
 }: GameVoiceType) => {
   const [volumeOn, setVolumeOn] = useState(true);
   const [micOn, setMicOn] = useState(true);
+  const { playerId } = useSelector((state: RootState) => {
+    return state.user;
+  });
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const handleVolume = () => {
     subscribers.map((sm) => {
@@ -41,74 +51,96 @@ const EditorVoice = ({
     if (!!publisher) publisher.publishAudio(!micOn);
     setMicOn(!micOn);
   };
+  const handleDrawer = () => {
+    setDrawerOpen(!drawerOpen);
+  };
 
   return (
-    <AudioBox>
-      {!!session ? (
-        <>
-          {subscribers.map((sub, i) => (
-            <div key={sub.id} style={{ display: 'hidden' }}>
-              <Audio streamManager={sub} />
-            </div>
-          ))}
-          <SvgWrapper>
-            {volumeOn ? (
-              <VolOn
-                width="32px"
-                height="32px"
-                fill="white"
-                onClick={handleVolume}
-              />
-            ) : (
-              <VolOff
-                width="32px"
-                height="32px"
-                fill="white"
-                onClick={handleVolume}
-              />
-            )}
-            {micOn ? (
-              <MicOn
-                width="30px"
-                height="30px"
-                fill="white"
-                onClick={handleMic}
-                style={{ transform: 'scaleX(-1)' }}
-              />
-            ) : (
-              <MicOff
-                width="30px"
-                height="30px"
-                fill="white"
-                onClick={handleMic}
-                style={{ transform: 'scaleX(-1)' }}
-              />
-            )}
-            <div id="session-header">
-              <input
-                className="btn btn-large btn-danger"
-                type="button"
-                id="buttonLeaveSession"
-                onClick={leaveSession}
-                value="Leave session"
-              />
-            </div>
-          </SvgWrapper>
-        </>
-      ) : (
-        <ConnectingLine>
-          <LoadingOutlined />
-          오디오 연결 중...
-          <input
-            className="btn btn-large btn-danger"
-            type="button"
-            id="buttonLeaveSession"
-            onClick={joinSession}
-            value="Join session"
-          />
-        </ConnectingLine>
-      )}
-    </AudioBox>
+    <>
+      <FloatingButton
+        icon={PeopleIcon}
+        handleClick={() => handleDrawer()}
+        top="1%"
+        right="1%"
+      />
+      <Drawer
+        anchor="right"
+        isOpen={drawerOpen}
+        handleDrawer={handleDrawer}
+        content={CurrentPlayer}
+      />
+      <AudioBox>
+        {!!session ? (
+          <>
+            {subscribers.map((sub, i) => {
+              const { user } = JSON.parse(sub.stream.connection.data);
+              return (
+                user !== playerId && (
+                  <div key={user} style={{ display: 'hidden' }}>
+                    <Audio streamManager={sub} />
+                  </div>
+                )
+              );
+            })}
+            <SvgWrapper>
+              {volumeOn ? (
+                <VolOn
+                  width="32px"
+                  height="32px"
+                  fill="white"
+                  onClick={handleVolume}
+                />
+              ) : (
+                <VolOff
+                  width="32px"
+                  height="32px"
+                  fill="white"
+                  onClick={handleVolume}
+                />
+              )}
+              {micOn ? (
+                <MicOn
+                  width="30px"
+                  height="30px"
+                  fill="white"
+                  onClick={handleMic}
+                  style={{ transform: 'scaleX(-1)' }}
+                />
+              ) : (
+                <MicOff
+                  width="30px"
+                  height="30px"
+                  fill="white"
+                  onClick={handleMic}
+                  style={{ transform: 'scaleX(-1)' }}
+                />
+              )}
+              <div id="session-header">
+                <input
+                  className="btn btn-large btn-danger"
+                  type="button"
+                  id="buttonLeaveSession"
+                  onClick={leaveSession}
+                  value="Leave session"
+                />
+              </div>
+            </SvgWrapper>
+          </>
+        ) : (
+          <ConnectingLine>
+            <LoadingOutlined />
+            오디오 연결 중...
+            <input
+              className="btn btn-large btn-danger"
+              type="button"
+              id="buttonLeaveSession"
+              onClick={joinSession}
+              value="Join session"
+            />
+          </ConnectingLine>
+        )}
+      </AudioBox>
+    </>
   );
 };
 
@@ -118,6 +150,7 @@ const AudioBox = styled.div`
   position: absolute;
   bottom: 30px;
   left: 25px;
+  border: 1px solid red;
 `;
 
 const ConnectingLine = styled.div`

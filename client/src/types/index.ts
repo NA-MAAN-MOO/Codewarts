@@ -4,6 +4,7 @@ import {
   StreamManager,
   SessionEventMap,
   Subscriber,
+  Publisher,
 } from 'openvidu-browser';
 import { Game } from 'phaser';
 import { Socket } from 'socket.io-client';
@@ -56,4 +57,11 @@ export type MotionType = {
   x: number;
   y: number;
   motion: string;
+};
+export type GameVoiceType = {
+  session: Session | undefined;
+  subscribers: Subscriber[];
+  publisher: Publisher | undefined;
+  leaveSession: () => void;
+  joinSession: () => void;
 };
