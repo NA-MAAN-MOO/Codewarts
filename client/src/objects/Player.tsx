@@ -6,12 +6,10 @@ import Button from './Button';
 
 export default class Player extends Phaser.Physics.Matter.Sprite {
   socketId!: string;
-  playerTexture!: string;
   touching!: MatterJS.BodyType[];
   inputKeys!: Phaser.Input.Keyboard.Key | {};
-  showingIcon!: any;
-  spriteIcon!: any;
   buttonEditor!: any;
+  playerTexture!: string;
   playerNameBubble!: Phaser.GameObjects.Text;
   playerName!: string;
   // playerNameObject!: any;
@@ -55,11 +53,6 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
   }
 
   static preload(scene: any) {
-    scene.load.atlas(
-      'male1',
-      'assets/images/villager-males.png',
-      'assets/images/male1.json'
-    );
     for (let i = 0; i <= 27; i++) {
       scene.load.atlas(
         `char${i}`,
@@ -83,12 +76,10 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
       playerVelocity.x = -1;
       this.anims.play(`${this.playerTexture}-walk-left`, true);
       motion = 'left';
-      // this.x -= speed;
     } else if (this.inputKeys.right.isDown) {
       playerVelocity.x = 1;
       this.anims.play(`${this.playerTexture}-walk-right`, true);
       motion = 'right';
-      // this.x += speed;
     }
     if (this.inputKeys.up.isDown) {
       playerVelocity.y = -1;
@@ -96,15 +87,12 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         this.anims.play(`${this.playerTexture}-walk-up`, true);
         motion = 'up';
       }
-
-      // this.y -= speed;
     } else if (this.inputKeys.down.isDown) {
       playerVelocity.y = 1;
       if (motion === 'idle') {
         this.anims.play(`${this.playerTexture}-walk-down`, true);
         motion = 'down';
       }
-      // this.y += speed;
     }
     if (motion === 'idle') {
       this.anims.play(`${this.playerTexture}-idle-down`, true);
@@ -125,51 +113,48 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
       y: this.y,
       motion: motion,
     });
-
-    // this.spriteIcon.setPosition(this.x, this.y);
-    // this.showIcon();
   }
 
-  CreateCollisions(playerSensor: MatterJS.BodyType) {
-    this.scene.matterCollision.addOnCollideStart({
-      objectA: [playerSensor],
-      callback: (other) => {
-        // console.log("from player: ", other);
-        if (
-          other.gameObjectB['texture'] &&
-          other.gameObjectB.texture.key === 'table'
-        ) {
-          this.touching.push(other.gameObjectB);
+  //   CreateCollisions(playerSensor: MatterJS.BodyType) {
+  //     this.scene.matterCollision.addOnCollideStart({
+  //       objectA: [playerSensor],
+  //       callback: (other) => {
+  //         // console.log("from player: ", other);
+  //         if (
+  //           other.gameObjectB['texture'] &&
+  //           other.gameObjectB.texture.key === 'table'
+  //         ) {
+  //           this.touching.push(other.gameObjectB);
 
-          this.buttonEditor = new Button({
-            scene: this.scene,
-            x: other.gameObjectB.x,
-            y: other.gameObjectB.y - 20,
-            text: 'E를 눌러 참여하기',
-            style: {
-              fontSize: '20px',
-              backgroundColor: 'white',
-              color: 'black',
-              resolution: 20,
-            },
-          }).getBtn();
-          this.buttonEditor.setInteractive(); // 이거 해줘야 function 들어감!!!!! 3시간 버린듯;v
-        }
-      },
-      context: this.scene,
-    });
+  //           this.buttonEditor = new Button({
+  //             scene: this.scene,
+  //             x: other.gameObjectB.x,
+  //             y: other.gameObjectB.y - 20,
+  //             text: 'E를 눌러 참여하기',
+  //             style: {
+  //               fontSize: '20px',
+  //               backgroundColor: 'white',
+  //               color: 'black',
+  //               resolution: 20,
+  //             },
+  //           }).getBtn();
+  //           this.buttonEditor.setInteractive(); // 이거 해줘야 function 들어감!!!!! 3시간 버린듯;v
+  //         }
+  //       },
+  //       context: this.scene,
+  //     });
 
-    this.scene.matterCollision.addOnCollideEnd({
-      objectA: [playerSensor],
-      callback: (other: any) => {
-        this.touching = this.touching.filter(
-          (gameObject) => gameObject !== other.gameObjectB
-        );
-        if (this.buttonEditor) {
-          this.buttonEditor.destroy();
-        }
-      },
-      context: this.scene,
-    });
-  }
+  //     this.scene.matterCollision.addOnCollideEnd({
+  //       objectA: [playerSensor],
+  //       callback: (other: any) => {
+  //         this.touching = this.touching.filter(
+  //           (gameObject) => gameObject !== other.gameObjectB
+  //         );
+  //         if (this.buttonEditor) {
+  //           this.buttonEditor.destroy();
+  //         }
+  //       },
+  //       context: this.scene,
+  //     });
+  //   }
 }

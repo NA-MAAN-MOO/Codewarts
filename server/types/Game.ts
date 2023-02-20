@@ -10,4 +10,4 @@ export type PlayerType = {
   y: number;
 };
 
-export type TableType = [number, number, string];
+export type TableType = [number, number, string, any];
