@@ -19,6 +19,7 @@ import { VoiceProp } from 'types';
 import GameVoice from 'components/voice/GameVoice';
 import { GAME_STATUS } from 'utils/Constants';
 import EditorVoice from 'components/voice/EditorVoice';
+import useGetPlayer from 'hooks/useGetPlayer';
 
 //Voice 방 컴포넌트
 const Voice = ({ roomKey }: VoiceProp) => {
@@ -32,6 +33,7 @@ const Voice = ({ roomKey }: VoiceProp) => {
   const { playerId, status } = useSelector((state: RootState) => {
     return { ...state.user, ...state.mode };
   });
+  const { getPlayer } = useGetPlayer();
 
   useEffect(() => {
     (async () => {
@@ -98,6 +100,9 @@ const Voice = ({ roomKey }: VoiceProp) => {
       OV,
       userName: playerId,
     });
+    (async () => {
+      await getPlayer();
+    })();
   }, [session]);
 
   return status === GAME_STATUS.GAME ? (

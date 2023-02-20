@@ -6,7 +6,7 @@ import { io, Socket } from 'socket.io-client';
 import store from 'stores';
 import { openEditor, openGame } from 'stores/modeSlice';
 import { setRoomId, setUserName } from 'stores/editorSlice';
-import { setUsers, addUser, removeUser } from 'stores/chatSlice';
+// import { addUser, removeUser } from 'stores/chatSlice';
 import { GAME_STATUS } from 'utils/Constants';
 import Table from 'objects/Table';
 import phaserGame from 'codeuk';
@@ -143,7 +143,7 @@ export default class MainScene extends Phaser.Scene {
 
     this.player = new Player(playerInfo);
 
-    store.dispatch(addUser(phaserGame.userName));
+    // store.dispatch(addUser(phaserGame.userName));
 
     this.player.inputKeys = this.input.keyboard.addKeys({
       up: Phaser.Input.Keyboard.KeyCodes.UP,
@@ -193,7 +193,7 @@ export default class MainScene extends Phaser.Scene {
         userName: payLoad.userName,
       };
       this.addOtherPlayers(otherPlayerInfo);
-      store.dispatch(addUser(payLoad.userName));
+      // store.dispatch(addUser(payLoad.userName));
     });
     phaserGame.socket.on('playerDisconnect', (socketId) => {
       this.removePlayer(socketId);
@@ -396,7 +396,7 @@ export default class MainScene extends Phaser.Scene {
       frame: 'down-1', // atlas.json의 첫번째 filename
     };
     const otherPlayer = new OtherPlayer(otherPlayerInfo);
-    store.dispatch(addUser(playerInfo.userName));
+    // store.dispatch(addUser(playerInfo.userName));
 
     if (playerInfo.state === 'paused') {
       otherPlayer.setStatic(true);
@@ -413,7 +413,7 @@ export default class MainScene extends Phaser.Scene {
         player.destroy();
       }
     });
-    store.dispatch(removeUser(removingName));
+    // store.dispatch(removeUser(removingName));
     this.otherPlayers.filter((player) => player.socketId !== res);
   }
 

@@ -31,16 +31,6 @@ function App() {
   return (
     loadFlag || (
       <HoverDiv id="codeuk">
-        <div
-          style={{
-            border: '1px solid red',
-            width: '100%',
-            height: '20px',
-            backgroundColor: 'white',
-          }}
-        >
-          {users.map((d) => d)}
-        </div>
         {status === START ? (
           <Start></Start>
         ) : status === LOBBY ? (

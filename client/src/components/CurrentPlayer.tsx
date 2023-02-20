@@ -12,6 +12,8 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import styled from 'styled-components';
 import useGetPlayer from 'hooks/useGetPlayer';
+import { useSelector } from 'react-redux';
+import { RootState } from 'stores';
 
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
 type DrawerProp = {
@@ -21,8 +23,10 @@ type DrawerProp = {
 };
 
 const CurrentPlayer = ({ anchor, handleDrawer, isOpen }: DrawerProp) => {
-  const players = useGetPlayer();
-  console.log(players);
+  const users = useSelector((state: RootState) => {
+    return state.chat.users;
+  });
+  console.log(users);
 
   return (
     <Box
