@@ -18,12 +18,28 @@ const createAligned = (
   scrollFactor: number
 ) => {
   let x = -100;
-  for (let i = 0; i < count; i++) {
-    const image = scene.add
-      .image(x, scene.scale.height, texture)
-      .setOrigin(0, 1)
-      .setScrollFactor(scrollFactor);
-    x += image.width;
+
+  if (texture === 'lobby10') {
+    const sceneHeight = scene.cameras.main.height;
+    const sceneWidth = scene.cameras.main.width;
+    const backdropImage = scene.add.image(
+      sceneWidth / 2,
+      sceneHeight / 2,
+      texture
+    );
+    const scale = Math.max(
+      sceneWidth / backdropImage.width,
+      sceneHeight / backdropImage.height
+    );
+    backdropImage.setScale(scale).setScrollFactor(0);
+  } else {
+    for (let i = 0; i < count; i++) {
+      const image = scene.add
+        .image(x, scene.scale.height, texture)
+        .setOrigin(0, 1)
+        .setScrollFactor(scrollFactor);
+      x += image.width;
+    }
   }
 };
 
