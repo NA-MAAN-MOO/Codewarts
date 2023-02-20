@@ -91,16 +91,16 @@ const Voice = ({ roomKey }: VoiceProp) => {
   };
 
   useEffect(() => {
-    registerSession({
-      session,
-      sessionId: roomKey,
-      addSubscriber,
-      deleteSubscriber,
-      handlePublisher,
-      OV,
-      userName: playerId,
-    });
     (async () => {
+      await registerSession({
+        session,
+        sessionId: roomKey,
+        addSubscriber,
+        deleteSubscriber,
+        handlePublisher,
+        OV,
+        userName: playerId,
+      });
       await getPlayer();
     })();
   }, [session]);
