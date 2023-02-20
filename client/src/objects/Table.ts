@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import Resource from './Resources';
+import Player from './Player';
 
 // type tableStateType = { [index: number]: object };
 const tableInfoModel = {
@@ -112,10 +113,8 @@ export default class Table {
     this.tableInfo.get(index)['laptop'] = laptop;
   }
 
-  registerChairs(chairs: any) {
-    for (let i = 0; i < 4; i++) {
-      this.tableInfo.get(i)['chair'] = chairs[i];
-    }
+  registerChair(index: number, chair: any) {
+    this.tableInfo.get(index)['chair'] = chair;
   }
 
   /* Change laptop sprite texture */
@@ -134,12 +133,41 @@ export default class Table {
     }
   }
 
-  updateTable(idx: number, userName: string) {
-    console.log(this.tableInfo.get(idx).laptop);
+  sitOnChair(index: number, player: Player) {
+    let chair: Resource = this.tableInfo.get(index)['chair'];
+
+    chair.setTexture(`${player.playerTexture}_${chair.texture.key}`);
+
+    player.setVisible(false);
+    player.setPosition(chair.x, chair.y);
+    player.playerNameBubble.setPosition(
+      chair.x,
+      chair.y - player.height / 2 - 25
+    );
+  }
+
+  standUpFromChair(index: number, player: Player) {
+    let chair: Resource = this.tableInfo.get(index)['chair'];
+    if (index < 2) {
+      chair.setTexture(`chair_front`);
+    } else {
+      chair.setTexture(`chair_back`);
+    }
+
+    player.setVisible(true);
+  }
+
+  updateTable(idx: number, userName: string, player: Player) {
+    // console.log(this.tableInfo.get(idx).laptop);
     this.updateLaptopImage(idx);
 
     this.tableInfo.get(idx)['username'] = userName;
     this.tableInfo.get(idx)['roomId'] = userName;
+
+    if (userName) {
+      this.sitOnChair(idx, player);
+    } else {
+      this.standUpFromChair(idx, player);
+    }
   }
-  /* Change chair sprite texture */
 }
