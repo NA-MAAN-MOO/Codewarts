@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import ToggleButton from '@mui/material/ToggleButton';
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Avatar from '@mui/material/Avatar';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -15,9 +17,22 @@ import { setPlayerId, setPlayerTexture } from '../stores/userSlice';
 import { useDispatch } from 'react-redux';
 import { handleScene } from 'lib/phaserLib';
 import { GAME_STATUS } from 'utils/Constants';
+import { Snackbar, SnackbarOrigin } from '@mui/material';
+import SignUpForm from './SignUpForm';
 
 interface Characters {
   [key: string]: string;
+}
+
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={10} ref={ref} variant="filled" {...props} />;
+});
+
+export interface State extends SnackbarOrigin {
+  openLoginWarn: boolean;
 }
 
 const characters = chars as Characters;
@@ -28,19 +43,47 @@ const avatars: { name: string; img: string }[] = Array.from(
 );
 
 const LoginDialog = () => {
-  const [name, setName] = useState<string>('');
+  const [openLoginWarn, setOpenLoginWarn] = React.useState(false);
+  const [openSignUp, setOpenSignUp] = React.useState(false);
+
+  const handleClick = () => {
+    setOpenLoginWarn(true);
+  };
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenLoginWarn(false);
+  };
+
+  const [userId, setUserId] = useState<string>('');
+  const [idValid, setIdValid] = useState<boolean>(true);
+  const [userIdFieldEmpty, setUserIdFieldEmpty] = useState<boolean>(false);
+  const [userPw, setUserPw] = useState<string>('');
+  const [pwValid, setPwValid] = useState<boolean>(false);
+  const [userPwFieldEmpty, setUserPwFieldEmpty] = useState<boolean>(false);
   const [avatarIndex, setAvatarIndex] = useState<number>(0);
-  const [nameFieldEmpty, setNameFieldEmpty] = useState<boolean>(false);
   const dispatch = useDispatch();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (name === '') {
-      setNameFieldEmpty(true);
+    if (userId === '') {
+      setUserIdFieldEmpty(true);
+    } else if (userId !== '' && userPw === '') {
+      setUserPwFieldEmpty(true);
+      setUserIdFieldEmpty(false);
+      // } else if (!pwValid || !idValid) {  나중에 실제로 db연결하면 활성화
+      //   handleClick();
+      //   // console.log('fdas?', open);  onclose 때문에 꺼지면서 false로..
     } else {
-      console.log('Join! Name:', name, 'Avatar:', avatars[avatarIndex].name);
+      console.log('Join! Name:', userId, 'Avatar:', avatars[avatarIndex].name);
 
-      dispatch(setPlayerId(name));
+      dispatch(setPlayerId(userId));
       dispatch(setPlayerTexture(avatars[avatarIndex].name));
       handleScene(GAME_STATUS.LOBBY);
 
@@ -52,6 +95,16 @@ const LoginDialog = () => {
 
   return (
     <Wrapper onSubmit={handleSubmit}>
+      <Snackbar
+        autoHideDuration={1500}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={openLoginWarn}
+        onClose={handleClose}
+      >
+        <Alert severity="warning" sx={{ width: '100%' }}>
+          아이디와 비밀번호를 다시 확인해 주세요
+        </Alert>
+      </Snackbar>
       <img
         src={logo}
         style={{ width: styledTheme.logoWidth, height: styledTheme.logoHeight }}
@@ -94,29 +147,43 @@ const LoginDialog = () => {
         </Left>
         <Right>
           <TextField
-            autoFocus
             fullWidth
-            label="이름 입력"
+            label="ID"
             variant="outlined"
-            error={nameFieldEmpty}
-            helperText={nameFieldEmpty && '이름을 입력해 주세요.'}
+            error={userIdFieldEmpty}
+            helperText={userIdFieldEmpty && 'ID를 입력해 주세요.'}
             onInput={(e) => {
-              setName((e.target as HTMLInputElement).value);
+              setUserId((e.target as HTMLInputElement).value);
             }}
             sx={{ fontFamily: styledTheme.mainFont }}
           />
+          <div style={{ height: '15px' }}></div>
+          <TextField
+            fullWidth
+            label="PASSWORD"
+            variant="outlined"
+            error={userPwFieldEmpty}
+            helperText={userPwFieldEmpty && 'Password를 입력해 주세요.'}
+            onInput={(e) => {
+              setUserPw((e.target as HTMLInputElement).value);
+            }}
+            sx={{ fontFamily: styledTheme.mainFont }}
+          />
+          <div style={{ height: '30px' }}></div>
+          <Button
+            style={{ left: '200px' }}
+            variant="contained"
+            color="primary"
+            size="large"
+            type="submit"
+            sx={{ fontFamily: styledTheme.mainFont }}
+          >
+            시작하기
+          </Button>
         </Right>
       </Content>
       <Bottom>
-        <Button
-          variant="contained"
-          color="primary"
-          size="large"
-          type="submit"
-          sx={{ fontFamily: styledTheme.mainFont }}
-        >
-          시작하기
-        </Button>
+        <SignUpForm />
       </Bottom>
     </Wrapper>
   );
@@ -171,7 +238,7 @@ const Left = styled.div`
 
 const Right = styled.div`
   width: 300px;
-  display: flex;
+  display: block;
   align-items: center;
   // padding-top: 50px;
 `;

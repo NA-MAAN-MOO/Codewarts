@@ -21,6 +21,7 @@ export const userSlice = createSlice({
     backgroundMode: getInitialBackgroundMode(),
     playerId: '',
     playerTexture: 'char0',
+    playerNickname: 'Unknown',
   },
   reducers: {
     toggleBackgroundMode: (state) => {
@@ -32,6 +33,9 @@ export const userSlice = createSlice({
       state.backgroundMode = newMode;
       const bootstrap = phaserGame.scene.keys.bootstrap as MainScene;
       bootstrap.changeBackgroundMode(newMode);
+    },
+    setPlayerNickname: (state, action: PayloadAction<string>) => {
+      state.playerNickname = action.payload;
     },
     setPlayerId: (state, action: PayloadAction<string>) => {
       state.playerId = action.payload;
@@ -57,7 +61,11 @@ export const userSlice = createSlice({
   },
 });
 
-export const { toggleBackgroundMode, setPlayerId, setPlayerTexture } =
-  userSlice.actions;
+export const {
+  toggleBackgroundMode,
+  setPlayerId,
+  setPlayerTexture,
+  setPlayerNickname,
+} = userSlice.actions;
 
 export default userSlice.reducer;
