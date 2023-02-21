@@ -34,7 +34,7 @@ const config = {
   backgroundColor: '#EEEEEE', //  scene이 그려지는 canvas의 backgroundColor 값
   type: Phaser.AUTO,
   parent: 'codeuk',
-  scene: [Background, StartScene, Lobby, MainScene],
+  scene: [Background, Lobby, MainScene],
   scale: {
     // mode: Phaser.Scale.FIT,
     mode: Phaser.Scale.ScaleModes.RESIZE,

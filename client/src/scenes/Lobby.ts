@@ -18,11 +18,16 @@ const createAligned = (
   scrollFactor: number
 ) => {
   let x = -100;
+
+  const sceneHeight = scene.cameras.main.height;
+  const sceneWidth = scene.cameras.main.width;
   for (let i = 0; i < count; i++) {
-    const image = scene.add
-      .image(x, scene.scale.height, texture)
-      .setOrigin(0, 1)
-      .setScrollFactor(scrollFactor);
+    const image = scene.add.image(x, sceneHeight, texture).setOrigin(0, 1);
+    const scale = Math.max(
+      sceneWidth / image.width,
+      sceneHeight / image.height
+    );
+    image.setScale(scale).setScrollFactor(scrollFactor);
     x += image.width;
   }
 };

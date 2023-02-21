@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import MainScene from 'scenes/Mainscene';
+import Background from 'scenes/Background';
 // import { BackgroundMode } from '../../../server/types/BackgroundMode';
 import phaserGame from 'codeuk';
 
@@ -31,7 +32,7 @@ export const userSlice = createSlice({
           : BackgroundMode.DAY;
 
       state.backgroundMode = newMode;
-      const bootstrap = phaserGame.scene.keys.bootstrap as MainScene;
+      const bootstrap = phaserGame.scene.keys.bootstrap as Background;
       bootstrap.changeBackgroundMode(newMode);
     },
     setPlayerNickname: (state, action: PayloadAction<string>) => {

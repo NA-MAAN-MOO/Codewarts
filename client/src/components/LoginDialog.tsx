@@ -42,7 +42,7 @@ const avatars: { name: string; img: string }[] = Array.from(
   new Array(28),
   (d, idx) => ({ name: `char${idx}`, img: characters[`char${idx}`] })
 );
-
+let randomNumber = Math.floor(Math.random() * 28);
 const LoginDialog = () => {
   const [openLoginWarn, setOpenLoginWarn] = React.useState(false);
   const [openSignUp, setOpenSignUp] = React.useState(false);
@@ -145,6 +145,7 @@ const LoginDialog = () => {
             onSlideChange={(swiper) => {
               setAvatarIndex(swiper.activeIndex);
             }}
+            initialSlide={randomNumber}
           >
             {avatars.map((avatar) => (
               <SwiperSlide key={avatar.name}>
@@ -152,7 +153,7 @@ const LoginDialog = () => {
                   style={{
                     scale: '4.5',
                     left: '20%',
-                    clipPath: 'inset(0px 36px 102px 40px)',
+                    clipPath: 'inset(0px 36px 102px 39px)',
                     top: '120%',
                     position: 'absolute',
                   }}
