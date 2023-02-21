@@ -9,16 +9,11 @@ import {
   Subscriber,
   Publisher,
 } from 'openvidu-browser';
-import {
-  createSession,
-  disconnectSession,
-  registerSession,
-  initSession,
-} from 'hooks/useVoice';
+import useVoice from 'hooks/useVoice';
 import { VoiceProp } from 'types';
-import GameVoice from 'components/voice/GameVoice';
+import GameVoice from 'pages/voice/GameVoice';
 import { GAME_STATUS } from 'utils/Constants';
-import EditorVoice from 'components/voice/EditorVoice';
+import EditorVoice from 'pages/voice/EditorVoice';
 import useGetPlayer from 'hooks/useGetPlayer';
 
 //Voice 방 컴포넌트
@@ -27,6 +22,8 @@ const Voice = ({ roomKey }: VoiceProp) => {
   const [session, setSession] = useState<Session>();
   const [subscribers, setSubscribers] = useState<Array<Subscriber>>([]);
   const [publisher, setPublisher] = useState<Publisher>();
+  const { createSession, disconnectSession, registerSession, initSession } =
+    useVoice();
 
   const onBeforeUnload = (e: BeforeUnloadEvent) => {
     leaveSession();
@@ -95,6 +92,7 @@ const Voice = ({ roomKey }: VoiceProp) => {
     if (!session) {
       return;
     }
+    console.log('영, 유즈이펙트 호출');
     (async () => {
       await registerSession({
         session,
@@ -105,15 +103,9 @@ const Voice = ({ roomKey }: VoiceProp) => {
         OV,
         userName: playerId,
       });
-      await getConnections();
+      await getConnections(roomKey);
     })();
   }, [session]);
-
-  // useEffect(() => {
-  //   (async () => {
-  //   })();
-  //   console.log(users);
-  // }, [subscribers]);
 
   useEffect(() => {
     console.log(users);

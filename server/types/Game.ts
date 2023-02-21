@@ -10,4 +10,8 @@ export type PlayerType = {
   y: number;
 };
 
-export type TableType = [number, number, string, any];
+//[id, idx, userName, socketId]
+export type TableType = [number, number, string, string];
+
+//{닉네임 : 캐릭터} 타입
+export type CharInfoType = Record<string, string>;

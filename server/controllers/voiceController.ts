@@ -61,7 +61,6 @@ export const getConnections = async (req: Request, res: Response) => {
       }
     );
     res.send(data.content);
-    console.log('출력데이터', data);
   } catch (err: unknown) {
     console.log(err);
     if (err instanceof AxiosError && err.response?.status === 404) {

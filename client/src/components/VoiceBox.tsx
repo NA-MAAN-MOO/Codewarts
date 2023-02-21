@@ -29,6 +29,7 @@ const VoiceBox = ({
     });
     setVolumeOn(!volumeOn);
   };
+
   const handleMic = () => {
     if (!!publisher) publisher.publishAudio(!micOn);
     setMicOn(!micOn);

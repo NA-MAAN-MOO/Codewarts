@@ -12,7 +12,7 @@ import editorServer from './servers/editorServer';
 import basicRouter from './routes/basicRouter';
 import { table } from 'console';
 import voiceServer from './servers/voiceServer';
-import { PlayerType, TableType } from './types/Game';
+import { PlayerType, TableType, CharInfoType } from './types/Game';
 
 const port = process.env.PORT || 8080;
 const mongoPassword = process.env.MONGO_PW;
@@ -49,6 +49,7 @@ app.use('/', basicRouter);
 
 let players: PlayerType[] = []; // 모든 '접속 중' 유저들을 저장하는 리스트
 let tables: TableType[] = []; // 모든 '사용 중' 테이블 데이터를 저장하는 리스트
+let charInfo: CharInfoType = {};
 
 io.on('connection', (socket: Socket) => {
   // socket이 연결됩니다~ 이 안에서 서버는 연결된 클라이언트와 소통할 준비가 됨
@@ -72,10 +73,14 @@ io.on('connection', (socket: Socket) => {
     socketId: socket.id,
   }); // 연결된 유저에게 고유 데이터를 전달한다.
 
-  socket.on('savePlayer', ({ charKey, userName }) => {
-    playerInfo.charKey = charKey;
-    playerInfo.userName = userName;
-  });
+  socket.on(
+    'savePlayer',
+    ({ charKey, userName }: { charKey: string; userName: string }) => {
+      playerInfo.charKey = charKey;
+      playerInfo.userName = userName;
+      charInfo[userName] = charKey;
+    }
+  );
 
   // Send back the payload to the client and set its initial position
   socket.on('loadNewPlayer', (payLoad) => {

@@ -1,15 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import type { RootState } from 'stores';
-import { Peer } from 'peerjs';
-import {
-  createSession,
-  disconnectSession,
-  registerSession,
-  initSession,
-} from 'hooks/useVoice';
-import { VoiceProp } from 'types';
-import GameVoice from 'components/voice/GameVoice';
 // import ChatSession from 'peerjs/ChatSession';
 import { GAME_STATUS } from 'utils/Constants';
 

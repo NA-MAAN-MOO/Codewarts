@@ -37,14 +37,16 @@ const CurrentPlayer = ({ anchor, handleDrawer, isOpen }: DrawerProp) => {
       <Title>현재 보고 있는 사람</Title>
       <Divider />
       <List>
-        {users.map((text, index) => {
+        {users.map((user, index) => {
+          const { user: name } = JSON.parse(user.clientData);
           return (
-            <ListItem key={text} disablePadding>
+            <ListItem key={name} disablePadding>
               <ListItemButton>
                 <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  {/* TODO : 캐릭터 로고 가져오는 axios 호출 해서 이미지 붙이기 */}
+                  <InboxIcon />
                 </ListItemIcon>
-                <ListItemText primary={text} />
+                <ListItemText primary={name} />
               </ListItemButton>
             </ListItem>
           );
