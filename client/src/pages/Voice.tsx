@@ -27,13 +27,14 @@ const Voice = ({ roomKey }: VoiceProp) => {
   const [session, setSession] = useState<Session>();
   const [subscribers, setSubscribers] = useState<Array<Subscriber>>([]);
   const [publisher, setPublisher] = useState<Publisher>();
+
   const onBeforeUnload = (e: BeforeUnloadEvent) => {
     leaveSession();
   };
-  const { playerId, status } = useSelector((state: RootState) => {
-    return { ...state.user, ...state.mode };
+  const { playerId, status, users } = useSelector((state: RootState) => {
+    return { ...state.user, ...state.mode, ...state.chat };
   });
-  const { getPlayer } = useGetPlayer();
+  const { getConnections, getSessions } = useGetPlayer();
 
   useEffect(() => {
     (async () => {
@@ -41,11 +42,11 @@ const Voice = ({ roomKey }: VoiceProp) => {
 
       if (session) return;
       await joinSession();
-
-      return function cleanup() {
-        window.removeEventListener('beforeunload', onBeforeUnload);
-      };
     })();
+
+    return function cleanup() {
+      window.removeEventListener('beforeunload', onBeforeUnload);
+    };
   }, []);
 
   const deleteSubscriber = (streamManager: Subscriber) => {
@@ -91,6 +92,9 @@ const Voice = ({ roomKey }: VoiceProp) => {
   };
 
   useEffect(() => {
+    if (!session) {
+      return;
+    }
     (async () => {
       await registerSession({
         session,
@@ -101,18 +105,32 @@ const Voice = ({ roomKey }: VoiceProp) => {
         OV,
         userName: playerId,
       });
-      await getPlayer();
+      await getConnections();
     })();
   }, [session]);
 
+  // useEffect(() => {
+  //   (async () => {
+  //   })();
+  //   console.log(users);
+  // }, [subscribers]);
+
+  useEffect(() => {
+    console.log(users);
+  }, [users]);
+
   return status === GAME_STATUS.GAME ? (
-    <GameVoice
-      session={session}
-      subscribers={subscribers}
-      leaveSession={leaveSession}
-      joinSession={joinSession}
-      publisher={publisher}
-    />
+    <>
+      <GameVoice
+        session={session}
+        subscribers={subscribers}
+        leaveSession={leaveSession}
+        joinSession={joinSession}
+        publisher={publisher}
+      />
+      {/* <button onClick={getConnections}>MAIN 세션 커넥션 가져오기</button>
+      <button onClick={getSessions}>전체 세션 가져오기</button> */}
+    </>
   ) : (
     <EditorVoice
       session={session}

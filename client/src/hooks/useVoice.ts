@@ -129,8 +129,9 @@ export const registerSession = async (props: {
 
     // --- 6) Publish your stream ---
 
-    mySession.publish(pubNow);
+    await mySession.publish(pubNow);
     handlePublisher(pubNow);
+    console.log('여기까지');
   } catch (error) {
     console.log(error);
   }

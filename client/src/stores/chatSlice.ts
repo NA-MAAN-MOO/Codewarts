@@ -1,8 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { GAME_STATUS } from '../utils/Constants';
+import { Connection } from 'openvidu-browser';
+
 export interface ChatState {
-  users: string[];
+  users: Connection[];
 }
 
 const initialState: ChatState = {

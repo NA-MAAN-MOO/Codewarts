@@ -20,7 +20,7 @@ const Game = () => {
   };
   return (
     <BackgroundDiv>
-      <Voice roomKey="MAIN" />
+      <Voice roomKey={GAME_STATUS.GAME} />
       <BtnDiv>
         {/* <Button
           type="button"

@@ -63,3 +63,49 @@ export type GameVoiceType = {
   leaveSession: () => void;
   joinSession: () => void;
 };
+
+export type Connection = {
+  id: string;
+  object: string;
+  type: string;
+  status: string;
+  sessionId: string;
+  createdAt: number;
+  activeAt: number;
+  location: string;
+  ip: string;
+  platform: string;
+  token: string;
+  serverData: string;
+  clientData: string;
+  record: boolean;
+  role: string;
+  kurentoOptions: object;
+  customIceServers: {
+    url: string;
+    username?: string;
+    credential?: string;
+  }[];
+  rtspUri: string;
+  adaptativeBitrate: boolean;
+  onlyPlayWithSubscribers: boolean;
+  networkCache: number;
+  publishers: {
+    streamId: string;
+    createdAt: number;
+    mediaOptions: {
+      hasVideo: boolean;
+      hasAudio: boolean;
+      videoActive: boolean;
+      audioActive: boolean;
+      frameRate: number;
+      videoDimensions: string;
+      typeOfVideo: string;
+      filter: object;
+    };
+  }[];
+  subscribers: {
+    streamId: string;
+    createdAt: number;
+  }[];
+};

@@ -10,16 +10,24 @@ export default () => {
     return { ...state.mode, ...state.editor };
   });
 
-  const getPlayer = async () => {
+  const getConnections = async () => {
     if (status === GAME_STATUS.GAME) {
-      const { data } = await axios.get('http://localhost:3002/get-connection', {
-        params: { sessionId: GAME_STATUS.GAME },
-      });
-      dispatch(setUsers(data.content));
+      const { data } = await axios.get(
+        'http://localhost:3002/get-connections',
+        {
+          params: { sessionId: GAME_STATUS.GAME },
+        }
+      );
+      dispatch(setUsers(data));
     } else {
       //에디터일 때
     }
+    console.log('getConnections 끝');
+  };
+  const getSessions = async () => {
+    const { data } = await axios.get('http://localhost:3002/get-sessions', {});
+    console.log(data);
   };
 
-  return { getPlayer };
+  return { getConnections, getSessions };
 };
