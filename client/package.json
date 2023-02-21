@@ -35,6 +35,7 @@
     "phaser-matter-collision-plugin": "^1.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.43.1",
     "react-redux": "^8.0.5",
     "react-scripts": "5.0.1",
     "react-svg": "^16.1.2",
