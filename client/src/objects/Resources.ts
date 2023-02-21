@@ -23,7 +23,7 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
     this.mainScene = scene;
 
     scene.add.existing(this);
-
+    console.log(resource.name);
     const Body = scene.matter.body;
     const Bodies = scene.matter.bodies;
 
@@ -129,6 +129,20 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
     scene.load.image('teapot', 'assets/room/teapot.png');
     scene.load.image('wall_candle', 'assets/room/wall_candle.png');
     scene.load.image('table', 'assets/room/table.png');
+    scene.load.image(
+      'crate_table_flower',
+      'assets/room/crate_table_flower.png'
+    );
+    scene.load.image('crate_table', 'assets/room/crate_table.png');
+    scene.load.image('floor_candle', 'assets/room/floor_candle.png');
+    scene.load.image('painting1', 'assets/room/painting1.png');
+    scene.load.image('painting2', 'assets/room/painting2.png');
+    scene.load.image('painting3', 'assets/room/painting3.png');
+    scene.load.image('plant_long', 'assets/room/plant_long.png');
+    scene.load.image('statue', 'assets/room/statue.png');
+    scene.load.image('table_candle', 'assets/room/table_candle.png');
+    scene.load.image('bench', 'assets/room/bench.png');
+
     /* Chairs where characters sit */
     for (let i = 0; i < 28; i++) {
       scene.load.image(
