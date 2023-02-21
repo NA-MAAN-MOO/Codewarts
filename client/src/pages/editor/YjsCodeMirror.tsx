@@ -147,6 +147,10 @@ const AlgoTextField = styled((props: TextFieldProps) => (
 ))(({ theme }) => ({
   '& label': {
     textShadow: '1px 1px 2px #ededed',
+    fontFamily: 'Cascadia Code, EliceDigitalBaeum_Bold',
+  },
+  '& input': {
+    fontFamily: 'Cascadia Code, EliceDigitalBaeum_Bold',
   },
   '& label.Mui-focused': {
     color: 'papayawhip',
@@ -532,7 +536,9 @@ function YjsCodeMirror() {
                   <AlgoTextField
                     id="reddit-input"
                     label={
-                      algoSelect === 0 ? '문제 번호' : 'leetcode-title-slug'
+                      algoSelect === 0
+                        ? '백준 문제 번호'
+                        : 'leetcode-title-slug'
                     }
                     variant="filled"
                     size="small"
@@ -561,7 +567,7 @@ function YjsCodeMirror() {
               aria-controls="panel1a-content"
               id="panel1a-header"
             >
-              <Typography>문제 정보</Typography>
+              문제 정보
             </AccordionSummary>
             <AccordionDetails>
               <Typography>
@@ -590,7 +596,7 @@ function YjsCodeMirror() {
                 aria-controls="panel2a-content"
                 id="panel2a-header"
               >
-                <Typography>입력 & 출력</Typography>
+                입력 & 출력
               </AccordionSummary>
               <AccordionDetails>
                 <Typography>
@@ -622,7 +628,7 @@ function YjsCodeMirror() {
                 aria-controls="panel2a-content"
                 id="panel2a-header"
               >
-                <Typography>코드 스니펫</Typography>
+                코드 스니펫
               </AccordionSummary>
               <AccordionDetails>
                 <Typography>
@@ -648,7 +654,7 @@ function YjsCodeMirror() {
                 aria-controls="panel2a-content"
                 id="panel2a-header"
               >
-                <Typography>예제</Typography>
+                예제
               </AccordionSummary>
               <AccordionDetails>
                 <Typography>
@@ -895,6 +901,7 @@ const StyledTab = styled((props: StyledTabProps) => (
   <Tab disableRipple {...props} />
 ))(({ theme }) => ({
   textTransform: 'none',
+  fontFamily: 'Cascadia Code, EliceDigitalBaeum_Bold',
   fontWeight: theme.typography.fontWeightRegular,
   fontSize: theme.typography.pxToRem(20),
   marginRight: theme.spacing(1),
@@ -923,6 +930,7 @@ const AlgoInput = styledc.input`
   border: none;
   border-radius: 3px;
 `;
+
 const AlgoInputWrap = styledc.div`
   // margin-top: 10px;
   border: 1px solid red;
