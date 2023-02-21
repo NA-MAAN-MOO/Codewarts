@@ -1,7 +1,6 @@
 //@ts-nocheck
 /* react */
 import { useRef, useEffect, useState } from 'react';
-import './YjsCodeMirror.css';
 
 /* lib */
 import * as random from 'lib0/random';
@@ -29,7 +28,12 @@ import { noctisLilac } from '@uiw/codemirror-theme-noctis-lilac';
 import { okaidia } from '@uiw/codemirror-theme-okaidia';
 import { RootState } from 'stores';
 
+/* GraphQL queries */
+import PROBLEMQUERY from '../../graphql/problemQuery';
+import USERINFOQUERY from '../../graphql/userInfoQuery';
+
 /* UI */
+import './YjsCodeMirror.css';
 import styledc from 'styled-components';
 import 'styles/fonts.css'; /* FONT */
 import Button from '@mui/material/Button';
@@ -119,6 +123,7 @@ const buttonTheme = createTheme({
   },
 });
 
+/* Paper element theme setting */
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
@@ -135,6 +140,7 @@ function YjsCodeMirror() {
   const leetProbDataRef = useRef(null);
   const bojUserNameRef = useRef(null);
   const bojProbDataRef = useRef(null);
+
   /* states */
   const { userName, roomId } = useSelector((state: RootState) => state.editor);
   let [compileOutput, setCompileOutput] = useState();
@@ -279,41 +285,16 @@ function YjsCodeMirror() {
     }
   }
 
+  /* 백준(0), 리트코드(1) 선택 */
+  const [algoSelect, setAlgoSelect] = useState(0);
+
+  const selectChange = (event, newValue: number) => {
+    setAlgoSelect(newValue);
+  };
+
   /* leetcode 문제 정보 가져오기 */
   const fetchLeetProbInfo = async () => {
     if (leetProbDataRef.current === null) return;
-
-    // 문제 정보 쿼리
-    const problemQuery = `
-    query ($titleSlug: String!) {
-      question(titleSlug: $titleSlug) {
-          questionId
-          questionFrontendId
-          title
-          titleSlug
-          content
-          difficulty
-          likes
-          dislikes
-          exampleTestcases
-          topicTags {
-              name
-              slug
-              translatedName
-          }
-          codeSnippets {
-              lang
-              langSlug
-              code
-          }
-          stats
-          metaData
-          enableRunCode
-          enableTestMode
-          enableDebugger
-        }
-      }
-    `;
 
     const problemQueryVariable = {
       //@ts-ignore
@@ -324,7 +305,7 @@ function YjsCodeMirror() {
       const response = await axios.post(
         'https://cors-anywhere.herokuapp.com/https://leetcode.com/graphql',
         {
-          query: problemQuery,
+          query: PROBLEMQUERY,
           variables: problemQueryVariable,
         }
       );
@@ -383,45 +364,6 @@ function YjsCodeMirror() {
     let leetUserName = leetUserNameRef.current.value;
     console.log(leetUserName);
 
-    const userInfoQuery = `
-    query ($username: String!) {
-      matchedUser(username: $username) {
-          username
-          socialAccounts
-          githubUrl
-          profile {
-              realName
-  
-              ranking
-          }
-          submitStats {
-              acSubmissionNum {
-                  difficulty
-                  count
-              }
-              totalSubmissionNum {
-                  difficulty
-                  count
-                  # submissions
-              }
-          }
-          badges {
-              id
-              displayName
-              icon
-              creationDate
-          }
-      }
-      recentSubmissionList(username: $username, limit: 20) {
-          title
-          titleSlug
-          timestamp
-          statusDisplay
-          lang
-      }
-    }
-    `;
-
     const userQueryVariable = {
       //@ts-ignore
       username: leetUserName,
@@ -431,7 +373,7 @@ function YjsCodeMirror() {
       const response = await axios.post(
         'https://cors-anywhere.herokuapp.com/https://leetcode.com/graphql',
         {
-          query: userInfoQuery,
+          query: USERINFOQUERY,
           variables: userQueryVariable,
         }
       );
@@ -465,18 +407,11 @@ function YjsCodeMirror() {
     }
   };
 
-  /* 백준(0), 리트코드(1) 선택 */
-  const [algoSelect, setAlgoSelect] = useState(0);
-
   /* 문제 예제 인풋을 실행 인풋 창으로 복사 */
   // todo: 인덱스를 인수로 받고, 해당하는 예제 복사하기
   const copyToInput = () => {
     if (inputStdin.current === undefined) return;
     inputStdin.current.value = bojProbFullData?.samples?.[1].input;
-  };
-
-  const handleChange = (event, newValue: number) => {
-    setAlgoSelect(newValue);
   };
 
   return (
@@ -496,7 +431,7 @@ function YjsCodeMirror() {
             <Header>
               <StyledTabs
                 value={algoSelect}
-                onChange={handleChange}
+                onChange={selectChange}
                 aria-label="algo-selector"
               >
                 <StyledTab label="Baekjoon" />
@@ -738,6 +673,7 @@ function YjsCodeMirror() {
             </Button>
           </Tooltip>
         </ThemeProvider>
+
         <FormGroup>
           <FormControlLabel
             control={
@@ -820,20 +756,18 @@ function YjsCodeMirror() {
                   </Item>
                 </Grid>
               </Grid>
-              <div>
-                <TextField
-                  id="standard-multiline-static"
-                  label="OUTPUT"
-                  multiline
-                  fullWidth
-                  rows={5}
-                  variant="standard"
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                  value={compileOutput}
-                />
-              </div>
+              <TextField
+                id="standard-multiline-static"
+                label="OUTPUT"
+                multiline
+                fullWidth
+                rows={5}
+                variant="standard"
+                InputProps={{
+                  readOnly: true,
+                }}
+                value={compileOutput}
+              />
               {/* <span
                     style={{ border: '1px solid black' }}
                     className="compiled-output"
