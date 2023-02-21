@@ -7,6 +7,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import axios, { AxiosError } from 'axios';
+import { styledTheme } from 'styles/theme';
+import MySnackbar from './MySnackbar';
 
 export default function FormDialog() {
   const [openSignUpForm, setOpenSignUpForm] = React.useState(false);
@@ -37,11 +39,15 @@ export default function FormDialog() {
       console.log(signUpResponse.data);
       if (signUpResponse.data.status === 200) {
         console.log('회원가입 성공');
+        setSignUpSuccess(true);
+        setSignUpFail(false);
         setOpenSignUpForm(false);
       }
     } catch (error: any) {
       if (error?.response?.status === 409) {
         console.log('이미 존재하는 회원입니다');
+        setSignUpFail(true);
+        setSignUpSuccess(false);
       }
     }
     return false;
@@ -56,6 +62,21 @@ export default function FormDialog() {
     userBojId: '',
     userLeetId: '',
   });
+
+  const handleSignUpClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSignUpSuccess(false);
+    setSignUpFail(false);
+  };
+
+  const [signUpSuccess, setSignUpSuccess] = React.useState<boolean>(false);
+  const [signUpFail, setSignUpFail] = React.useState<boolean>(false);
 
   const handleForm = (item: string, value: string) => {
     let newUserForm = userForm;
@@ -85,12 +106,36 @@ export default function FormDialog() {
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
+      <MySnackbar
+        text="회원가입 완료"
+        state="success"
+        onClose={handleSignUpClose}
+        onOpen={signUpSuccess}
+      />
+      <MySnackbar
+        onClose={handleSignUpClose}
+        text="이미 존재하는 회원입니다."
+        state="warning"
+        onOpen={signUpFail}
+      />
+      <Button
+        variant="contained"
+        color="primary"
+        size="large"
+        onClick={handleClickOpen}
+        sx={{ fontFamily: styledTheme.mainFont }}
+      >
         회원가입
       </Button>
-      <Dialog open={openSignUpForm} onClose={handleClose}>
+      <Dialog
+        open={openSignUpForm}
+        onClose={handleClose}
+        sx={{ fontFamily: styledTheme.mainFont }}
+      >
         <form onSubmit={submitSignUpForm} id="signUp">
-          <DialogTitle>회원가입</DialogTitle>
+          <DialogTitle sx={{ fontFamily: styledTheme.mainFont }}>
+            회원가입
+          </DialogTitle>
           <DialogContent>
             <TextField
               required={true}
@@ -156,8 +201,23 @@ export default function FormDialog() {
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose}>취소</Button>
-            <Button type="submit" form="signUp">
+            <Button
+              variant="contained"
+              color="primary"
+              size="small"
+              sx={{ fontFamily: styledTheme.mainFont }}
+              onClick={handleClose}
+            >
+              취소
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              size="small"
+              sx={{ fontFamily: styledTheme.mainFont }}
+              type="submit"
+              form="signUp"
+            >
               확인
             </Button>
           </DialogActions>
