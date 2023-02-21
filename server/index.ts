@@ -14,6 +14,7 @@ import { table } from 'console';
 import voiceServer from './servers/voiceServer';
 import dbServer from './servers/dbServer';
 import { PlayerType, TableType, CharInfoType } from './types/Game';
+import CharInfo from './services/CharInfo';
 
 import cookieParser from 'cookie-parser';
 
@@ -36,8 +37,15 @@ app.get('/', function (req, res) {
 //db connect
 const db = `mongodb+srv://juncheol:${mongoPassword}@cluster0.v0izvl3.mongodb.net/?retryWrites=true&w=majority`;
 mongoose
-  .connect(db)
-  .then(() => console.log('MongoDB Connected...'))
+  .connect(db, { dbName: 'codewart' })
+  .then(() => {
+    console.log('DB 연결 완료');
+    // if (mongoose.modelNames().includes('user')) {
+    //   return mongoose.model('user');
+    // } else {
+    //   new User();
+    // }
+  })
   .catch((err) => console.log(err));
 
 //merge phaser 230209
@@ -53,7 +61,6 @@ app.use('/', basicRouter);
 
 let players: PlayerType[] = []; // 모든 '접속 중' 유저들을 저장하는 리스트
 let tables: TableType[] = []; // 모든 '사용 중' 테이블 데이터를 저장하는 리스트
-let charInfo: CharInfoType = {};
 
 io.on('connection', (socket: Socket) => {
   // socket이 연결됩니다~ 이 안에서 서버는 연결된 클라이언트와 소통할 준비가 됨
@@ -82,7 +89,7 @@ io.on('connection', (socket: Socket) => {
     ({ charKey, userName }: { charKey: string; userName: string }) => {
       playerInfo.charKey = charKey;
       playerInfo.userName = userName;
-      charInfo[userName] = charKey;
+      CharInfo.set(userName, charKey);
     }
   );
 
