@@ -408,10 +408,9 @@ function YjsCodeMirror() {
   };
 
   /* 문제 예제 인풋을 실행 인풋 창으로 복사 */
-  // todo: 인덱스를 인수로 받고, 해당하는 예제 복사하기
-  const copyToInput = () => {
+  const copyToInput = (key) => {
     if (inputStdin.current === undefined) return;
-    inputStdin.current.value = bojProbFullData?.samples?.[1].input;
+    inputStdin.current.value = bojProbFullData?.samples?.[key].input;
   };
 
   return (
@@ -609,15 +608,15 @@ function YjsCodeMirror() {
                           />
                         </Item>
                       </Grid>
-                    ) : (
+                    ) : bojProbFullData?.samples ? (
                       Object.entries(bojProbFullData?.samples).map(
                         ([key, value]) => {
                           return (
                             <Grid xs>
                               <Item>
-                                예제{key} 인풋
-                                <Tooltip title="인풋 창으로 복사하기" arrow>
-                                  <InputIcon onClick={copyToInput} />
+                                예제{key} INPUT
+                                <Tooltip title="INPUT 칸으로 복사하기" arrow>
+                                  <InputIcon onClick={() => copyToInput(key)} />
                                 </Tooltip>
                                 <div
                                   dangerouslySetInnerHTML={{
@@ -626,7 +625,7 @@ function YjsCodeMirror() {
                                     ].input.replace(/\n/g, '<br>'),
                                   }}
                                 />
-                                예제{key} 아웃풋
+                                예제{key} OUTPUT
                                 <div
                                   dangerouslySetInnerHTML={{
                                     __html: bojProbFullData?.samples?.[
@@ -639,7 +638,7 @@ function YjsCodeMirror() {
                           );
                         }
                       )
-                    )}
+                    ) : null}
                   </Grid>
                 </Typography>
               </AccordionDetails>
@@ -705,10 +704,10 @@ function YjsCodeMirror() {
             <Item>
               <TextField
                 id="standard-multiline-static"
-                label="INPUT"
+                // label="INPUT"
+                helperText="INPUT"
                 multiline
                 fullWidth
-                // disabled
                 rows={8}
                 variant="standard"
                 inputRef={inputStdin}
@@ -723,13 +722,13 @@ function YjsCodeMirror() {
                     <TextField
                       id="standard-read-only-input"
                       variant="standard"
-                      label="TIME"
+                      // label="TIME"
                       size="small"
                       fullWidth
                       InputProps={{
                         readOnly: true,
                       }}
-                      // helperText="TIME"
+                      helperText="TIME"
                       value={cpuTime}
                     />
                   </Item>
@@ -740,7 +739,8 @@ function YjsCodeMirror() {
                     <TextField
                       id="standard-read-only-input"
                       variant="standard"
-                      label="MEMORY"
+                      // label="MEMORY"
+                      helperText="MEMORY"
                       size="small"
                       fullWidth
                       InputProps={{
@@ -753,7 +753,8 @@ function YjsCodeMirror() {
               </Grid>
               <TextField
                 id="standard-multiline-static"
-                label="OUTPUT"
+                // label="OUTPUT"
+                helperText="OUTPUT"
                 multiline
                 fullWidth
                 rows={5}
