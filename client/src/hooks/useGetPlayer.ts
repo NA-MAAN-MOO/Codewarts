@@ -37,7 +37,7 @@ export default () => {
 
   const getUsers = async (sessionId: string) => {
     const users = (await getConnections(sessionId)) || [];
-    const charInfos = await Promise.all(
+    const userInfos = await Promise.all(
       users.map(async (user, index) => {
         const name = JSON.parse(user.clientData).user;
         const { data: char } = await axios.get(
@@ -46,7 +46,12 @@ export default () => {
         return { name, char };
       })
     );
-    dispatch(setUsers(charInfos));
+    const uniqueUserList = userInfos.filter(
+      (char, index, self) =>
+        index ===
+        self.findIndex((p) => p.name === char.name && p.char === char.char)
+    );
+    dispatch(setUsers(uniqueUserList));
   };
 
   return { getConnections, getSessions, getUsers };
