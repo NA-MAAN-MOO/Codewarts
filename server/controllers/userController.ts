@@ -30,7 +30,7 @@ import { IUserInfo } from './userTypes';
 
 const db = `mongodb+srv://juncheol:${mongoPassword}@cluster0.v0izvl3.mongodb.net/?retryWrites=true&w=majority`;
 mongoose
-  .connect(db)
+  .connect(db, { dbName: 'codewart' })
   .then(() => {
     console.log('연결은되냐?');
     if (mongoose.modelNames().includes('user')) {
