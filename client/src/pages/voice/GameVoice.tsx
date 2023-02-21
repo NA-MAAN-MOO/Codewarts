@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import VoiceBox from 'components/VoiceBox';
 import styled from 'styled-components';
 import { Session, Publisher, Subscriber } from 'openvidu-browser';
@@ -15,7 +15,6 @@ const GameVoice = (props: GameVoiceType) => {
   const handleDrawer = () => {
     setDrawerOpen(!drawerOpen);
   };
-
   return (
     <>
       <FloatingButton
