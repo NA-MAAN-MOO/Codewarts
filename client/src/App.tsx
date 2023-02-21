@@ -13,8 +13,8 @@ import './codeuk';
 function App() {
   const mode = process.env.REACT_APP_MODE;
   const { START, LOBBY, GAME, EDITOR } = GAME_STATUS;
-  const { status, users } = useSelector((state: RootState) => {
-    return { ...state.mode, ...state.chat };
+  const { status } = useSelector((state: RootState) => {
+    return state.mode;
   });
   const dispatch = useDispatch();
   let loadFlag = false;
