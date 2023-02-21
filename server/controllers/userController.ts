@@ -69,6 +69,7 @@ export const signUp = async (req: Request, res: Response) => {
       userPw: user.userPw,
       userNickname: user.userNickname,
       userBojId: user.userBojId,
+      userLeetId: user.userLeetId,
     });
     if (!result) {
       return res.json({ success: false, message: '회원가입 실패' });
@@ -121,6 +122,7 @@ export const login = async (req: Request, res: Response) => {
         userId: foundUser.userId,
         userNickname: foundUser.userNickname,
         userBojId: foundUser.userBojId,
+        userLeetId: foundUser.userLeetId,
       },
     });
   } else {

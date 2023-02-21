@@ -28,8 +28,8 @@ export default function FormDialog() {
         userPw: userForm.userPw,
         userNickname: userForm.userNickName,
         userBojId: userForm.userBojId,
+        userLeetId: userForm.userLeetId,
       };
-      console.log('fds?');
       const signUpResponse = await axios.post(
         'http://localhost:3003/user/signup',
         body
@@ -54,6 +54,7 @@ export default function FormDialog() {
     userPw: '',
     userNickName: '',
     userBojId: '',
+    userLeetId: '',
   });
 
   const handleForm = (item: string, value: string) => {
@@ -73,6 +74,10 @@ export default function FormDialog() {
         break;
       case 'userBojId':
         newUserForm.userBojId = value;
+        setUserForm(newUserForm);
+        break;
+      case 'userLeetId':
+        newUserForm.userLeetId = value;
         setUserForm(newUserForm);
         break;
     }
@@ -136,6 +141,17 @@ export default function FormDialog() {
               variant="standard"
               onInput={(e) => {
                 handleForm('userBojId', (e.target as HTMLInputElement).value);
+              }}
+            />
+            <TextField
+              margin="dense"
+              id="name"
+              label="LeetCode ID"
+              type="text"
+              fullWidth
+              variant="standard"
+              onInput={(e) => {
+                handleForm('userLeetId', (e.target as HTMLInputElement).value);
               }}
             />
           </DialogContent>

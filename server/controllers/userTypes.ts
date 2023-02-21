@@ -1,8 +1,9 @@
 export type Token = string;
 
 export interface IUserInfo {
-  userId?: string;
-  userPw?: string;
-  userNickname?: string;
+  userId: string;
+  userPw: string;
+  userNickname: string;
   userBojId?: string;
+  userLeetId?: string;
 }

@@ -13,7 +13,12 @@ import 'swiper/css/navigation';
 import logo from 'assets/images/logo.png';
 import chars from 'assets/characters';
 import { styledTheme } from 'styles/theme';
-import { setPlayerId, setPlayerTexture } from '../stores/userSlice';
+import {
+  setPlayerBojId,
+  setPlayerId,
+  setPlayerLeetId,
+  setPlayerTexture,
+} from '../stores/userSlice';
 import { useDispatch } from 'react-redux';
 import { handleScene } from 'lib/phaserLib';
 import { GAME_STATUS } from 'utils/Constants';
@@ -89,7 +94,7 @@ const LoginDialog = () => {
           body
         );
         if (response.data.status === 200) {
-          const { payload } = response.data; //userId, userNickname, userBojId
+          const { payload } = response.data; //userId, userNickname, userBojId, userLeetId
           //todo payload 값 리덕스에 저장하기
           console.log(
             'Join! Name:',
@@ -99,6 +104,8 @@ const LoginDialog = () => {
           );
 
           dispatch(setPlayerId(payload.userNickname));
+          dispatch(setPlayerBojId(payload.userBojId));
+          dispatch(setPlayerLeetId(payload.userLeetId));
           dispatch(setPlayerTexture(avatars[avatarIndex].name));
           handleScene(GAME_STATUS.LOBBY);
         }

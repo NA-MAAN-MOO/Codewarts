@@ -10,6 +10,7 @@ const user = new Schema<IUserInfo>({
   userPw: { type: String, required: true },
   userNickname: { type: String, required: true, unique: true },
   userBojId: { type: String, required: true },
+  userLeetId: { type: String, required: false },
 });
 
 const User = model<IUserDocument>('user', user);
