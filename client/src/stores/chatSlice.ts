@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { GAME_STATUS } from '../utils/Constants';
-import { Connection } from 'types';
+import { CharInfoType } from 'types';
 
 export interface ChatState {
-  users: Connection[];
+  users: CharInfoType[];
 }
 
 const initialState: ChatState = {
@@ -18,18 +18,18 @@ export const chatSlice = createSlice({
     setUsers: (state, action) => {
       state.users = action.payload;
     },
-    addUser: (state, action) => {
-      state.users = [...state.users, action.payload];
-    },
-    removeUser: (state, action) => {
-      const targetName = action.payload;
-      if (!targetName) return;
-      state.users = state.users.filter((item) => item !== targetName);
-    },
+    // addUser: (state, action) => {
+    //   state.users = [...state.users, action.payload];
+    // },
+    // removeUser: (state, action) => {
+    //   const targetName = action.payload;
+    //   if (!targetName) return;
+    //   state.users = state.users.filter((item) => item !== targetName);
+    // },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setUsers, addUser, removeUser } = chatSlice.actions;
+export const { setUsers } = chatSlice.actions;
 
 export default chatSlice.reducer;

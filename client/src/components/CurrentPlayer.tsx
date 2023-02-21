@@ -13,6 +13,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { RootState } from 'stores';
+import CharRoundLogo from 'components/CharRoundLogo';
 
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
 type DrawerProp = {
@@ -31,22 +32,29 @@ const CurrentPlayer = ({ anchor, handleDrawer, isOpen }: DrawerProp) => {
     <Box
       sx={{ width: 250 }}
       role="presentation"
-      onClick={handleDrawer}
+      // onClick={handleDrawer}
       onKeyDown={handleDrawer}
     >
-      <Title>현재 보고 있는 사람</Title>
+      <Title>현재 접속중인 사람</Title>
       <Divider />
       <List>
-        {users.map((user, index) => {
-          const { user: name } = JSON.parse(user.clientData);
+        {users.map(({ name, char }, index) => {
           return (
-            <ListItem key={name} disablePadding>
-              <ListItemButton>
+            <ListItem
+              key={name}
+              disablePadding
+              sx={{ display: 'flex', gap: '10px' }}
+            >
+              <ListItemButton onClick={(e) => e.preventDefault()}>
                 <ListItemIcon>
-                  {/* TODO : 캐릭터 로고 가져오는 axios 호출 해서 이미지 붙이기 */}
-                  <InboxIcon />
+                  <CharRoundLogo charName={char} />
                 </ListItemIcon>
-                <ListItemText primary={name} />
+                <ListItemText
+                  primary={name}
+                  primaryTypographyProps={{
+                    fontFamily: 'Firenze',
+                  }}
+                />
               </ListItemButton>
             </ListItem>
           );

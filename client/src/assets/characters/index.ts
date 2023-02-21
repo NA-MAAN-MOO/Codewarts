@@ -27,7 +27,11 @@ import char25 from './char25.png';
 import char26 from './char26.png';
 import char27 from './char27.png';
 
-export default {
+type Characters = {
+  [key: string]: string;
+};
+
+const characters: Characters = {
   char0,
   char1,
   char2,
@@ -57,3 +61,5 @@ export default {
   char26,
   char27,
 };
+
+export default characters;

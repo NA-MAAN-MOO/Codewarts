@@ -37,5 +37,19 @@ export default () => {
     console.log(data);
   };
 
-  return { getConnections, getSessions };
+  const getUsers = async (sessionId: string) => {
+    const users = (await getConnections(sessionId)) || [];
+    const charInfos = await Promise.all(
+      users.map(async (user, index) => {
+        const name = JSON.parse(user.clientData).user;
+        const { data: char } = await axios.get(
+          `http://localhost:3003/user/get-char/${name}`
+        );
+        return { name, char };
+      })
+    );
+    dispatch(setUsers(charInfos));
+  };
+
+  return { getConnections, getSessions, getUsers };
 };

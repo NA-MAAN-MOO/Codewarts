@@ -109,3 +109,6 @@ export type Connection = {
     createdAt: number;
   }[];
 };
+
+//{닉네임 : 캐릭터} 타입
+export type CharInfoType = Record<string, string>;

@@ -31,7 +31,7 @@ const Voice = ({ roomKey }: VoiceProp) => {
   const { playerId, status, users } = useSelector((state: RootState) => {
     return { ...state.user, ...state.mode, ...state.chat };
   });
-  const { getConnections, getSessions } = useGetPlayer();
+  const { getUsers, getSessions } = useGetPlayer();
 
   useEffect(() => {
     (async () => {
@@ -103,7 +103,7 @@ const Voice = ({ roomKey }: VoiceProp) => {
         OV,
         userName: playerId,
       });
-      await getConnections(roomKey);
+      await getUsers(roomKey);
     })();
   }, [session]);
 

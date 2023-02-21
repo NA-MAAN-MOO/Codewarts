@@ -59,7 +59,7 @@ const EditorVoice = ({
     <>
       <FloatingButton
         icon={PeopleIcon}
-        handleClick={() => handleDrawer()}
+        handleClick={handleDrawer}
         top="1%"
         right="1%"
       />
