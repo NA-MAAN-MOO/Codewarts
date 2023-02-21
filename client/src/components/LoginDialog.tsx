@@ -25,6 +25,7 @@ import { GAME_STATUS } from 'utils/Constants';
 import { Snackbar, SnackbarOrigin } from '@mui/material';
 import SignUpForm from './SignUpForm';
 import axios from 'axios';
+import MySnackbar from './MySnackbar';
 
 interface Characters {
   [key: string]: string;
@@ -120,16 +121,12 @@ const LoginDialog = () => {
 
   return (
     <Wrapper>
-      <Snackbar
-        autoHideDuration={1500}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        open={openLoginWarn}
+      <MySnackbar
+        text="아이디와 비밀번호를 다시 확인해 주세요"
+        state="warning"
         onClose={handleClose}
-      >
-        <Alert severity="warning" sx={{ width: '100%' }}>
-          아이디와 비밀번호를 다시 확인해 주세요
-        </Alert>
-      </Snackbar>
+        onOpen={openLoginWarn}
+      />
       <img
         src={logo}
         style={{ width: styledTheme.logoWidth, height: styledTheme.logoHeight }}
