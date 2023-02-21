@@ -37,7 +37,8 @@ const EditorDiv = styled.div`
   height: 100%;
   background-color: white;
   // background-color: #272822;
-  // background-color: rgba(0, 0, 0, 0.7);
+  // background-color: rgba(0, 0, 0, 0.7); // 검정 투명
+  // background-color: rgba(256, 256, 256, 0.7); // 흰색 투명
   // background-size: cover;
   // background-attachment: fixed;
   position: absolute;
