@@ -594,9 +594,9 @@ function YjsCodeMirror() {
               <AccordionDetails>
                 <Typography>
                   <Grid container spacing={3}>
-                    <Grid xs>
-                      {algoSelect === 1 &&
-                      leetProbData?.question.exampleTestcases ? (
+                    {algoSelect === 1 &&
+                    leetProbData?.question.exampleTestcases ? (
+                      <Grid xs>
                         <Item>
                           <div
                             dangerouslySetInnerHTML={{
@@ -608,40 +608,38 @@ function YjsCodeMirror() {
                             }}
                           />
                         </Item>
-                      ) : (
-                        <Item>
-                          예제1 인풋
-                          <Tooltip title="인풋 창으로 복사하기" arrow>
-                            <InputIcon onClick={copyToInput} />
-                          </Tooltip>
-                          <div
-                            dangerouslySetInnerHTML={{
-                              __html:
-                                bojProbFullData?.samples?.[1].input.replace(
-                                  /\n/g,
-                                  '<br>'
-                                ),
-                            }}
-                          />
-                          예제1 아웃풋
-                          <div
-                            dangerouslySetInnerHTML={{
-                              __html:
-                                bojProbFullData?.samples?.[1].output.replace(
-                                  /\n/g,
-                                  '<br>'
-                                ),
-                            }}
-                          />
-                        </Item>
-                      )}
-                    </Grid>
-                    <Grid xs>
-                      <Item>xs=6</Item>
-                    </Grid>
-                    <Grid xs>
-                      <Item>xsㄴㅇㄹㄴㅇㄹ</Item>
-                    </Grid>
+                      </Grid>
+                    ) : (
+                      Object.entries(bojProbFullData?.samples).map(
+                        ([key, value]) => {
+                          return (
+                            <Grid xs>
+                              <Item>
+                                예제{key} 인풋
+                                <Tooltip title="인풋 창으로 복사하기" arrow>
+                                  <InputIcon onClick={copyToInput} />
+                                </Tooltip>
+                                <div
+                                  dangerouslySetInnerHTML={{
+                                    __html: bojProbFullData?.samples?.[
+                                      key
+                                    ].input.replace(/\n/g, '<br>'),
+                                  }}
+                                />
+                                예제{key} 아웃풋
+                                <div
+                                  dangerouslySetInnerHTML={{
+                                    __html: bojProbFullData?.samples?.[
+                                      key
+                                    ].output.replace(/\n/g, '<br>'),
+                                  }}
+                                />
+                              </Item>
+                            </Grid>
+                          );
+                        }
+                      )
+                    )}
                   </Grid>
                 </Typography>
               </AccordionDetails>
@@ -651,28 +649,25 @@ function YjsCodeMirror() {
       ) : null}
 
       <MiddleWrapper>
-        <ThemeProvider>
-          <Tooltip title="코드 실행하기" arrow>
-            <Button onClick={runCode} color="primary" theme={buttonTheme}>
-              RUN
-            </Button>
-          </Tooltip>
-          <Tooltip title="제출하기" arrow>
-            <Button
-              color="primary"
-              theme={buttonTheme}
-              href={
-                bojProbData?.problemId
-                  ? `https://acmicpc.net/problem/${bojProbData?.problemId}`
-                  : `https://leetcode.com/problems/${leetProbData?.question.titleSlug}`
-              }
-              target="_blank"
-              rel="noreferrer"
-            >
-              SUBMIT
-            </Button>
-          </Tooltip>
-        </ThemeProvider>
+        <Tooltip title="코드 실행하기" arrow>
+          <Button onClick={runCode} color="primary">
+            RUN
+          </Button>
+        </Tooltip>
+        <Tooltip title="제출하기" arrow>
+          <Button
+            color="primary"
+            href={
+              bojProbData?.problemId
+                ? `https://acmicpc.net/problem/${bojProbData?.problemId}`
+                : `https://leetcode.com/problems/${leetProbData?.question.titleSlug}`
+            }
+            target="_blank"
+            rel="noreferrer"
+          >
+            SUBMIT
+          </Button>
+        </Tooltip>
 
         <FormGroup>
           <FormControlLabel
@@ -701,7 +696,7 @@ function YjsCodeMirror() {
         }}
       />
 
-      <Divider light="true"></Divider>
+      <Divider />
 
       <Box sx={{ flexGrow: 1, marginTop: '10px' }}>
         {/* <Grid container spacing={1.5} columns={16}> */}

@@ -209,10 +209,10 @@ export default class MainScene extends Phaser.Scene {
         const table = this.tableMap.get(payLoad.id);
         if (table) {
           //FIXME: 내 에디터 업데이트
-          if (phaserGame.socketID === payLoad.socketId) {
+          if (phaserGame.socketId === payLoad.socketId) {
             table.updateTable(payLoad.idx, payLoad.userName, this.player);
           }
-          //FIXME: socketID가 일치하는 other player를 앉힘
+          //FIXME: socketId가 일치하는 other player를 앉힘
           else {
             this.otherPlayers.forEach((otherPlayer: OtherPlayer) => {
               if (otherPlayer.socketId === payLoad.socketId) {
