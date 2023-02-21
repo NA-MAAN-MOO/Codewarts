@@ -19,6 +19,7 @@ import { handleScene } from 'lib/phaserLib';
 import { GAME_STATUS } from 'utils/Constants';
 import { Snackbar, SnackbarOrigin } from '@mui/material';
 import SignUpForm from './SignUpForm';
+import axios from 'axios';
 
 interface Characters {
   [key: string]: string;
@@ -62,7 +63,7 @@ const LoginDialog = () => {
   };
 
   const [userId, setUserId] = useState<string>('');
-  const [idValid, setIdValid] = useState<boolean>(true);
+  const [idValid, setIdValid] = useState<boolean>(false);
   const [userIdFieldEmpty, setUserIdFieldEmpty] = useState<boolean>(false);
   const [userPw, setUserPw] = useState<string>('');
   const [pwValid, setPwValid] = useState<boolean>(false);
@@ -70,31 +71,48 @@ const LoginDialog = () => {
   const [avatarIndex, setAvatarIndex] = useState<number>(0);
   const dispatch = useDispatch();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (userId === '') {
       setUserIdFieldEmpty(true);
+      return;
     } else if (userId !== '' && userPw === '') {
       setUserPwFieldEmpty(true);
       setUserIdFieldEmpty(false);
-      // } else if (!pwValid || !idValid) {  나중에 실제로 db연결하면 활성화
-      //   handleClick();
-      //   // console.log('fdas?', open);  onclose 때문에 꺼지면서 false로..
+      return;
     } else {
-      console.log('Join! Name:', userId, 'Avatar:', avatars[avatarIndex].name);
+      //todo user info 확인
+      const body = { userId: userId, userPw: userPw };
+      try {
+        const response = await axios.post(
+          'http://localhost:3003/user/login',
+          body
+        );
+        if (response.data.status === 200) {
+          const { payload } = response.data; //userId, userNickname, userBojId
+          //todo payload 값 리덕스에 저장하기
+          console.log(
+            'Join! Name:',
+            userId,
+            'Avatar:',
+            avatars[avatarIndex].name
+          );
 
-      dispatch(setPlayerId(userId));
-      dispatch(setPlayerTexture(avatars[avatarIndex].name));
-      handleScene(GAME_STATUS.LOBBY);
-
-      // game.myPlayer.setPlayerTexture(avatars[avatarIndex].name);
-      // game.network.readyToConnect();
-      // dispatch(setLoggedIn(true));
+          dispatch(setPlayerId(payload.userNickname));
+          dispatch(setPlayerTexture(avatars[avatarIndex].name));
+          handleScene(GAME_STATUS.LOBBY);
+        }
+      } catch (e) {
+        handleClick();
+        setUserId('');
+        setUserPw('');
+        console.log('불통요');
+      }
     }
   };
 
   return (
-    <Wrapper onSubmit={handleSubmit}>
+    <Wrapper>
       <Snackbar
         autoHideDuration={1500}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
@@ -117,7 +135,7 @@ const LoginDialog = () => {
         </Avatar>
         <h3>{'My Room'}</h3>
       </RoomName> */}
-      <Content>
+      <Content onSubmit={handleSubmit} id="login">
         <Left>
           <Swiper
             modules={[Navigation]}
@@ -152,6 +170,7 @@ const LoginDialog = () => {
             variant="outlined"
             error={userIdFieldEmpty}
             helperText={userIdFieldEmpty && 'ID를 입력해 주세요.'}
+            value={userId}
             onInput={(e) => {
               setUserId((e.target as HTMLInputElement).value);
             }}
@@ -160,8 +179,10 @@ const LoginDialog = () => {
           <div style={{ height: '15px' }}></div>
           <TextField
             fullWidth
+            type="password"
             label="PASSWORD"
             variant="outlined"
+            value={userPw}
             error={userPwFieldEmpty}
             helperText={userPwFieldEmpty && 'Password를 입력해 주세요.'}
             onInput={(e) => {
@@ -176,6 +197,7 @@ const LoginDialog = () => {
             color="primary"
             size="large"
             type="submit"
+            form="login"
             sx={{ fontFamily: styledTheme.mainFont }}
           >
             시작하기
@@ -191,7 +213,7 @@ const LoginDialog = () => {
 
 export default LoginDialog;
 
-const Wrapper = styled.form`
+const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -202,7 +224,7 @@ const Wrapper = styled.form`
   box-shadow: 0px 0px 5px #0000006f;
 `;
 
-const Content = styled.div`
+const Content = styled.form`
   display: flex;
   margin: 36px 0;
 `;

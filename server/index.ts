@@ -12,7 +12,10 @@ import editorServer from './servers/editorServer';
 import basicRouter from './routes/basicRouter';
 import { table } from 'console';
 import voiceServer from './servers/voiceServer';
+import dbServer from './servers/dbServer';
 import { PlayerType, TableType } from './types/Game';
+
+import cookieParser from 'cookie-parser';
 
 const port = process.env.PORT || 8080;
 const mongoPassword = process.env.MONGO_PW;
@@ -21,6 +24,7 @@ const { json } = pkg;
 const app: Express = express();
 app.use(json());
 app.use(cors());
+app.use(cookieParser());
 
 /*********배포 시 설정들********* */
 //빌드하고 나서 주석 해제
@@ -229,4 +233,8 @@ editorServer.listen(3001, () => {
 /* 보이스챗 서버 포트: 3002 */
 voiceServer.listen(3002, () => {
   console.log('Voice Server listening on *:3002');
+});
+/* DB 로직 서버 포트 : 3003 */
+dbServer.listen(3003, () => {
+  console.log(`server running on port 3003`);
 });
