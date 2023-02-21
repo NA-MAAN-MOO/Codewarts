@@ -1,18 +1,12 @@
-import dotenv from 'dotenv';
-//환경변수 이용(코드 최상단에 위치시킬 것)
-dotenv.config();
-
-import mongoose from 'mongoose';
-const mongoPassword = process.env.MONGO_PW;
 import { Request, Response } from 'express';
 const bcrypt = require('bcrypt');
 import jwt from 'jsonwebtoken';
-// import { config } from '../envconfig';
 const AUTH_ERROR = { message: '사용자 인증 오류' };
 import { Token } from '../controllers/userTypes';
 import User from '../models/User';
 import { v4 as uuidv4 } from 'uuid';
 import { IUserInfo } from './userTypes';
+import CharInfo from '../services/CharInfo';
 
 // async function hashPassword(user: IUserInfo) {
 //   const password = user.userPw;
@@ -27,19 +21,6 @@ import { IUserInfo } from './userTypes';
 
 //   return hashedPassword;
 // }
-
-const db = `mongodb+srv://juncheol:${mongoPassword}@cluster0.v0izvl3.mongodb.net/?retryWrites=true&w=majority`;
-mongoose
-  .connect(db, { dbName: 'codewart' })
-  .then(() => {
-    console.log('연결은되냐?');
-    if (mongoose.modelNames().includes('user')) {
-      return mongoose.model('user');
-    } else {
-      new User();
-    }
-  })
-  .catch((err) => console.log(err));
 
 export const signUp = async (req: Request, res: Response) => {
   try {
@@ -131,52 +112,66 @@ export const login = async (req: Request, res: Response) => {
       message: '비밀번호가 올바르지 않습니다.',
     });
   }
-  // const isPasswordCorrect = await bcrypt.compare(userPw, foundUser.userPw);
-  // if (isPasswordCorrect) {
-  //   const accessToken = jwt.sign(
-  //     {
-  //       userId: foundUser.userId,
-  //       username: foundUser.userNickname,
-  //       uuid: uuidv4(),
-  //     },
-  //     config.jwt.secretKey,
-  //     {
-  //       expiresIn: '1h',
-  //     }
-  //   );
-
-  //   const refreshToken = jwt.sign(
-  //     {
-  //       userId: foundUser.userId,
-  //       username: foundUser.userNickname,
-  //       uuid1: uuidv4(),
-  //       uuid2: uuidv4(),
-  //     },
-  //     config.jwt.secretKey
-  //   );
-
-  //   await User.collection.updateOne(
-  //     { userId: foundUser.userId },
-  //     {
-  //       $set: {
-  //         refreshToken: refreshToken,
-  //         lastUpdated: new Date(),
-  //       },
-  //     }
-  //   );
-
-  //   res.cookie('refreshToken', refreshToken, { path: '/', secure: true }); // 60초 * 60분 * 1시간
-  //   res.status(200).json({
-  //     status: 200,
-  //     payload: {
-  //       userId: foundUser.userId,
-  //       accessToken: accessToken,
-  //     },
-  //   });
-  // } else {
-  //   return res.status(400).json({
-  //     status: 400,
-  //     message: '비밀번호가 올바르지 않습니다.',
-  //   });
-  // }
 };
+
+export const getChar = async (req: Request, res: Response) => {
+  try {
+    const username = req.params.username;
+
+    if (!CharInfo.get(username)) {
+      return res.status(500).end();
+    }
+    res.send(CharInfo.get(username));
+  } catch (e) {
+    console.log(e);
+    res.status(500).send(e);
+  }
+};
+// const isPasswordCorrect = await bcrypt.compare(userPw, foundUser.userPw);
+// if (isPasswordCorrect) {
+//   const accessToken = jwt.sign(
+//     {
+//       userId: foundUser.userId,
+//       username: foundUser.userNickname,
+//       uuid: uuidv4(),
+//     },
+//     config.jwt.secretKey,
+//     {
+//       expiresIn: '1h',
+//     }
+//   );
+
+//   const refreshToken = jwt.sign(
+//     {
+//       userId: foundUser.userId,
+//       username: foundUser.userNickname,
+//       uuid1: uuidv4(),
+//       uuid2: uuidv4(),
+//     },
+//     config.jwt.secretKey
+//   );
+
+//   await User.collection.updateOne(
+//     { userId: foundUser.userId },
+//     {
+//       $set: {
+//         refreshToken: refreshToken,
+//         lastUpdated: new Date(),
+//       },
+//     }
+//   );
+
+//   res.cookie('refreshToken', refreshToken, { path: '/', secure: true }); // 60초 * 60분 * 1시간
+//   res.status(200).json({
+//     status: 200,
+//     payload: {
+//       userId: foundUser.userId,
+//       accessToken: accessToken,
+//     },
+//   });
+// } else {
+//   return res.status(400).json({
+//     status: 400,
+//     message: '비밀번호가 올바르지 않습니다.',
+//   });
+// }

@@ -13,7 +13,8 @@ import basicRouter from './routes/basicRouter';
 import { table } from 'console';
 import voiceServer from './servers/voiceServer';
 import dbServer from './servers/dbServer';
-import { PlayerType, TableType } from './types/Game';
+import { PlayerType, TableType, CharInfoType } from './types/Game';
+import CharInfo from './services/CharInfo';
 
 import cookieParser from 'cookie-parser';
 
@@ -36,8 +37,15 @@ app.get('/', function (req, res) {
 //db connect
 const db = `mongodb+srv://juncheol:${mongoPassword}@cluster0.v0izvl3.mongodb.net/?retryWrites=true&w=majority`;
 mongoose
-  .connect(db)
-  .then(() => console.log('MongoDB Connected...'))
+  .connect(db, { dbName: 'codewart' })
+  .then(() => {
+    console.log('DB 연결 완료');
+    // if (mongoose.modelNames().includes('user')) {
+    //   return mongoose.model('user');
+    // } else {
+    //   new User();
+    // }
+  })
   .catch((err) => console.log(err));
 
 //merge phaser 230209
@@ -76,10 +84,14 @@ io.on('connection', (socket: Socket) => {
     socketId: socket.id,
   }); // 연결된 유저에게 고유 데이터를 전달한다.
 
-  socket.on('savePlayer', ({ charKey, userName }) => {
-    playerInfo.charKey = charKey;
-    playerInfo.userName = userName;
-  });
+  socket.on(
+    'savePlayer',
+    ({ charKey, userName }: { charKey: string; userName: string }) => {
+      playerInfo.charKey = charKey;
+      playerInfo.userName = userName;
+      CharInfo.set(userName, charKey);
+    }
+  );
 
   // Send back the payload to the client and set its initial position
   socket.on('loadNewPlayer', (payLoad) => {
