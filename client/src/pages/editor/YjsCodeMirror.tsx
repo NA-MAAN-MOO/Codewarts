@@ -37,7 +37,12 @@ import './YjsCodeMirror.css';
 import styledc from 'styled-components';
 import 'styles/fonts.css'; /* FONT */
 import Button from '@mui/material/Button';
-import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
+import {
+  styled,
+  createTheme,
+  ThemeProvider,
+  alpha,
+} from '@mui/material/styles';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
@@ -56,6 +61,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import InputIcon from '@mui/icons-material/Input';
+import Chip from '@mui/material/Chip';
 
 /* solvedAC badge svg */
 import RenderSvg from 'components/Svg';
@@ -130,6 +136,43 @@ const Item = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(1),
   textAlign: 'center',
   color: theme.palette.text.secondary,
+}));
+
+/* reddit text field theme setting */
+const AlgoTextField = styled((props: TextFieldProps) => (
+  <TextField
+    InputProps={{ disableUnderline: true } as Partial<OutlinedInputProps>}
+    {...props}
+  />
+))(({ theme }) => ({
+  '& label': {
+    textShadow: '1px 1px 2px #ededed',
+  },
+  '& label.Mui-focused': {
+    color: 'papayawhip',
+    textShadow: '2px 2px 2px gray',
+  },
+  '& .MuiFilledInput-root': {
+    border: '1px solid papayawhip',
+    overflow: 'hidden',
+    borderRadius: 4,
+    backgroundColor: theme.palette.mode === 'light' ? 'papayawhip' : '#2b2b2b',
+    transition: theme.transitions.create([
+      'border-color',
+      'background-color',
+      'box-shadow',
+    ]),
+    '&:hover': {
+      backgroundColor: 'transparent',
+      color: 'papayawhip',
+    },
+    '&.Mui-focused': {
+      backgroundColor: 'transparent',
+      color: 'papayawhip',
+      boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 2px`,
+      borderColor: theme.palette.primary.main,
+    },
+  },
 }));
 
 function YjsCodeMirror() {
@@ -417,81 +460,98 @@ function YjsCodeMirror() {
     <EditorWrapper>
       <EditorInfo>
         <div>
-          🧙🏻‍♂️{roomId}님의 IDE🪄
+          🧙🏻‍♂️
+          <span
+            style={{
+              color: 'papayawhip',
+              filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25)',
+            }}
+          >
+            {roomId}
+          </span>
+          님의 에디터
           <span style={{ fontSize: '10px', color: 'grey' }}>
-            내정보: {userName}
+            나: {userName}
           </span>
         </div>
       </EditorInfo>
 
-      <AlgoWrapper>
-        <Box>
-          <Box sx={{ bgcolor: '#272822', display: 'flex' }}>
-            <Header>
-              <StyledTabs
-                value={algoSelect}
-                onChange={selectChange}
-                aria-label="algo-selector"
-              >
-                <StyledTab label="Baekjoon" />
-                <StyledTab label="LeetCode" />
-              </StyledTabs>
+      <AlgoInfoWrap>
+        <Box
+          sx={{
+            bgcolor: '#272822',
+            display: 'flex',
+            // border: '1px solid orange',
+            borderRadius: 1.4,
+            boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)',
+          }}
+        >
+          <Header>
+            <StyledTabs
+              value={algoSelect}
+              onChange={selectChange}
+              aria-label="algo-selector"
+            >
+              <StyledTab label="Baekjoon" />
+              <StyledTab label="LeetCode" />
+            </StyledTabs>
 
-              <InputWrapper>
+            {algoSelect === 0 && bojProbData?.level ? (
+              <ProbSummary>
                 <div>
-                  {algoSelect === 0 ? (
-                    <div>
-                      <TextField
-                        id="standard-basic"
-                        label="문제 번호"
-                        variant="standard"
-                        inputRef={bojProbDataRef}
-                      />
-                      <AutoFixHighIcon
-                        onClick={fetchBojProbInfo}
-                        style={{ color: '#ffefd5' }}
-                      />
-                    </div>
-                  ) : (
-                    <div>
-                      <TextField
-                        id="standard-basic"
-                        label="leetcode-title-slug"
-                        variant="standard"
-                        inputRef={leetProbDataRef}
-                      />
-                      <AutoFixHighIcon
-                        onClick={fetchLeetProbInfo}
-                        style={{ color: '#ffe600' }}
-                      />
-                    </div>
-                  )}
-                </div>
-              </InputWrapper>
-            </Header>
-
-            <ProbInfo>
-              <div style={{ color: '#ffefd5' }}>
-                {algoSelect === 0 && bojProbData?.level ? (
-                  <>
-                    <RenderSvg svgName={bojProbData.level} />
-                    <span>
-                      {bojProbData?.problemId}번 {bojProbData?.titleKo}
-                    </span>
-                  </>
-                ) : (
+                  <RenderSvg svgName={bojProbData.level} />
                   <span>
-                    {leetProbData?.question.difficulty}{' '}
+                    {bojProbData?.problemId}번 {bojProbData?.titleKo}
+                  </span>
+                </div>
+              </ProbSummary>
+            ) : leetProbData?.question.questionId ? (
+              <ProbSummary>
+                <div>
+                  <span>
+                    <Chip
+                      label={leetProbData?.question.difficulty}
+                      color={
+                        leetProbData?.question.difficulty === 'Easy'
+                          ? 'success'
+                          : leetProbData?.question.difficulty === 'Medium'
+                          ? 'warning'
+                          : 'error'
+                      }
+                    />{' '}
                     {leetProbData?.question.questionId}번{' '}
                     {leetProbData?.question.title}
                   </span>
-                )}
+                </div>
+              </ProbSummary>
+            ) : null}
+
+            <AlgoInputWrap>
+              <div>
+                <>
+                  <AlgoTextField
+                    id="reddit-input"
+                    label={
+                      algoSelect === 0 ? '문제 번호' : 'leetcode-title-slug'
+                    }
+                    variant="filled"
+                    size="small"
+                    inputRef={
+                      algoSelect === 0 ? bojProbDataRef : leetProbDataRef
+                    }
+                  />
+                  <AutoFixHighIcon
+                    onClick={
+                      algoSelect === 0 ? fetchBojProbInfo : fetchLeetProbInfo
+                    }
+                    style={{ color: '#ffefd5' }}
+                  />
+                </>
               </div>
-            </ProbInfo>
-            <Box sx={{ p: 3 }} />
-          </Box>
+            </AlgoInputWrap>
+          </Header>
         </Box>
-      </AlgoWrapper>
+      </AlgoInfoWrap>
 
       {bojProbData?.problemId || leetProbData?.question.titleSlug ? (
         <>
@@ -685,6 +745,7 @@ function YjsCodeMirror() {
       </MiddleWrapper>
 
       <div
+        className="codemirror-editor"
         ref={editor}
         style={{
           minHeight: '50%',
@@ -729,6 +790,7 @@ function YjsCodeMirror() {
                         readOnly: true,
                       }}
                       helperText="TIME"
+                      // focused
                       value={cpuTime}
                     />
                   </Item>
@@ -740,12 +802,13 @@ function YjsCodeMirror() {
                       id="standard-read-only-input"
                       variant="standard"
                       // label="MEMORY"
-                      helperText="MEMORY"
                       size="small"
                       fullWidth
                       InputProps={{
                         readOnly: true,
                       }}
+                      helperText="MEMORY"
+                      // focused
                       value={memory}
                     />
                   </Item>
@@ -784,16 +847,18 @@ export default YjsCodeMirror;
 const EditorWrapper = styledc.div`
   width: 95%;
   margin: 0 auto;
-  font-family: 'Cascadia Code', sans-serif;
+  font-family: 'Cascadia Code', 'EliceDigitalBaeum_Bold';
 `;
 
 const EditorInfo = styledc.div`
 font-size: 40px; 
 font-weight: 600; 
 margin-top: 3%;
+text-align: center;
+filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 `;
 
-const AlgoWrapper = styledc.div`
+const AlgoInfoWrap = styledc.div`
 margin-top: 20px;
 width: 100%;
 `;
@@ -843,8 +908,11 @@ const StyledTab = styled((props: StyledTabProps) => (
 }));
 
 const Header = styledc.div`
-  display: flex;
-  justify-content: space-between;
+display: flex;
+justify-content: space-between;
+// border: 1px solid blue;
+width: 100%;
+color: papayawhip;
 `;
 
 const AlgoInput = styledc.input`
@@ -855,17 +923,20 @@ const AlgoInput = styledc.input`
   border: none;
   border-radius: 3px;
 `;
-const InputWrapper = styledc.div`
-  margin-top: 10px;
+const AlgoInputWrap = styledc.div`
+  // margin-top: 10px;
+  border: 1px solid red;
+  
 `;
 
-const ProbInfo = styledc.div`
-  margin-left: 20px;
-  margin-top: 20px;
-  color: 'rgba(255, 255, 255, 0.7)';
-  font-size: 20px;
-  background-color: 'white';
-  width: 300px;
+const ProbSummary = styledc.div`
+color: 'papayawhip';
+// color: 'rgba(255, 255, 255, 0.7)';
+font-size: 23px;
+width: 300px;
+border: 1px solid yellow;
+text-align: center;
+
 `;
 
 const ProfileInfo = styledc.div`
