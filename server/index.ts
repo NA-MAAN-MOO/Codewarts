@@ -22,15 +22,12 @@ const app: Express = express();
 app.use(json());
 app.use(cors());
 
-//배포 시 주석처리
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-
 /*********배포 시 설정들********* */
 //빌드하고 나서 주석 해제
-// app.use(express.static('../client/build'));
-// app.get('/', function (req, res) {
-//   res.sendFile('../client/build/index.html');
-// });
+app.use(express.static('../client/build'));
+app.get('/', function (req, res) {
+  res.sendFile('../client/build/index.html');
+});
 
 //db connect
 const db = `mongodb+srv://juncheol:${mongoPassword}@cluster0.v0izvl3.mongodb.net/?retryWrites=true&w=majority`;
@@ -181,13 +178,20 @@ io.on('connection', (socket: Socket) => {
   socket.on('addEditor', (payLoad) => {
     console.log('addEditor');
     // 누군가 editor에 들어가면 해당 table ID값과 자리(인덱스)값을 업데이트 한다.
-    tables.push([payLoad.id, payLoad.idx, playerInfo.userName]);
-    console.log(tables);
+    //FIXME:
+    tables.push([
+      payLoad.id,
+      payLoad.idx,
+      playerInfo.userName,
+      payLoad.socketId,
+    ]);
+    // console.log(tables);
     let payLoad2 = {
       id: payLoad.id,
       idx: payLoad.idx,
       userName: playerInfo.userName,
-      // socketId: playerInfo.socketId,
+      //FIXME:
+      socketId: payLoad.socketId,
     };
     socket.broadcast.emit('updateEditor', payLoad2);
   });
@@ -200,6 +204,8 @@ io.on('connection', (socket: Socket) => {
         id: table[0],
         idx: table[1],
         userName: table[2],
+        //FIXME:
+        socketId: playerInfo.socketId,
       };
       socket.emit('updateEditor', payLoad);
     });

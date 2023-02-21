@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import Player from './Player';
+import OtherPlayer from './OtherPlayer';
 import Button from './Button';
 import Table from './Table';
 
@@ -22,29 +23,39 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
     this.mainScene = scene;
 
     scene.add.existing(this);
-    // let yOrigin = resource.properties.find(
-    //     (p) => p.name == "yOrigin"
-    // ).value; // #1 오브젝트 collider를 원형으로 적용할 시 사용
 
-    // this.y = this.y + this.height * (yOrigin - 0.5); // #1 오브젝트 collider를 원형으로 적용할 시 사용
-    // const { Body, Bodies } = Phaser.Physics.Matter.Matter;
     const Body = scene.matter.body;
     const Bodies = scene.matter.bodies;
 
-    let verticeCollider = Bodies.fromVertices(this.x, this.y, polygon);
+    let verticeCollider = Bodies.fromVertices(this.x + 5, this.y, polygon);
 
-    /* Disable chair collision */
+    /* Disable chair collision & Add chair resource table info */
     if (resource.name === 'chair_back' || resource.name === 'chair_front') {
+      // Sensor
       verticeCollider = Bodies.fromVertices(this.x, this.y, polygon, {
         isSensor: true,
       });
+      // Chair list
+      if (index < 2) {
+        scene.chairList[0].push(this);
+      } else if (index < 4) {
+        scene.chairList[1].push(this);
+      } else if (index < 6) {
+        scene.chairList[2].push(this);
+      } else if (index < 8) {
+        scene.chairList[3].push(this);
+      } else if (index < 10) {
+        scene.chairList[4].push(this);
+      } else if (index < 12) {
+        scene.chairList[5].push(this);
+      }
     }
     this.setExistingBody(verticeCollider);
-    // this.macbookList = [];
+
     /* Add table interaction */
     if (resource.name === 'table') {
       // @ts-ignore
-      let tableCollider = Bodies.circle(this.x - 10, this.y + 10, 100, {
+      let tableCollider = Bodies.circle(this.x - 10, this.y + 10, 115, {
         isSensor: true,
         label: 'tableSensor',
       });
@@ -59,49 +70,12 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
         compoundBody.id,
         new Table(this.mainScene, this, compoundBody.id)
       );
-      // console.log(scene.tableMap);
-      // console.log(compoundBody.id);
+
       this.CreateCollisions(tableCollider);
       this.setExistingBody(compoundBody);
-
-      // for (let i = 0; i < 5; i++) {
-      //   if (i !== 0) {
-      //     this.buttonToEditor = new Button({
-      //       scene: this.scene,
-      //       x: this.x,
-      //       y: this.y - 30 - 30 * i,
-      //       text: `${5 - i}번 자리 앉기`,
-      //       style: {
-      //         fontSize: '20px',
-      //         // backgroundColor: 'white',
-      //         color: '#de77ae',
-      //         stroke: '#de77aa',
-      //         strokeThickness: 2,
-      //       },
-      //     })
-      //       .getBtn()
-      //       .setDepth(300)
-      //       .setShadow(2, 2, '#333333', 2, false, true);
-      //   } else {
-      //     this.buttonToEditor = new Button({
-      //       scene: this.scene,
-      //       x: this.x,
-      //       y: this.y - 30 - 30 * i,
-      //       text: `돌아가기`,
-      //       style: {
-      //         fontSize: '20px',
-      //         backgroundColor: 'white',
-      //         color: 'black',
-      //       },
-      //     })
-      //       .getBtn()
-      //       .setDepth(300);
-      //   }
-      //   this.buttonToEditor.setVisible(false);
-      //   this.macbookList.push(this.buttonToEditor);
-      // }
     }
 
+    /* Add laptop resource to table info */
     if (
       resource.name == 'macbook_front_closed' ||
       resource.name == 'macbook_back_closed'
@@ -155,6 +129,17 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
     scene.load.image('teapot', 'assets/room/teapot.png');
     scene.load.image('wall_candle', 'assets/room/wall_candle.png');
     scene.load.image('table', 'assets/room/table.png');
+    /* Chairs where characters sit */
+    for (let i = 0; i < 28; i++) {
+      scene.load.image(
+        `char${i}_chair_back`,
+        `assets/room/sitting/char${i}_chair_back.png`
+      );
+      scene.load.image(
+        `char${i}_chair_front`,
+        `assets/room/sitting/char${i}_chair_front.png`
+      );
+    }
   }
 
   CreateCollisions(tableSensor: any) {
@@ -164,7 +149,11 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
         // console.log(this.body.id);
         // console.log("from player: ", other);
 
-        if (other.bodyB.isSensor && other.bodyB.gameObject instanceof Player) {
+        if (
+          other.bodyB.isSensor &&
+          other.bodyB.gameObject instanceof Player &&
+          !(other.bodyB.gameObject instanceof OtherPlayer)
+        ) {
           this.buttonEditor = new Button({
             scene: this.scene,
             x: this.x,
@@ -179,15 +168,12 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
           }).getBtn();
           this.buttonEditor.setInteractive(); // 이거 해줘야 function 들어감!!!!! 3시간 버린듯;
 
-          // TODO: E누르면 한 번 overlap된 모든 table이 찍히는 현상 해결하기
           // 딱 하나만 볼 수 있게하기
-          //@ts-ignore
+          // @ts-ignore
           const table = this.mainScene.tableMap.get(this.body.id);
           this.mainScene.input.keyboard.on('keydown-E', () =>
             console.log(table.tableId)
           );
-
-          // this.buttonEditor.setDepth(6000);
 
           //TODO: 여기에서 사용자가 키보드 누르면 상호작용 하도록 만듦
           //@ts-ignore

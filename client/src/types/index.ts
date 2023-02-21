@@ -27,8 +27,6 @@ export interface PlayerInterface {
   playerTexture: string;
   touching: any[];
   inputKeys: any;
-  showingIcon: any;
-  spriteIcon: any;
   buttonEditor: any;
 }
 
