@@ -13,7 +13,6 @@ export default () => {
 
   const getConnections = async (sessionId: string) => {
     try {
-      console.log('겟 코넥션 진입');
       if (status === GAME_STATUS.GAME) {
         const { data }: { data: Connection[] } = await axios.get(
           'http://localhost:3002/get-connections',
@@ -21,7 +20,6 @@ export default () => {
             params: { sessionId: GAME_STATUS.GAME },
           }
         );
-        console.log(data);
         dispatch(setUsers(data));
         return data;
       } else {

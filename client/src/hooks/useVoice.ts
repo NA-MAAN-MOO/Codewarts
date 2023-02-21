@@ -87,15 +87,12 @@ export default () => {
       handlePublisher,
     } = props;
     try {
-      console.log('레지스터 진입');
       if (!session) return;
       const content: Connection[] = (await getConnections(sessionId)) || [];
-      console.log('일', content);
       const isConnectExist = content.some((con: Connection) => {
         const { user } = JSON.parse(con.clientData);
         return user === userName;
       });
-      console.log('이', isConnectExist);
       if (isConnectExist) return;
 
       const mySession = session;
@@ -149,8 +146,6 @@ export default () => {
 
       await mySession.publish(pubNow);
       handlePublisher(pubNow);
-      const connections2 = await getConnections(sessionId);
-      console.log('삼', connections2);
     } catch (error) {
       console.log(error);
     }

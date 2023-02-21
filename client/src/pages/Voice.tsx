@@ -92,7 +92,6 @@ const Voice = ({ roomKey }: VoiceProp) => {
     if (!session) {
       return;
     }
-    console.log('영, 유즈이펙트 호출');
     (async () => {
       await registerSession({
         session,
@@ -107,9 +106,9 @@ const Voice = ({ roomKey }: VoiceProp) => {
     })();
   }, [session]);
 
-  useEffect(() => {
-    console.log(users);
-  }, [users]);
+  // useEffect(() => {
+  //   console.log(users);
+  // }, [users]);
 
   return status === GAME_STATUS.GAME ? (
     <>
