@@ -22,6 +22,7 @@ const VoiceRoom = () => {
 
   useEffect(() => {
     disconnectSession(session);
+    setSession(undefined);
   }, [status, roomId]);
 
   return (

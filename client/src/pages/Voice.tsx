@@ -25,7 +25,6 @@ const Voice = ({ roomKey, session, handleSession }: VoiceProp) => {
   } = useVoice();
 
   const onBeforeUnload = (e: BeforeUnloadEvent) => {
-    console.log('실행');
     leaveSession();
   };
   const { playerId, status, users } = useSelector((state: RootState) => {
@@ -34,11 +33,6 @@ const Voice = ({ roomKey, session, handleSession }: VoiceProp) => {
 
   useEffect(() => {
     window.addEventListener('beforeunload', onBeforeUnload);
-
-    (async () => {
-      if (session) return;
-      await joinSession();
-    })();
 
     return function cleanup() {
       window.removeEventListener('beforeunload', onBeforeUnload);
@@ -88,10 +82,11 @@ const Voice = ({ roomKey, session, handleSession }: VoiceProp) => {
   };
 
   useEffect(() => {
-    if (!session) {
-      return;
-    }
     (async () => {
+      if (!session) {
+        await joinSession();
+        return;
+      }
       await registerSession({
         session,
         sessionId: roomKey,
@@ -104,10 +99,6 @@ const Voice = ({ roomKey, session, handleSession }: VoiceProp) => {
       await getUsers(roomKey);
     })();
   }, [session]);
-
-  // useEffect(() => {
-  //   console.log(users);
-  // }, [users]);
 
   return (
     <>

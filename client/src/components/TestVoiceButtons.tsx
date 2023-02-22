@@ -20,7 +20,11 @@ const TestVoiceButtons = ({ roomKey }: { roomKey: string }) => {
       <button
         onClick={async () => {
           const conn = await getConnections(GAME_STATUS.GAME);
-          console.log(conn);
+          if (conn === false) {
+            console.log('세션 없음');
+          } else {
+            console.log(conn);
+          }
         }}
       >
         메인 세션 커넥션 가져오기

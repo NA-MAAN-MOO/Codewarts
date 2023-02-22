@@ -18,7 +18,7 @@ export default () => {
 
   const getConnections = async (sessionId: string) => {
     try {
-      const { data }: { data: Connection[] } = await axios.get(
+      const { data }: { data: Connection[] | false } = await axios.get(
         'http://localhost:3002/get-connections',
         {
           params: { sessionId: sessionId },
@@ -27,7 +27,7 @@ export default () => {
       return data;
     } catch (err) {
       console.log(err);
-      return [];
+      return false;
     }
   };
   const getSessions = async () => {
@@ -90,10 +90,8 @@ export default () => {
 
   const disconnectSession = (session: Session | undefined) => {
     if (!session) {
-      console.log('세션이 없어용');
       return;
     }
-    console.log('세션 나갑니다.,.');
     session.disconnect();
     // dispatch(removeSession());
   };
@@ -135,8 +133,13 @@ export default () => {
       handlePublisher,
     } = props;
     try {
-      if (!session) return;
-      const content: Connection[] = (await getConnections(sessionId)) || [];
+      if (!session || !sessionId) return;
+
+      const content: Connection[] | false = await getConnections(sessionId);
+      if (content === false) {
+        // 세션 아직 존재하지 않음
+        return;
+      }
       const isConnectExist = content.some((con: Connection) => {
         if (!con.clientData) return false;
         const { user } = JSON.parse(con.clientData);
@@ -173,7 +176,6 @@ export default () => {
       mySession.on('sessionDisconnected', (event: SessionDisconnectedEvent) => {
         //내가 세션을 나갔을 때 호출
         // disconnectSession(event.target as Session);
-        console.log('세션 나감 완료됐습니다.');
       });
 
       mySession.on('connectionDestroyed', (event: ConnectionEvent) => {
@@ -206,7 +208,6 @@ export default () => {
 
       await mySession.publish(pubNow);
       handlePublisher(pubNow);
-      // dispatch(setSession(mySession));
     } catch (error) {
       console.log(error);
     }

@@ -66,7 +66,7 @@ export const getConnections = async (req: Request, res: Response) => {
     console.log(err);
     if (err instanceof AxiosError && err.response?.status === 404) {
       // 아직 세션 만들어지지 않은 상태임
-      res.send([]);
+      res.send(false);
       return;
     }
     res.status(500).send(err);
