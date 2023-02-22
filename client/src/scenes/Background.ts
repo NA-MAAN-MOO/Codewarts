@@ -15,17 +15,17 @@ export default class Background extends Phaser.Scene {
   private backdropKey!: string;
 
   constructor() {
-    super('background');
+    super('Background');
     // this.clouds = [];
   }
 
-  preload() {
-    this.load.atlas(
-      'castle_night',
-      'assets/background/castle_night.png',
-      'assets/background/castle_night.json'
-    );
-  }
+  // preload() {
+  //   this.load.atlas(
+  //     'castle_night',
+  //     'assets/background/castle_night.png',
+  //     'assets/background/castle_night.json'
+  //   );
+  // }
 
   create(data: { backgroundMode: BackgroundMode }) {
     const sceneHeight = this.cameras.main.height;

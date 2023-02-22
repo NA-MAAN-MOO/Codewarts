@@ -48,13 +48,13 @@ export default class MainScene extends Phaser.Scene {
     this.tableMap = new Map<string, Table>();
   }
 
-  preload() {
-    // 미리 로드하는 메서드, 이미지 등을 미리 로드한다.
-    Player.preload(this);
-    Resource.preload(this);
-    this.load.image('room_map', 'assets/room/room_map.png');
-    this.load.tilemapTiledJSON('room_map_tile', 'assets/room/room_map.json');
-  }
+  // preload() {
+  //   // 미리 로드하는 메서드, 이미지 등을 미리 로드한다.
+  //   Player.preload(this);
+  //   Resource.preload(this);
+  //   this.load.image('room_map', 'assets/room/room_map.png');
+  //   this.load.tilemapTiledJSON('room_map_tile', 'assets/room/room_map.json');
+  // }
 
   create() {
     // this.getOut = false;

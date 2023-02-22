@@ -39,23 +39,23 @@ export default class Lobby extends Phaser.Scene {
     });
   }
 
-  preload() {
-    Player.preload(this);
-    /* Lobby Background image load */
-    this.load.image('lobby', 'assets/lobby/lobby_scene.png');
+  // preload() {
+  //   // Player.preload(this);
+  //   /* Lobby Background image load */
+  //   this.load.image('lobby', 'assets/lobby/lobby_scene.png');
 
-    this.load.atlas(
-      'green',
-      'assets/lobby/green.png',
-      'assets/lobby/green.json'
-    );
+  //   this.load.atlas(
+  //     'green',
+  //     'assets/lobby/green.png',
+  //     'assets/lobby/green.json'
+  //   );
 
-    this.load.atlas(
-      'plasma',
-      'assets/lobby/plasma.png',
-      'assets/lobby/plasma.json'
-    );
-  }
+  //   this.load.atlas(
+  //     'plasma',
+  //     'assets/lobby/plasma.png',
+  //     'assets/lobby/plasma.json'
+  //   );
+  // }
 
   create() {
     /* Add Lobby background */
