@@ -38,6 +38,11 @@ const EditorDiv = styled.div`
   width: 100%;
   height: 100%;
   background-color: white;
+  // background-color: #272822; // 에디터 검정
+  // background-color: rgba(0, 0, 0, 0.3); // 검정 투명
+  background-color: rgba(256, 256, 256, 0.7); // 흰색 투명
+  // background-size: cover;
+  // background-attachment: fixed;
   position: absolute;
   top: 0;
   left: 0;

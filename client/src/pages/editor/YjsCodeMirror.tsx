@@ -1,7 +1,8 @@
 //@ts-nocheck
 /* react */
 import { useRef, useEffect, useState } from 'react';
-import './YjsCodeMirror.css';
+import { RootState } from 'stores';
+
 /* lib */
 import * as random from 'lib0/random';
 import { useSelector } from 'react-redux';
@@ -26,28 +27,53 @@ import {
 } from '@codemirror/commands';
 import { noctisLilac } from '@uiw/codemirror-theme-noctis-lilac';
 import { okaidia } from '@uiw/codemirror-theme-okaidia';
-import { RootState } from 'stores';
+
+/* GraphQL queries */
+import PROBLEMQUERY from '../../graphql/problemQuery';
+import USERINFOQUERY from '../../graphql/userInfoQuery';
 
 /* UI */
-import { Button, Radio } from 'antd';
-import { DownCircleOutlined } from '@ant-design/icons';
-import type { RadioChangeEvent } from 'antd';
-import { styled } from '@mui/material/styles';
+import './YjsCodeMirror.css';
+import styledc from 'styled-components';
+import 'styles/fonts.css'; /* FONT */
+import Button from '@mui/material/Button';
+import {
+  styled,
+  createTheme,
+  ThemeProvider,
+  alpha,
+} from '@mui/material/styles';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import styledc from 'styled-components';
-import 'styles/fonts.css'; /* FONT */
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Unstable_Grid2';
+import TextField from '@mui/material/TextField';
+import Tooltip from '@mui/material/Tooltip';
+import Divider from '@mui/material/Divider';
+import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Typography from '@mui/material/Typography';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import InputIcon from '@mui/icons-material/Input';
+import Chip from '@mui/material/Chip';
 
 /* solvedAC badge svg */
 import RenderSvg from 'components/Svg';
 
+/* 다크/라이트 토글 스위치 테마 */
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
+  // 토글 막대기 부분
   width: 62,
   height: 34,
   padding: 7,
   '& .MuiSwitch-switchBase': {
-    margin: 1,
+    margin: 0,
     padding: 0,
     transform: 'translateX(6px)',
     '&.Mui-checked': {
@@ -89,7 +115,79 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
+/* MUI button color theme setting */
+const buttonTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#272822', // 에디터 검정
+    },
+    secondary: {
+      // main: '#FD971F', // 주황
+      main: '#ffefd5', // papayawhip
+      // main: '#11cb5f',
+    },
+  },
+});
+
+/* Paper element theme setting */
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
+
+/* reddit text field theme setting */
+const AlgoTextField = styled((props: TextFieldProps) => (
+  <TextField
+    InputProps={{ disableUnderline: true } as Partial<OutlinedInputProps>}
+    {...props}
+  />
+))(({ theme }) => ({
+  '& label': {
+    textShadow: '1px 1px 2px #ededed',
+    fontFamily: 'Cascadia Code, EliceDigitalBaeum_Bold',
+  },
+  '& input': {
+    fontFamily: 'Cascadia Code, EliceDigitalBaeum_Bold',
+  },
+  '& label.Mui-focused': {
+    color: 'papayawhip',
+    textShadow: '2px 2px 2px gray',
+  },
+  '& .MuiFilledInput-root': {
+    border: '1px solid papayawhip',
+    overflow: 'hidden',
+    borderRadius: 4,
+    backgroundColor: theme.palette.mode === 'light' ? 'papayawhip' : '#2b2b2b',
+    transition: theme.transitions.create([
+      'border-color',
+      'background-color',
+      'box-shadow',
+    ]),
+    '&:hover': {
+      backgroundColor: 'transparent',
+      color: 'papayawhip',
+    },
+    '&.Mui-focused': {
+      backgroundColor: 'transparent',
+      color: 'papayawhip',
+      boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 2px`,
+      borderColor: theme.palette.primary.main,
+    },
+  },
+}));
+
 function YjsCodeMirror() {
+  /* ref */
+  const editor = useRef(null);
+  const inputStdin = useRef();
+  const leetUserNameRef = useRef(null);
+  const leetProbDataRef = useRef(null);
+  const bojUserNameRef = useRef(null);
+  const bojProbDataRef = useRef(null);
+
   /* states */
   const { userName, roomId } = useSelector((state: RootState) => state.editor);
   let [compileOutput, setCompileOutput] = useState();
@@ -101,17 +199,6 @@ function YjsCodeMirror() {
   let [bojUserData, setBojUserData] = useState();
   let [bojProbData, setBojProbData] = useState();
   let [bojProbFullData, setBojProbFullData] = useState();
-
-  /* ref */
-  const editor = useRef(null);
-  const inputStdin = useRef();
-  const leetUserNameRef = useRef(null);
-  const leetProbDataRef = useRef(null);
-  const bojUserNameRef = useRef(null);
-  const bojProbDataRef = useRef(null);
-
-  /* for UI */
-  // const { TextArea } = Input;
 
   /* roomName 스트링 값 수정하지 말 것(※ 수정할 거면 전부 수정해야 함) */
   const roomName = `ROOMNAME${roomId}`;
@@ -168,10 +255,11 @@ function YjsCodeMirror() {
     /* editor theme 설정 */
     let basicThemeSet = EditorView.theme({
       '&': {
-        // fontFamily: 'Cascadia Code',
         height: '500px',
         // minHeight: '500px',
+        borderRadius: '.5em', // '.cm-gutters'와 같이 조절할 것
       },
+      '.cm-editor': {},
       '.cm-content, .cm-gutter': { minHeight: '30%' },
       '.cm-content': {
         fontFamily: 'Cascadia Code',
@@ -180,6 +268,9 @@ function YjsCodeMirror() {
       '.cm-gutter': {
         // minHeight: '50%',
         fontFamily: 'Cascadia Code',
+      },
+      '.cm-gutters': {
+        borderRadius: '.5em',
       },
     });
 
@@ -212,13 +303,14 @@ function YjsCodeMirror() {
   /* 유저가 작성한 코드를 컴파일하기 위해 서버로 보냄 */
   const runCode = async () => {
     if (!inputStdin.current) return;
-    console.log(inputStdin.current.value);
+
+    console.log(inputStdin.current?.value);
 
     try {
-      const { data } = await axios.post(`http://localhost:3001/run-code`, {
+      const { data } = await axios.post(`http://localhost:3001/code_to_run`, {
         codeToRun: ytext.toString(),
         //@ts-ignore
-        stdin: inputStdin.current.value,
+        stdin: inputStdin.current?.value,
       });
 
       console.log(data); // 전체 reponse body (output, statusCode, memory, cpuTime)
@@ -240,41 +332,16 @@ function YjsCodeMirror() {
     }
   }
 
+  /* 백준(0), 리트코드(1) 선택 */
+  const [algoSelect, setAlgoSelect] = useState(0);
+
+  const selectChange = (event, newValue: number) => {
+    setAlgoSelect(newValue);
+  };
+
   /* leetcode 문제 정보 가져오기 */
   const fetchLeetProbInfo = async () => {
     if (leetProbDataRef.current === null) return;
-
-    // 문제 정보 쿼리
-    const problemQuery = `
-    query ($titleSlug: String!) {
-      question(titleSlug: $titleSlug) {
-          questionId
-          questionFrontendId
-          title
-          titleSlug
-          content
-          difficulty
-          likes
-          dislikes
-          exampleTestcases
-          topicTags {
-              name
-              slug
-              translatedName
-          }
-          codeSnippets {
-              lang
-              langSlug
-              code
-          }
-          stats
-          metaData
-          enableRunCode
-          enableTestMode
-          enableDebugger
-        }
-      }
-    `;
 
     const problemQueryVariable = {
       //@ts-ignore
@@ -285,7 +352,7 @@ function YjsCodeMirror() {
       const response = await axios.post(
         'https://cors-anywhere.herokuapp.com/https://leetcode.com/graphql',
         {
-          query: problemQuery,
+          query: PROBLEMQUERY,
           variables: problemQueryVariable,
         }
       );
@@ -344,45 +411,6 @@ function YjsCodeMirror() {
     let leetUserName = leetUserNameRef.current.value;
     console.log(leetUserName);
 
-    const userInfoQuery = `
-    query ($username: String!) {
-      matchedUser(username: $username) {
-          username
-          socialAccounts
-          githubUrl
-          profile {
-              realName
-  
-              ranking
-          }
-          submitStats {
-              acSubmissionNum {
-                  difficulty
-                  count
-              }
-              totalSubmissionNum {
-                  difficulty
-                  count
-                  # submissions
-              }
-          }
-          badges {
-              id
-              displayName
-              icon
-              creationDate
-          }
-      }
-      recentSubmissionList(username: $username, limit: 20) {
-          title
-          titleSlug
-          timestamp
-          statusDisplay
-          lang
-      }
-    }
-    `;
-
     const userQueryVariable = {
       //@ts-ignore
       username: leetUserName,
@@ -392,7 +420,7 @@ function YjsCodeMirror() {
       const response = await axios.post(
         'https://cors-anywhere.herokuapp.com/https://leetcode.com/graphql',
         {
-          query: userInfoQuery,
+          query: USERINFOQUERY,
           variables: userQueryVariable,
         }
       );
@@ -426,254 +454,397 @@ function YjsCodeMirror() {
     }
   };
 
-  /* 백준, 리트코드 선택 */
-  const [algoSelect, setAlgoSelect] = useState(1);
-  const platformChange = (e: RadioChangeEvent) => {
-    setAlgoSelect(e.target.value);
-  };
-
   /* 문제 예제 인풋을 실행 인풋 창으로 복사 */
-  // todo: 인덱스를 인수로 받고, 해당하는 예제 복사하기
-  const copyToInput = () => {
+  const copyToInput = (key) => {
     if (inputStdin.current === undefined) return;
-    inputStdin.current.value = bojProbFullData?.samples?.[1].input;
+    inputStdin.current.value = bojProbFullData?.samples?.[key].input;
   };
 
   return (
     <EditorWrapper>
-      <div className="room-user-info">
-        <div>내 이름 : {userName}</div>
-        <div>에디터 주인 이름(구 룸ID) : {roomId}</div>
-      </div>
-
-      <div className="algo-info">
-        <div className="algo-user-input">
-          <Radio.Group onChange={platformChange} value={algoSelect}>
-            <Radio value={1}>LeetCode</Radio>
-            <Radio value={2}>백준</Radio>
-          </Radio.Group>
-
-          {algoSelect === 1 ? (
-            <div className="leet-user-input">
-              <input ref={leetUserNameRef} placeholder="leetcode 아이디 입력" />
-              <DownCircleOutlined onClick={fetchLeetUserData} />
-            </div>
-          ) : (
-            <div className="boj-user-input">
-              <input ref={bojUserNameRef} placeholder="백준 아이디 입력" />
-              <DownCircleOutlined onClick={fetchBojUserData} />
-            </div>
-          )}
-        </div>
-
-        <div className="algo-user-info">
-          {algoSelect === 1 ? (
-            <div className="leet-user-info">
-              {/* <div>깃헙 주소 :{leetUserData?.matchedUser?.githubUrl}</div> */}
-              <div>
-                leetcode 랭킹 : {leetUserData?.matchedUser?.profile?.ranking}
-              </div>
-              <div>
-                leetcode 총 맞춘 문제수 :
-                {
-                  leetUserData?.matchedUser?.submitStats?.acSubmissionNum?.[0]
-                    ?.count
-                }
-              </div>
-            </div>
-          ) : (
-            <div className="boj-user-info">
-              <div>나의 백준 티어 : {bojUserData?.items[0].tier}</div>
-              <div>백준 푼 문제 수 : {bojUserData?.items[0].solvedCount}</div>
-            </div>
-          )}
-        </div>
-
-        <div className="algo-problem-input">
-          {algoSelect === 1 ? (
-            <div className="leet-problem-input">
-              <input
-                ref={leetProbDataRef}
-                placeholder="LeetCode 문제의 title slug를 입력!"
-              />
-              <DownCircleOutlined onClick={fetchLeetProbInfo} />
-            </div>
-          ) : (
-            <div className="boj-problem-input">
-              <input ref={bojProbDataRef} placeholder="백준 문제 번호 입력!" />
-              <DownCircleOutlined onClick={fetchBojProbInfo} />
-            </div>
-          )}
-        </div>
-
-        <div
-          className="algo-problem-info"
-          style={{ border: '5px solid black' }}
-        >
-          {algoSelect === 1 ? (
-            <div className="leet-prob-info">
-              <a
-                href={`https://leetcode.com/problems/${leetProbData?.question.titleSlug}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                LeetCode에 답안 제출하러 가기
-              </a>
-              <div>문제 제목 : {leetProbData?.question.title}</div>
-              <div>문제 번호 : {leetProbData?.question.questionId}</div>
-              <div>난이도 : {leetProbData?.question.difficulty}</div>
-              <h3>문제 내용</h3>
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: leetProbData?.question.content,
-                }}
-              />
-              <h3>예제</h3>
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: leetProbData?.question.exampleTestcases.replace(
-                    /\n/g,
-                    '<br>'
-                  ),
-                }}
-              />
-              <h3>파이썬 스니펫</h3>
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: leetProbData?.question.codeSnippets[3].code.replace(
-                    /\n/g,
-                    '<br>'
-                  ),
-                }}
-              ></div>
-            </div>
-          ) : (
-            <div className="boj-prob-info">
-              <span>
-                <a
-                  href={`https://acmicpc.net/problem/${bojProbData?.problemId}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  백준에 답안 제출하러 가기
-                </a>
-              </span>
-
-              <span style={{ display: 'flex' }}>
-                {bojProbData?.level ? (
-                  <RenderSvg svgName={bojProbData.level} />
-                ) : null}
-                {bojProbData?.titleKo}
-              </span>
-
-              <h3>문제 내용</h3>
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: bojProbFullData?.prob_desc.replace(/\n/g, '<br>'),
-                }}
-              />
-              <h3>입력</h3>
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: bojProbFullData?.prob_input.replace(/\n/g, '<br>'),
-                }}
-              />
-              <h3>출력</h3>
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: bojProbFullData?.prob_output.replace(/\n/g, '<br>'),
-                }}
-              />
-              <div className="prob-samples">
-                <h3>예제 1</h3>
-                <button onClick={copyToInput}>input창으로 복사하기</button>
-                <div className="prob-sample-input1">
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: bojProbFullData?.samples?.[1].input.replace(
-                        /\n/g,
-                        '<br>'
-                      ),
-                    }}
-                  />
-                </div>
-                <div className="prob-sample-output1">
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: bojProbFullData?.samples?.[1].output.replace(
-                        /\n/g,
-                        '<br>'
-                      ),
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* <Space direction="vertical">
-        <Switch
-          checkedChildren="Dark"
-          unCheckedChildren="Lavender"
-          defaultChecked
-          onChange={(checked) => {
-            switchTheme(checked);
-          }}
-        />
-      </Space> */}
-      <FormGroup>
-        <FormControlLabel
-          control={
-            <MaterialUISwitch
-              sx={{ m: 1 }}
-              defaultChecked
-              onClick={(checked) => {
-                switchTheme(checked);
-              }}
-            />
-          }
-          label=""
-        />
-      </FormGroup>
-
-      <div className="editor" ref={editor} style={{ minHeight: '50%' }} />
-
-      <div className="compiler">
-        {/* <div key={inputStdin.current}>
-          <TextArea
-            className="stdin"
-            rows={5}
-            placeholder="Input"
-            defaultValue=""
-            ref={inputStdin}
-          />
-        </div> */}
+      <EditorInfo>
         <div>
-          <textarea
-            className="stdin"
-            rows={5}
-            placeholder="Input"
-            ref={inputStdin}
-          />
-        </div>
-        <Button onClick={runCode} type="primary">
-          코드 실행
-        </Button>
-        <div className="compiled-result">
-          <h3>OUTPUT</h3>
-          <div
-            style={{ border: '1px solid black' }}
-            className="compiled-output"
-            dangerouslySetInnerHTML={{
-              __html: compileOutput,
+          🧙🏻‍♂️
+          <span
+            style={{
+              color: 'papayawhip',
+              filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25)',
             }}
-          ></div>
-          <div className="compiled-cputime">CPU TIME : {cpuTime}</div>
-          <div className="compiled-memory">MEMORY : {memory}</div>
+          >
+            {roomId}
+          </span>
+          님의 에디터
+          <span style={{ fontSize: '10px', color: 'grey' }}>
+            나: {userName}
+          </span>
         </div>
-      </div>
+      </EditorInfo>
+
+      <AlgoInfoWrap>
+        <Box
+          sx={{
+            bgcolor: '#272822',
+            display: 'flex',
+            // border: '1px solid orange',
+            borderRadius: 1.4,
+            boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)',
+          }}
+        >
+          <Header>
+            <StyledTabs
+              value={algoSelect}
+              onChange={selectChange}
+              aria-label="algo-selector"
+            >
+              <StyledTab label="Baekjoon" />
+              <StyledTab label="LeetCode" />
+            </StyledTabs>
+
+            {algoSelect === 0 && bojProbData?.level ? (
+              <ProbSummary>
+                <div>
+                  <RenderSvg svgName={bojProbData.level} />
+                  <span>
+                    {bojProbData?.problemId}번 {bojProbData?.titleKo}
+                  </span>
+                </div>
+              </ProbSummary>
+            ) : leetProbData?.question.questionId ? (
+              <ProbSummary>
+                <div>
+                  <span>
+                    <Chip
+                      label={leetProbData?.question.difficulty}
+                      color={
+                        leetProbData?.question.difficulty === 'Easy'
+                          ? 'success'
+                          : leetProbData?.question.difficulty === 'Medium'
+                          ? 'warning'
+                          : 'error'
+                      }
+                    />{' '}
+                    {leetProbData?.question.questionId}번{' '}
+                    {leetProbData?.question.title}
+                  </span>
+                </div>
+              </ProbSummary>
+            ) : null}
+
+            <AlgoInputWrap>
+              <div>
+                <>
+                  <AlgoTextField
+                    id="reddit-input"
+                    label={
+                      algoSelect === 0
+                        ? '백준 문제 번호'
+                        : 'leetcode-title-slug'
+                    }
+                    variant="filled"
+                    size="small"
+                    inputRef={
+                      algoSelect === 0 ? bojProbDataRef : leetProbDataRef
+                    }
+                  />
+                  <AutoFixHighIcon
+                    onClick={
+                      algoSelect === 0 ? fetchBojProbInfo : fetchLeetProbInfo
+                    }
+                    style={{ color: '#ffefd5' }}
+                    fontSize="large"
+                  />
+                </>
+              </div>
+            </AlgoInputWrap>
+          </Header>
+        </Box>
+      </AlgoInfoWrap>
+
+      {bojProbData?.problemId || leetProbData?.question.titleSlug ? (
+        <>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              문제 정보
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography>
+                <div
+                  dangerouslySetInnerHTML={
+                    algoSelect === 0 && bojProbFullData?.prob_desc
+                      ? {
+                          __html: bojProbFullData?.prob_desc.replace(
+                            /\n/g,
+                            '<br>'
+                          ),
+                        }
+                      : {
+                          __html: leetProbData?.question.content,
+                        }
+                  }
+                />
+              </Typography>
+            </AccordionDetails>
+          </Accordion>
+
+          {algoSelect === 0 && bojProbFullData?.prob_input ? (
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel2a-content"
+                id="panel2a-header"
+              >
+                입력 & 출력
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography>
+                  <Typography>입력</Typography>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: bojProbFullData?.prob_input.replace(
+                        /\n/g,
+                        '<br>'
+                      ),
+                    }}
+                  />
+                  <Typography>출력</Typography>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: bojProbFullData?.prob_output.replace(
+                        /\n/g,
+                        '<br>'
+                      ),
+                    }}
+                  />
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
+          ) : (
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel2a-content"
+                id="panel2a-header"
+              >
+                코드 스니펫
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html:
+                        leetProbData?.question.codeSnippets[3].code.replace(
+                          /\n/g,
+                          '<br>'
+                        ),
+                    }}
+                  ></div>
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
+          )}
+
+          {leetProbData?.question.exampleTestcases ||
+          bojProbFullData?.samples ? (
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel2a-content"
+                id="panel2a-header"
+              >
+                예제
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography>
+                  <Grid container spacing={3}>
+                    {algoSelect === 1 &&
+                    leetProbData?.question.exampleTestcases ? (
+                      <Grid xs>
+                        <Item>
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html:
+                                leetProbData?.question.exampleTestcases.replace(
+                                  /\n/g,
+                                  '<br>'
+                                ),
+                            }}
+                          />
+                        </Item>
+                      </Grid>
+                    ) : bojProbFullData?.samples ? (
+                      Object.entries(bojProbFullData?.samples).map(
+                        ([key, value]) => {
+                          return (
+                            <Grid xs>
+                              <Item>
+                                예제{key} INPUT
+                                <Tooltip title="INPUT 칸으로 복사하기" arrow>
+                                  <InputIcon onClick={() => copyToInput(key)} />
+                                </Tooltip>
+                                <div
+                                  dangerouslySetInnerHTML={{
+                                    __html: bojProbFullData?.samples?.[
+                                      key
+                                    ].input.replace(/\n/g, '<br>'),
+                                  }}
+                                />
+                                예제{key} OUTPUT
+                                <div
+                                  dangerouslySetInnerHTML={{
+                                    __html: bojProbFullData?.samples?.[
+                                      key
+                                    ].output.replace(/\n/g, '<br>'),
+                                  }}
+                                />
+                              </Item>
+                            </Grid>
+                          );
+                        }
+                      )
+                    ) : null}
+                  </Grid>
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
+          ) : null}
+        </>
+      ) : null}
+
+      <MiddleWrapper>
+        <Tooltip title="코드 실행하기" arrow>
+          <Button onClick={runCode} color="primary">
+            RUN
+          </Button>
+        </Tooltip>
+        <Tooltip title="제출하기" arrow>
+          <Button
+            color="primary"
+            href={
+              bojProbData?.problemId
+                ? `https://acmicpc.net/problem/${bojProbData?.problemId}`
+                : `https://leetcode.com/problems/${leetProbData?.question.titleSlug}`
+            }
+            target="_blank"
+            rel="noreferrer"
+          >
+            SUBMIT
+          </Button>
+        </Tooltip>
+
+        <FormGroup>
+          <FormControlLabel
+            control={
+              <MaterialUISwitch
+                sx={{ m: 1 }}
+                defaultChecked
+                onClick={(checked) => {
+                  switchTheme(checked);
+                }}
+              />
+            }
+            label=""
+          />
+        </FormGroup>
+      </MiddleWrapper>
+
+      <div
+        className="codemirror-editor"
+        ref={editor}
+        style={{
+          minHeight: '50%',
+          // boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)',
+          filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25)',
+          // marginTop: '10px',
+          marginBottom: '10px',
+        }}
+      />
+
+      <Divider />
+
+      <Box sx={{ flexGrow: 1, marginTop: '10px' }}>
+        {/* <Grid container spacing={1.5} columns={16}> */}
+        <Grid container spacing={1.5}>
+          <Grid xs>
+            <Item>
+              <TextField
+                id="standard-multiline-static"
+                // label="INPUT"
+                helperText="INPUT"
+                multiline
+                fullWidth
+                rows={8}
+                variant="standard"
+                inputRef={inputStdin}
+              />
+            </Item>
+          </Grid>
+          <Grid xs>
+            <Item>
+              <Grid container spacing={1.5}>
+                <Grid xs>
+                  <Item>
+                    <TextField
+                      id="standard-read-only-input"
+                      variant="standard"
+                      // label="TIME"
+                      size="small"
+                      fullWidth
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                      helperText="TIME"
+                      // focused
+                      value={cpuTime}
+                    />
+                  </Item>
+                </Grid>
+
+                <Grid xs>
+                  <Item>
+                    <TextField
+                      id="standard-read-only-input"
+                      variant="standard"
+                      // label="MEMORY"
+                      size="small"
+                      fullWidth
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                      helperText="MEMORY"
+                      // focused
+                      value={memory}
+                    />
+                  </Item>
+                </Grid>
+              </Grid>
+              <TextField
+                id="standard-multiline-static"
+                // label="OUTPUT"
+                helperText="OUTPUT"
+                multiline
+                fullWidth
+                rows={5}
+                variant="standard"
+                InputProps={{
+                  readOnly: true,
+                }}
+                value={compileOutput}
+              />
+              {/* <span
+                    style={{ border: '1px solid black' }}
+                    className="compiled-output"
+                    dangerouslySetInnerHTML={{
+                      __html: compileOutput,
+                    }}
+                  ></span> */}
+            </Item>
+          </Grid>
+        </Grid>
+      </Box>
     </EditorWrapper>
   );
 }
@@ -681,7 +852,111 @@ function YjsCodeMirror() {
 export default YjsCodeMirror;
 
 const EditorWrapper = styledc.div`
-  & {
-    font-family: 'Cascadia Code', sans-serif;
-  }
+  width: 95%;
+  margin: 0 auto;
+  font-family: 'Cascadia Code', 'EliceDigitalBaeum_Bold';
+`;
+
+const EditorInfo = styledc.div`
+font-size: 40px; 
+font-weight: 600; 
+margin-top: 3%;
+text-align: center;
+filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+`;
+
+const AlgoInfoWrap = styledc.div`
+margin-top: 20px;
+width: 100%;
+`;
+
+interface StyledTabsProps {
+  children?: React.ReactNode;
+  value: number;
+  onChange: (event: React.SyntheticEvent, newValue: number) => void;
+}
+
+const StyledTabs = styled((props: StyledTabsProps) => (
+  <Tabs
+    {...props}
+    TabIndicatorProps={{ children: <span className="MuiTabs-indicatorSpan" /> }}
+  />
+))({
+  '& .MuiTabs-indicator': {
+    display: 'flex',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+  },
+  '& .MuiTabs-indicatorSpan': {
+    maxWidth: 80,
+    width: '100%',
+    backgroundColor: '#ffe600',
+  },
+});
+
+interface StyledTabProps {
+  label: string;
+}
+
+const StyledTab = styled((props: StyledTabProps) => (
+  <Tab disableRipple {...props} />
+))(({ theme }) => ({
+  textTransform: 'none',
+  fontFamily: 'Cascadia Code, EliceDigitalBaeum_Bold',
+  fontWeight: theme.typography.fontWeightRegular,
+  fontSize: theme.typography.pxToRem(20),
+  marginRight: theme.spacing(1),
+  color: 'rgba(255, 255, 255, 0.7)',
+  '&.Mui-selected': {
+    color: '#fff',
+  },
+  '&.Mui-focusVisible': {
+    backgroundColor: 'rgba(100, 95, 228, 0.32)',
+  },
+}));
+
+const Header = styledc.div`
+display: flex;
+justify-content: space-between;
+// border: 1px solid blue;
+width: 100%;
+color: papayawhip;
+`;
+
+const AlgoInput = styledc.input`
+  font-size: 18px;
+  padding: 10px;
+  margin: 10px;
+  background: papayawhip;
+  border: none;
+  border-radius: 3px;
+`;
+
+const AlgoInputWrap = styledc.div`
+  // margin-top: 10px;
+  border: 1px solid red;
+  
+`;
+
+const ProbSummary = styledc.div`
+color: 'papayawhip';
+// color: 'rgba(255, 255, 255, 0.7)';
+font-size: 23px;
+width: 300px;
+border: 1px solid yellow;
+text-align: center;
+
+`;
+
+const ProfileInfo = styledc.div`
+  margin-left: 20px;
+  martgin-top: 10px;
+  font-size: 20px;
+`;
+
+const MiddleWrapper = styledc.div`
+  margin-left: 20px;
+  martgin-top: 10px;
+  font-size: 20px;
+  display: flex;
 `;
