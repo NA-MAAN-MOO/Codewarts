@@ -145,6 +145,14 @@ const Voice = ({ roomKey }: VoiceProp) => {
       </button>
       <button
         onClick={async () => {
+          const conn = await getConnections(GAME_STATUS.GAME);
+          console.log(conn);
+        }}
+      >
+        메인 세션 커넥션 가져오기
+      </button>
+      <button
+        onClick={async () => {
           const ses = await getSessions();
           console.log(ses);
         }}

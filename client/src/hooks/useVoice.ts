@@ -2,18 +2,14 @@ import { useState, useEffect } from 'react';
 import { OpenVidu, Session } from 'openvidu-browser';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'stores';
-import { GAME_STATUS } from 'utils/Constants';
 import axios from 'axios';
-import { setUsers } from 'stores/chatSlice';
+import { setSession, setUsers, removeSession } from 'stores/chatSlice';
 import { Connection } from 'types';
 
 const APPLICATION_SERVER_URL = 'http://localhost:3002';
 
 export default () => {
   const dispatch = useDispatch();
-  const { status, roomId } = useSelector((state: RootState) => {
-    return { ...state.mode, ...state.editor };
-  });
 
   const getConnections = async (sessionId: string) => {
     try {
@@ -87,6 +83,7 @@ export default () => {
   const disconnectSession = (session: Session | undefined) => {
     if (!session) return;
     session.disconnect();
+    dispatch(removeSession());
   };
 
   const getToken = async (sessionId: string) => {
@@ -160,6 +157,10 @@ export default () => {
         console.warn(exception);
       });
 
+      mySession.on('sessionDisconnected', (event) => {
+        //다른 유저가 세션을 나갔을 때 호출
+      });
+
       // --- 4) Connect to the session with a valid user token ---
 
       // Get a token from the OpenVidu deployment
@@ -185,6 +186,7 @@ export default () => {
 
       await mySession.publish(pubNow);
       handlePublisher(pubNow);
+      dispatch(setSession(mySession));
     } catch (error) {
       console.log(error);
     }

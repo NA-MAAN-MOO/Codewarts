@@ -2,13 +2,16 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { GAME_STATUS } from '../utils/Constants';
 import { CharInfoType } from 'types';
+import { Session } from 'openvidu-browser';
 
 export interface ChatState {
   users: CharInfoType[];
+  session: Session | undefined;
 }
 
 const initialState: ChatState = {
   users: [],
+  session: undefined,
 };
 
 export const chatSlice = createSlice({
@@ -17,6 +20,12 @@ export const chatSlice = createSlice({
   reducers: {
     setUsers: (state, action) => {
       state.users = action.payload;
+    },
+    setSession: (state, action) => {
+      state.session = action.payload;
+    },
+    removeSession: (state) => {
+      state.session = undefined;
     },
     // addUser: (state, action) => {
     //   state.users = [...state.users, action.payload];
@@ -30,6 +39,6 @@ export const chatSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setUsers } = chatSlice.actions;
+export const { setUsers, setSession, removeSession } = chatSlice.actions;
 
 export default chatSlice.reducer;
