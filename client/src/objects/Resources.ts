@@ -29,6 +29,16 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
 
     let verticeCollider = Bodies.fromVertices(this.x + 5, this.y, polygon);
 
+    if (
+      resource.name === 'table_candle' ||
+      resource.name === 'painting3' ||
+      resource.name === 'floor_candle'
+    ) {
+      verticeCollider = Bodies.fromVertices(this.x, this.y, polygon, {
+        isSensor: true,
+      });
+    }
+
     /* Disable chair collision & Add chair resource table info */
     if (resource.name === 'chair_back' || resource.name === 'chair_front') {
       // Sensor
