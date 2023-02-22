@@ -71,7 +71,6 @@ export default class MainScene extends Phaser.Scene {
     /* Extracting objects' polygons from TiledJson */
     const polygons = this.map.tilesets.reduce(
       (acc: Record<string, any[]>, obj: Phaser.Tilemaps.Tileset) => {
-        console.log(obj.name);
         let polygonArray = Object.entries(obj.tileData)[0][1].objectgroup
           .objects[0].polygon;
         let key = obj.name;

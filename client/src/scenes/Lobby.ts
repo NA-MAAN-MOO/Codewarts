@@ -10,29 +10,12 @@ import { handleScene } from 'lib/phaserLib';
 import { GAME_STATUS } from 'utils/Constants';
 import { styledTheme } from 'styles/theme';
 
-/* Parallax Scrolling */
-// const createAligned = (
-//   scene: Phaser.Scene,
-//   count: number,
-//   texture: string,
-//   scrollFactor: number
-// ) => {
-//   let x = -100;
-//   for (let i = 0; i < count; i++) {
-//     const image = scene.add
-//       .image(x, scene.scale.height, texture)
-//       .setOrigin(0, 1)
-//       .setScrollFactor(scrollFactor);
-//     x += image.width;
-//   }
-// };
-
 export default class Lobby extends Phaser.Scene {
   private player!: Phaser.Physics.Matter.Sprite;
   private buttonForList!: Phaser.GameObjects.Text;
   private portal!: Phaser.Physics.Matter.Sprite;
-  private portalZone!: Phaser.GameObjects.Zone | any;
-  socketId: string | any;
+  private portalZone!: any;
+  socketId: any;
 
   socket: Socket | undefined;
   // const {nickName, characterModel} = useSelector((state:RootState)=> state.charactor);
@@ -186,7 +169,6 @@ export default class Lobby extends Phaser.Scene {
 
   update() {
     /* Control Player Movement */
-    const speed = 5;
     const playerId = store.getState().user.playerId;
     if (playerId === '') {
       this.input.keyboard.disableGlobalCapture();

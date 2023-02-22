@@ -23,7 +23,7 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
     this.mainScene = scene;
 
     scene.add.existing(this);
-    console.log(resource.name);
+
     const Body = scene.matter.body;
     const Bodies = scene.matter.bodies;
 
