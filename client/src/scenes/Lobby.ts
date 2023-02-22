@@ -165,6 +165,7 @@ export default class Lobby extends Phaser.Scene {
 
     this.portal.setExistingBody(this.portalZone);
     this.createCollisions(this.portalZone);
+    // handleScene(GAME_STATUS.GAME);
   }
 
   update() {
