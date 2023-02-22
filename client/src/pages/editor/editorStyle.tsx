@@ -5,6 +5,12 @@ import { styled, alpha } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import MuiAccordionSummary, {
+  AccordionSummaryProps,
+} from '@mui/material/AccordionSummary';
+import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
+import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 
 const EditorWrapper = styledc.div`
   width: 95%;
@@ -231,6 +237,41 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
+const Accordion = styled((props: AccordionProps) => (
+  <MuiAccordion disableGutters elevation={0} {...props} />
+))(({ theme }) => ({
+  backgroundColor: '#272822',
+  // color: '#fff',
+  color: 'papayawhip',
+  '&:not(:last-child)': {
+    borderBottom: 0,
+  },
+  '&:before': {
+    display: 'none',
+  },
+}));
+
+const AccordionSummary = styled((props: AccordionSummaryProps) => (
+  <MuiAccordionSummary
+    expandIcon={
+      <ArrowForwardIosSharpIcon
+        sx={{ fontSize: '0.9rem', color: 'rgba(255, 255, 255, 0.7)' }}
+      />
+    }
+    {...props}
+  />
+))(({ theme }) => ({
+  color: 'rgba(255, 255, 255, 0.7)',
+  backgroundColor: '#272822',
+  flexDirection: 'row-reverse',
+  '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
+    transform: 'rotate(90deg)',
+  },
+  '& .MuiAccordionSummary-content': {
+    marginLeft: theme.spacing(1),
+  },
+}));
+
 export {
   Header,
   AlgoInput,
@@ -246,4 +287,6 @@ export {
   StyledTab,
   StyledTabs,
   MaterialUISwitch,
+  AccordionSummary,
+  Accordion,
 };
