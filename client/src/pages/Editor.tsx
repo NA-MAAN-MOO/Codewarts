@@ -6,15 +6,14 @@ import YjsCodeMirror from './editor/YjsCodeMirror';
 import UserForm from './editor/UserForm';
 import { RootState } from '../stores';
 import Voice from 'pages/Voice';
-import useVoice from 'hooks/useVoice';
-import axios from 'axios';
+import { VoiceProp } from 'types';
 
-const Editor = () => {
+const Editor = (props: VoiceProp) => {
   const { roomId } = useSelector((state: RootState) => {
     return { ...state.editor, ...state.chat };
   });
   const dispatch = useDispatch();
-  const { disconnectSession, handleDisconnect } = useVoice();
+  // const { disconnectSession, handleDisconnect } = useVoice();
 
   const handleExit = () => {
     dispatch(openGame());
@@ -30,7 +29,7 @@ const Editor = () => {
     <EditorDiv>
       {roomId ? (
         <div>
-          <Voice roomKey={roomId} />
+          <Voice {...props} />
           <YjsCodeMirror />
         </div>
       ) : (

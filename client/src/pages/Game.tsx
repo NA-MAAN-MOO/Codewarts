@@ -1,32 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { openStart, openEditor, openGame, openLobby } from 'stores/modeSlice';
 import Voice from 'pages/Voice';
-import PeerVoice from 'pages/PeerVoice';
 import { handleScene } from 'lib/phaserLib';
 import { GAME_STATUS } from 'utils/Constants';
 import Button from '@mui/material/Button';
 import { styledTheme } from 'styles/theme';
 import useVoice from 'hooks/useVoice';
+import { VoiceProp } from 'types';
 
-const Game = () => {
+const Game = (props: VoiceProp) => {
   const dispatch = useDispatch();
-  const { handleDisconnect } = useVoice();
 
   const handleMainClick = () => {
     handleScene(GAME_STATUS.START);
   };
 
-  useEffect(() => {
-    (async () => {
-      await handleDisconnect();
-    })();
-  }, []);
-
   return (
     <BackgroundDiv>
-      <Voice roomKey={GAME_STATUS.GAME} />
+      <Voice {...props} />
       <BtnDiv>
         {/* <Button
           type="button"

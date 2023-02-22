@@ -1,14 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import type { RootState } from 'stores';
-import {
-  OpenVidu,
-  Session,
-  StreamManager,
-  SessionEventMap,
-  Subscriber,
-  Publisher,
-} from 'openvidu-browser';
+import { OpenVidu, Subscriber, Publisher } from 'openvidu-browser';
 import useVoice from 'hooks/useVoice';
 import { VoiceProp } from 'types';
 import GameVoice from 'pages/voice/GameVoice';
@@ -17,9 +10,8 @@ import EditorVoice from 'pages/voice/EditorVoice';
 import TestVoiceButtons from 'components/TestVoiceButtons';
 
 //Voice 방 컴포넌트
-const Voice = ({ roomKey }: VoiceProp) => {
+const Voice = ({ roomKey, session, handleSession }: VoiceProp) => {
   const [OV, setOV] = useState<OpenVidu>();
-  const [session, setSession] = useState<Session>();
   const [subscribers, setSubscribers] = useState<Array<Subscriber>>([]);
   const [publisher, setPublisher] = useState<Publisher>();
   const {
@@ -76,7 +68,7 @@ const Voice = ({ roomKey }: VoiceProp) => {
 
     // Empty all properties...
     setOV(undefined);
-    setSession(undefined);
+    handleSession(undefined);
     setSubscribers([]);
     setPublisher(undefined);
   };
@@ -91,7 +83,7 @@ const Voice = ({ roomKey }: VoiceProp) => {
     if (!result) {
       return;
     }
-    setSession(session);
+    handleSession(session);
     setOV(OV);
   };
 

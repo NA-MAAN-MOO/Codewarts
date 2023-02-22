@@ -95,7 +95,7 @@ export default () => {
     }
     console.log('세션 나갑니다.,.');
     session.disconnect();
-    dispatch(removeSession());
+    // dispatch(removeSession());
   };
 
   const getToken = async (sessionId: string) => {
@@ -212,31 +212,31 @@ export default () => {
     }
   };
 
-  const sessionNow = useSelector((state: RootState) => {
-    if (!state.chat.sessionNow) return undefined;
-    return JSON.parse(state.chat.sessionNow);
-  });
+  // const sessionNow = useSelector((state: RootState) => {
+  //   if (!state.chat.sessionNow) return undefined;
+  //   return JSON.parse(state.chat.sessionNow);
+  // });
 
-  const handleDisconnect = async () => {
-    //현재 연결된 세션 있으면, 끊기
-    try {
-      // if (!sessionIdNow) return;
+  // const handleDisconnect = async () => {
+  //   //현재 연결된 세션 있으면, 끊기
+  //   try {
+  //     // if (!sessionIdNow) return;
 
-      // const { data: session } = await axios.get(
-      //   'http://localhost:3002/get-session-from-id',
-      //   {
-      //     params: {
-      //       sessionId: sessionIdNow,
-      //     },
-      //   }
-      // );
-      if (!sessionNow) return;
+  //     // const { data: session } = await axios.get(
+  //     //   'http://localhost:3002/get-session-from-id',
+  //     //   {
+  //     //     params: {
+  //     //       sessionId: sessionIdNow,
+  //     //     },
+  //     //   }
+  //     // );
+  //     if (!sessionNow) return;
 
-      disconnectSession(sessionNow);
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  //     disconnectSession(sessionNow);
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
   return {
     initSession,
@@ -248,6 +248,6 @@ export default () => {
     getConnections,
     getSessions,
     getUsers,
-    handleDisconnect,
+    // handleDisconnect,
   };
 };

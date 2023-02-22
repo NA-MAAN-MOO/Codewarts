@@ -4,7 +4,7 @@ import GameVoice from 'pages/voice/GameVoice';
 import { GAME_STATUS } from 'utils/Constants';
 import EditorVoice from 'pages/voice/EditorVoice';
 
-const TestVoiceButtons = ({ roomKey }: VoiceProp) => {
+const TestVoiceButtons = ({ roomKey }: { roomKey: string }) => {
   const { getSessions, getConnections } = useVoice();
 
   return (

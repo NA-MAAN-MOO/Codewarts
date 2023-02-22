@@ -3,12 +3,11 @@ import { GAME_STATUS } from 'utils/Constants';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from 'stores';
-import Game from 'pages/Game';
 import Start from 'pages/Start';
-import Editor from 'pages/Editor';
 import Lobby from 'pages/Lobby';
 import { openEditor, openGame } from 'stores/modeSlice';
 import './codeuk';
+import VoiceRoom from 'pages/VoiceRoom';
 
 function App() {
   const mode = process.env.REACT_APP_MODE;
@@ -35,10 +34,8 @@ function App() {
           <Start></Start>
         ) : status === LOBBY ? (
           <Lobby></Lobby>
-        ) : status === GAME ? (
-          <Game></Game>
         ) : (
-          <Editor></Editor>
+          <VoiceRoom />
         )}
       </HoverDiv>
     )

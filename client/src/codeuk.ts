@@ -2,7 +2,6 @@ import MainScene from 'scenes/Mainscene';
 import Lobby from 'scenes/Lobby';
 import Phaser from 'phaser';
 import PhaserMatterCollisionPlugin from 'phaser-matter-collision-plugin';
-import StartScene from 'scenes/StartScene';
 import { GameType } from 'types';
 import Background from './scenes/Background';
 

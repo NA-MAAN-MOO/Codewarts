@@ -12,6 +12,8 @@ import { Socket } from 'socket.io-client';
 export type Event = React.ChangeEvent<HTMLInputElement>;
 
 export type VoiceProp = {
+  session: Session | undefined;
+  handleSession: (session?: Session | undefined) => void;
   roomKey: string;
 };
 
