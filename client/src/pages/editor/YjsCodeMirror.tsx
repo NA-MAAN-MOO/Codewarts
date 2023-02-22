@@ -25,8 +25,8 @@ import {
   indentWithTab,
   standardKeymap,
 } from '@codemirror/commands';
-import { noctisLilac } from '@uiw/codemirror-theme-noctis-lilac';
 import { okaidia } from '@uiw/codemirror-theme-okaidia';
+import { solarizedLight } from '@uiw/codemirror-theme-solarized';
 
 /* GraphQL queries */
 import PROBLEMQUERY from '../../graphql/problemQuery';
@@ -56,7 +56,6 @@ import {
 import 'styles/fonts.css'; /* FONT */
 import Button from '@mui/material/Button';
 import { ThemeProvider } from '@mui/material/styles';
-import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -218,7 +217,7 @@ function YjsCodeMirror() {
   /* 다크/라이트 모드 테마 토글 */
   function switchTheme(checked: boolean) {
     if (editorThemeMode === okaidia) {
-      setEditorTheme(noctisLilac);
+      setEditorTheme(solarizedLight);
     } else {
       setEditorTheme(okaidia);
     }
