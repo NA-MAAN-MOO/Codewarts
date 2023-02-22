@@ -34,6 +34,7 @@ import USERINFOQUERY from '../../graphql/userInfoQuery';
 
 /* UI */
 import './YjsCodeMirror.css';
+import 'animate.css';
 import {
   Header,
   AlgoInput,
@@ -70,7 +71,9 @@ import Chip from '@mui/material/Chip';
 /* solvedAC badge svg */
 import RenderSvg from 'components/Svg';
 
-import 'animate.css';
+/* toast */
+import notify from './toast';
+import { ToastContainer } from 'react-toastify';
 
 function YjsCodeMirror() {
   /* ref */
@@ -622,7 +625,8 @@ function YjsCodeMirror() {
             </Button>
           </Tooltip>
           <Tooltip title="제출하기" arrow>
-            <Button
+            {/* 링크로 가서 제출하기 */}
+            {/* <Button
               color="primary"
               href={
                 bojProbData?.problemId
@@ -632,6 +636,10 @@ function YjsCodeMirror() {
               target="_blank"
               rel="noreferrer"
             >
+              SUBMIT
+            </Button> */}
+            {/* 시연용 토스트 noti!!!!!!!!!!! */}
+            <Button color="primary" onClick={notify}>
               SUBMIT
             </Button>
           </Tooltip>
@@ -652,7 +660,18 @@ function YjsCodeMirror() {
         />
         {/* </FormGroup> */}
       </MiddleWrapper>
-
+      <ToastContainer
+        position="top-center"
+        autoClose={9000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
       <div
         className="codemirror-editor"
         ref={editor}
