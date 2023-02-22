@@ -1,16 +1,38 @@
 import styledc from 'styled-components';
+import { createTheme } from '@mui/material/styles';
+
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { styled, alpha } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MuiAccordionSummary, {
   AccordionSummaryProps,
 } from '@mui/material/AccordionSummary';
 import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
+
+/* MUI button color theme setting */
+const theme = createTheme({
+  palette: {
+    primary: {
+      // main: '#eeba30', // 그리핀도르 찐노랑
+      // main: '#ffefd5', // papayawhip
+      main: '#272822', // 에디터 검정
+      // main: '#ba835e', // 갈색
+    },
+    secondary: {
+      main: '#ffefd5', // papayawhip
+      // main: '#FD971F', // 주황
+      // main: '#272822', // 에디터 검정
+      // main: '#11cb5f',
+    },
+    error: {
+      main: '#ae0001', // 그리핀도르 찐빨강
+    },
+  },
+});
 
 const EditorWrapper = styledc.div`
   width: 95%;
@@ -85,8 +107,8 @@ const StyledTab = styled((props: StyledTabProps) => (
 }));
 
 const ProbSummary = styledc.div`
-color: 'papayawhip';
-// color: 'rgba(255, 255, 255, 0.7)';
+// color: 'papayawhip';
+color: #fff;
 font-size: 23px;
 width: 300px;
 // border: 1px solid yellow;
@@ -159,9 +181,11 @@ const AlgoTextField = styled((props: TextFieldProps) => (
     },
     '&.Mui-focused': {
       backgroundColor: 'transparent',
-      color: 'papayawhip',
+      // color: 'papayawhip',
+      color: '#fff',
       boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 2px`,
-      borderColor: theme.palette.primary.main,
+      border: 0,
+      // borderColor: theme.palette.primary.main,
     },
   },
 }));
@@ -185,7 +209,7 @@ const MiddleWrapper = styledc.div`
   margin-left: 20px;
   martgin-top: 10px;
   font-size: 20px;
-  display: flex;
+  text-align: right;
 `;
 
 /* 다크/라이트 토글 스위치 테마 */
@@ -289,4 +313,5 @@ export {
   MaterialUISwitch,
   AccordionSummary,
   Accordion,
+  theme,
 };

@@ -51,49 +51,25 @@ import {
   MaterialUISwitch,
   AccordionSummary,
   Accordion,
+  theme,
 } from './editorStyle';
 import 'styles/fonts.css'; /* FONT */
 import Button from '@mui/material/Button';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
-import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
 import Divider from '@mui/material/Divider';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
-// import Accordion from '@mui/material/Accordion';
-// import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
-// import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import InputIcon from '@mui/icons-material/Input';
 import Chip from '@mui/material/Chip';
 
 /* solvedAC badge svg */
 import RenderSvg from 'components/Svg';
-
-/* MUI button color theme setting */
-const theme = createTheme({
-  palette: {
-    primary: {
-      // main: '#eeba30', // 그리핀도르 찐노랑
-      // main: '#ffefd5', // papayawhip
-      main: '#272822', // 에디터 검정
-      // main: '#ba835e', // 갈색
-    },
-    secondary: {
-      main: '#ffefd5', // papayawhip
-      // main: '#FD971F', // 주황
-      // main: '#272822', // 에디터 검정
-      // main: '#11cb5f',
-    },
-    error: {
-      main: '#ae0001', // 그리핀도르 찐빨강
-    },
-  },
-});
 
 function YjsCodeMirror() {
   /* ref */
@@ -660,20 +636,20 @@ function YjsCodeMirror() {
           </Tooltip>
         </ThemeProvider>
 
-        <FormGroup>
-          <FormControlLabel
-            control={
-              <MaterialUISwitch
-                sx={{ m: 1 }}
-                defaultChecked
-                onClick={(checked) => {
-                  switchTheme(checked);
-                }}
-              />
-            }
-            label=""
-          />
-        </FormGroup>
+        {/* <FormGroup> */}
+        <FormControlLabel
+          control={
+            <MaterialUISwitch
+              sx={{ m: 1 }}
+              defaultChecked
+              onClick={(checked) => {
+                switchTheme(checked);
+              }}
+            />
+          }
+          label=""
+        />
+        {/* </FormGroup> */}
       </MiddleWrapper>
 
       <div
@@ -704,7 +680,6 @@ function YjsCodeMirror() {
               <AlgoTextField
                 id="standard-multiline-static"
                 label="INPUT"
-                // helperText="INPUT"
                 multiline
                 fullWidth
                 rows={8}
@@ -723,8 +698,7 @@ function YjsCodeMirror() {
               <Grid container spacing={1.5}>
                 <Grid xs sx={{ p: 0 }}>
                   <AlgoTextField
-                    // id="standard-read-only-input"
-                    // id="reddit-input"
+                    id="standard-read-only-input"
                     variant="standard"
                     label="TIME"
                     size="small"
@@ -734,8 +708,6 @@ function YjsCodeMirror() {
                       disableUnderline: true,
                     }}
                     InputLabelProps={{ shrink: true }}
-                    // helperText="TIME"
-                    // focused
                     value={cpuTime}
                   />
                 </Grid>
@@ -752,8 +724,6 @@ function YjsCodeMirror() {
                       disableUnderline: true,
                     }}
                     InputLabelProps={{ shrink: true }}
-                    // helperText="MEMORY"
-                    // focused
                     value={memory}
                   />
                 </Grid>
@@ -761,7 +731,6 @@ function YjsCodeMirror() {
               <AlgoTextField
                 id="standard-multiline-static"
                 label="OUTPUT"
-                // helperText="OUTPUT"
                 multiline
                 fullWidth
                 rows={6}
