@@ -2,7 +2,7 @@
 import { Schema, model, Document, Model } from 'mongoose';
 import { IUserInfo } from '../controllers/userTypes';
 
-const bcrypt = require('bcrypt');
+// const bcrypt = require('bcrypt');
 // const saltRounds = config.bcrypt.saltRounds;
 
 const user = new Schema<IUserInfo>({
