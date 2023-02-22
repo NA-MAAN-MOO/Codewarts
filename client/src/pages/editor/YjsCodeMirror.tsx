@@ -154,7 +154,7 @@ function YjsCodeMirror() {
       '.cm-editor': {},
       '.cm-content, .cm-gutter': { minHeight: '30%' },
       '.cm-content': {
-        fontFamily: 'Cascadia Code',
+        fontFamily: 'Cascadia Code, EliceDigitalBaeum_Bold',
         fontSize: 'large',
       },
       '.cm-gutter': {
