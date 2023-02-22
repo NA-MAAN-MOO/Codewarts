@@ -1,0 +1,135 @@
+{
+  "frames": {
+    "bg-0": {
+      "frame": {
+        "x": 0,
+        "y": 38,
+        "w": 1200,
+        "h": 630
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 38,
+        "w": 1200,
+        "h": 630
+      },
+      "sourceSize": {
+        "w": 7200,
+        "h": 704
+      }
+    },
+    "bg-1": {
+      "frame": {
+        "x": 1200,
+        "y": 38,
+        "w": 1200,
+        "h": 630
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 1200,
+        "y": 38,
+        "w": 1200,
+        "h": 630
+      },
+      "sourceSize": {
+        "w": 7200,
+        "h": 704
+      }
+    },
+    "bg-2": {
+      "frame": {
+        "x": 2400,
+        "y": 38,
+        "w": 1200,
+        "h": 630
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 2400,
+        "y": 38,
+        "w": 1200,
+        "h": 630
+      },
+      "sourceSize": {
+        "w": 7200,
+        "h": 704
+      }
+    },
+    "bg-3": {
+      "frame": {
+        "x": 3600,
+        "y": 38,
+        "w": 1200,
+        "h": 630
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 3600,
+        "y": 38,
+        "w": 1200,
+        "h": 630
+      },
+      "sourceSize": {
+        "w": 7200,
+        "h": 704
+      }
+    },
+    "bg-4": {
+      "frame": {
+        "x": 4800,
+        "y": 38,
+        "w": 1200,
+        "h": 630
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 4800,
+        "y": 38,
+        "w": 1200,
+        "h": 630
+      },
+      "sourceSize": {
+        "w": 7200,
+        "h": 704
+      }
+    },
+    "bg-5": {
+      "frame": {
+        "x": 6000,
+        "y": 38,
+        "w": 1200,
+        "h": 630
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 6000,
+        "y": 38,
+        "w": 1200,
+        "h": 630
+      },
+      "sourceSize": {
+        "w": 7200,
+        "h": 704
+      }
+    }
+  },
+  "meta": {
+    "app": "sprite-sheet-to-json",
+    "version": "1.0.0",
+    "image": "castle_spritesheet.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 7200,
+      "h": 704
+    },
+    "scale": "1"
+  }
+}

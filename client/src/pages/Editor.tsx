@@ -6,16 +6,24 @@ import YjsCodeMirror from './editor/YjsCodeMirror';
 import UserForm from './editor/UserForm';
 import { RootState } from '../stores';
 import Voice from 'pages/Voice';
+import useVoice from 'hooks/useVoice';
 
-/* 유저 네임이 존재하면 에디터, 존재하지 않으면 userform을 보여줌 */
 const Editor = () => {
-  const { userName } = useSelector((state: RootState) => state.editor);
+  const { roomId, session } = useSelector((state: RootState) => {
+    return { ...state.editor, ...state.chat };
+  });
   const dispatch = useDispatch();
+  const { disconnectSession } = useVoice();
+
+  const handleExit = () => {
+    disconnectSession(session);
+    dispatch(openGame());
+  };
   return (
     <EditorDiv>
-      {userName ? (
+      {roomId ? (
         <div>
-          <Voice roomKey={userName} />
+          <Voice roomKey={roomId} />
           <YjsCodeMirror />
         </div>
       ) : (
@@ -24,7 +32,7 @@ const Editor = () => {
         </div>
       )}
       <BtnDiv>
-        <button type="button" onClick={() => dispatch(openGame())}>
+        <button type="button" onClick={handleExit}>
           돌아가기
         </button>
       </BtnDiv>

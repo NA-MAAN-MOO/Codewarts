@@ -3,7 +3,7 @@
  "infinite":false,
  "layers":[
         {
-         "data":[1],
+         "data":[20],
          "height":1,
          "id":1,
          "name":"bg",
@@ -22,7 +22,7 @@
          "objects":[
                 {
                  "class":"",
-                 "gid":2,
+                 "gid":1,
                  "height":164,
                  "id":35,
                  "name":"chair_front",
@@ -35,13 +35,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":854.286,
-                 "y":479.451
+                 "x":1248.01526455337,
+                 "y":512.12850053853
                 },
             
                 {
                  "class":"",
-                 "gid":2,
+                 "gid":1,
                  "height":164,
                  "id":36,
                  "name":"chair_front",
@@ -54,13 +54,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":916.967,
-                 "y":511.452
+                 "x":1318.69626455337,
+                 "y":549.12950053853
                 },
             
                 {
                  "class":"",
-                 "gid":2,
+                 "gid":1,
                  "height":164,
                  "id":37,
                  "name":"chair_front",
@@ -73,13 +73,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":1109.18,
-                 "y":608.512
+                 "x":1679.52333611779,
+                 "y":733.726598973463
                 },
             
                 {
                  "class":"",
-                 "gid":2,
+                 "gid":1,
                  "height":164,
                  "id":38,
                  "name":"chair_front",
@@ -92,13 +92,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":1171.87,
-                 "y":640.513
+                 "x":1750.21333611779,
+                 "y":770.727598973464
                 },
             
                 {
                  "class":"",
-                 "gid":2,
+                 "gid":1,
                  "height":164,
                  "id":39,
                  "name":"chair_front",
@@ -111,13 +111,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":620.991,
-                 "y":596.619
+                 "x":924.717564199616,
+                 "y":680.58990258096
                 },
             
                 {
                  "class":"",
-                 "gid":2,
+                 "gid":1,
                  "height":164,
                  "id":40,
                  "name":"chair_front",
@@ -130,13 +130,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":683.672,
-                 "y":628.62
+                 "x":995.398564199616,
+                 "y":717.59090258096
                 },
             
                 {
                  "class":"",
-                 "gid":2,
+                 "gid":1,
                  "height":164,
                  "id":41,
                  "name":"chair_front",
@@ -149,13 +149,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":875.885,
-                 "y":725.68
+                 "x":1343.521065663,
+                 "y":906.343060060213
                 },
             
                 {
                  "class":"",
-                 "gid":2,
+                 "gid":1,
                  "height":164,
                  "id":42,
                  "name":"chair_front",
@@ -168,13 +168,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":938.575,
-                 "y":757.681
+                 "x":1414.211065663,
+                 "y":943.344060060213
                 },
             
                 {
                  "class":"",
-                 "gid":2,
+                 "gid":1,
                  "height":164,
                  "id":47,
                  "name":"chair_front",
@@ -187,13 +187,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":372.943,
-                 "y":720.261
+                 "x":593.195710196557,
+                 "y":859.575824325085
                 },
             
                 {
                  "class":"",
-                 "gid":2,
+                 "gid":1,
                  "height":164,
                  "id":48,
                  "name":"chair_front",
@@ -206,13 +206,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":435.624,
-                 "y":752.262
+                 "x":663.876710196557,
+                 "y":896.576824325086
                 },
             
                 {
                  "class":"",
-                 "gid":2,
+                 "gid":1,
                  "height":164,
                  "id":49,
                  "name":"chair_front",
@@ -225,13 +225,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":627.837,
-                 "y":849.322
+                 "x":1000.5152601311,
+                 "y":1080.06648568307
                 },
             
                 {
                  "class":"",
-                 "gid":2,
+                 "gid":1,
                  "height":164,
                  "id":50,
                  "name":"chair_front",
@@ -244,8 +244,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":690.527,
-                 "y":881.323
+                 "x":1071.2052601311,
+                 "y":1117.06748568307
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -261,80 +261,80 @@
          "objects":[
                 {
                  "class":"",
-                 "gid":20,
+                 "gid":18,
                  "height":196,
                  "id":144,
                  "name":"table",
                  "rotation":0,
                  "visible":true,
                  "width":204,
-                 "x":822.655491260514,
-                 "y":548.993258963193
+                 "x":1216.38475581388,
+                 "y":581.670759501724
                 },
             
                 {
                  "class":"",
-                 "gid":20,
+                 "gid":18,
                  "height":196,
                  "id":145,
                  "name":"table",
                  "rotation":0,
                  "visible":true,
                  "width":204,
-                 "x":1079.76937302392,
-                 "y":677.251923879974
+                 "x":1650.11270914171,
+                 "y":802.466522853438
                 },
             
                 {
                  "class":"",
-                 "gid":20,
+                 "gid":18,
                  "height":196,
                  "id":146,
                  "name":"table",
                  "rotation":0,
                  "visible":true,
                  "width":204,
-                 "x":590.000238620772,
-                 "y":668.303644932291
+                 "x":893.726802820388,
+                 "y":752.274547513251
                 },
             
                 {
                  "class":"",
-                 "gid":20,
+                 "gid":18,
                  "height":196,
                  "id":147,
                  "name":"table",
                  "rotation":0,
                  "visible":true,
                  "width":204,
-                 "x":847.11412038418,
-                 "y":795.369205989381
+                 "x":1314.75018604718,
+                 "y":976.032266049594
                 },
             
                 {
                  "class":"",
-                 "gid":20,
+                 "gid":18,
                  "height":196,
                  "id":148,
                  "name":"table",
                  "rotation":0,
                  "visible":true,
                  "width":204,
-                 "x":344.220843524429,
-                 "y":790.596790550617
+                 "x":564.473553720986,
+                 "y":929.911614875703
                 },
             
                 {
                  "class":"",
-                 "gid":20,
+                 "gid":18,
                  "height":196,
                  "id":149,
                  "name":"table",
                  "rotation":0,
                  "visible":true,
                  "width":204,
-                 "x":601.334725287836,
-                 "y":918.855455467399
+                 "x":974.012985418939,
+                 "y":1149.59994115046
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -350,7 +350,7 @@
          "objects":[
                 {
                  "class":"",
-                 "gid":3,
+                 "gid":2,
                  "height":164,
                  "id":51,
                  "name":"chair_back",
@@ -363,13 +363,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":776.162,
-                 "y":541.328
+                 "x":1163.89126455336,
+                 "y":571.00550053853
                 },
             
                 {
                  "class":"",
-                 "gid":3,
+                 "gid":2,
                  "height":164,
                  "id":52,
                  "name":"chair_back",
@@ -382,26 +382,26 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":840.299,
-                 "y":572.807
+                 "x":1241.02826455337,
+                 "y":606.48450053853
                 },
             
                 {
                  "class":"",
-                 "gid":3,
+                 "gid":2,
                  "height":164,
                  "id":53,
                  "name":"chair_back",
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":1032.95,
-                 "y":669.527
+                 "x":1597.29333611779,
+                 "y":791.741598973463
                 },
             
                 {
                  "class":"",
-                 "gid":3,
+                 "gid":2,
                  "height":164,
                  "id":54,
                  "name":"chair_back",
@@ -414,13 +414,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":1097.09,
-                 "y":701.006
+                 "x":1674.43333611779,
+                 "y":827.220598973464
                 },
             
                 {
                  "class":"",
-                 "gid":3,
+                 "gid":2,
                  "height":164,
                  "id":55,
                  "name":"chair_back",
@@ -433,13 +433,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":546.198,
-                 "y":661.684
+                 "x":843.924564199616,
+                 "y":742.65490258096
                 },
             
                 {
                  "class":"",
-                 "gid":3,
+                 "gid":2,
                  "height":164,
                  "id":56,
                  "name":"chair_back",
@@ -452,13 +452,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":610.335,
-                 "y":693.163
+                 "x":921.061564199616,
+                 "y":778.13390258096
                 },
             
                 {
                  "class":"",
-                 "gid":3,
+                 "gid":2,
                  "height":164,
                  "id":57,
                  "name":"chair_back",
@@ -471,13 +471,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":802.986,
-                 "y":789.883
+                 "x":1264.622065663,
+                 "y":967.546060060213
                 },
             
                 {
                  "class":"",
-                 "gid":3,
+                 "gid":2,
                  "height":164,
                  "id":58,
                  "name":"chair_back",
@@ -490,13 +490,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":867.126,
-                 "y":821.362
+                 "x":1341.762065663,
+                 "y":1003.02506006021
                 },
             
                 {
                  "class":"",
-                 "gid":3,
+                 "gid":2,
                  "height":164,
                  "id":59,
                  "name":"chair_back",
@@ -509,13 +509,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":298.449,
-                 "y":784.801
+                 "x":512.701710196557,
+                 "y":921.115824325086
                 },
             
                 {
                  "class":"",
-                 "gid":3,
+                 "gid":2,
                  "height":164,
                  "id":60,
                  "name":"chair_back",
@@ -528,13 +528,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":362.586,
-                 "y":816.28
+                 "x":589.838710196557,
+                 "y":956.594824325085
                 },
             
                 {
                  "class":"",
-                 "gid":3,
+                 "gid":2,
                  "height":164,
                  "id":61,
                  "name":"chair_back",
@@ -547,13 +547,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":555.237,
-                 "y":913
+                 "x":921.915260131103,
+                 "y":1140.74448568307
                 },
             
                 {
                  "class":"",
-                 "gid":3,
+                 "gid":2,
                  "height":164,
                  "id":62,
                  "name":"chair_back",
@@ -566,8 +566,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":619.377,
-                 "y":944.479
+                 "x":999.055260131103,
+                 "y":1176.22348568307
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -583,7 +583,7 @@
          "objects":[
                 {
                  "class":"",
-                 "gid":4,
+                 "gid":3,
                  "height":277,
                  "id":73,
                  "name":"bookshelf_corner",
@@ -596,8 +596,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":888.082,
-                 "y":333.648
+                 "x":1280.88231821798,
+                 "y":326.686981702466
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -613,7 +613,7 @@
          "objects":[
                 {
                  "class":"",
-                 "gid":16,
+                 "gid":14,
                  "height":277,
                  "id":123,
                  "name":"bookshelf_left",
@@ -626,13 +626,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":823.1,
-                 "y":365.18
+                 "x":1215.90031821798,
+                 "y":358.218981702466
                 },
             
                 {
                  "class":"",
-                 "gid":16,
+                 "gid":14,
                  "height":277,
                  "id":124,
                  "name":"bookshelf_left",
@@ -645,13 +645,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":631.62,
-                 "y":458.84
+                 "x":1024.42031821798,
+                 "y":451.878981702466
                 },
             
                 {
                  "class":"",
-                 "gid":16,
+                 "gid":14,
                  "height":277,
                  "id":125,
                  "name":"bookshelf_left",
@@ -664,13 +664,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":567.08,
-                 "y":491.84
+                 "x":959.880318217979,
+                 "y":484.878981702466
                 },
             
                 {
                  "class":"",
-                 "gid":16,
+                 "gid":14,
                  "height":277,
                  "id":126,
                  "name":"bookshelf_left",
@@ -683,13 +683,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":370.06,
-                 "y":589.64
+                 "x":484.01129963095,
+                 "y":719.163993673539
                 },
             
                 {
                  "class":"",
-                 "gid":16,
+                 "gid":14,
                  "height":277,
                  "id":127,
                  "name":"bookshelf_left",
@@ -702,8 +702,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":305.52,
-                 "y":622.64
+                 "x":419.47129963095,
+                 "y":752.163993673539
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -719,7 +719,7 @@
          "objects":[
                 {
                  "class":"",
-                 "gid":17,
+                 "gid":15,
                  "height":277,
                  "id":128,
                  "name":"bookshelf_right",
@@ -732,13 +732,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":983.736,
-                 "y":365.336
+                 "x":1376.53631821798,
+                 "y":358.374981702466
                 },
             
                 {
                  "class":"",
-                 "gid":17,
+                 "gid":15,
                  "height":277,
                  "id":129,
                  "name":"bookshelf_right",
@@ -751,13 +751,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":1435.81,
-                 "y":587.717
+                 "x":2143.25562714246,
+                 "y":739.794883304297
                 },
             
                 {
                  "class":"",
-                 "gid":17,
+                 "gid":15,
                  "height":277,
                  "id":130,
                  "name":"bookshelf_right",
@@ -770,8 +770,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":1499.84,
-                 "y":620.378
+                 "x":2207.28562714246,
+                 "y":772.455883304297
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -787,7 +787,7 @@
          "objects":[
                 {
                  "class":"",
-                 "gid":6,
+                 "gid":5,
                  "height":32,
                  "id":86,
                  "name":"macbook_back_closed",
@@ -800,13 +800,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":32,
-                 "x":896.347,
-                 "y":430.072
+                 "x":1285.07626455336,
+                 "y":458.749500538531
                 },
             
                 {
                  "class":"",
-                 "gid":6,
+                 "gid":5,
                  "height":32,
                  "id":87,
                  "name":"macbook_back_closed",
@@ -819,13 +819,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":32,
-                 "x":961.075,
-                 "y":462.753
+                 "x":1353.80426455336,
+                 "y":494.430500538531
                 },
             
                 {
                  "class":"",
-                 "gid":6,
+                 "gid":5,
                  "height":32,
                  "id":88,
                  "name":"macbook_back_closed",
@@ -838,13 +838,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":32,
-                 "x":1153.94,
-                 "y":559.843
+                 "x":1719.28333611779,
+                 "y":681.057598973464
                 },
             
                 {
                  "class":"",
-                 "gid":6,
+                 "gid":5,
                  "height":32,
                  "id":89,
                  "name":"macbook_back_closed",
@@ -857,13 +857,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":32,
-                 "x":1218.67,
-                 "y":592.524
+                 "x":1788.01333611779,
+                 "y":716.738598973464
                 },
             
                 {
                  "class":"",
-                 "gid":6,
+                 "gid":5,
                  "height":32,
                  "id":90,
                  "name":"macbook_back_closed",
@@ -876,13 +876,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":32,
-                 "x":663.632,
-                 "y":546.754
+                 "x":962.358564199616,
+                 "y":626.72490258096
                 },
             
                 {
                  "class":"",
-                 "gid":6,
+                 "gid":5,
                  "height":32,
                  "id":91,
                  "name":"macbook_back_closed",
@@ -895,13 +895,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":32,
-                 "x":728.36,
-                 "y":579.435
+                 "x":1031.08656419962,
+                 "y":662.40590258096
                 },
             
                 {
                  "class":"",
-                 "gid":6,
+                 "gid":5,
                  "height":32,
                  "id":92,
                  "name":"macbook_back_closed",
@@ -914,13 +914,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":32,
-                 "x":921.225,
-                 "y":676.525
+                 "x":1383.861065663,
+                 "y":853.188060060213
                 },
             
                 {
                  "class":"",
-                 "gid":6,
+                 "gid":5,
                  "height":32,
                  "id":93,
                  "name":"macbook_back_closed",
@@ -933,13 +933,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":32,
-                 "x":985.955,
-                 "y":709.206
+                 "x":1452.591065663,
+                 "y":888.869060060213
                 },
             
                 {
                  "class":"",
-                 "gid":6,
+                 "gid":5,
                  "height":32,
                  "id":94,
                  "name":"macbook_back_closed",
@@ -952,13 +952,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":32,
-                 "x":416.314,
-                 "y":670.891
+                 "x":631.566710196557,
+                 "y":806.205824325085
                 },
             
                 {
                  "class":"",
-                 "gid":6,
+                 "gid":5,
                  "height":32,
                  "id":95,
                  "name":"macbook_back_closed",
@@ -971,13 +971,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":32,
-                 "x":481.042,
-                 "y":703.572
+                 "x":700.294710196557,
+                 "y":841.886824325086
                 },
             
                 {
                  "class":"",
-                 "gid":6,
+                 "gid":5,
                  "height":32,
                  "id":96,
                  "name":"macbook_back_closed",
@@ -990,13 +990,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":32,
-                 "x":673.907,
-                 "y":800.662
+                 "x":1041.5852601311,
+                 "y":1027.40648568307
                 },
             
                 {
                  "class":"",
-                 "gid":6,
+                 "gid":5,
                  "height":32,
                  "id":97,
                  "name":"macbook_back_closed",
@@ -1009,8 +1009,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":32,
-                 "x":738.637,
-                 "y":833.343
+                 "x":1110.3152601311,
+                 "y":1063.08748568307
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1026,7 +1026,7 @@
          "objects":[
                 {
                  "class":"",
-                 "gid":5,
+                 "gid":4,
                  "height":32,
                  "id":74,
                  "name":"macbook_front_closed",
@@ -1039,13 +1039,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":32,
-                 "x":863.129,
-                 "y":450.84
+                 "x":1255.85826455336,
+                 "y":475.51750053853
                 },
             
                 {
                  "class":"",
-                 "gid":5,
+                 "gid":4,
                  "height":32,
                  "id":75,
                  "name":"macbook_front_closed",
@@ -1058,13 +1058,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":32,
-                 "x":927.635,
-                 "y":482.332
+                 "x":1324.36426455336,
+                 "y":510.009500538531
                 },
             
                 {
                  "class":"",
-                 "gid":5,
+                 "gid":4,
                  "height":32,
                  "id":76,
                  "name":"macbook_front_closed",
@@ -1077,13 +1077,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":32,
-                 "x":1120.71,
-                 "y":580.25
+                 "x":1690.05333611779,
+                 "y":697.464598973463
                 },
             
                 {
                  "class":"",
-                 "gid":5,
+                 "gid":4,
                  "height":32,
                  "id":77,
                  "name":"macbook_front_closed",
@@ -1096,13 +1096,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":32,
-                 "x":1185.21,
-                 "y":611.742
+                 "x":1758.55333611779,
+                 "y":731.956598973463
                 },
             
                 {
                  "class":"",
-                 "gid":5,
+                 "gid":4,
                  "height":32,
                  "id":78,
                  "name":"macbook_front_closed",
@@ -1115,13 +1115,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":32,
-                 "x":630.344,
-                 "y":567.624
+                 "x":933.070564199616,
+                 "y":643.59490258096
                 },
             
                 {
                  "class":"",
-                 "gid":5,
+                 "gid":4,
                  "height":32,
                  "id":79,
                  "name":"macbook_front_closed",
@@ -1134,13 +1134,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":32,
-                 "x":694.851,
-                 "y":599.116
+                 "x":1001.57756419962,
+                 "y":678.08690258096
                 },
             
                 {
                  "class":"",
-                 "gid":5,
+                 "gid":4,
                  "height":32,
                  "id":80,
                  "name":"macbook_front_closed",
@@ -1153,13 +1153,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":32,
-                 "x":887.919,
-                 "y":697.034
+                 "x":1354.555065663,
+                 "y":869.697060060213
                 },
             
                 {
                  "class":"",
-                 "gid":5,
+                 "gid":4,
                  "height":32,
                  "id":81,
                  "name":"macbook_front_closed",
@@ -1172,13 +1172,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":32,
-                 "x":952.429,
-                 "y":728.526
+                 "x":1423.065065663,
+                 "y":904.189060060213
                 },
             
                 {
                  "class":"",
-                 "gid":5,
+                 "gid":4,
                  "height":32,
                  "id":82,
                  "name":"macbook_front_closed",
@@ -1191,13 +1191,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":32,
-                 "x":382.501,
-                 "y":691.86
+                 "x":601.753710196557,
+                 "y":823.174824325086
                 },
             
                 {
                  "class":"",
-                 "gid":5,
+                 "gid":4,
                  "height":32,
                  "id":83,
                  "name":"macbook_front_closed",
@@ -1210,13 +1210,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":32,
-                 "x":447.008,
-                 "y":723.352
+                 "x":670.260710196557,
+                 "y":857.666824325085
                 },
             
                 {
                  "class":"",
-                 "gid":5,
+                 "gid":4,
                  "height":32,
                  "id":84,
                  "name":"macbook_front_closed",
@@ -1229,13 +1229,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":32,
-                 "x":640.076,
-                 "y":821.27
+                 "x":1011.7542601311,
+                 "y":1044.01448568307
                 },
             
                 {
                  "class":"",
-                 "gid":5,
+                 "gid":4,
                  "height":32,
                  "id":85,
                  "name":"macbook_front_closed",
@@ -1248,8 +1248,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":32,
-                 "x":704.586,
-                 "y":852.762
+                 "x":1080.2642601311,
+                 "y":1078.50648568306
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1265,7 +1265,7 @@
          "objects":[
                 {
                  "class":"",
-                 "gid":15,
+                 "gid":13,
                  "height":277,
                  "id":116,
                  "name":"wall_candle",
@@ -1278,13 +1278,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":1341.82,
-                 "y":514.348
+                 "x":1870.1464480606,
+                 "y":579.19708780437
                 },
             
                 {
                  "class":"",
-                 "gid":15,
+                 "gid":13,
                  "height":277,
                  "id":117,
                  "name":"wall_candle",
@@ -1297,8 +1297,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":1079.49,
-                 "y":380.103
+                 "x":1607.8164480606,
+                 "y":444.95208780437
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1314,7 +1314,7 @@
          "objects":[
                 {
                  "class":"",
-                 "gid":8,
+                 "gid":6,
                  "height":164,
                  "id":100,
                  "name":"cupboard",
@@ -1327,13 +1327,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":1126.77,
-                 "y":429.306
+                 "x":1655.0964480606,
+                 "y":494.15508780437
                 },
             
                 {
                  "class":"",
-                 "gid":8,
+                 "gid":6,
                  "height":164,
                  "id":101,
                  "name":"cupboard",
@@ -1346,13 +1346,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":1190.91,
-                 "y":461.296
+                 "x":1719.2364480606,
+                 "y":526.14508780437
                 },
             
                 {
                  "class":"",
-                 "gid":8,
+                 "gid":6,
                  "height":164,
                  "id":102,
                  "name":"cupboard",
@@ -1365,8 +1365,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":1255.39,
-                 "y":492.985
+                 "x":1783.7164480606,
+                 "y":557.834087804371
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1382,7 +1382,7 @@
          "objects":[
                 {
                  "class":"",
-                 "gid":9,
+                 "gid":7,
                  "height":164,
                  "id":104,
                  "name":"plant_short",
@@ -1395,13 +1395,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":1352.93,
-                 "y":522.02
+                 "x":1881.2564480606,
+                 "y":586.86908780437
                 },
             
                 {
                  "class":"",
-                 "gid":9,
+                 "gid":7,
                  "height":164,
                  "id":105,
                  "name":"plant_short",
@@ -1414,8 +1414,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":1007.37,
-                 "y":347.993
+                 "x":1535.6964480606,
+                 "y":412.84208780437
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1431,7 +1431,7 @@
          "objects":[
                 {
                  "class":"",
-                 "gid":10,
+                 "gid":8,
                  "height":164,
                  "id":106,
                  "name":"flower",
@@ -1444,13 +1444,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":1302.78,
-                 "y":494.665
+                 "x":1831.1064480606,
+                 "y":559.51408780437
                 },
             
                 {
                  "class":"",
-                 "gid":10,
+                 "gid":8,
                  "height":164,
                  "id":107,
                  "name":"flower",
@@ -1463,8 +1463,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":1045.53,
-                 "y":366.341
+                 "x":1573.8564480606,
+                 "y":431.19008780437
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1480,15 +1480,15 @@
          "objects":[
                 {
                  "class":"",
-                 "gid":21,
+                 "gid":19,
                  "height":182,
                  "id":150,
                  "name":"whiteboard",
                  "rotation":0,
                  "visible":true,
                  "width":208,
-                 "x":1162.91771588452,
-                 "y":386.278392471067
+                 "x":1691.24416394512,
+                 "y":451.127480275437
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1504,7 +1504,7 @@
          "objects":[
                 {
                  "class":"",
-                 "gid":13,
+                 "gid":11,
                  "height":32,
                  "id":119,
                  "name":"mug",
@@ -1517,13 +1517,13 @@
                  "rotation":0,
                  "visible":true,
                  "width":32,
-                 "x":1325.09,
-                 "y":403.597
+                 "x":1830.63908984678,
+                 "y":467.007000974524
                 },
             
                 {
                  "class":"",
-                 "gid":13,
+                 "gid":11,
                  "height":32,
                  "id":120,
                  "name":"mug",
@@ -1536,8 +1536,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":32,
-                 "x":1311.91,
-                 "y":397.395
+                 "x":1840.2364480606,
+                 "y":462.24408780437
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1553,7 +1553,7 @@
          "objects":[
                 {
                  "class":"",
-                 "gid":12,
+                 "gid":10,
                  "height":164,
                  "id":118,
                  "name":"book",
@@ -1566,8 +1566,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":1128.33,
-                 "y":378.124
+                 "x":1656.6564480606,
+                 "y":442.97308780437
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1583,7 +1583,7 @@
          "objects":[
                 {
                  "class":"",
-                 "gid":14,
+                 "gid":12,
                  "height":32,
                  "id":121,
                  "name":"teapot",
@@ -1596,8 +1596,343 @@
                  "rotation":0,
                  "visible":true,
                  "width":32,
-                 "x":1292.79,
-                 "y":387.819
+                 "x":1821.1164480606,
+                 "y":452.66808780437
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        },
+    
+        {
+         "draworder":"topdown",
+         "id":33,
+         "name":"table_candle",
+         "objects":[
+                {
+                 "class":"",
+                 "gid":21,
+                 "height":277,
+                 "id":519,
+                 "name":"table_candle",
+                 "properties":[
+                        {
+                         "name":"noCollision",
+                         "type":"bool",
+                         "value":true
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":148,
+                 "x":1249.10855822922,
+                 "y":498.823362134453
+                },
+            
+                {
+                 "class":"",
+                 "gid":21,
+                 "height":277,
+                 "id":520,
+                 "name":"table_candle",
+                 "properties":[
+                        {
+                         "name":"noCollision",
+                         "type":"bool",
+                         "value":true
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":148,
+                 "x":1682.55665493896,
+                 "y":720.576214994033
+                },
+            
+                {
+                 "class":"",
+                 "gid":21,
+                 "height":277,
+                 "id":521,
+                 "name":"table_candle",
+                 "properties":[
+                        {
+                         "name":"noCollision",
+                         "type":"bool",
+                         "value":true
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":148,
+                 "x":923.781646599455,
+                 "y":666.435980431178
+                },
+            
+                {
+                 "class":"",
+                 "gid":21,
+                 "height":277,
+                 "id":522,
+                 "name":"table_candle",
+                 "properties":[
+                        {
+                         "name":"noCollision",
+                         "type":"bool",
+                         "value":true
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":148,
+                 "x":1347.30603866944,
+                 "y":893.131679250401
+                },
+            
+                {
+                 "class":"",
+                 "gid":21,
+                 "height":277,
+                 "id":523,
+                 "name":"table_candle",
+                 "properties":[
+                        {
+                         "name":"noCollision",
+                         "type":"bool",
+                         "value":true
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":148,
+                 "x":592.595327035535,
+                 "y":847.10033880729
+                },
+            
+                {
+                 "class":"",
+                 "gid":21,
+                 "height":277,
+                 "id":524,
+                 "name":"table_candle",
+                 "properties":[
+                        {
+                         "name":"noCollision",
+                         "type":"bool",
+                         "value":true
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":148,
+                 "x":1005.17336005453,
+                 "y":1066.56540423284
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        },
+    
+        {
+         "draworder":"topdown",
+         "id":37,
+         "name":"statue",
+         "objects":[
+                {
+                 "class":"",
+                 "gid":28,
+                 "height":277,
+                 "id":549,
+                 "name":"statue",
+                 "rotation":0,
+                 "visible":true,
+                 "width":148,
+                 "x":718.888068792176,
+                 "y":613.287628763928
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        },
+    
+        {
+         "draworder":"topdown",
+         "id":39,
+         "name":"floor_candle",
+         "objects":[
+                {
+                 "class":"",
+                 "gid":25,
+                 "height":277,
+                 "id":553,
+                 "name":"floor_candle",
+                 "rotation":0,
+                 "visible":true,
+                 "width":148,
+                 "x":1608.38523072883,
+                 "y":936.292468814936
+                },
+            
+                {
+                 "class":"",
+                 "gid":25,
+                 "height":277,
+                 "id":554,
+                 "name":"floor_candle",
+                 "rotation":0,
+                 "visible":true,
+                 "width":148,
+                 "x":646.690751796114,
+                 "y":763.048168544803
+                },
+            
+                {
+                 "class":"",
+                 "gid":25,
+                 "height":277,
+                 "id":555,
+                 "name":"floor_candle",
+                 "rotation":0,
+                 "visible":true,
+                 "width":148,
+                 "x":1237.09517340606,
+                 "y":1123.88045030142
+                },
+            
+                {
+                 "class":"",
+                 "gid":25,
+                 "height":277,
+                 "id":556,
+                 "name":"floor_candle",
+                 "rotation":0,
+                 "visible":true,
+                 "width":148,
+                 "x":988.186623576323,
+                 "y":586.00432669678
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        },
+    
+        {
+         "draworder":"topdown",
+         "id":38,
+         "name":"painting3",
+         "objects":[
+                {
+                 "class":"",
+                 "gid":22,
+                 "height":262,
+                 "id":552,
+                 "name":"painting3",
+                 "rotation":0,
+                 "visible":true,
+                 "width":147,
+                 "x":2060.38292437422,
+                 "y":697.696861952661
+                },
+            
+                {
+                 "class":"",
+                 "gid":22,
+                 "height":262,
+                 "id":557,
+                 "name":"painting3",
+                 "rotation":0,
+                 "visible":true,
+                 "width":147,
+                 "x":1483.52673085905,
+                 "y":409.261847447275
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        },
+    
+        {
+         "draworder":"topdown",
+         "id":35,
+         "name":"plant_long",
+         "objects":[
+                {
+                 "class":"",
+                 "gid":27,
+                 "height":278,
+                 "id":538,
+                 "name":"plant_long",
+                 "properties":[
+                        {
+                         "name":"Collision",
+                         "type":"bool",
+                         "value":true
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":148,
+                 "x":1488.10508604328,
+                 "y":410.072983544267
+                },
+            
+                {
+                 "class":"",
+                 "gid":27,
+                 "height":278,
+                 "id":539,
+                 "name":"plant_long",
+                 "properties":[
+                        {
+                         "name":"Collision",
+                         "type":"bool",
+                         "value":true
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":148,
+                 "x":1933.64333193835,
+                 "y":631.327689191043
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        },
+    
+        {
+         "draworder":"topdown",
+         "id":41,
+         "name":"bench",
+         "objects":[
+                {
+                 "class":"",
+                 "gid":30,
+                 "height":164,
+                 "id":566,
+                 "name":"bench",
+                 "rotation":0,
+                 "visible":true,
+                 "width":148,
+                 "x":192.097907779809,
+                 "y":855.918342474101
+                },
+            
+                {
+                 "class":"",
+                 "gid":30,
+                 "height":164,
+                 "id":567,
+                 "name":"bench",
+                 "rotation":0,
+                 "visible":true,
+                 "width":148,
+                 "x":78.3461304082876,
+                 "y":912.731667682307
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1605,252 +1940,16 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":30,
- "nextobjectid":152,
+ "nextlayerid":42,
+ "nextobjectid":568,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",
- "tileheight":1077,
+ "tileheight":1424,
  "tilesets":[
         {
          "columns":1,
          "firstgid":1,
-         "image":"..\/..\/..\/..\/..\/..\/Assets_fixed\/room_map.png",
-         "imageheight":1077,
-         "imagewidth":1674,
-         "margin":0,
-         "name":"room_map",
-         "spacing":0,
-         "tilecount":1,
-         "tileheight":1077,
-         "tiles":[
-                {
-                 "id":0,
-                 "objectgroup":
-                    {
-                     "draworder":"index",
-                     "name":"",
-                     "objects":[
-                            {
-                             "class":"",
-                             "height":0,
-                             "id":1,
-                             "name":"wall_left",
-                             "polygon":[
-                                    {
-                                     "x":0,
-                                     "y":0
-                                    },
-                                
-                                    {
-                                     "x":-0.90009,
-                                     "y":152.115
-                                    },
-                                
-                                    {
-                                     "x":63.0063,
-                                     "y":184.518
-                                    },
-                                
-                                    {
-                                     "x":955.896,
-                                     "y":-254.725
-                                    },
-                                
-                                    {
-                                     "x":956.796,
-                                     "y":-477.948
-                                    }],
-                             "rotation":0,
-                             "visible":true,
-                             "width":0,
-                             "x":9.0009,
-                             "y":480.648
-                            },
-                        
-                            {
-                             "class":"",
-                             "height":0,
-                             "id":2,
-                             "name":"wall_right",
-                             "polygon":[
-                                    {
-                                     "x":0,
-                                     "y":0
-                                    },
-                                
-                                    {
-                                     "x":634.563,
-                                     "y":310.531
-                                    },
-                                
-                                    {
-                                     "x":698.47,
-                                     "y":287.129
-                                    },
-                                
-                                    {
-                                     "x":697.57,
-                                     "y":126.913
-                                    },
-                                
-                                    {
-                                     "x":0.90009,
-                                     "y":-219.622
-                                    }],
-                             "rotation":0,
-                             "visible":true,
-                             "width":0,
-                             "x":969.397,
-                             "y":226.823
-                            },
-                        
-                            {
-                             "class":"",
-                             "height":0,
-                             "id":3,
-                             "name":"floor_left",
-                             "polygon":[
-                                    {
-                                     "x":0,
-                                     "y":0
-                                    },
-                                
-                                    {
-                                     "x":703.87,
-                                     "y":350.135
-                                    },
-                                
-                                    {
-                                     "x":700.27,
-                                     "y":365.437
-                                    },
-                                
-                                    {
-                                     "x":-1.80018,
-                                     "y":16.2016
-                                    }],
-                             "rotation":0,
-                             "visible":true,
-                             "width":0,
-                             "x":6.30063,
-                             "y":677.768
-                            },
-                        
-                            {
-                             "class":"",
-                             "height":0,
-                             "id":6,
-                             "name":"floor_right",
-                             "polygon":[
-                                    {
-                                     "x":0,
-                                     "y":0
-                                    },
-                                
-                                    {
-                                     "x":5.40054,
-                                     "y":12.6013
-                                    },
-                                
-                                    {
-                                     "x":895.59,
-                                     "y":-433.843
-                                    },
-                                
-                                    {
-                                     "x":888.389,
-                                     "y":-445.545
-                                    }],
-                             "rotation":0,
-                             "visible":true,
-                             "width":0,
-                             "x":715.572,
-                             "y":1028.8
-                            },
-                        
-                            {
-                             "class":"",
-                             "height":0,
-                             "id":7,
-                             "name":"floor_left_corner",
-                             "polygon":[
-                                    {
-                                     "x":0,
-                                     "y":0
-                                    },
-                                
-                                    {
-                                     "x":-0.563682,
-                                     "y":39.4577
-                                    },
-                                
-                                    {
-                                     "x":-39.1759,
-                                     "y":20.8562
-                                    },
-                                
-                                    {
-                                     "x":-33.5391,
-                                     "y":-17.756
-                                    }],
-                             "rotation":0,
-                             "visible":true,
-                             "width":0,
-                             "x":72.1513,
-                             "y":668.245
-                            },
-                        
-                            {
-                             "class":"",
-                             "height":0,
-                             "id":8,
-                             "name":"floor_right_corner",
-                             "polygon":[
-                                    {
-                                     "x":0,
-                                     "y":0
-                                    },
-                                
-                                    {
-                                     "x":0.845523,
-                                     "y":41.1488
-                                    },
-                                
-                                    {
-                                     "x":60.5958,
-                                     "y":12.6828
-                                    },
-                                
-                                    {
-                                     "x":54.1135,
-                                     "y":-17.756
-                                    }],
-                             "rotation":0,
-                             "visible":true,
-                             "width":0,
-                             "x":1602.27,
-                             "y":540.007
-                            }],
-                     "opacity":1,
-                     "type":"objectgroup",
-                     "visible":true,
-                     "x":0,
-                     "y":0
-                    },
-                 "properties":[
-                        {
-                         "name":"collides",
-                         "type":"bool",
-                         "value":true
-                        }]
-                }],
-         "tilewidth":1674
-        },
-    
-        {
-         "columns":1,
-         "firstgid":2,
          "image":"..\/..\/..\/..\/..\/..\/Assets_fixed\/Props\/chair_front.png",
          "imageheight":164,
          "imagewidth":148,
@@ -1955,7 +2054,7 @@
     
         {
          "columns":1,
-         "firstgid":3,
+         "firstgid":2,
          "image":"..\/..\/..\/..\/..\/..\/Assets_fixed\/Props\/chair_back.png",
          "imageheight":164,
          "imagewidth":148,
@@ -2070,8 +2169,8 @@
     
         {
          "columns":1,
-         "firstgid":4,
-         "image":"..\/..\/..\/..\/..\/..\/Assets_fixed\/Props\/bookshelf_corner.png",
+         "firstgid":3,
+         "image":"bookshelf_corner.png",
          "imageheight":277,
          "imagewidth":148,
          "margin":0,
@@ -2085,7 +2184,6 @@
                  "objectgroup":
                     {
                      "draworder":"index",
-                     "id":2,
                      "name":"",
                      "objects":[
                             {
@@ -2151,7 +2249,7 @@
     
         {
          "columns":1,
-         "firstgid":5,
+         "firstgid":4,
          "image":"..\/..\/..\/..\/..\/..\/Assets_fixed\/Props\/macbook_front_closed.png",
          "imageheight":32,
          "imagewidth":32,
@@ -2211,7 +2309,7 @@
     
         {
          "columns":1,
-         "firstgid":6,
+         "firstgid":5,
          "image":"..\/..\/..\/..\/..\/..\/Assets_fixed\/Props\/macbook_back_closed.png",
          "imageheight":32,
          "imagewidth":32,
@@ -2271,67 +2369,7 @@
     
         {
          "columns":1,
-         "firstgid":7,
-         "image":"..\/..\/..\/..\/..\/..\/Assets_fixed\/Props\/wall_candle.png",
-         "imageheight":277,
-         "imagewidth":148,
-         "margin":0,
-         "name":"wall_candle",
-         "spacing":0,
-         "tilecount":1,
-         "tileheight":277,
-         "tiles":[
-                {
-                 "id":0,
-                 "objectgroup":
-                    {
-                     "draworder":"index",
-                     "name":"",
-                     "objects":[
-                            {
-                             "class":"",
-                             "height":0,
-                             "id":1,
-                             "name":"wall_candle",
-                             "polygon":[
-                                    {
-                                     "x":0,
-                                     "y":0
-                                    },
-                                
-                                    {
-                                     "x":-0.668553,
-                                     "y":23.3994
-                                    },
-                                
-                                    {
-                                     "x":35.879,
-                                     "y":37.2161
-                                    },
-                                
-                                    {
-                                     "x":38.1075,
-                                     "y":2.45136
-                                    }],
-                             "rotation":0,
-                             "visible":true,
-                             "width":0,
-                             "x":34.7648,
-                             "y":89.5862
-                            }],
-                     "opacity":1,
-                     "type":"objectgroup",
-                     "visible":true,
-                     "x":0,
-                     "y":0
-                    }
-                }],
-         "tilewidth":148
-        },
-    
-        {
-         "columns":1,
-         "firstgid":8,
+         "firstgid":6,
          "image":"..\/..\/..\/..\/..\/..\/Assets_fixed\/Props\/cupboard.png",
          "imageheight":164,
          "imagewidth":148,
@@ -2411,7 +2449,7 @@
     
         {
          "columns":1,
-         "firstgid":9,
+         "firstgid":7,
          "image":"..\/..\/..\/..\/..\/..\/Assets_fixed\/Props\/plant_short.png",
          "imageheight":164,
          "imagewidth":148,
@@ -2471,7 +2509,7 @@
     
         {
          "columns":1,
-         "firstgid":10,
+         "firstgid":8,
          "image":"..\/..\/..\/..\/..\/..\/Assets_fixed\/Props\/flower.png",
          "imageheight":164,
          "imagewidth":148,
@@ -2536,7 +2574,7 @@
     
         {
          "columns":1,
-         "firstgid":11,
+         "firstgid":9,
          "image":"..\/..\/..\/..\/..\/..\/Assets_fixed\/Props\/chalkboard.png",
          "imageheight":105,
          "imagewidth":70,
@@ -2596,7 +2634,7 @@
     
         {
          "columns":1,
-         "firstgid":12,
+         "firstgid":10,
          "image":"..\/..\/..\/..\/..\/..\/Assets_fixed\/Props\/book.png",
          "imageheight":164,
          "imagewidth":148,
@@ -2656,7 +2694,7 @@
     
         {
          "columns":1,
-         "firstgid":13,
+         "firstgid":11,
          "image":"..\/..\/..\/..\/..\/..\/Assets_fixed\/Props\/mug.png",
          "imageheight":32,
          "imagewidth":32,
@@ -2716,7 +2754,7 @@
     
         {
          "columns":1,
-         "firstgid":14,
+         "firstgid":12,
          "image":"..\/..\/..\/..\/..\/..\/Assets_fixed\/Props\/teapot.png",
          "imageheight":32,
          "imagewidth":32,
@@ -2776,7 +2814,7 @@
     
         {
          "columns":1,
-         "firstgid":15,
+         "firstgid":13,
          "image":"..\/..\/..\/..\/..\/..\/Assets_fixed\/Props\/wall_candle.png",
          "imageheight":277,
          "imagewidth":148,
@@ -2841,8 +2879,8 @@
     
         {
          "columns":1,
-         "firstgid":16,
-         "image":"..\/..\/..\/..\/..\/..\/Assets_fixed\/Props\/bookshelf_left.png",
+         "firstgid":14,
+         "image":"bookshelf_left.png",
          "imageheight":277,
          "imagewidth":148,
          "margin":0,
@@ -2911,8 +2949,8 @@
     
         {
          "columns":1,
-         "firstgid":17,
-         "image":"..\/..\/..\/..\/..\/..\/Assets_fixed\/Props\/bookshelf_right.png",
+         "firstgid":15,
+         "image":"bookshelf_right.png",
          "imageheight":277,
          "imagewidth":148,
          "margin":0,
@@ -2981,7 +3019,7 @@
     
         {
          "columns":1,
-         "firstgid":18,
+         "firstgid":16,
          "image":"..\/..\/..\/..\/..\/..\/Assets_fixed\/Props\/table_left.png",
          "imageheight":164,
          "imagewidth":148,
@@ -3076,7 +3114,7 @@
     
         {
          "columns":1,
-         "firstgid":19,
+         "firstgid":17,
          "image":"..\/..\/..\/..\/..\/..\/Assets_fixed\/Props\/table_right.png",
          "imageheight":164,
          "imagewidth":148,
@@ -3191,7 +3229,7 @@
     
         {
          "columns":1,
-         "firstgid":20,
+         "firstgid":18,
          "image":"table.png",
          "imageheight":196,
          "imagewidth":204,
@@ -3331,7 +3369,7 @@
     
         {
          "columns":1,
-         "firstgid":21,
+         "firstgid":19,
          "image":"whiteboard.png",
          "imageheight":182,
          "imagewidth":208,
@@ -3346,7 +3384,6 @@
                  "objectgroup":
                     {
                      "draworder":"index",
-                     "id":2,
                      "name":"",
                      "objects":[
                             {
@@ -3388,8 +3425,785 @@
                     }
                 }],
          "tilewidth":208
+        },
+    
+        {
+         "columns":1,
+         "firstgid":20,
+         "image":"room_map.png",
+         "imageheight":1424,
+         "imagewidth":2385,
+         "margin":0,
+         "name":"room_map",
+         "spacing":0,
+         "tilecount":1,
+         "tileheight":1424,
+         "tiles":[
+                {
+                 "id":0,
+                 "objectgroup":
+                    {
+                     "draworder":"index",
+                     "name":"",
+                     "objects":[
+                            {
+                             "class":"",
+                             "height":0,
+                             "id":1,
+                             "name":"wall_left",
+                             "polygon":[
+                                    {
+                                     "x":0,
+                                     "y":0
+                                    },
+                                
+                                    {
+                                     "x":-0.90009,
+                                     "y":152.115
+                                    },
+                                
+                                    {
+                                     "x":63.0063,
+                                     "y":184.518
+                                    },
+                                
+                                    {
+                                     "x":1345.15495087427,
+                                     "y":-460.803268109908
+                                    },
+                                
+                                    {
+                                     "x":1342.55882501221,
+                                     "y":-655.936684842458
+                                    }],
+                             "rotation":0,
+                             "visible":true,
+                             "width":0,
+                             "x":14.5711906744379,
+                             "y":664.029975020816
+                            },
+                        
+                            {
+                             "class":"",
+                             "height":0,
+                             "id":2,
+                             "name":"wall_right",
+                             "polygon":[
+                                    {
+                                     "x":0,
+                                     "y":0
+                                    },
+                                
+                                    {
+                                     "x":959.292392173189,
+                                     "y":477.058893422148
+                                    },
+                                
+                                    {
+                                     "x":1014.87299750208,
+                                     "y":449.493696086594
+                                    },
+                                
+                                    {
+                                     "x":1022.29939217319,
+                                     "y":293.440893422148
+                                    },
+                                
+                                    {
+                                     "x":3.7291443885706,
+                                     "y":-200.525882877148
+                                    }],
+                             "rotation":0,
+                             "visible":true,
+                             "width":0,
+                             "x":1357.20233139051,
+                             "y":210.241465445462
+                            },
+                        
+                            {
+                             "class":"",
+                             "height":0,
+                             "id":3,
+                             "name":"floor_right",
+                             "polygon":[
+                                    {
+                                     "x":0,
+                                     "y":0
+                                    },
+                                
+                                    {
+                                     "x":5.40054,
+                                     "y":12.6013
+                                    },
+                                
+                                    {
+                                     "x":1347.29691090758,
+                                     "y":-662.818853455454
+                                    },
+                                
+                                    {
+                                     "x":1340.09591090758,
+                                     "y":-674.520853455454
+                                    }],
+                             "rotation":0,
+                             "visible":true,
+                             "width":0,
+                             "x":1023.22814321399,
+                             "y":1355.77352206495
+                            },
+                        
+                            {
+                             "class":"",
+                             "height":0,
+                             "id":4,
+                             "name":"floor_left",
+                             "polygon":[
+                                    {
+                                     "x":0,
+                                     "y":0
+                                    },
+                                
+                                    {
+                                     "x":1020.27299750208,
+                                     "y":514.581294754371
+                                    },
+                                
+                                    {
+                                     "x":1002.10180682764,
+                                     "y":523.638498751041
+                                    },
+                                
+                                    {
+                                     "x":-1.80018,
+                                     "y":16.2016
+                                    }],
+                             "rotation":0,
+                             "visible":true,
+                             "width":0,
+                             "x":16.6527893422147,
+                             "y":849.292256452956
+                            }],
+                     "opacity":1,
+                     "type":"objectgroup",
+                     "visible":true,
+                     "x":0,
+                     "y":0
+                    },
+                 "properties":[
+                        {
+                         "name":"collides",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }],
+         "tilewidth":2385
+        },
+    
+        {
+         "columns":1,
+         "firstgid":21,
+         "image":"table_candle.png",
+         "imageheight":277,
+         "imagewidth":148,
+         "margin":0,
+         "name":"table_candle",
+         "spacing":0,
+         "tilecount":1,
+         "tileheight":277,
+         "tiles":[
+                {
+                 "id":0,
+                 "objectgroup":
+                    {
+                     "draworder":"index",
+                     "id":2,
+                     "name":"",
+                     "objects":[
+                            {
+                             "class":"",
+                             "height":0,
+                             "id":3,
+                             "name":"table_candle",
+                             "polygon":[
+                                    {
+                                     "x":0,
+                                     "y":0
+                                    },
+                                
+                                    {
+                                     "x":0.371443429165737,
+                                     "y":-4.45732114998884
+                                    },
+                                
+                                    {
+                                     "x":5.9430948666518,
+                                     "y":-4.08587772082311
+                                    },
+                                
+                                    {
+                                     "x":5.20020800832033,
+                                     "y":0
+                                    }],
+                             "rotation":0,
+                             "visible":true,
+                             "width":0,
+                             "x":72.8029121164847,
+                             "y":228.066265507763
+                            }],
+                     "opacity":1,
+                     "type":"objectgroup",
+                     "visible":true,
+                     "x":0,
+                     "y":0
+                    }
+                }],
+         "tilewidth":148
+        },
+    
+        {
+         "columns":1,
+         "firstgid":22,
+         "image":"painting3.png",
+         "imageheight":262,
+         "imagewidth":147,
+         "margin":0,
+         "name":"painting3",
+         "spacing":0,
+         "tilecount":1,
+         "tileheight":262,
+         "tiles":[
+                {
+                 "id":0,
+                 "objectgroup":
+                    {
+                     "draworder":"index",
+                     "name":"",
+                     "objects":[
+                            {
+                             "class":"",
+                             "height":0,
+                             "id":1,
+                             "name":"painting3",
+                             "polygon":[
+                                    {
+                                     "x":0,
+                                     "y":0
+                                    },
+                                
+                                    {
+                                     "x":11.1433028749721,
+                                     "y":6.68598172498328
+                                    },
+                                
+                                    {
+                                     "x":14.8577371666295,
+                                     "y":-4.08587772082312
+                                    }],
+                             "rotation":0,
+                             "visible":true,
+                             "width":0,
+                             "x":43.8303246415571,
+                             "y":76.1459029789763
+                            }],
+                     "opacity":1,
+                     "type":"objectgroup",
+                     "visible":true,
+                     "x":0,
+                     "y":0
+                    }
+                }],
+         "tilewidth":147
+        },
+    
+        {
+         "columns":1,
+         "firstgid":23,
+         "image":"painting1.png",
+         "imageheight":290,
+         "imagewidth":212,
+         "margin":0,
+         "name":"painting1",
+         "spacing":0,
+         "tilecount":1,
+         "tileheight":290,
+         "tiles":[
+                {
+                 "id":0,
+                 "objectgroup":
+                    {
+                     "draworder":"index",
+                     "name":"",
+                     "objects":[
+                            {
+                             "class":"",
+                             "height":0,
+                             "id":1,
+                             "name":"painting1",
+                             "rotation":0,
+                             "visible":true,
+                             "width":0,
+                             "x":84.3176584206225,
+                             "y":92.117970433103
+                            }],
+                     "opacity":1,
+                     "type":"objectgroup",
+                     "visible":true,
+                     "x":0,
+                     "y":0
+                    }
+                }],
+         "tilewidth":212
+        },
+    
+        {
+         "columns":1,
+         "firstgid":24,
+         "image":"painting2.png",
+         "imageheight":326,
+         "imagewidth":273,
+         "margin":0,
+         "name":"painting2",
+         "spacing":0,
+         "tilecount":1,
+         "tileheight":326,
+         "tiles":[
+                {
+                 "id":0,
+                 "objectgroup":
+                    {
+                     "draworder":"index",
+                     "name":"",
+                     "objects":[
+                            {
+                             "class":"",
+                             "height":0,
+                             "id":1,
+                             "name":"painting2",
+                             "rotation":0,
+                             "visible":true,
+                             "width":0,
+                             "x":108.461481316396,
+                             "y":104.004160166407
+                            }],
+                     "opacity":1,
+                     "type":"objectgroup",
+                     "visible":true,
+                     "x":0,
+                     "y":0
+                    }
+                }],
+         "tilewidth":273
+        },
+    
+        {
+         "columns":1,
+         "firstgid":25,
+         "image":"floor_candle.png",
+         "imageheight":277,
+         "imagewidth":148,
+         "margin":0,
+         "name":"floor_candle",
+         "spacing":0,
+         "tilecount":1,
+         "tileheight":277,
+         "tiles":[
+                {
+                 "id":0,
+                 "objectgroup":
+                    {
+                     "draworder":"index",
+                     "name":"",
+                     "objects":[
+                            {
+                             "class":"",
+                             "height":0,
+                             "id":1,
+                             "name":"floor_candle",
+                             "polygon":[
+                                    {
+                                     "x":0,
+                                     "y":0
+                                    },
+                                
+                                    {
+                                     "x":-14.8577371666295,
+                                     "y":8.54319887081195
+                                    },
+                                
+                                    {
+                                     "x":-6.31453829581755,
+                                     "y":18.2007280291211
+                                    },
+                                
+                                    {
+                                     "x":5.20020800832033,
+                                     "y":20.0579451749499
+                                    },
+                                
+                                    {
+                                     "x":20.8008320332813,
+                                     "y":16.3435108832925
+                                    },
+                                
+                                    {
+                                     "x":25.2581531832702,
+                                     "y":8.17175544164621
+                                    },
+                                
+                                    {
+                                     "x":18.9436148874526,
+                                     "y":2.9715474333259
+                                    },
+                                
+                                    {
+                                     "x":8.17175544164623,
+                                     "y":-0.371443429165737
+                                    },
+                                
+                                    {
+                                     "x":6.68598172498328,
+                                     "y":-2.22866057499445
+                                    },
+                                
+                                    {
+                                     "x":7.05742515414902,
+                                     "y":-47.9162023623802
+                                    },
+                                
+                                    {
+                                     "x":2.60010400416016,
+                                     "y":-46.801872074883
+                                    }],
+                             "rotation":0,
+                             "visible":true,
+                             "width":0,
+                             "x":70.2028081123245,
+                             "y":214.694302057797
+                            }],
+                     "opacity":1,
+                     "type":"objectgroup",
+                     "visible":true,
+                     "x":0,
+                     "y":0
+                    }
+                }],
+         "tilewidth":148
+        },
+    
+        {
+         "columns":1,
+         "firstgid":26,
+         "image":"crate_table_flower.png",
+         "imageheight":164,
+         "imagewidth":148,
+         "margin":0,
+         "name":"crate_table_flower",
+         "spacing":0,
+         "tilecount":1,
+         "tileheight":164,
+         "tiles":[
+                {
+                 "id":0,
+                 "objectgroup":
+                    {
+                     "draworder":"index",
+                     "id":2,
+                     "name":"",
+                     "objects":[
+                            {
+                             "class":"",
+                             "height":15.2291805957953,
+                             "id":1,
+                             "name":"crate_table_flower",
+                             "rotation":0,
+                             "visible":true,
+                             "width":0,
+                             "x":73.5457989748161,
+                             "y":71.3171383998217
+                            }],
+                     "opacity":1,
+                     "type":"objectgroup",
+                     "visible":true,
+                     "x":0,
+                     "y":0
+                    }
+                }],
+         "tilewidth":148
+        },
+    
+        {
+         "columns":1,
+         "firstgid":27,
+         "image":"plant_long.png",
+         "imageheight":278,
+         "imagewidth":148,
+         "margin":0,
+         "name":"plant_long",
+         "spacing":0,
+         "tilecount":1,
+         "tileheight":278,
+         "tiles":[
+                {
+                 "id":0,
+                 "objectgroup":
+                    {
+                     "draworder":"index",
+                     "name":"",
+                     "objects":[
+                            {
+                             "class":"",
+                             "height":0,
+                             "id":1,
+                             "name":"plant_long",
+                             "polygon":[
+                                    {
+                                     "x":0,
+                                     "y":0
+                                    },
+                                
+                                    {
+                                     "x":83.9462149914568,
+                                     "y":23.4009360374415
+                                    },
+                                
+                                    {
+                                     "x":95.8324047247604,
+                                     "y":-75.0315726914791
+                                    },
+                                
+                                    {
+                                     "x":6.31453829581755,
+                                     "y":-80.6032241289652
+                                    }],
+                             "rotation":0,
+                             "visible":true,
+                             "width":0,
+                             "x":31.5726914790877,
+                             "y":208.379763761979
+                            }],
+                     "opacity":1,
+                     "type":"objectgroup",
+                     "visible":true,
+                     "x":0,
+                     "y":0
+                    }
+                }],
+         "tilewidth":148
+        },
+    
+        {
+         "columns":1,
+         "firstgid":28,
+         "image":"statue.png",
+         "imageheight":277,
+         "imagewidth":148,
+         "margin":0,
+         "name":"statue",
+         "spacing":0,
+         "tilecount":1,
+         "tileheight":277,
+         "tiles":[
+                {
+                 "id":0,
+                 "objectgroup":
+                    {
+                     "draworder":"index",
+                     "id":2,
+                     "name":"",
+                     "objects":[
+                            {
+                             "class":"",
+                             "height":0,
+                             "id":1,
+                             "name":"statue",
+                             "polygon":[
+                                    {
+                                     "x":0,
+                                     "y":0
+                                    },
+                                
+                                    {
+                                     "x":3.34299086249164,
+                                     "y":4.45732114998887
+                                    },
+                                
+                                    {
+                                     "x":4.08587772082312,
+                                     "y":8.91464229997771
+                                    },
+                                
+                                    {
+                                     "x":-21.1722754624471,
+                                     "y":26.0010400416017
+                                    },
+                                
+                                    {
+                                     "x":-21.1722754624471,
+                                     "y":29.715474333259
+                                    },
+                                
+                                    {
+                                     "x":23.0294926082758,
+                                     "y":49.0305326498774
+                                    },
+                                
+                                    {
+                                     "x":69.8313646831588,
+                                     "y":25.2581531832702
+                                    },
+                                
+                                    {
+                                     "x":46.801872074883,
+                                     "y":11.5147463041379
+                                    },
+                                
+                                    {
+                                     "x":40.4873337790655,
+                                     "y":-8.17175544164621
+                                    }],
+                             "rotation":0,
+                             "visible":true,
+                             "width":0,
+                             "x":52.3735235123691,
+                             "y":155.634796820444
+                            }],
+                     "opacity":1,
+                     "type":"objectgroup",
+                     "visible":true,
+                     "x":0,
+                     "y":0
+                    }
+                }],
+         "tilewidth":148
+        },
+    
+        {
+         "columns":1,
+         "firstgid":29,
+         "image":"painting4.png",
+         "imageheight":262,
+         "imagewidth":147,
+         "margin":0,
+         "name":"painting4",
+         "spacing":0,
+         "tilecount":1,
+         "tileheight":262,
+         "tiles":[
+                {
+                 "id":0,
+                 "objectgroup":
+                    {
+                     "draworder":"index",
+                     "id":2,
+                     "name":"",
+                     "objects":[
+                            {
+                             "class":"",
+                             "height":0,
+                             "id":1,
+                             "name":"painting4",
+                             "polygon":[
+                                    {
+                                     "x":0,
+                                     "y":0
+                                    },
+                                
+                                    {
+                                     "x":-0.371443429165744,
+                                     "y":4.82876457915459
+                                    },
+                                
+                                    {
+                                     "x":5.20020800832033,
+                                     "y":4.08587772082311
+                                    },
+                                
+                                    {
+                                     "x":4.08587772082311,
+                                     "y":0.742886858331474
+                                    }],
+                             "rotation":0,
+                             "visible":true,
+                             "width":0,
+                             "x":44.2017680707228,
+                             "y":83.2033281331253
+                            }],
+                     "opacity":1,
+                     "type":"objectgroup",
+                     "visible":true,
+                     "x":0,
+                     "y":0
+                    }
+                }],
+         "tilewidth":147
+        },
+    
+        {
+         "columns":1,
+         "firstgid":30,
+         "image":"bench.png",
+         "imageheight":164,
+         "imagewidth":148,
+         "margin":0,
+         "name":"bench",
+         "spacing":0,
+         "tilecount":1,
+         "tileheight":164,
+         "tiles":[
+                {
+                 "id":0,
+                 "objectgroup":
+                    {
+                     "draworder":"index",
+                     "id":2,
+                     "name":"",
+                     "objects":[
+                            {
+                             "class":"",
+                             "height":0,
+                             "id":1,
+                             "name":"bench",
+                             "polygon":[
+                                    {
+                                     "x":0,
+                                     "y":0
+                                    },
+                                
+                                    {
+                                     "x":0.371443429165738,
+                                     "y":38.6301166332368
+                                    },
+                                
+                                    {
+                                     "x":120.347671049699,
+                                     "y":-18.2007280291212
+                                    },
+                                
+                                    {
+                                     "x":117.747567045539,
+                                     "y":-64.6311566748384
+                                    },
+                                
+                                    {
+                                     "x":46.801872074883,
+                                     "y":-47.1733155040487
+                                    }],
+                             "rotation":0,
+                             "visible":true,
+                             "width":0,
+                             "x":2.22866057499443,
+                             "y":79.4888938414679
+                            }],
+                     "opacity":1,
+                     "type":"objectgroup",
+                     "visible":true,
+                     "x":0,
+                     "y":0
+                    }
+                }],
+         "tilewidth":148
         }],
- "tilewidth":1674,
+ "tilewidth":2385,
  "type":"map",
  "version":"1.9",
  "width":1
