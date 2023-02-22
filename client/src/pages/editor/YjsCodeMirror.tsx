@@ -1,6 +1,7 @@
 //@ts-nocheck
 /* react */
 import { useRef, useEffect, useState } from 'react';
+import { RootState } from 'stores';
 
 /* lib */
 import * as random from 'lib0/random';
@@ -26,7 +27,6 @@ import {
 } from '@codemirror/commands';
 import { noctisLilac } from '@uiw/codemirror-theme-noctis-lilac';
 import { okaidia } from '@uiw/codemirror-theme-okaidia';
-import { RootState } from 'stores';
 
 /* GraphQL queries */
 import PROBLEMQUERY from '../../graphql/problemQuery';
@@ -551,6 +551,7 @@ function YjsCodeMirror() {
                       algoSelect === 0 ? fetchBojProbInfo : fetchLeetProbInfo
                     }
                     style={{ color: '#ffefd5' }}
+                    fontSize="large"
                   />
                 </>
               </div>
