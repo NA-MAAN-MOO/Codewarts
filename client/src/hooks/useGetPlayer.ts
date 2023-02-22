@@ -20,7 +20,6 @@ export default () => {
             params: { sessionId: GAME_STATUS.GAME },
           }
         );
-        dispatch(setUsers(data));
         return data;
       } else {
         //에디터일 때
@@ -32,7 +31,6 @@ export default () => {
   };
   const getSessions = async () => {
     const { data } = await axios.get('http://localhost:3002/get-sessions', {});
-    console.log(data);
   };
 
   const getUsers = async (sessionId: string) => {
