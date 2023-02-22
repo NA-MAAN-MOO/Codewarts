@@ -173,14 +173,29 @@ export default () => {
         console.warn(exception);
       });
 
-      mySession.on('sessionDisconnected', (event: SessionDisconnectedEvent) => {
-        //내가 세션을 나갔을 때 호출
-        // disconnectSession(event.target as Session);
+      mySession.on('connectionCreated', async (event: ConnectionEvent) => {
+        //세션에 누군가 왔을 때 호출
+        const session = event.target as Session;
+        const sessionId = session.sessionId;
+        await getUsers(sessionId);
       });
+      mySession.on(
+        'sessionDisconnected',
+        async (event: SessionDisconnectedEvent) => {
+          //내가 세션을 나갔을 때 호출
+          // disconnectSession(event.target as Session);
+          const session = event.target as Session;
+          const sessionId = session.sessionId;
+          await getUsers(sessionId);
+        }
+      );
 
-      mySession.on('connectionDestroyed', (event: ConnectionEvent) => {
+      mySession.on('connectionDestroyed', async (event: ConnectionEvent) => {
         //다른 유저가 세션을 나갔을 때 호출
         deleteSubscriber(event.target);
+        const session = event.target as Session;
+        const sessionId = session.sessionId;
+        await getUsers(sessionId);
       });
 
       // --- 4) Connect to the session with a valid user token ---
