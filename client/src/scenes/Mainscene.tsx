@@ -1,4 +1,5 @@
 //@ts-nocheck
+
 import { createCharacterAnims } from '../anims/CharacterAnims';
 import OtherPlayer from '../objects/OtherPlayer';
 import Player from '../objects/Player';
@@ -7,11 +8,12 @@ import { io, Socket } from 'socket.io-client';
 import store from 'stores';
 import { openEditor, openGame } from 'stores/modeSlice';
 import { setRoomId, setUserName } from 'stores/editorSlice';
+// import { addUser, removeUser } from 'stores/chatSlice';
 import { GAME_STATUS } from 'utils/Constants';
 import Table from 'objects/Table';
 import phaserGame from 'codeuk';
 import { NONE } from 'phaser';
-import { PlayerType, ServerPlayerType } from 'types';
+import { MotionType, PlayerType, ServerPlayerType } from 'types';
 
 export default class MainScene extends Phaser.Scene {
   // class 속성 명시는 constructor 이전에 명시하면 되는듯
@@ -110,7 +112,7 @@ export default class MainScene extends Phaser.Scene {
     if (!phaserGame.charKey || !phaserGame.socketId || !phaserGame.userName)
       return;
 
-    this.player = new Player({
+    const playerInfo = {
       scene: this,
       x: this.x,
       y: this.y,
@@ -119,7 +121,11 @@ export default class MainScene extends Phaser.Scene {
       id: phaserGame.socketId,
       name: phaserGame.userName,
       frame: 'down-1', // atlas.json의 첫번째 filename
-    });
+    };
+
+    this.player = new Player(playerInfo);
+
+    // store.dispatch(addUser(phaserGame.userName));
 
     this.player.inputKeys = this.input.keyboard.addKeys({
       up: Phaser.Input.Keyboard.KeyCodes.UP,
@@ -132,7 +138,7 @@ export default class MainScene extends Phaser.Scene {
     this.editorIdx = 4;
 
     let camera = this.cameras.main;
-    camera.zoom = 0.8;
+    camera.zoom = 1;
     camera.startFollow(this.player);
     camera.setLerp(0.1, 0.1);
     // camera.setBounds(0, 0, this.game.config.width, this.game.config.height);
@@ -157,15 +163,19 @@ export default class MainScene extends Phaser.Scene {
         userName: payLoad.userName,
       });
     });
+
     phaserGame.socket.on('newPlayer', (payLoad: ServerPlayerType) => {
-      this.addOtherPlayers({
+      //새 플레이어가 들어옴
+      const otherPlayerInfo = {
         x: payLoad.x,
         y: payLoad.y,
         charKey: payLoad.charKey,
         socketId: payLoad.socketId,
         state: payLoad.state,
         userName: payLoad.userName,
-      });
+      };
+      this.addOtherPlayers(otherPlayerInfo);
+      // store.dispatch(addUser(payLoad.userName));
     });
     phaserGame.socket.on('playerDisconnect', (socketId) => {
       this.removePlayer(socketId);
@@ -210,10 +220,10 @@ export default class MainScene extends Phaser.Scene {
         const table = this.tableMap.get(payLoad.id);
         if (table) {
           //FIXME: 내 에디터 업데이트
-          if (phaserGame.socketID === payLoad.socketId) {
+          if (phaserGame.socketId === payLoad.socketId) {
             table.updateTable(payLoad.idx, payLoad.userName, this.player);
           }
-          //FIXME: socketID가 일치하는 other player를 앉힘
+          //FIXME: socketId가 일치하는 other player를 앉힘
           else {
             this.otherPlayers.forEach((otherPlayer: OtherPlayer) => {
               if (otherPlayer.socketId === payLoad.socketId) {
@@ -398,18 +408,21 @@ export default class MainScene extends Phaser.Scene {
     this.otherPlayers.push(otherPlayer);
   }
 
-  removePlayer(res: any) {
-    this.otherPlayers.forEach((player: any) => {
+  removePlayer(res: string) {
+    let removingName = '';
+    this.otherPlayers.forEach((player) => {
       if (player.socketId === res) {
+        removingName = player.name;
         player.destroy();
         player.playerNameBubble.destroy();
       }
     });
-    this.otherPlayers.filter((player: any) => player.socketId !== res);
+    // store.dispatch(removeUser(removingName));
+    this.otherPlayers.filter((player) => player.socketId !== res);
   }
 
-  updateLocation(payLoad: any) {
-    this.otherPlayers.forEach((otherPlayer: any) => {
+  updateLocation(payLoad: MotionType) {
+    this.otherPlayers.forEach((otherPlayer) => {
       if (otherPlayer.socketId === payLoad.socketId) {
         switch (payLoad.motion) {
           case 'left':

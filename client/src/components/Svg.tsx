@@ -14,10 +14,10 @@ function RenderSvg({ svgName }) {
 export default RenderSvg;
 
 const RenderSvgDiv = styled.span`
-  width: 50px;
-  height: 50px;
-  display: flex;
+  width: 30px;
+  display: inline-block;
   justify-content: center;
+  margin: 0 10px 0 0;
   // flex-direction: column;
   // gap: 50px;
 `;

@@ -3,8 +3,8 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { GAME_STATUS } from '../utils/Constants';
 
 export interface EditorState {
-  userName: String;
-  roomId: String;
+  userName: string;
+  roomId: string;
 }
 
 const initialState: EditorState = {

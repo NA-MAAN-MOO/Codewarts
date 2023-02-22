@@ -5,16 +5,25 @@ import { openGame } from '../stores/modeSlice';
 import YjsCodeMirror from './editor/YjsCodeMirror';
 import UserForm from './editor/UserForm';
 import { RootState } from '../stores';
+import Voice from 'pages/Voice';
+import useVoice from 'hooks/useVoice';
 
-/* 유저 네임이 존재하면 에디터, 존재하지 않으면 userform을 보여줌 */
 const Editor = () => {
-  const { userName } = useSelector((state: RootState) => state.editor);
+  const { roomId, session } = useSelector((state: RootState) => {
+    return { ...state.editor, ...state.chat };
+  });
   const dispatch = useDispatch();
+  const { disconnectSession } = useVoice();
+
+  const handleExit = () => {
+    disconnectSession(session);
+    dispatch(openGame());
+  };
   return (
     <EditorDiv>
-      <h1>Do Codeuk!</h1>
-      {userName ? (
+      {roomId ? (
         <div>
+          <Voice roomKey={roomId} />
           <YjsCodeMirror />
         </div>
       ) : (
@@ -23,7 +32,7 @@ const Editor = () => {
         </div>
       )}
       <BtnDiv>
-        <button type="button" onClick={() => dispatch(openGame())}>
+        <button type="button" onClick={handleExit}>
           돌아가기
         </button>
       </BtnDiv>
@@ -37,6 +46,11 @@ const EditorDiv = styled.div`
   width: 100%;
   height: 100%;
   background-color: white;
+  // background-color: #272822; // 에디터 검정
+  // background-color: rgba(0, 0, 0, 0.3); // 검정 투명
+  background-color: rgba(256, 256, 256, 0.7); // 흰색 투명
+  // background-size: cover;
+  // background-attachment: fixed;
   position: absolute;
   top: 0;
   left: 0;

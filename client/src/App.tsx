@@ -13,7 +13,9 @@ import './codeuk';
 function App() {
   const mode = process.env.REACT_APP_MODE;
   const { START, LOBBY, GAME, EDITOR } = GAME_STATUS;
-  const status = useSelector((state: RootState) => state.mode.status);
+  const { status } = useSelector((state: RootState) => {
+    return state.mode;
+  });
   const dispatch = useDispatch();
   let loadFlag = false;
 
@@ -28,7 +30,7 @@ function App() {
 
   return (
     loadFlag || (
-      <HoverDiv>
+      <HoverDiv id="codeuk">
         {status === START ? (
           <Start></Start>
         ) : status === LOBBY ? (

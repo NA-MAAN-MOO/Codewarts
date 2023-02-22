@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import ToggleButton from '@mui/material/ToggleButton';
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Avatar from '@mui/material/Avatar';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -11,13 +13,33 @@ import 'swiper/css/navigation';
 import logo from 'assets/images/logo.png';
 import chars from 'assets/characters';
 import { styledTheme } from 'styles/theme';
-import { setPlayerId, setPlayerTexture } from '../stores/userSlice';
+import {
+  setPlayerBojId,
+  setPlayerId,
+  setPlayerLeetId,
+  setPlayerTexture,
+} from '../stores/userSlice';
 import { useDispatch } from 'react-redux';
 import { handleScene } from 'lib/phaserLib';
 import { GAME_STATUS } from 'utils/Constants';
+import { Snackbar, SnackbarOrigin } from '@mui/material';
+import SignUpForm from './SignUpForm';
+import axios from 'axios';
+import MySnackbar from './MySnackbar';
 
 interface Characters {
   [key: string]: string;
+}
+
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={10} ref={ref} variant="filled" {...props} />;
+});
+
+export interface State extends SnackbarOrigin {
+  openLoginWarn: boolean;
 }
 
 const characters = chars as Characters;
@@ -26,32 +48,85 @@ const avatars: { name: string; img: string }[] = Array.from(
   new Array(28),
   (d, idx) => ({ name: `char${idx}`, img: characters[`char${idx}`] })
 );
-
+let randomNumber = Math.floor(Math.random() * 28);
 const LoginDialog = () => {
-  const [name, setName] = useState<string>('');
+  const [openLoginWarn, setOpenLoginWarn] = React.useState(false);
+  const [openSignUp, setOpenSignUp] = React.useState(false);
+
+  const handleClick = () => {
+    setOpenLoginWarn(true);
+  };
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenLoginWarn(false);
+  };
+
+  const [userId, setUserId] = useState<string>('');
+  const [idValid, setIdValid] = useState<boolean>(false);
+  const [userIdFieldEmpty, setUserIdFieldEmpty] = useState<boolean>(false);
+  const [userPw, setUserPw] = useState<string>('');
+  const [pwValid, setPwValid] = useState<boolean>(false);
+  const [userPwFieldEmpty, setUserPwFieldEmpty] = useState<boolean>(false);
   const [avatarIndex, setAvatarIndex] = useState<number>(0);
-  const [nameFieldEmpty, setNameFieldEmpty] = useState<boolean>(false);
   const dispatch = useDispatch();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (name === '') {
-      setNameFieldEmpty(true);
+    if (userId === '') {
+      setUserIdFieldEmpty(true);
+      return;
+    } else if (userId !== '' && userPw === '') {
+      setUserPwFieldEmpty(true);
+      setUserIdFieldEmpty(false);
+      return;
     } else {
-      console.log('Join! Name:', name, 'Avatar:', avatars[avatarIndex].name);
+      //todo user info 확인
+      const body = { userId: userId, userPw: userPw };
+      try {
+        const response = await axios.post(
+          'http://localhost:3003/user/login',
+          body
+        );
+        if (response.data.status === 200) {
+          const { payload } = response.data; //userId, userNickname, userBojId, userLeetId
+          //todo payload 값 리덕스에 저장하기
+          console.log(
+            'Join! Name:',
+            userId,
+            'Avatar:',
+            avatars[avatarIndex].name
+          );
 
-      dispatch(setPlayerId(name));
-      dispatch(setPlayerTexture(avatars[avatarIndex].name));
-      handleScene(GAME_STATUS.LOBBY);
-
-      // game.myPlayer.setPlayerTexture(avatars[avatarIndex].name);
-      // game.network.readyToConnect();
-      // dispatch(setLoggedIn(true));
+          dispatch(setPlayerId(payload.userNickname));
+          dispatch(setPlayerBojId(payload.userBojId));
+          dispatch(setPlayerLeetId(payload.userLeetId));
+          dispatch(setPlayerTexture(avatars[avatarIndex].name));
+          handleScene(GAME_STATUS.LOBBY);
+        }
+      } catch (e) {
+        handleClick();
+        setUserId('');
+        setUserPw('');
+        console.log('불통요');
+      }
     }
   };
 
   return (
-    <Wrapper onSubmit={handleSubmit}>
+    <Wrapper>
+      <MySnackbar
+        text="아이디와 비밀번호를 다시 확인해 주세요"
+        state="warning"
+        onClose={handleClose}
+        onOpen={openLoginWarn}
+      />
       <img
         src={logo}
         style={{ width: styledTheme.logoWidth, height: styledTheme.logoHeight }}
@@ -64,7 +139,7 @@ const LoginDialog = () => {
         </Avatar>
         <h3>{'My Room'}</h3>
       </RoomName> */}
-      <Content>
+      <Content onSubmit={handleSubmit} id="login">
         <Left>
           <Swiper
             modules={[Navigation]}
@@ -74,6 +149,7 @@ const LoginDialog = () => {
             onSlideChange={(swiper) => {
               setAvatarIndex(swiper.activeIndex);
             }}
+            initialSlide={randomNumber}
           >
             {avatars.map((avatar) => (
               <SwiperSlide key={avatar.name}>
@@ -81,7 +157,7 @@ const LoginDialog = () => {
                   style={{
                     scale: '4.5',
                     left: '20%',
-                    clipPath: 'inset(0px 36px 102px 40px)',
+                    clipPath: 'inset(0px 36px 102px 39px)',
                     top: '120%',
                     position: 'absolute',
                   }}
@@ -94,29 +170,47 @@ const LoginDialog = () => {
         </Left>
         <Right>
           <TextField
-            autoFocus
             fullWidth
-            label="이름 입력"
+            label="ID"
             variant="outlined"
-            error={nameFieldEmpty}
-            helperText={nameFieldEmpty && '이름을 입력해 주세요.'}
+            error={userIdFieldEmpty}
+            helperText={userIdFieldEmpty && 'ID를 입력해 주세요.'}
+            value={userId}
             onInput={(e) => {
-              setName((e.target as HTMLInputElement).value);
+              setUserId((e.target as HTMLInputElement).value);
             }}
             sx={{ fontFamily: styledTheme.mainFont }}
           />
+          <div style={{ height: '15px' }}></div>
+          <TextField
+            fullWidth
+            type="password"
+            label="PASSWORD"
+            variant="outlined"
+            value={userPw}
+            error={userPwFieldEmpty}
+            helperText={userPwFieldEmpty && 'Password를 입력해 주세요.'}
+            onInput={(e) => {
+              setUserPw((e.target as HTMLInputElement).value);
+            }}
+            sx={{ fontFamily: styledTheme.mainFont }}
+          />
+          <div style={{ height: '30px' }}></div>
+          <Button
+            style={{ left: '200px' }}
+            variant="contained"
+            color="primary"
+            size="large"
+            type="submit"
+            form="login"
+            sx={{ fontFamily: styledTheme.mainFont }}
+          >
+            시작하기
+          </Button>
         </Right>
       </Content>
       <Bottom>
-        <Button
-          variant="contained"
-          color="primary"
-          size="large"
-          type="submit"
-          sx={{ fontFamily: styledTheme.mainFont }}
-        >
-          시작하기
-        </Button>
+        <SignUpForm />
       </Bottom>
     </Wrapper>
   );
@@ -124,7 +218,7 @@ const LoginDialog = () => {
 
 export default LoginDialog;
 
-const Wrapper = styled.form`
+const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -135,7 +229,7 @@ const Wrapper = styled.form`
   box-shadow: 0px 0px 5px #0000006f;
 `;
 
-const Content = styled.div`
+const Content = styled.form`
   display: flex;
   margin: 36px 0;
 `;
@@ -171,7 +265,7 @@ const Left = styled.div`
 
 const Right = styled.div`
   width: 300px;
-  display: flex;
+  display: block;
   align-items: center;
   // padding-top: 50px;
 `;

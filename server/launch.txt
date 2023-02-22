@@ -1,0 +1,16 @@
+//서버 쪽 디버깅을 위한 launch.json(.vscode 디렉토리 아래에 launch.json으로 파일 저장하고, 디버깅 시작할 때 이걸로 선택)
+
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Express Server",
+      "command": "npm run dev",
+      "request": "launch",
+      "type": "node-terminal",
+      "program": "${workspaceFolder}/server/dist/index.js",
+      "cwd": "${workspaceFolder}/server",
+      "sourceMaps": true
+    }
+  ]
+}

@@ -14,7 +14,7 @@ export default class OtherPlayer extends Player {
 //   playerTexture!: string;
 //   touching!: [];
 //   playerNameBubble!: Phaser.GameObjects.Text;
-//   playerName!: string;
+//   name!: string;
 
 //   constructor(data: any) {
 //     let { scene, x, y, texture, id, name, frame } = data;
