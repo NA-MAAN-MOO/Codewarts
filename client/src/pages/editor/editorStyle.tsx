@@ -1,9 +1,8 @@
 import styledc from 'styled-components';
-import { createTheme } from '@mui/material/styles';
+import { styled, alpha, createTheme } from '@mui/material/styles';
 
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import { styled, alpha } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
