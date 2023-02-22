@@ -12,7 +12,6 @@ const Editor = () => {
   const dispatch = useDispatch();
   return (
     <EditorDiv>
-      <h1>Do Codeuk!</h1>
       {roomId ? (
         <div>
           <Voice roomKey={roomId} />

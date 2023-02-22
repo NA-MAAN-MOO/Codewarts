@@ -14,7 +14,6 @@ import { VoiceProp } from 'types';
 import GameVoice from 'pages/voice/GameVoice';
 import { GAME_STATUS } from 'utils/Constants';
 import EditorVoice from 'pages/voice/EditorVoice';
-import useGetPlayer from 'hooks/useGetPlayer';
 
 //Voice 방 컴포넌트
 const Voice = ({ roomKey }: VoiceProp) => {
@@ -22,8 +21,15 @@ const Voice = ({ roomKey }: VoiceProp) => {
   const [session, setSession] = useState<Session>();
   const [subscribers, setSubscribers] = useState<Array<Subscriber>>([]);
   const [publisher, setPublisher] = useState<Publisher>();
-  const { createSession, disconnectSession, registerSession, initSession } =
-    useVoice();
+  const {
+    createSession,
+    disconnectSession,
+    registerSession,
+    initSession,
+    getUsers,
+    getSessions,
+    getConnections,
+  } = useVoice();
 
   const onBeforeUnload = (e: BeforeUnloadEvent) => {
     leaveSession();
@@ -31,7 +37,6 @@ const Voice = ({ roomKey }: VoiceProp) => {
   const { playerId, status, users } = useSelector((state: RootState) => {
     return { ...state.user, ...state.mode, ...state.chat };
   });
-  const { getUsers, getSessions, getConnections } = useGetPlayer();
 
   useEffect(() => {
     window.addEventListener('beforeunload', onBeforeUnload);
