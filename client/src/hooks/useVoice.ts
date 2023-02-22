@@ -89,7 +89,10 @@ export default () => {
   };
 
   const disconnectSession = (session: Session | undefined) => {
-    if (!session) return;
+    if (!session) {
+      console.log('세션이 없어용');
+      return;
+    }
     console.log('세션 나갑니다.,.');
     session.disconnect();
     dispatch(removeSession());
@@ -135,7 +138,7 @@ export default () => {
       if (!session) return;
       const content: Connection[] = (await getConnections(sessionId)) || [];
       const isConnectExist = content.some((con: Connection) => {
-        console.log(con);
+        if (!con.clientData) return false;
         const { user } = JSON.parse(con.clientData);
         return user === userName;
       });
@@ -203,31 +206,33 @@ export default () => {
 
       await mySession.publish(pubNow);
       handlePublisher(pubNow);
-      dispatch(setSession(sessionId));
+      // dispatch(setSession(mySession));
     } catch (error) {
       console.log(error);
     }
   };
 
-  const { sessionIdNow } = useSelector((state: RootState) => {
-    return state.chat;
+  const sessionNow = useSelector((state: RootState) => {
+    if (!state.chat.sessionNow) return undefined;
+    return JSON.parse(state.chat.sessionNow);
   });
 
   const handleDisconnect = async () => {
     //현재 연결된 세션 있으면, 끊기
     try {
-      if (!sessionIdNow) return;
+      // if (!sessionIdNow) return;
 
-      const { data: session } = await axios.get(
-        'http://localhost:3002/get-session-from-id',
-        {
-          params: {
-            sessionId: sessionIdNow,
-          },
-        }
-      );
-      console.log(session);
-      disconnectSession(session);
+      // const { data: session } = await axios.get(
+      //   'http://localhost:3002/get-session-from-id',
+      //   {
+      //     params: {
+      //       sessionId: sessionIdNow,
+      //     },
+      //   }
+      // );
+      if (!sessionNow) return;
+
+      disconnectSession(sessionNow);
     } catch (e) {
       console.log(e);
     }

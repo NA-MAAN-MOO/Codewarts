@@ -33,6 +33,7 @@ const Voice = ({ roomKey }: VoiceProp) => {
   } = useVoice();
 
   const onBeforeUnload = (e: BeforeUnloadEvent) => {
+    console.log('실행');
     leaveSession();
   };
   const { playerId, status, users } = useSelector((state: RootState) => {

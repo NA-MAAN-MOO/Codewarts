@@ -10,7 +10,7 @@ import useVoice from 'hooks/useVoice';
 import axios from 'axios';
 
 const Editor = () => {
-  const { roomId, sessionIdNow } = useSelector((state: RootState) => {
+  const { roomId } = useSelector((state: RootState) => {
     return { ...state.editor, ...state.chat };
   });
   const dispatch = useDispatch();
@@ -20,11 +20,11 @@ const Editor = () => {
     dispatch(openGame());
   };
 
-  useEffect(() => {
-    (async () => {
-      await handleDisconnect();
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     await handleDisconnect();
+  //   })();
+  // }, []);
 
   return (
     <EditorDiv>
