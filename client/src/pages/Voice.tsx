@@ -27,8 +27,8 @@ const Voice = ({ roomKey, session, handleSession }: VoiceProp) => {
   const onBeforeUnload = (e: BeforeUnloadEvent) => {
     leaveSession();
   };
-  const { playerId, status, users } = useSelector((state: RootState) => {
-    return { ...state.user, ...state.mode, ...state.chat };
+  const { playerId, status } = useSelector((state: RootState) => {
+    return { ...state.user, ...state.mode };
   });
 
   useEffect(() => {
@@ -119,7 +119,7 @@ const Voice = ({ roomKey, session, handleSession }: VoiceProp) => {
           publisher={publisher}
         />
       )}
-      <TestVoiceButtons roomKey={roomKey} />
+      {playerId === '개발자' && <TestVoiceButtons roomKey={roomKey} />}
     </>
   );
 };

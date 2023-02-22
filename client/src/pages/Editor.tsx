@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { openGame } from '../stores/modeSlice';
+import { resetRoomId } from 'stores/editorSlice';
 import YjsCodeMirror from './editor/YjsCodeMirror';
 import UserForm from './editor/UserForm';
 import { RootState } from '../stores';
@@ -17,6 +18,7 @@ const Editor = (props: VoiceProp) => {
 
   const handleExit = () => {
     dispatch(openGame());
+    dispatch(resetRoomId());
   };
 
   // useEffect(() => {

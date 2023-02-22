@@ -22,10 +22,13 @@ export const editorSlice = createSlice({
     setRoomId: (state, action: PayloadAction<string>) => {
       state.roomId = action.payload;
     },
+    resetRoomId: (state) => {
+      state.roomId = '';
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setUserName, setRoomId } = editorSlice.actions;
+export const { setUserName, setRoomId, resetRoomId } = editorSlice.actions;
 
 export default editorSlice.reducer;

@@ -40,8 +40,9 @@ export default () => {
     if (users.length === 0) {
       return dispatch(setUsers([]));
     }
+    const filteredUser = users.filter((user) => !!user.clientData);
     const userInfos = await Promise.all(
-      users.map(async (user, index) => {
+      filteredUser.map(async (user, index) => {
         const name = JSON.parse(user.clientData).user;
         const { data: char } = await axios.get(
           `http://localhost:3003/user/get-char/${name}`
@@ -92,6 +93,7 @@ export default () => {
     if (!session) {
       return;
     }
+    console.log('세션 disconnect');
     session.disconnect();
     // dispatch(removeSession());
   };
@@ -183,18 +185,18 @@ export default () => {
         'sessionDisconnected',
         async (event: SessionDisconnectedEvent) => {
           //내가 세션을 나갔을 때 호출
-          // disconnectSession(event.target as Session);
-          const session = event.target as Session;
-          const sessionId = session.sessionId;
-          await getUsers(sessionId);
+          // const session = event.target as Session;
+          // const sessionId = session.sessionId;
+          // await getUsers(sessionId);
         }
       );
 
       mySession.on('connectionDestroyed', async (event: ConnectionEvent) => {
         //다른 유저가 세션을 나갔을 때 호출
-        deleteSubscriber(event.target);
+        console.log('세션나감');
         const session = event.target as Session;
         const sessionId = session.sessionId;
+        deleteSubscriber(event.target);
         await getUsers(sessionId);
       });
 

@@ -26,7 +26,6 @@ const CurrentPlayer = ({ anchor, handleDrawer, isOpen }: DrawerProp) => {
   const users = useSelector((state: RootState) => {
     return state.chat.users;
   });
-  console.log(users);
 
   return (
     <Box
