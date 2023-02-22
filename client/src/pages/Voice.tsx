@@ -31,17 +31,18 @@ const Voice = ({ roomKey }: VoiceProp) => {
   const { playerId, status, users } = useSelector((state: RootState) => {
     return { ...state.user, ...state.mode, ...state.chat };
   });
-  const { getUsers, getSessions } = useGetPlayer();
+  const { getUsers, getSessions, getConnections } = useGetPlayer();
 
   useEffect(() => {
-    (async () => {
-      window.addEventListener('beforeunload', onBeforeUnload);
+    window.addEventListener('beforeunload', onBeforeUnload);
 
+    (async () => {
       if (session) return;
       await joinSession();
     })();
 
     return function cleanup() {
+      disconnectSession(session);
       window.removeEventListener('beforeunload', onBeforeUnload);
     };
   }, []);
@@ -110,26 +111,42 @@ const Voice = ({ roomKey }: VoiceProp) => {
   //   console.log(users);
   // }, [users]);
 
-  return status === GAME_STATUS.GAME ? (
+  return (
     <>
-      <GameVoice
-        session={session}
-        subscribers={subscribers}
-        leaveSession={leaveSession}
-        joinSession={joinSession}
-        publisher={publisher}
-      />
-      {/* <button onClick={getConnections}>MAIN 세션 커넥션 가져오기</button>
-      <button onClick={getSessions}>전체 세션 가져오기</button> */}
+      {status === GAME_STATUS.GAME ? (
+        <GameVoice
+          session={session}
+          subscribers={subscribers}
+          leaveSession={leaveSession}
+          joinSession={joinSession}
+          publisher={publisher}
+        />
+      ) : (
+        <EditorVoice
+          session={session}
+          subscribers={subscribers}
+          leaveSession={leaveSession}
+          joinSession={joinSession}
+          publisher={publisher}
+        />
+      )}
+      <button
+        onClick={async () => {
+          const conn = await getConnections(roomKey);
+          console.log(conn);
+        }}
+      >
+        현재 세션 커넥션 가져오기
+      </button>
+      <button
+        onClick={async () => {
+          const ses = await getSessions();
+          console.log(ses);
+        }}
+      >
+        전체 세션 가져오기
+      </button>
     </>
-  ) : (
-    <EditorVoice
-      session={session}
-      subscribers={subscribers}
-      leaveSession={leaveSession}
-      joinSession={joinSession}
-      publisher={publisher}
-    />
   );
 };
 

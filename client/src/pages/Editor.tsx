@@ -7,16 +7,15 @@ import UserForm from './editor/UserForm';
 import { RootState } from '../stores';
 import Voice from 'pages/Voice';
 
-/* 유저 네임이 존재하면 에디터, 존재하지 않으면 userform을 보여줌 */
 const Editor = () => {
-  const { userName } = useSelector((state: RootState) => state.editor);
+  const { roomId } = useSelector((state: RootState) => state.editor);
   const dispatch = useDispatch();
   return (
     <EditorDiv>
       <h1>Do Codeuk!</h1>
-      {userName ? (
+      {roomId ? (
         <div>
-          <Voice roomKey={userName} />
+          <Voice roomKey={roomId} />
           <YjsCodeMirror />
         </div>
       ) : (

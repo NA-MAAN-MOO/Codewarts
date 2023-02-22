@@ -13,17 +13,13 @@ export default () => {
 
   const getConnections = async (sessionId: string) => {
     try {
-      if (status === GAME_STATUS.GAME) {
-        const { data }: { data: Connection[] } = await axios.get(
-          'http://localhost:3002/get-connections',
-          {
-            params: { sessionId: GAME_STATUS.GAME },
-          }
-        );
-        return data;
-      } else {
-        //에디터일 때
-      }
+      const { data }: { data: Connection[] } = await axios.get(
+        'http://localhost:3002/get-connections',
+        {
+          params: { sessionId: sessionId },
+        }
+      );
+      return data;
     } catch (err) {
       console.log(err);
       return [];
@@ -31,6 +27,7 @@ export default () => {
   };
   const getSessions = async () => {
     const { data } = await axios.get('http://localhost:3002/get-sessions', {});
+    return data;
   };
 
   const getUsers = async (sessionId: string) => {
