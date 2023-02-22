@@ -52,7 +52,7 @@ import {
 } from './editorStyle';
 import 'styles/fonts.css'; /* FONT */
 import Button from '@mui/material/Button';
-import { createTheme } from '@mui/material/styles';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Box from '@mui/material/Box';
@@ -73,15 +73,22 @@ import Chip from '@mui/material/Chip';
 import RenderSvg from 'components/Svg';
 
 /* MUI button color theme setting */
-const buttonTheme = createTheme({
+const theme = createTheme({
   palette: {
     primary: {
+      // main: '#eeba30', // 그리핀도르 찐노랑
+      // main: '#ffefd5', // papayawhip
       main: '#272822', // 에디터 검정
+      // main: '#ba835e', // 갈색
     },
     secondary: {
-      // main: '#FD971F', // 주황
       main: '#ffefd5', // papayawhip
+      // main: '#FD971F', // 주황
+      // main: '#272822', // 에디터 검정
       // main: '#11cb5f',
+    },
+    error: {
+      main: '#ae0001', // 그리핀도르 찐빨강
     },
   },
 });
@@ -371,7 +378,7 @@ function YjsCodeMirror() {
     <EditorWrapper>
       <EditorInfo>
         <div>
-          🧙🏻‍♂️
+          {/* 🧙🏻‍♂️ */}
           <span
             style={{
               color: 'papayawhip',
@@ -452,6 +459,8 @@ function YjsCodeMirror() {
                     inputRef={
                       algoSelect === 0 ? bojProbDataRef : leetProbDataRef
                     }
+                    autoFocus={true}
+                    type={algoSelect === 0 ? 'number' : 'text'}
                   />
                   <AutoFixHighIcon
                     onClick={
@@ -587,7 +596,13 @@ function YjsCodeMirror() {
                         ([key, value]) => {
                           return (
                             <Grid xs key={key}>
-                              <Item>
+                              <Item
+                                sx={{
+                                  color: 'papayawhip',
+                                  fontFamily:
+                                    'Cascadia Code, EliceDigitalBaeum_Bold',
+                                }}
+                              >
                                 예제{key} INPUT
                                 <Tooltip title="INPUT 칸으로 복사하기" arrow>
                                   <InputIcon onClick={() => copyToInput(key)} />
@@ -622,25 +637,27 @@ function YjsCodeMirror() {
       ) : null}
 
       <MiddleWrapper>
-        <Tooltip title="코드 실행하기" arrow>
-          <Button onClick={runCode} color="primary">
-            RUN
-          </Button>
-        </Tooltip>
-        <Tooltip title="제출하기" arrow>
-          <Button
-            color="primary"
-            href={
-              bojProbData?.problemId
-                ? `https://acmicpc.net/problem/${bojProbData?.problemId}`
-                : `https://leetcode.com/problems/${leetProbData?.question.titleSlug}`
-            }
-            target="_blank"
-            rel="noreferrer"
-          >
-            SUBMIT
-          </Button>
-        </Tooltip>
+        <ThemeProvider theme={theme}>
+          <Tooltip title="코드 실행하기" arrow>
+            <Button onClick={runCode} color="primary">
+              RUN
+            </Button>
+          </Tooltip>
+          <Tooltip title="제출하기" arrow>
+            <Button
+              color="primary"
+              href={
+                bojProbData?.problemId
+                  ? `https://acmicpc.net/problem/${bojProbData?.problemId}`
+                  : `https://leetcode.com/problems/${leetProbData?.question.titleSlug}`
+              }
+              target="_blank"
+              rel="noreferrer"
+            >
+              SUBMIT
+            </Button>
+          </Tooltip>
+        </ThemeProvider>
 
         <FormGroup>
           <FormControlLabel
@@ -672,73 +689,86 @@ function YjsCodeMirror() {
 
       <Divider />
 
-      <Box sx={{ flexGrow: 1, marginTop: '10px' }}>
+      <Box
+        sx={{
+          flexGrow: 1,
+          marginTop: '10px',
+          filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
+        }}
+      >
         {/* <Grid container spacing={1.5} columns={16}> */}
         <Grid container spacing={1.5}>
           <Grid xs>
             <Item>
-              <TextField
+              <AlgoTextField
                 id="standard-multiline-static"
-                // label="INPUT"
-                helperText="INPUT"
+                label="INPUT"
+                // helperText="INPUT"
                 multiline
                 fullWidth
                 rows={8}
                 variant="standard"
                 inputRef={inputStdin}
+                InputLabelProps={{ shrink: true }}
+                InputProps={{
+                  disableUnderline: false,
+                }}
               />
             </Item>
           </Grid>
+
           <Grid xs>
             <Item>
               <Grid container spacing={1.5}>
-                <Grid xs>
-                  <Item>
-                    <TextField
-                      id="standard-read-only-input"
-                      variant="standard"
-                      // label="TIME"
-                      size="small"
-                      fullWidth
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                      helperText="TIME"
-                      // focused
-                      value={cpuTime}
-                    />
-                  </Item>
+                <Grid xs sx={{ p: 0 }}>
+                  <AlgoTextField
+                    // id="standard-read-only-input"
+                    // id="reddit-input"
+                    variant="standard"
+                    label="TIME"
+                    size="small"
+                    fullWidth
+                    InputProps={{
+                      readOnly: true,
+                      disableUnderline: true,
+                    }}
+                    InputLabelProps={{ shrink: true }}
+                    // helperText="TIME"
+                    // focused
+                    value={cpuTime}
+                  />
                 </Grid>
 
-                <Grid xs>
-                  <Item>
-                    <TextField
-                      id="standard-read-only-input"
-                      variant="standard"
-                      // label="MEMORY"
-                      size="small"
-                      fullWidth
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                      helperText="MEMORY"
-                      // focused
-                      value={memory}
-                    />
-                  </Item>
+                <Grid xs sx={{ p: 0 }}>
+                  <AlgoTextField
+                    id="standard-read-only-input"
+                    variant="standard"
+                    label="MEMORY"
+                    size="small"
+                    fullWidth
+                    InputProps={{
+                      readOnly: true,
+                      disableUnderline: true,
+                    }}
+                    InputLabelProps={{ shrink: true }}
+                    // helperText="MEMORY"
+                    // focused
+                    value={memory}
+                  />
                 </Grid>
               </Grid>
-              <TextField
+              <AlgoTextField
                 id="standard-multiline-static"
-                // label="OUTPUT"
-                helperText="OUTPUT"
+                label="OUTPUT"
+                // helperText="OUTPUT"
                 multiline
                 fullWidth
-                rows={5}
+                rows={6}
                 variant="standard"
                 InputProps={{
                   readOnly: true,
                 }}
+                InputLabelProps={{ shrink: true }}
                 value={compileOutput}
               />
               {/* <span

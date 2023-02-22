@@ -102,7 +102,7 @@ const AlgoInputWrap = styledc.div`
   
 `;
 
-/* reddit text field theme setting */
+/* text field theme setting */
 //@ts-ignore
 const AlgoTextField = styled((props: TextFieldProps) => (
   <TextField
@@ -117,6 +117,21 @@ const AlgoTextField = styled((props: TextFieldProps) => (
   },
   '& input': {
     fontFamily: 'Cascadia Code, EliceDigitalBaeum_Bold',
+    // color: 'papayawhip',
+  },
+  '& textarea': {
+    fontFamily: 'Cascadia Code, EliceDigitalBaeum_Bold',
+    color: 'papayawhip',
+    // border: '1px solid red',
+  },
+  // 컴파일칸 라벨
+  '& .css-1gds3nb-MuiFormLabel-root-MuiInputLabel-root': {
+    fontSize: '1.5rem',
+  },
+
+  // 컴파일 output칸 input 필드
+  '& .MuiInputBase-readOnly': {
+    color: 'papayawhip',
   },
   '& label.Mui-focused': {
     color: 'papayawhip',
@@ -153,7 +168,7 @@ const ProfileInfo = styledc.div`
 
 /* Paper element theme setting */
 const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  backgroundColor: theme.palette.mode === 'dark' ? '#272822' : '#272822',
   ...theme.typography.body2,
   padding: theme.spacing(1),
   textAlign: 'center',
