@@ -2,16 +2,15 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { GAME_STATUS } from '../utils/Constants';
 import { CharInfoType } from 'types';
-import { Session } from 'openvidu-browser';
 
 export interface ChatState {
   users: CharInfoType[];
-  session: Session | undefined;
+  sessionIdNow: string;
 }
 
 const initialState: ChatState = {
   users: [],
-  session: undefined,
+  sessionIdNow: '',
 };
 
 export const chatSlice = createSlice({
@@ -22,10 +21,10 @@ export const chatSlice = createSlice({
       state.users = action.payload;
     },
     setSession: (state, action) => {
-      state.session = action.payload;
+      state.sessionIdNow = action.payload;
     },
     removeSession: (state) => {
-      state.session = undefined;
+      state.sessionIdNow = '';
     },
     // addUser: (state, action) => {
     //   state.users = [...state.users, action.payload];

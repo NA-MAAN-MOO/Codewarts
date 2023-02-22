@@ -10,6 +10,9 @@ const OPENVIDU_SECRET = process.env.OPENVIDU_SECRET || 'MY_SECRET';
 
 let isRoomExist: IsRoomExist = {};
 const openvidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
+const authCode = Buffer.from(`OPENVIDUAPP:${OPENVIDU_SECRET}`).toString(
+  'base64'
+);
 
 export const createSession = async (req: Request, res: Response) => {
   try {
@@ -49,9 +52,7 @@ export const createConnection = async (req: Request, res: Response) => {
 export const getConnections = async (req: Request, res: Response) => {
   try {
     const { sessionId } = req.query;
-    const authCode = Buffer.from(`OPENVIDUAPP:${OPENVIDU_SECRET}`).toString(
-      'base64'
-    );
+
     const { data } = await axios.get(
       `${OPENVIDU_URL}/openvidu/api/sessions/${sessionId}/connection`,
       {
@@ -65,7 +66,7 @@ export const getConnections = async (req: Request, res: Response) => {
     console.log(err);
     if (err instanceof AxiosError && err.response?.status === 404) {
       // 아직 세션 만들어지지 않은 상태임
-      res.send({ numberOfElements: 0, content: [] });
+      res.send([]);
       return;
     }
     res.status(500).send(err);
@@ -75,16 +76,30 @@ export const getConnections = async (req: Request, res: Response) => {
 //전체 세션 가져오기
 export const getSessions = async (req: Request, res: Response) => {
   try {
-    const authCode = Buffer.from(`OPENVIDUAPP:${OPENVIDU_SECRET}`).toString(
-      'base64'
-    );
     const { data } = await axios.get(`${OPENVIDU_URL}/openvidu/api/sessions`, {
       headers: {
         Authorization: `Basic ${authCode}`,
       },
     });
     res.send(data.content);
-    console.log('출력데이터', data);
+  } catch (err: unknown) {
+    console.log(err);
+    res.status(500).send(err);
+  }
+};
+
+export const getSessionFromId = async (req: Request, res: Response) => {
+  try {
+    const { sessionId } = req.query;
+    const { data } = await axios.get(
+      `${OPENVIDU_URL}/openvidu/api/sessions/${sessionId}`,
+      {
+        headers: {
+          Authorization: `Basic ${authCode}`,
+        },
+      }
+    );
+    res.send(data);
   } catch (err: unknown) {
     console.log(err);
     res.status(500).send(err);

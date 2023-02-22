@@ -1,5 +1,10 @@
 import { useState, useEffect } from 'react';
-import { OpenVidu, Session } from 'openvidu-browser';
+import {
+  ConnectionEvent,
+  OpenVidu,
+  Session,
+  SessionDisconnectedEvent,
+} from 'openvidu-browser';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'stores';
 import axios from 'axios';
@@ -32,6 +37,9 @@ export default () => {
 
   const getUsers = async (sessionId: string) => {
     const users = (await getConnections(sessionId)) || [];
+    if (users.length === 0) {
+      return dispatch(setUsers([]));
+    }
     const userInfos = await Promise.all(
       users.map(async (user, index) => {
         const name = JSON.parse(user.clientData).user;
@@ -82,6 +90,7 @@ export default () => {
 
   const disconnectSession = (session: Session | undefined) => {
     if (!session) return;
+    console.log('세션 나갑니다.,.');
     session.disconnect();
     dispatch(removeSession());
   };
@@ -126,6 +135,7 @@ export default () => {
       if (!session) return;
       const content: Connection[] = (await getConnections(sessionId)) || [];
       const isConnectExist = content.some((con: Connection) => {
+        console.log(con);
         const { user } = JSON.parse(con.clientData);
         return user === userName;
       });
@@ -157,8 +167,15 @@ export default () => {
         console.warn(exception);
       });
 
-      mySession.on('sessionDisconnected', (event) => {
+      mySession.on('sessionDisconnected', (event: SessionDisconnectedEvent) => {
+        //내가 세션을 나갔을 때 호출
+        // disconnectSession(event.target as Session);
+        console.log('세션 나감 완료됐습니다.');
+      });
+
+      mySession.on('connectionDestroyed', (event: ConnectionEvent) => {
         //다른 유저가 세션을 나갔을 때 호출
+        deleteSubscriber(event.target);
       });
 
       // --- 4) Connect to the session with a valid user token ---
@@ -186,9 +203,33 @@ export default () => {
 
       await mySession.publish(pubNow);
       handlePublisher(pubNow);
-      dispatch(setSession(mySession));
+      dispatch(setSession(sessionId));
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const { sessionIdNow } = useSelector((state: RootState) => {
+    return state.chat;
+  });
+
+  const handleDisconnect = async () => {
+    //현재 연결된 세션 있으면, 끊기
+    try {
+      if (!sessionIdNow) return;
+
+      const { data: session } = await axios.get(
+        'http://localhost:3002/get-session-from-id',
+        {
+          params: {
+            sessionId: sessionIdNow,
+          },
+        }
+      );
+      console.log(session);
+      disconnectSession(session);
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -202,5 +243,6 @@ export default () => {
     getConnections,
     getSessions,
     getUsers,
+    handleDisconnect,
   };
 };

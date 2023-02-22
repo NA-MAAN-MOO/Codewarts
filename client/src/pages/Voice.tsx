@@ -14,6 +14,7 @@ import { VoiceProp } from 'types';
 import GameVoice from 'pages/voice/GameVoice';
 import { GAME_STATUS } from 'utils/Constants';
 import EditorVoice from 'pages/voice/EditorVoice';
+import TestVoiceButtons from 'components/TestVoiceButtons';
 
 //Voice 방 컴포넌트
 const Voice = ({ roomKey }: VoiceProp) => {
@@ -47,7 +48,6 @@ const Voice = ({ roomKey }: VoiceProp) => {
     })();
 
     return function cleanup() {
-      disconnectSession(session);
       window.removeEventListener('beforeunload', onBeforeUnload);
     };
   }, []);
@@ -135,30 +135,7 @@ const Voice = ({ roomKey }: VoiceProp) => {
           publisher={publisher}
         />
       )}
-      <button
-        onClick={async () => {
-          const conn = await getConnections(roomKey);
-          console.log(conn);
-        }}
-      >
-        현재 세션 커넥션 가져오기
-      </button>
-      <button
-        onClick={async () => {
-          const conn = await getConnections(GAME_STATUS.GAME);
-          console.log(conn);
-        }}
-      >
-        메인 세션 커넥션 가져오기
-      </button>
-      <button
-        onClick={async () => {
-          const ses = await getSessions();
-          console.log(ses);
-        }}
-      >
-        전체 세션 가져오기
-      </button>
+      <TestVoiceButtons roomKey={roomKey} />
     </>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { openGame } from '../stores/modeSlice';
@@ -7,18 +7,25 @@ import UserForm from './editor/UserForm';
 import { RootState } from '../stores';
 import Voice from 'pages/Voice';
 import useVoice from 'hooks/useVoice';
+import axios from 'axios';
 
 const Editor = () => {
-  const { roomId, session } = useSelector((state: RootState) => {
+  const { roomId, sessionIdNow } = useSelector((state: RootState) => {
     return { ...state.editor, ...state.chat };
   });
   const dispatch = useDispatch();
-  const { disconnectSession } = useVoice();
+  const { disconnectSession, handleDisconnect } = useVoice();
 
   const handleExit = () => {
-    disconnectSession(session);
     dispatch(openGame());
   };
+
+  useEffect(() => {
+    (async () => {
+      await handleDisconnect();
+    })();
+  }, []);
+
   return (
     <EditorDiv>
       {roomId ? (

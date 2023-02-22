@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { openStart, openEditor, openGame, openLobby } from 'stores/modeSlice';
@@ -8,16 +8,22 @@ import { handleScene } from 'lib/phaserLib';
 import { GAME_STATUS } from 'utils/Constants';
 import Button from '@mui/material/Button';
 import { styledTheme } from 'styles/theme';
+import useVoice from 'hooks/useVoice';
 
 const Game = () => {
   const dispatch = useDispatch();
-  const handleEditorClick = () => {
-    dispatch(openEditor());
-  };
+  const { handleDisconnect } = useVoice();
 
   const handleMainClick = () => {
     handleScene(GAME_STATUS.START);
   };
+
+  useEffect(() => {
+    (async () => {
+      await handleDisconnect();
+    })();
+  }, []);
+
   return (
     <BackgroundDiv>
       <Voice roomKey={GAME_STATUS.GAME} />
