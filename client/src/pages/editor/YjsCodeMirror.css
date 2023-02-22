@@ -2,8 +2,8 @@
   position: absolute;
   top: -1.05em;
   left: -1px;
-  font-size: 0.75em;
-  font-family: serif;
+  font-size: 1em;
+  font-family: 'Firenze';
   font-style: normal;
   font-weight: normal;
   line-height: normal;
@@ -24,13 +24,6 @@
   /* text-shadow: 1px 1px 2px #ededed; */
 }
 
-/* 아코디언 제목 */
-.MuiAccordionSummary-content {
-  /* color: rgba(255, 255, 255, 0.7); */
-  /* color: red; */
-}
-
-/* expand 아이콘 */
-.css-i4bv87-MuiSvgIcon-root {
-  /* color: rgba(255, 255, 255, 0.7); */
+.sample-content {
+  font-family: 'Cascadia Code', 'EliceDigitalBaeum_Bold';
 }

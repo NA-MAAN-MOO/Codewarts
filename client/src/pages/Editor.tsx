@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { openGame } from '../stores/modeSlice';
@@ -47,7 +46,7 @@ const EditorDiv = styled.div`
   height: 100%;
   background-color: white;
   // background-color: #272822; // 에디터 검정
-  // background-color: rgba(0, 0, 0, 0.3); // 검정 투명
+  // background-color: rgba(0, 0, 0, 0.5); // 검정 투명
   background-color: rgba(256, 256, 256, 0.7); // 흰색 투명
   // background-size: cover;
   // background-attachment: fixed;

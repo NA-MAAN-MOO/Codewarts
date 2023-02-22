@@ -1,10 +1,37 @@
 import styledc from 'styled-components';
+import { styled, alpha, createTheme } from '@mui/material/styles';
+
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import { styled, alpha } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
+import MuiAccordionSummary, {
+  AccordionSummaryProps,
+} from '@mui/material/AccordionSummary';
+import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
+import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
+
+/* MUI button color theme setting */
+const theme = createTheme({
+  palette: {
+    primary: {
+      // main: '#eeba30', // 그리핀도르 찐노랑
+      // main: '#ffefd5', // papayawhip
+      main: '#272822', // 에디터 검정
+      // main: '#ba835e', // 갈색
+    },
+    secondary: {
+      main: '#ffefd5', // papayawhip
+      // main: '#FD971F', // 주황
+      // main: '#272822', // 에디터 검정
+      // main: '#11cb5f',
+    },
+    error: {
+      main: '#ae0001', // 그리핀도르 찐빨강
+    },
+  },
+});
 
 const EditorWrapper = styledc.div`
   width: 95%;
@@ -79,8 +106,8 @@ const StyledTab = styled((props: StyledTabProps) => (
 }));
 
 const ProbSummary = styledc.div`
-color: 'papayawhip';
-// color: 'rgba(255, 255, 255, 0.7)';
+// color: 'papayawhip';
+color: #fff;
 font-size: 23px;
 width: 300px;
 // border: 1px solid yellow;
@@ -153,9 +180,11 @@ const AlgoTextField = styled((props: TextFieldProps) => (
     },
     '&.Mui-focused': {
       backgroundColor: 'transparent',
-      color: 'papayawhip',
+      // color: 'papayawhip',
+      color: '#fff',
       boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 2px`,
-      borderColor: theme.palette.primary.main,
+      border: 0,
+      // borderColor: theme.palette.primary.main,
     },
   },
 }));
@@ -179,7 +208,7 @@ const MiddleWrapper = styledc.div`
   margin-left: 20px;
   martgin-top: 10px;
   font-size: 20px;
-  display: flex;
+  text-align: right;
 `;
 
 /* 다크/라이트 토글 스위치 테마 */
@@ -197,12 +226,12 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
       transform: 'translateX(22px)',
       '& .MuiSwitch-thumb:before': {
         backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="${encodeURIComponent(
-          '#fff'
+          'papayawhip'
         )}" d="M4.2 2.5l-.7 1.8-1.8.7 1.8.7.7 1.8.6-1.8L6.7 5l-1.9-.7-.6-1.8zm15 8.3a6.7 6.7 0 11-6.6-6.6 5.8 5.8 0 006.6 6.6z"/></svg>')`,
       },
       '& + .MuiSwitch-track': {
         opacity: 1,
-        backgroundColor: theme.palette.mode === 'dark' ? '#8796A5' : '#aab4be',
+        backgroundColor: theme.palette.mode === 'dark' ? '#8796A5' : '#272822',
       },
     },
   },
@@ -220,14 +249,49 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
       backgroundRepeat: 'no-repeat',
       backgroundPosition: 'center',
       backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="${encodeURIComponent(
-        '#fff'
+        'papayawhip'
       )}" d="M9.305 1.667V3.75h1.389V1.667h-1.39zm-4.707 1.95l-.982.982L5.09 6.072l.982-.982-1.473-1.473zm10.802 0L13.927 5.09l.982.982 1.473-1.473-.982-.982zM10 5.139a4.872 4.872 0 00-4.862 4.86A4.872 4.872 0 0010 14.862 4.872 4.872 0 0014.86 10 4.872 4.872 0 0010 5.139zm0 1.389A3.462 3.462 0 0113.471 10a3.462 3.462 0 01-3.473 3.472A3.462 3.462 0 016.527 10 3.462 3.462 0 0110 6.528zM1.665 9.305v1.39h2.083v-1.39H1.666zm14.583 0v1.39h2.084v-1.39h-2.084zM5.09 13.928L3.616 15.4l.982.982 1.473-1.473-.982-.982zm9.82 0l-.982.982 1.473 1.473.982-.982-1.473-1.473zM9.305 16.25v2.083h1.389V16.25h-1.39z"/></svg>')`,
     },
   },
   '& .MuiSwitch-track': {
     opacity: 1,
-    backgroundColor: theme.palette.mode === 'dark' ? '#8796A5' : '#aab4be',
+    backgroundColor: theme.palette.mode === 'dark' ? '#8796A5' : '#272822',
     borderRadius: 20 / 2,
+  },
+}));
+
+const Accordion = styled((props: AccordionProps) => (
+  <MuiAccordion disableGutters elevation={0} {...props} />
+))(({ theme }) => ({
+  backgroundColor: '#272822',
+  // color: '#fff',
+  color: 'papayawhip',
+  '&:not(:last-child)': {
+    borderBottom: 0,
+  },
+  '&:before': {
+    display: 'none',
+  },
+}));
+
+const AccordionSummary = styled((props: AccordionSummaryProps) => (
+  <MuiAccordionSummary
+    expandIcon={
+      <ArrowForwardIosSharpIcon
+        sx={{ fontSize: '0.9rem', color: 'rgba(255, 255, 255, 0.7)' }}
+      />
+    }
+    {...props}
+  />
+))(({ theme }) => ({
+  color: 'rgba(255, 255, 255, 0.7)',
+  backgroundColor: '#272822',
+  flexDirection: 'row-reverse',
+  '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
+    transform: 'rotate(90deg)',
+  },
+  '& .MuiAccordionSummary-content': {
+    marginLeft: theme.spacing(1),
   },
 }));
 
@@ -246,4 +310,7 @@ export {
   StyledTab,
   StyledTabs,
   MaterialUISwitch,
+  AccordionSummary,
+  Accordion,
+  theme,
 };
