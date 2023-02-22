@@ -57,7 +57,7 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
-import TextField from '@mui/material/TextField';
+
 import Tooltip from '@mui/material/Tooltip';
 import Divider from '@mui/material/Divider';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
@@ -71,6 +71,8 @@ import Chip from '@mui/material/Chip';
 
 /* solvedAC badge svg */
 import RenderSvg from 'components/Svg';
+
+import 'animate.css';
 
 /* MUI button color theme setting */
 const theme = createTheme({
@@ -375,7 +377,7 @@ function YjsCodeMirror() {
   };
 
   return (
-    <EditorWrapper>
+    <EditorWrapper className="animate__animated animate__zoomInUp">
       <EditorInfo>
         <div>
           {/* 🧙🏻‍♂️ */}
