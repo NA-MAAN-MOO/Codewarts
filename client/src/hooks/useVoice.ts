@@ -1,19 +1,54 @@
 import { useState, useEffect } from 'react';
-import {
-  OpenVidu,
-  Session,
-  StreamManager,
-  SessionEventMap,
-} from 'openvidu-browser';
-import useGetPlayer from 'hooks/useGetPlayer';
+import { OpenVidu, Session } from 'openvidu-browser';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from 'stores';
 import axios from 'axios';
-import { GAME_STATUS } from 'utils/Constants';
+import { setSession, setUsers, removeSession } from 'stores/chatSlice';
 import { Connection } from 'types';
 
 const APPLICATION_SERVER_URL = 'http://localhost:3002';
 
 export default () => {
-  const { getConnections } = useGetPlayer();
+  const dispatch = useDispatch();
+
+  const getConnections = async (sessionId: string) => {
+    try {
+      const { data }: { data: Connection[] } = await axios.get(
+        'http://localhost:3002/get-connections',
+        {
+          params: { sessionId: sessionId },
+        }
+      );
+      return data;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
+  };
+  const getSessions = async () => {
+    const { data } = await axios.get('http://localhost:3002/get-sessions', {});
+    return data;
+  };
+
+  const getUsers = async (sessionId: string) => {
+    const users = (await getConnections(sessionId)) || [];
+    const userInfos = await Promise.all(
+      users.map(async (user, index) => {
+        const name = JSON.parse(user.clientData).user;
+        const { data: char } = await axios.get(
+          `http://localhost:3003/user/get-char/${name}`
+        );
+        return { name, char };
+      })
+    );
+    const uniqueUserList = userInfos.filter(
+      (char, index, self) =>
+        index ===
+        self.findIndex((p) => p.name === char.name && p.char === char.char)
+    );
+    dispatch(setUsers(uniqueUserList));
+  };
+
   const initSession = () => {
     // 1. openvidu 객체 생성
     const newOV = new OpenVidu();
@@ -48,6 +83,7 @@ export default () => {
   const disconnectSession = (session: Session | undefined) => {
     if (!session) return;
     session.disconnect();
+    dispatch(removeSession());
   };
 
   const getToken = async (sessionId: string) => {
@@ -121,6 +157,10 @@ export default () => {
         console.warn(exception);
       });
 
+      mySession.on('sessionDisconnected', (event) => {
+        //다른 유저가 세션을 나갔을 때 호출
+      });
+
       // --- 4) Connect to the session with a valid user token ---
 
       // Get a token from the OpenVidu deployment
@@ -146,10 +186,12 @@ export default () => {
 
       await mySession.publish(pubNow);
       handlePublisher(pubNow);
+      dispatch(setSession(mySession));
     } catch (error) {
       console.log(error);
     }
   };
+
   return {
     initSession,
     createSession,
@@ -157,5 +199,8 @@ export default () => {
     getToken,
     createToken,
     registerSession,
+    getConnections,
+    getSessions,
+    getUsers,
   };
 };
