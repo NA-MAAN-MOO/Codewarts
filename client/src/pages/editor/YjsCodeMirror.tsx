@@ -601,9 +601,12 @@ function YjsCodeMirror() {
                                   color: 'papayawhip',
                                   fontFamily:
                                     'Cascadia Code, EliceDigitalBaeum_Bold',
+                                  textAlign: 'left',
                                 }}
                               >
-                                예제{key} INPUT
+                                <span className="samples-title">
+                                  예제{key} INPUT
+                                </span>
                                 <Tooltip title="INPUT 칸으로 복사하기" arrow>
                                   <InputIcon onClick={() => copyToInput(key)} />
                                 </Tooltip>
@@ -614,7 +617,9 @@ function YjsCodeMirror() {
                                     ].input.replace(/\n/g, '<br>'),
                                   }}
                                 />
-                                예제{key} OUTPUT
+                                <span className="samples-title">
+                                  예제{key} OUTPUT
+                                </span>
                                 <div
                                   dangerouslySetInnerHTML={{
                                     __html: bojProbFullData?.samples?.[

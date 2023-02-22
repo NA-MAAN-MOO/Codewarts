@@ -74,7 +74,7 @@ const StyledTab = styled((props: StyledTabProps) => (
     color: '#fff',
   },
   '&.Mui-focusVisible': {
-    backgroundColor: 'rgba(100, 95, 228, 0.32)',
+    backgroundColor: 'rgba(100, 95, 228, 0.32)', // 원래값
   },
 }));
 

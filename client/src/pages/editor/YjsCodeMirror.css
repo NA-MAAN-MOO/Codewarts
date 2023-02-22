@@ -17,3 +17,20 @@
   opacity: 1;
   transition-delay: 0s;
 }
+
+/* 예제 타이틀 */
+.samples-title {
+  color: rgba(255, 255, 255, 0.7);
+  /* text-shadow: 1px 1px 2px #ededed; */
+}
+
+/* 아코디언 제목 */
+.MuiAccordionSummary-content {
+  /* color: rgba(255, 255, 255, 0.7); */
+  /* color: red; */
+}
+
+/* expand 아이콘 */
+.css-i4bv87-MuiSvgIcon-root {
+  /* color: rgba(255, 255, 255, 0.7); */
+}
