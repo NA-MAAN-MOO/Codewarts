@@ -158,13 +158,13 @@ export default class Lobby extends Phaser.Scene {
     );
 
     const Bodies = this.matter.bodies;
-    this.portalZone = Bodies.rectangle(this.portal.x, this.portal.y, 260, 260, {
+    this.portalZone = Bodies.rectangle(this.portal.x, this.portal.y, 260, 500, {
       isSensor: true,
       label: 'portalSensor',
     });
 
     this.portal.setExistingBody(this.portalZone);
-    this.createCollisions(this.portalZone);
+    // this.createCollisions(this.portalZone);
   }
 
   update() {
@@ -175,28 +175,43 @@ export default class Lobby extends Phaser.Scene {
     }
 
     this.player.update();
+
+    /* Add overlap between portal and player */
+    let boundPortal = this.portal.getBounds();
+    let boundPlayer = this.player.getBounds();
+
+    if (Phaser.Geom.Intersects.RectangleToRectangle(boundPortal, boundPlayer)) {
+      this.buttonForList.setVisible(true);
+
+      /* If player press key E when overlapping, scene changes */
+      if (this.player.inputKeys.open.isDown) {
+        handleScene(GAME_STATUS.GAME);
+      }
+    } else {
+      this.buttonForList.setVisible(false);
+    }
   }
 
-  createCollisions(portalSensor: any) {
-    this.matterCollision.addOnCollideStart({
-      objectA: [portalSensor],
-      callback: () => {
-        this.buttonForList.setVisible(true);
-        this.buttonForList.setInteractive();
+  //   createCollisions(portalSensor: any) {
+  //     this.matterCollision.addOnCollideStart({
+  //       objectA: [portalSensor],
+  //       callback: () => {
+  //         this.buttonForList.setVisible(true);
+  //         this.buttonForList.setInteractive();
 
-        /* When player press key E, go to Mainscene */
-        this.input.keyboard.on('keydown-E', () => {
-          handleScene(GAME_STATUS.GAME);
-        });
-      },
-      context: this,
-    });
-    this.matterCollision.addOnCollideEnd({
-      objectA: [portalSensor],
-      callback: () => {
-        this.buttonForList.setVisible(false);
-      },
-      context: this,
-    });
-  }
+  //         /* When player press key E, go to Mainscene */
+  //         this.input.keyboard.on('keydown-E', () => {
+  //           handleScene(GAME_STATUS.GAME);
+  //         });
+  //       },
+  //       context: this,
+  //     });
+  //     this.matterCollision.addOnCollideEnd({
+  //       objectA: [portalSensor],
+  //       callback: () => {
+  //         this.buttonForList.setVisible(false);
+  //       },
+  //       context: this,
+  //     });
+  //   }
 }
