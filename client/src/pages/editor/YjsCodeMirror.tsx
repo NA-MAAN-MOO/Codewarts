@@ -738,15 +738,10 @@ function YjsCodeMirror() {
                   readOnly: true,
                 }}
                 InputLabelProps={{ shrink: true }}
-                value={compileOutput}
+                value={
+                  compileOutput ? compileOutput.replace(/<br>/g, '\n') : null
+                }
               />
-              {/* <span
-                    style={{ border: '1px solid black' }}
-                    className="compiled-output"
-                    dangerouslySetInnerHTML={{
-                      __html: compileOutput,
-                    }}
-                  ></span> */}
             </Item>
           </Grid>
         </Grid>
