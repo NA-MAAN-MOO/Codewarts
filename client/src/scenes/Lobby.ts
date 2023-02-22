@@ -11,31 +11,30 @@ import { GAME_STATUS } from 'utils/Constants';
 import { styledTheme } from 'styles/theme';
 
 /* Parallax Scrolling */
-const createAligned = (
-  scene: Phaser.Scene,
-  count: number,
-  texture: string,
-  scrollFactor: number
-) => {
-  let x = -100;
-  for (let i = 0; i < count; i++) {
-    const image = scene.add
-      .image(x, scene.scale.height, texture)
-      .setOrigin(0, 1)
-      .setScrollFactor(scrollFactor);
-    x += image.width;
-  }
-};
+// const createAligned = (
+//   scene: Phaser.Scene,
+//   count: number,
+//   texture: string,
+//   scrollFactor: number
+// ) => {
+//   let x = -100;
+//   for (let i = 0; i < count; i++) {
+//     const image = scene.add
+//       .image(x, scene.scale.height, texture)
+//       .setOrigin(0, 1)
+//       .setScrollFactor(scrollFactor);
+//     x += image.width;
+//   }
+// };
 
 export default class Lobby extends Phaser.Scene {
-  private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private player!: Phaser.Physics.Matter.Sprite;
   private buttonForList!: Phaser.GameObjects.Text;
-  private houseForList!: Phaser.Physics.Matter.Sprite;
-  socketId: any;
+  private portal!: Phaser.Physics.Matter.Sprite;
+  private portalZone!: Phaser.GameObjects.Zone | any;
+  socketId: string | any;
 
   socket: Socket | undefined;
-
   // const {nickName, characterModel} = useSelector((state:RootState)=> state.charactor);
 
   constructor() {
@@ -43,7 +42,7 @@ export default class Lobby extends Phaser.Scene {
   }
 
   init() {
-    // socket-io와 링크 스타~트!
+    /* Open socket */
     phaserGame.socket = io('http://localhost:8080');
     phaserGame.socket.on('start', (payLoad: { socketId: string }) => {
       // Server에서 보내주는 고유 값을 받는다.
@@ -60,25 +59,60 @@ export default class Lobby extends Phaser.Scene {
   preload() {
     Player.preload(this);
     /* Lobby Background image load */
-    for (let i = 0; i < 12; i++) {
-      this.load.image(`lobby${i}`, `assets/lobby/lobby${i}.png`);
-    }
-    this.load.image('house', 'assets/lobby/house.png');
+    this.load.image('lobby', 'assets/lobby/lobby_scene.png');
+
+    this.load.atlas(
+      'green',
+      'assets/lobby/green.png',
+      'assets/lobby/green.json'
+    );
+
+    this.load.atlas(
+      'plasma',
+      'assets/lobby/plasma.png',
+      'assets/lobby/plasma.json'
+    );
   }
 
   create() {
     /* Add Lobby background */
-    for (let i = 11; i >= 0; i--) {
-      createAligned(this, 3, `lobby${i}`, i % 5);
-    }
+    const bg = this.add.image(
+      window.innerWidth / 2,
+      window.innerHeight / 2,
+      'lobby'
+    );
+    bg.setDisplaySize(window.innerWidth, window.innerHeight);
 
-    /* Add a house used as a room list */
-    this.houseForList = this.matter.add
-      .sprite(this.scale.width / 3, this.scale.height * 0.78, 'house')
-      .setScale(0.3);
+    /* Add portal */
+    this.anims.create({
+      key: 'green',
+      frames: this.anims.generateFrameNames('green', {
+        start: 0,
+        end: 90,
+        prefix: `thing-`,
+      }),
+      frameRate: 60,
+      repeat: -1,
+    });
 
-    this.houseForList.setSensor(true);
-    this.houseForList.setScrollFactor(0);
+    this.anims.create({
+      key: 'plasma',
+      frames: this.anims.generateFrameNames('plasma', {
+        start: 0,
+        end: 191,
+        prefix: 'plasma-',
+      }),
+      frameRate: 60,
+      repeat: -1,
+    });
+
+    this.add
+      .sprite(this.scale.width / 1.2, this.scale.height * 0.5, 'green', 0)
+      .play('green');
+
+    this.portal = this.matter.add
+      .sprite(this.scale.width / 4.5, this.scale.height * 0.5, 'plasma', 0)
+      .play('plasma');
 
     if (
       phaserGame.charKey === undefined ||
@@ -90,8 +124,8 @@ export default class Lobby extends Phaser.Scene {
     /* Add my player */
     this.player = new Player({
       scene: this,
-      x: this.scale.width / 10,
-      y: this.scale.height * 0.85,
+      x: 10,
+      y: this.scale.height * 0.7,
       texture: phaserGame.charKey,
       id: phaserGame.socketId,
       name: phaserGame.userName,
@@ -100,8 +134,6 @@ export default class Lobby extends Phaser.Scene {
 
     /* Add Keyboard keys to enable character animation */
     this.player.inputKeys = this.input.keyboard.addKeys({
-      //   up: Phaser.Input.Keyboard.KeyCodes.W,
-      //   down: Phaser.Input.Keyboard.KeyCodes.S,
       up: Phaser.Input.Keyboard.KeyCodes.UP,
       down: Phaser.Input.Keyboard.KeyCodes.DOWN,
       left: Phaser.Input.Keyboard.KeyCodes.LEFT,
@@ -109,7 +141,7 @@ export default class Lobby extends Phaser.Scene {
       open: Phaser.Input.Keyboard.KeyCodes.E,
     });
 
-    // Lock specific key (w, s)
+    /* Lock specific key (up, down) */
     this.player.inputKeys['up'].enabled = false;
     this.player.inputKeys['down'].enabled = false;
 
@@ -117,11 +149,11 @@ export default class Lobby extends Phaser.Scene {
       createCharacterAnims(phaserGame.charKey, phaserGame.anims);
     }
 
-    /* Add button for houseForList */
+    /* Guide to enter classroom */
     this.buttonForList = new Button({
       scene: this,
-      x: this.houseForList.x,
-      y: this.houseForList.y / 1.3,
+      x: this.portal.x,
+      y: this.portal.y / 1.6,
       text: 'E를 누르면 강의실에 들어갈 수 있어요!',
       style: {
         //https://photonstorm.github.io/phaser3-docs/Phaser.Types.GameObjects.Text.html#.TextStyle
@@ -131,6 +163,8 @@ export default class Lobby extends Phaser.Scene {
         resolution: 20,
       },
     }).getBtn();
+
+    this.buttonForList.setVisible(false);
     this.buttonForList.setScrollFactor(0);
 
     this.matter.world.setBounds(
@@ -139,6 +173,15 @@ export default class Lobby extends Phaser.Scene {
       this.scale.width * 1.5,
       this.scale.height
     );
+
+    const Bodies = this.matter.bodies;
+    this.portalZone = Bodies.rectangle(this.portal.x, this.portal.y, 260, 260, {
+      isSensor: true,
+      label: 'portalSensor',
+    });
+
+    this.portal.setExistingBody(this.portalZone);
+    this.createCollisions(this.portalZone);
   }
 
   update() {
@@ -150,25 +193,28 @@ export default class Lobby extends Phaser.Scene {
     }
 
     this.player.update();
+  }
 
-    /* Control Overlapping between player and house */
-    let boundPlayer = this.player.getBounds();
-    let boundHouseForList = this.houseForList.getBounds();
+  createCollisions(portalSensor: any) {
+    this.matterCollision.addOnCollideStart({
+      objectA: [portalSensor],
+      callback: () => {
+        this.buttonForList.setVisible(true);
+        this.buttonForList.setInteractive();
 
-    if (
-      Phaser.Geom.Intersects.RectangleToRectangle(
-        boundPlayer,
-        boundHouseForList
-      )
-    ) {
-      this.buttonForList.setVisible(true);
-
-      // Press E to Enter Classroom
-      if (this.player.inputKeys.open.isDown) {
-        handleScene(GAME_STATUS.GAME);
-      }
-    } else {
-      this.buttonForList.setVisible(false);
-    }
+        /* When player press key E, go to Mainscene */
+        this.input.keyboard.on('keydown-E', () => {
+          handleScene(GAME_STATUS.GAME);
+        });
+      },
+      context: this,
+    });
+    this.matterCollision.addOnCollideEnd({
+      objectA: [portalSensor],
+      callback: () => {
+        this.buttonForList.setVisible(false);
+      },
+      context: this,
+    });
   }
 }
