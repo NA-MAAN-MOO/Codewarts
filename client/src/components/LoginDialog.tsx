@@ -27,6 +27,8 @@ import SignUpForm from './SignUpForm';
 import axios from 'axios';
 import MySnackbar from './MySnackbar';
 
+import 'animate.css';
+
 interface Characters {
   [key: string]: string;
 }
@@ -77,8 +79,16 @@ const LoginDialog = () => {
   const [avatarIndex, setAvatarIndex] = useState<number>(0);
   const dispatch = useDispatch();
 
+  function myFunction() {
+    const selector = document.querySelector(
+      '.animate__animated animate__fadeIn'
+    );
+    selector?.classList.add('magictime', 'vanishOut');
+  }
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    myFunction();
     if (userId === '') {
       setUserIdFieldEmpty(true);
       return;
@@ -120,7 +130,10 @@ const LoginDialog = () => {
   };
 
   return (
-    <Wrapper>
+    <Wrapper
+      className="animate__animated animate__fadeIn"
+      style={{ position: 'absolute' }}
+    >
       <MySnackbar
         text="아이디와 비밀번호를 다시 확인해 주세요"
         state="warning"
@@ -169,6 +182,7 @@ const LoginDialog = () => {
           </Swiper>
         </Left>
         <Right>
+          <div style={{ height: '30px' }}></div>
           <TextField
             fullWidth
             label="ID"
@@ -181,7 +195,7 @@ const LoginDialog = () => {
             }}
             sx={{ fontFamily: styledTheme.mainFont }}
           />
-          <div style={{ height: '15px' }}></div>
+          <div style={{ height: '20px' }}></div>
           <TextField
             fullWidth
             type="password"
@@ -195,23 +209,22 @@ const LoginDialog = () => {
             }}
             sx={{ fontFamily: styledTheme.mainFont }}
           />
-          <div style={{ height: '30px' }}></div>
-          <Button
-            style={{ left: '200px' }}
-            variant="contained"
-            color="primary"
-            size="large"
-            type="submit"
-            form="login"
-            sx={{ fontFamily: styledTheme.mainFont }}
-          >
-            시작하기
-          </Button>
+          <div style={{ height: '20px' }}></div>
+          <Bottom>
+            <Button
+              variant="contained"
+              color="primary"
+              size="small"
+              type="submit"
+              form="login"
+              sx={{ fontFamily: styledTheme.mainFont }}
+            >
+              시작하기
+            </Button>
+            <SignUpForm />
+          </Bottom>
         </Right>
       </Content>
-      <Bottom>
-        <SignUpForm />
-      </Bottom>
     </Wrapper>
   );
 };
@@ -273,7 +286,7 @@ const Right = styled.div`
 const Bottom = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
 `;
 
 const Warning = styled.div`

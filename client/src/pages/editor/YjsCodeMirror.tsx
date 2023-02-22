@@ -377,7 +377,7 @@ function YjsCodeMirror() {
   };
 
   return (
-    <EditorWrapper className="animate__animated animate__zoomInUp">
+    <EditorWrapper className="animate__animated animate__zoomInUp ">
       <EditorInfo>
         <div>
           {/* 🧙🏻‍♂️ */}
