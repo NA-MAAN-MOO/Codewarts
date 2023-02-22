@@ -1,3 +1,4 @@
+import axios, { AxiosError } from 'axios';
 import { Request, Response } from 'express';
 import { OpenVidu, Session } from 'openvidu-node-client';
 import { IsRoomExist } from '../types/Voice';
@@ -35,10 +36,56 @@ export const createConnection = async (req: Request, res: Response) => {
       res.status(404).end();
     } else {
       const connection = await session.createConnection(req.body);
-      console.log('connection created', connection);
+      console.log('connection created');
       res.send(connection.token);
     }
   } catch (err) {
+    console.log(err);
+    res.status(500).send(err);
+  }
+};
+
+//특정 세션에 있는 전체 커넥션 가져오기
+export const getConnections = async (req: Request, res: Response) => {
+  try {
+    const { sessionId } = req.query;
+    const authCode = Buffer.from(`OPENVIDUAPP:${OPENVIDU_SECRET}`).toString(
+      'base64'
+    );
+    const { data } = await axios.get(
+      `${OPENVIDU_URL}/openvidu/api/sessions/${sessionId}/connection`,
+      {
+        headers: {
+          Authorization: `Basic ${authCode}`,
+        },
+      }
+    );
+    res.send(data.content);
+  } catch (err: unknown) {
+    console.log(err);
+    if (err instanceof AxiosError && err.response?.status === 404) {
+      // 아직 세션 만들어지지 않은 상태임
+      res.send({ numberOfElements: 0, content: [] });
+      return;
+    }
+    res.status(500).send(err);
+  }
+};
+
+//전체 세션 가져오기
+export const getSessions = async (req: Request, res: Response) => {
+  try {
+    const authCode = Buffer.from(`OPENVIDUAPP:${OPENVIDU_SECRET}`).toString(
+      'base64'
+    );
+    const { data } = await axios.get(`${OPENVIDU_URL}/openvidu/api/sessions`, {
+      headers: {
+        Authorization: `Basic ${authCode}`,
+      },
+    });
+    res.send(data.content);
+    console.log('출력데이터', data);
+  } catch (err: unknown) {
     console.log(err);
     res.status(500).send(err);
   }

@@ -22,6 +22,9 @@ export const styledTheme = {
   mainBlue: '#B0C4DE',
   lightBlue: '#B0E0E6',
   darkBlue: '#4682B4',
+  mainRed: '#A52A2A',
+  darkRed: '#800000',
+  lightYellow: '#F5DEB3',
   lighterBlue: '#F0F8FF',
   mainFont: 'Firenze',
 };
