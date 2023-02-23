@@ -108,7 +108,10 @@ const LoginDialog = () => {
           dispatch(setPlayerBojId(payload.userBojId));
           dispatch(setPlayerLeetId(payload.userLeetId));
           dispatch(setPlayerTexture(avatars[avatarIndex].name));
-          handleScene(GAME_STATUS.LOBBY);
+          handleScene(GAME_STATUS.LOBBY, {
+            playerId: payload.userNickname,
+            playerTexture: avatars[avatarIndex].name,
+          });
         }
       } catch (e) {
         handleClick();

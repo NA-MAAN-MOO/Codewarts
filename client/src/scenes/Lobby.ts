@@ -16,7 +16,9 @@ export default class Lobby extends Phaser.Scene {
   private portal!: Phaser.Physics.Matter.Sprite;
   private portalZone!: any;
   socketId: any;
-  network: boolean;
+  private playerId: string;
+  private playerTexture: string;
+  private network: boolean;
 
   socket: Socket | undefined;
   // const {nickName, characterModel} = useSelector((state:RootState)=> state.charactor);
@@ -24,67 +26,26 @@ export default class Lobby extends Phaser.Scene {
   constructor() {
     super('Lobby');
   }
-  async openSocket() {
+
+  init(data: any) {
+    /* Open socket */
     phaserGame.socket = io('http://localhost:8080');
     phaserGame.socket.on('start', (payLoad: { socketId: string }) => {
       // Server에서 보내주는 고유 값을 받는다.
       phaserGame.socketId = payLoad.socketId;
-      phaserGame.charKey = store.getState().user.playerTexture;
-      phaserGame.userName = store.getState().user.playerId;
+      phaserGame.charKey = data.playerTexture;
+      phaserGame.userName = data.playerId;
+
       phaserGame.socket?.emit('savePlayer', {
         charKey: phaserGame.charKey,
         userName: phaserGame.userName,
       });
+
       this.network = true;
-      // await createPlayer();
-      return this.network;
-    });
-  }
-
-  createPlayer() {
-    /* Add my player */
-    this.player = new Player({
-      scene: this,
-      x: 10,
-      y: this.scale.height * 0.7,
-      texture: phaserGame.charKey,
-      id: phaserGame.socketId,
-      name: phaserGame.userName,
-      frame: 'down-1',
     });
 
-    /* Add Keyboard keys to enable character animation */
-    this.player.inputKeys = this.input.keyboard.addKeys({
-      up: Phaser.Input.Keyboard.KeyCodes.UP,
-      down: Phaser.Input.Keyboard.KeyCodes.DOWN,
-      left: Phaser.Input.Keyboard.KeyCodes.LEFT,
-      right: Phaser.Input.Keyboard.KeyCodes.RIGHT,
-      open: Phaser.Input.Keyboard.KeyCodes.E,
-    });
-
-    /* Lock specific key (up, down) */
-    this.player.inputKeys['up'].enabled = false;
-    this.player.inputKeys['down'].enabled = false;
-
-    if (phaserGame.charKey) {
-      createCharacterAnims(phaserGame.charKey, phaserGame.anims);
-    }
-  }
-  init() {
-    /* Open socket */
-    this.openSocket().then((res) => console.log(res));
-    // phaserGame.socket = io('http://localhost:8080');
-    // phaserGame.socket.on('start', (payLoad: { socketId: string }) => {
-    //   // Server에서 보내주는 고유 값을 받는다.
-    //   phaserGame.socketId = payLoad.socketId;
-    //   phaserGame.charKey = store.getState().user.playerTexture;
-    //   phaserGame.userName = store.getState().user.playerId;
-    //   phaserGame.socket?.emit('savePlayer', {
-    //     charKey: phaserGame.charKey,
-    //     userName: phaserGame.userName,
-    //   });
-    //   this.network = true;
-    // });
+    this.playerId = data.playerId;
+    this.playerTexture = data.playerTexture;
   }
 
   create() {
@@ -127,15 +88,6 @@ export default class Lobby extends Phaser.Scene {
       .sprite(this.scale.width / 4.5, this.scale.height * 0.5, 'plasma', 0)
       .play('plasma');
 
-    console.log(phaserGame.charKey);
-
-    // if (
-    //   phaserGame.charKey === undefined ||
-    //   phaserGame.socketId === undefined ||
-    //   phaserGame.userName === undefined
-    // )
-    //   return;
-
     /* Guide to enter classroom */
     this.buttonForList = new Button({
       scene: this,
@@ -168,15 +120,15 @@ export default class Lobby extends Phaser.Scene {
     });
 
     this.portal.setExistingBody(this.portalZone);
-    // this.createCollisions(this.portalZone);
+
     /* Add my player */
     this.player = new Player({
       scene: this,
       x: 10,
       y: this.scale.height * 0.7,
-      texture: phaserGame.charKey,
+      texture: this.playerTexture,
       id: phaserGame.socketId,
-      name: phaserGame.userName,
+      name: this.playerId,
       frame: 'down-1',
     });
 
@@ -193,9 +145,7 @@ export default class Lobby extends Phaser.Scene {
     this.player.inputKeys['up'].enabled = false;
     this.player.inputKeys['down'].enabled = false;
 
-    if (phaserGame.charKey) {
-      createCharacterAnims(phaserGame.charKey, phaserGame.anims);
-    }
+    createCharacterAnims(this.playerTexture, this.player.anims);
   }
 
   update() {
@@ -226,27 +176,4 @@ export default class Lobby extends Phaser.Scene {
       }
     }
   }
-
-  //   createCollisions(portalSensor: any) {
-  //     this.matterCollision.addOnCollideStart({
-  //       objectA: [portalSensor],
-  //       callback: () => {
-  //         this.buttonForList.setVisible(true);
-  //         this.buttonForList.setInteractive();
-
-  //         /* When player press key E, go to Mainscene */
-  //         this.input.keyboard.on('keydown-E', () => {
-  //           handleScene(GAME_STATUS.GAME);
-  //         });
-  //       },
-  //       context: this,
-  //     });
-  //     this.matterCollision.addOnCollideEnd({
-  //       objectA: [portalSensor],
-  //       callback: () => {
-  //         this.buttonForList.setVisible(false);
-  //       },
-  //       context: this,
-  //     });
-  //   }
 }
