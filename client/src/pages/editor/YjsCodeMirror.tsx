@@ -25,8 +25,8 @@ import {
   indentWithTab,
   standardKeymap,
 } from '@codemirror/commands';
-import { noctisLilac } from '@uiw/codemirror-theme-noctis-lilac';
 import { okaidia } from '@uiw/codemirror-theme-okaidia';
+import { solarizedLight } from '@uiw/codemirror-theme-solarized';
 
 /* GraphQL queries */
 import PROBLEMQUERY from '../../graphql/problemQuery';
@@ -34,6 +34,7 @@ import USERINFOQUERY from '../../graphql/userInfoQuery';
 
 /* UI */
 import './YjsCodeMirror.css';
+import 'animate.css';
 import {
   Header,
   AlgoInput,
@@ -49,42 +50,29 @@ import {
   StyledTab,
   StyledTabs,
   MaterialUISwitch,
+  AccordionSummary,
+  Accordion,
+  theme,
 } from './editorStyle';
 import 'styles/fonts.css'; /* FONT */
 import Button from '@mui/material/Button';
-import { createTheme } from '@mui/material/styles';
-import FormGroup from '@mui/material/FormGroup';
+import { ThemeProvider } from '@mui/material/styles';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
-import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
 import Divider from '@mui/material/Divider';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import InputIcon from '@mui/icons-material/Input';
 import Chip from '@mui/material/Chip';
 
 /* solvedAC badge svg */
 import RenderSvg from 'components/Svg';
 
-/* MUI button color theme setting */
-const buttonTheme = createTheme({
-  palette: {
-    primary: {
-      main: '#272822', // 에디터 검정
-    },
-    secondary: {
-      // main: '#FD971F', // 주황
-      main: '#ffefd5', // papayawhip
-      // main: '#11cb5f',
-    },
-  },
-});
+/* toast */
+import { notifyOne, notifyTwo, notifyThree, ToastContainer } from './toast';
 
 function YjsCodeMirror() {
   /* ref */
@@ -169,7 +157,7 @@ function YjsCodeMirror() {
       '.cm-editor': {},
       '.cm-content, .cm-gutter': { minHeight: '30%' },
       '.cm-content': {
-        fontFamily: 'Cascadia Code',
+        fontFamily: 'Cascadia Code, EliceDigitalBaeum_Bold',
         fontSize: 'large',
       },
       '.cm-gutter': {
@@ -233,7 +221,7 @@ function YjsCodeMirror() {
   /* 다크/라이트 모드 테마 토글 */
   function switchTheme(checked: boolean) {
     if (editorThemeMode === okaidia) {
-      setEditorTheme(noctisLilac);
+      setEditorTheme(solarizedLight);
     } else {
       setEditorTheme(okaidia);
     }
@@ -368,10 +356,10 @@ function YjsCodeMirror() {
   };
 
   return (
-    <EditorWrapper>
+    <EditorWrapper className="animate__animated animate__zoomInUp ">
       <EditorInfo>
         <div>
-          🧙🏻‍♂️
+          {/* 🧙🏻‍♂️ */}
           <span
             style={{
               color: 'papayawhip',
@@ -452,6 +440,8 @@ function YjsCodeMirror() {
                     inputRef={
                       algoSelect === 0 ? bojProbDataRef : leetProbDataRef
                     }
+                    autoFocus={true}
+                    type={algoSelect === 0 ? 'number' : 'text'}
                   />
                   <AutoFixHighIcon
                     onClick={
@@ -471,85 +461,73 @@ function YjsCodeMirror() {
         <>
           <Accordion>
             <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
+              // expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"
               id="panel1a-header"
             >
               문제 정보
             </AccordionSummary>
             <AccordionDetails>
-              <Typography>
-                <div
-                  dangerouslySetInnerHTML={
-                    algoSelect === 0 && bojProbFullData?.prob_desc
-                      ? {
-                          __html: bojProbFullData?.prob_desc.replace(
-                            /\n/g,
-                            '<br>'
-                          ),
-                        }
-                      : {
-                          __html: leetProbData?.question.content,
-                        }
-                  }
-                />
-              </Typography>
+              <div
+                dangerouslySetInnerHTML={
+                  algoSelect === 0 && bojProbFullData?.prob_desc
+                    ? {
+                        __html: bojProbFullData?.prob_desc.replace(
+                          /\n/g,
+                          '<br>'
+                        ),
+                      }
+                    : {
+                        __html: leetProbData?.question.content,
+                      }
+                }
+              />
             </AccordionDetails>
           </Accordion>
 
           {algoSelect === 0 && bojProbFullData?.prob_input ? (
             <Accordion>
               <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
+                // expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel2a-content"
                 id="panel2a-header"
               >
                 입력 & 출력
               </AccordionSummary>
               <AccordionDetails>
-                <Typography>
-                  <Typography>입력</Typography>
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: bojProbFullData?.prob_input.replace(
-                        /\n/g,
-                        '<br>'
-                      ),
-                    }}
-                  />
-                  <Typography>출력</Typography>
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: bojProbFullData?.prob_output.replace(
-                        /\n/g,
-                        '<br>'
-                      ),
-                    }}
-                  />
-                </Typography>
+                입력
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: bojProbFullData?.prob_input.replace(/\n/g, '<br>'),
+                  }}
+                />
+                <br />
+                출력
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: bojProbFullData?.prob_output.replace(/\n/g, '<br>'),
+                  }}
+                />
               </AccordionDetails>
             </Accordion>
           ) : (
             <Accordion>
               <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
+                // expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel2a-content"
                 id="panel2a-header"
               >
                 코드 스니펫
               </AccordionSummary>
               <AccordionDetails>
-                <Typography>
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html:
-                        leetProbData?.question.codeSnippets[3].code.replace(
-                          /\n/g,
-                          '<br>'
-                        ),
-                    }}
-                  ></div>
-                </Typography>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: leetProbData?.question.codeSnippets[3].code.replace(
+                      /\n/g,
+                      '<br>'
+                    ),
+                  }}
+                ></div>
               </AccordionDetails>
             </Accordion>
           )}
@@ -558,7 +536,7 @@ function YjsCodeMirror() {
           bojProbFullData?.samples ? (
             <Accordion>
               <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
+                // expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel2a-content"
                 id="panel2a-header"
               >
@@ -570,7 +548,13 @@ function YjsCodeMirror() {
                     {algoSelect === 1 &&
                     leetProbData?.question.exampleTestcases ? (
                       <Grid xs>
-                        <Item>
+                        <Item
+                          sx={{
+                            color: 'papayawhip',
+                            fontFamily: 'Cascadia Code, EliceDigitalBaeum_Bold',
+                            textAlign: 'left',
+                          }}
+                        >
                           <div
                             dangerouslySetInnerHTML={{
                               __html:
@@ -587,8 +571,17 @@ function YjsCodeMirror() {
                         ([key, value]) => {
                           return (
                             <Grid xs key={key}>
-                              <Item>
-                                예제{key} INPUT
+                              <Item
+                                sx={{
+                                  color: 'papayawhip',
+                                  fontFamily:
+                                    'Cascadia Code, EliceDigitalBaeum_Bold',
+                                  textAlign: 'left',
+                                }}
+                              >
+                                <span className="samples-title">
+                                  예제{key} INPUT
+                                </span>
                                 <Tooltip title="INPUT 칸으로 복사하기" arrow>
                                   <InputIcon onClick={() => copyToInput(key)} />
                                 </Tooltip>
@@ -599,7 +592,9 @@ function YjsCodeMirror() {
                                     ].input.replace(/\n/g, '<br>'),
                                   }}
                                 />
-                                예제{key} OUTPUT
+                                <span className="samples-title">
+                                  예제{key} OUTPUT
+                                </span>
                                 <div
                                   dangerouslySetInnerHTML={{
                                     __html: bojProbFullData?.samples?.[
@@ -622,41 +617,55 @@ function YjsCodeMirror() {
       ) : null}
 
       <MiddleWrapper>
-        <Tooltip title="코드 실행하기" arrow>
-          <Button onClick={runCode} color="primary">
-            RUN
+        <ThemeProvider theme={theme}>
+          <Tooltip title="코드 실행하기" arrow>
+            <Button onClick={runCode} color="primary">
+              RUN
+            </Button>
+          </Tooltip>
+          {/* <Tooltip title="제출하기" arrow> */}
+          {/* 링크로 가서 제출하기 */}
+          {/* <Button
+              color="primary"
+              href={
+                bojProbData?.problemId
+                  ? `https://acmicpc.net/problem/${bojProbData?.problemId}`
+                  : `https://leetcode.com/problems/${leetProbData?.question.titleSlug}`
+              }
+              target="_blank"
+              rel="noreferrer"
+            >
+              SUBMIT
+            </Button> */}
+          {/* 시연용 토스트 noti!!!!!!!!!!! */}
+          <Button color="primary" onClick={notifyTwo}>
+            SU
           </Button>
-        </Tooltip>
-        <Tooltip title="제출하기" arrow>
-          <Button
-            color="primary"
-            href={
-              bojProbData?.problemId
-                ? `https://acmicpc.net/problem/${bojProbData?.problemId}`
-                : `https://leetcode.com/problems/${leetProbData?.question.titleSlug}`
-            }
-            target="_blank"
-            rel="noreferrer"
-          >
-            SUBMIT
+          {/* </Tooltip> */}
+          <Button color="primary" onClick={notifyOne}>
+            BM
           </Button>
-        </Tooltip>
+          <Button color="primary" onClick={notifyThree}>
+            IT
+          </Button>
+        </ThemeProvider>
 
-        <FormGroup>
-          <FormControlLabel
-            control={
-              <MaterialUISwitch
-                sx={{ m: 1 }}
-                defaultChecked
-                onClick={(checked) => {
-                  switchTheme(checked);
-                }}
-              />
-            }
-            label=""
-          />
-        </FormGroup>
+        {/* <FormGroup> */}
+        <FormControlLabel
+          control={
+            <MaterialUISwitch
+              sx={{ m: 1 }}
+              defaultChecked
+              onClick={(checked) => {
+                switchTheme(checked);
+              }}
+            />
+          }
+          label=""
+        />
+        {/* </FormGroup> */}
       </MiddleWrapper>
+      <ToastContainer />
 
       <div
         className="codemirror-editor"
@@ -672,82 +681,83 @@ function YjsCodeMirror() {
 
       <Divider />
 
-      <Box sx={{ flexGrow: 1, marginTop: '10px' }}>
+      <Box
+        sx={{
+          flexGrow: 1,
+          marginTop: '10px',
+          filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
+        }}
+      >
         {/* <Grid container spacing={1.5} columns={16}> */}
         <Grid container spacing={1.5}>
           <Grid xs>
             <Item>
-              <TextField
+              <AlgoTextField
                 id="standard-multiline-static"
-                // label="INPUT"
-                helperText="INPUT"
+                label="INPUT"
                 multiline
                 fullWidth
                 rows={8}
                 variant="standard"
                 inputRef={inputStdin}
+                InputLabelProps={{ shrink: true }}
+                InputProps={{
+                  disableUnderline: false,
+                }}
               />
             </Item>
           </Grid>
+
           <Grid xs>
             <Item>
               <Grid container spacing={1.5}>
-                <Grid xs>
-                  <Item>
-                    <TextField
-                      id="standard-read-only-input"
-                      variant="standard"
-                      // label="TIME"
-                      size="small"
-                      fullWidth
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                      helperText="TIME"
-                      // focused
-                      value={cpuTime}
-                    />
-                  </Item>
+                <Grid xs sx={{ p: 0 }}>
+                  <AlgoTextField
+                    id="standard-read-only-input"
+                    variant="standard"
+                    label="TIME"
+                    size="small"
+                    fullWidth
+                    InputProps={{
+                      readOnly: true,
+                      disableUnderline: true,
+                    }}
+                    InputLabelProps={{ shrink: true }}
+                    value={cpuTime}
+                  />
                 </Grid>
 
-                <Grid xs>
-                  <Item>
-                    <TextField
-                      id="standard-read-only-input"
-                      variant="standard"
-                      // label="MEMORY"
-                      size="small"
-                      fullWidth
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                      helperText="MEMORY"
-                      // focused
-                      value={memory}
-                    />
-                  </Item>
+                <Grid xs sx={{ p: 0 }}>
+                  <AlgoTextField
+                    id="standard-read-only-input"
+                    variant="standard"
+                    label="MEMORY"
+                    size="small"
+                    fullWidth
+                    InputProps={{
+                      readOnly: true,
+                      disableUnderline: true,
+                    }}
+                    InputLabelProps={{ shrink: true }}
+                    value={memory}
+                  />
                 </Grid>
               </Grid>
-              <TextField
+              <AlgoTextField
                 id="standard-multiline-static"
-                // label="OUTPUT"
-                helperText="OUTPUT"
+                label="OUTPUT"
                 multiline
                 fullWidth
-                rows={5}
+                rows={6}
                 variant="standard"
                 InputProps={{
                   readOnly: true,
                 }}
-                value={compileOutput}
+                InputLabelProps={{ shrink: true }}
+                value={
+                  compileOutput ? compileOutput.replace(/<br>/g, '\n') : null
+                }
               />
-              {/* <span
-                    style={{ border: '1px solid black' }}
-                    className="compiled-output"
-                    dangerouslySetInnerHTML={{
-                      __html: compileOutput,
-                    }}
-                  ></span> */}
             </Item>
           </Grid>
         </Grid>
