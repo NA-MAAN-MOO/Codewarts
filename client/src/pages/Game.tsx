@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { openStart, openEditor, openGame, openLobby } from 'stores/modeSlice';
 import Voice from 'pages/Voice';
-import PeerVoice from 'pages/PeerVoice';
 import { handleScene } from 'lib/phaserLib';
 import { GAME_STATUS } from 'utils/Constants';
 import Button from '@mui/material/Button';

@@ -28,6 +28,7 @@ import axios from 'axios';
 import MySnackbar from './MySnackbar';
 
 import 'animate.css';
+import { openGame } from 'stores/modeSlice';
 
 interface Characters {
   [key: string]: string;
@@ -79,16 +80,8 @@ const LoginDialog = () => {
   const [avatarIndex, setAvatarIndex] = useState<number>(0);
   const dispatch = useDispatch();
 
-  function myFunction() {
-    const selector = document.querySelector(
-      '.animate__animated animate__fadeIn'
-    );
-    selector?.classList.add('magictime', 'vanishOut');
-  }
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    myFunction();
     if (userId === '') {
       setUserIdFieldEmpty(true);
       return;
@@ -105,6 +98,7 @@ const LoginDialog = () => {
           body
         );
         if (response.data.status === 200) {
+          handleScene(GAME_STATUS.LOBBY);
           const { payload } = response.data; //userId, userNickname, userBojId, userLeetId
           //todo payload 값 리덕스에 저장하기
           console.log(
@@ -113,12 +107,15 @@ const LoginDialog = () => {
             'Avatar:',
             avatars[avatarIndex].name
           );
-
+          dispatch(openGame());
           dispatch(setPlayerId(payload.userNickname));
           dispatch(setPlayerBojId(payload.userBojId));
           dispatch(setPlayerLeetId(payload.userLeetId));
           dispatch(setPlayerTexture(avatars[avatarIndex].name));
-          handleScene(GAME_STATUS.LOBBY);
+          handleScene(GAME_STATUS.LOBBY, {
+            playerId: payload.userNickname,
+            playerTexture: avatars[avatarIndex].name,
+          });
         }
       } catch (e) {
         handleClick();
@@ -182,7 +179,7 @@ const LoginDialog = () => {
           </Swiper>
         </Left>
         <Right>
-          <div style={{ height: '30px' }}></div>
+          <div style={{ height: '20px' }}></div>
           <TextField
             fullWidth
             label="ID"

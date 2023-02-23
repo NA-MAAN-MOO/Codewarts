@@ -6,6 +6,7 @@ import UserForm from './editor/UserForm';
 import { RootState } from '../stores';
 import Voice from 'pages/Voice';
 import useVoice from 'hooks/useVoice';
+import Button from '@mui/material/Button';
 
 const Editor = () => {
   const { roomId, session } = useSelector((state: RootState) => {
@@ -19,23 +20,27 @@ const Editor = () => {
     dispatch(openGame());
   };
   return (
-    <EditorDiv>
-      {roomId ? (
-        <div>
-          <Voice roomKey={roomId} />
+    <>
+      {roomId && (
+        <EditorDiv>
+          <div>
+            <Voice roomKey={roomId} />
+          </div>
           <YjsCodeMirror />
-        </div>
-      ) : (
-        <div>
-          <UserForm />
-        </div>
+          <BtnDiv>
+            <Button
+              variant="contained"
+              color="primary"
+              size="small"
+              style={{ position: 'fixed' }}
+              onClick={handleExit}
+            >
+              돌아가기
+            </Button>
+          </BtnDiv>
+        </EditorDiv>
       )}
-      <BtnDiv>
-        <button type="button" onClick={handleExit}>
-          돌아가기
-        </button>
-      </BtnDiv>
-    </EditorDiv>
+    </>
   );
 };
 
@@ -60,6 +65,6 @@ const BtnDiv = styled.div`
   justify-content: center;
   gap: 10px;
   position: absolute;
-  right: 10px;
-  bottom: 10px;
+  right: 40px;
+  bottom: 20px;
 `;
