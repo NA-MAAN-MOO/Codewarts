@@ -62,7 +62,6 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
 import Tooltip from '@mui/material/Tooltip';
 import Divider from '@mui/material/Divider';
-import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import InputIcon from '@mui/icons-material/Input';
@@ -157,7 +156,7 @@ function YjsCodeMirror() {
       '.cm-editor': {},
       '.cm-content, .cm-gutter': { minHeight: '30%' },
       '.cm-content': {
-        fontFamily: 'Cascadia Code, EliceDigitalBaeum_Bold',
+        fontFamily: 'Cascadia Code, Pretendard-Regular',
         fontSize: 'large',
       },
       '.cm-gutter': {
@@ -355,15 +354,24 @@ function YjsCodeMirror() {
     inputStdin.current.value = bojProbFullData?.samples?.[key].input;
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      if (algoSelect === 0) {
+        fetchBojProbInfo();
+      } else {
+        fetchLeetProbInfo();
+      }
+    }
+  };
+
   return (
     <EditorWrapper className="animate__animated animate__zoomInUp ">
       <EditorInfo>
         <div>
-          {/* 🧙🏻‍♂️ */}
           <span
             style={{
               color: 'papayawhip',
-              filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25)',
+              filter: 'drop-shadow(0px 4px 4px rgba(255, 255, 255, 0.5)',
             }}
           >
             {roomId}
@@ -441,14 +449,8 @@ function YjsCodeMirror() {
                       algoSelect === 0 ? bojProbDataRef : leetProbDataRef
                     }
                     autoFocus={true}
-                    type={algoSelect === 0 ? 'number' : 'text'}
-                  />
-                  <AutoFixHighIcon
-                    onClick={
-                      algoSelect === 0 ? fetchBojProbInfo : fetchLeetProbInfo
-                    }
-                    style={{ color: '#ffefd5' }}
-                    fontSize="large"
+                    type="text"
+                    onKeyDown={handleKeyDown}
                   />
                 </>
               </div>
@@ -551,7 +553,7 @@ function YjsCodeMirror() {
                         <Item
                           sx={{
                             color: 'papayawhip',
-                            fontFamily: 'Cascadia Code, EliceDigitalBaeum_Bold',
+                            fontFamily: 'Cascadia Code, Pretendard-Regular',
                             textAlign: 'left',
                           }}
                         >
@@ -575,7 +577,7 @@ function YjsCodeMirror() {
                                 sx={{
                                   color: 'papayawhip',
                                   fontFamily:
-                                    'Cascadia Code, EliceDigitalBaeum_Bold',
+                                    'Cascadia Code, Pretendard-Regular',
                                   textAlign: 'left',
                                 }}
                               >

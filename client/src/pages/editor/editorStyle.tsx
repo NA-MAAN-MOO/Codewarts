@@ -17,8 +17,8 @@ const theme = createTheme({
   palette: {
     primary: {
       // main: '#eeba30', // 그리핀도르 찐노랑
-      // main: '#ffefd5', // papayawhip
-      main: '#272822', // 에디터 검정
+      main: '#ffefd5', // papayawhip
+      // main: '#272822', // 에디터 검정
       // main: '#ba835e', // 갈색
     },
     secondary: {
@@ -36,15 +36,16 @@ const theme = createTheme({
 const EditorWrapper = styledc.div`
   width: 95%;
   margin: 0 auto;
-  font-family: 'Cascadia Code', 'EliceDigitalBaeum_Bold';
+  font-family: 'Cascadia Code', 'Pretendard-Regular';
 `;
 
 const EditorInfo = styledc.div`
-font-size: 40px; 
+  // color: rgba(255, 255, 255, 0.7);
+font-size: 35px; 
 font-weight: 600; 
 margin-top: 3%;
 text-align: center;
-filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+filter: drop-shadow(0px 4px 4px rgba(255, 255, 255, 0.5));
 `;
 
 const AlgoInfoWrap = styledc.div`
@@ -92,7 +93,7 @@ const StyledTab = styled((props: StyledTabProps) => (
   <Tab disableRipple {...props} />
 ))(({ theme }) => ({
   textTransform: 'none',
-  fontFamily: 'Cascadia Code, EliceDigitalBaeum_Bold',
+  fontFamily: 'Cascadia Code, Pretendard-Regular',
   fontWeight: theme.typography.fontWeightRegular,
   fontSize: theme.typography.pxToRem(20),
   marginRight: theme.spacing(1),
@@ -126,7 +127,9 @@ const AlgoInput = styledc.input`
 const AlgoInputWrap = styledc.div`
   // margin-top: 10px;
   // border: 1px solid red;
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 /* text field theme setting */
@@ -140,14 +143,17 @@ const AlgoTextField = styled((props: TextFieldProps) => (
 ))(({ theme }) => ({
   '& label': {
     textShadow: '1px 1px 2px #ededed',
-    fontFamily: 'Cascadia Code, EliceDigitalBaeum_Bold',
+    fontFamily: 'Cascadia Code, Pretendard-Regular',
   },
   '& input': {
-    fontFamily: 'Cascadia Code, EliceDigitalBaeum_Bold',
+    fontFamily: 'Cascadia Code, Pretendard-Regular',
     // color: 'papayawhip',
   },
+  '& .MuiInputBase-sizeSmall': {
+    // margin: '10px 10px 10px 10px',
+  },
   '& textarea': {
-    fontFamily: 'Cascadia Code, EliceDigitalBaeum_Bold',
+    fontFamily: 'Cascadia Code, Pretendard-Regular',
     color: 'papayawhip',
     // border: '1px solid red',
   },
