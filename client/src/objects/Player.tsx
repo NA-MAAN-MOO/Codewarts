@@ -58,16 +58,6 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     this.playerNameObject.setSensor(true);
   }
 
-  // static preload(scene: any) {
-  //   for (let i = 0; i <= 27; i++) {
-  //     scene.load.atlas(
-  //       `char${i}`,
-  //       `assets/characters/char${i}.png`,
-  //       `assets/characters/char${i}.json`
-  //     );
-  //   }
-  // }
-
   get velocity() {
     return this.body.velocity;
   }
