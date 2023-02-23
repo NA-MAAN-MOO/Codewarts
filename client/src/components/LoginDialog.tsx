@@ -182,7 +182,7 @@ const LoginDialog = () => {
           </Swiper>
         </Left>
         <Right>
-          <div style={{ height: '30px' }}></div>
+          <div style={{ height: '20px' }}></div>
           <TextField
             fullWidth
             label="ID"
