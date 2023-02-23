@@ -72,7 +72,7 @@ import Chip from '@mui/material/Chip';
 import RenderSvg from 'components/Svg';
 
 /* toast */
-import notify from './toast';
+import { notifyOne, notifyTwo, notifyThree } from './toast';
 import { ToastContainer } from 'react-toastify';
 
 function YjsCodeMirror() {
@@ -624,9 +624,9 @@ function YjsCodeMirror() {
               RUN
             </Button>
           </Tooltip>
-          <Tooltip title="제출하기" arrow>
-            {/* 링크로 가서 제출하기 */}
-            {/* <Button
+          {/* <Tooltip title="제출하기" arrow> */}
+          {/* 링크로 가서 제출하기 */}
+          {/* <Button
               color="primary"
               href={
                 bojProbData?.problemId
@@ -638,11 +638,17 @@ function YjsCodeMirror() {
             >
               SUBMIT
             </Button> */}
-            {/* 시연용 토스트 noti!!!!!!!!!!! */}
-            <Button color="primary" onClick={notify}>
-              SUBMIT
-            </Button>
-          </Tooltip>
+          {/* 시연용 토스트 noti!!!!!!!!!!! */}
+          <Button color="primary" onClick={notifyTwo}>
+            SU
+          </Button>
+          {/* </Tooltip> */}
+          <Button color="primary" onClick={notifyOne}>
+            BM
+          </Button>
+          <Button color="primary" onClick={notifyThree}>
+            IT
+          </Button>
         </ThemeProvider>
 
         {/* <FormGroup> */}
@@ -661,6 +667,7 @@ function YjsCodeMirror() {
         {/* </FormGroup> */}
       </MiddleWrapper>
       <ToastContainer
+        // containerId="준철실패"
         position="top-center"
         autoClose={9000}
         hideProgressBar={false}
@@ -672,6 +679,7 @@ function YjsCodeMirror() {
         pauseOnHover
         theme="colored"
       />
+
       <div
         className="codemirror-editor"
         ref={editor}
