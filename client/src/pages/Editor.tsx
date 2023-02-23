@@ -6,10 +6,12 @@ import UserForm from './editor/UserForm';
 import { RootState } from '../stores';
 import Voice from 'pages/Voice';
 import useVoice from 'hooks/useVoice';
+import Board from './Board';
+import { toggleWhiteboard } from 'stores/whiteboardSlice';
 
 const Editor = () => {
-  const { roomId, session } = useSelector((state: RootState) => {
-    return { ...state.editor, ...state.chat };
+  const { roomId, session, isChecked } = useSelector((state: RootState) => {
+    return { ...state.editor, ...state.chat, isChecked: state.board.isChecked };
   });
   const dispatch = useDispatch();
   const { disconnectSession } = useVoice();
@@ -18,12 +20,18 @@ const Editor = () => {
     disconnectSession(session);
     dispatch(openGame());
   };
+  const handleBoard = () => {
+    dispatch(toggleWhiteboard());
+  };
   return (
     <EditorDiv>
       {roomId ? (
         <div>
           <Voice roomKey={roomId} />
           <YjsCodeMirror />
+          <Whiteboard isChecked={isChecked}>
+            <Board />
+          </Whiteboard>
         </div>
       ) : (
         <div>
@@ -31,6 +39,9 @@ const Editor = () => {
         </div>
       )}
       <BtnDiv>
+        <button type="button" onClick={handleBoard}>
+          화이트보드 켜기 / 끄기
+        </button>
         <button type="button" onClick={handleExit}>
           돌아가기
         </button>
@@ -62,4 +73,9 @@ const BtnDiv = styled.div`
   position: absolute;
   right: 10px;
   bottom: 10px;
+`;
+const Whiteboard = styled.div<{ isChecked: boolean }>`
+  display: ${(props) => (props.isChecked ? 'fixed' : 'none')};
+  width: 100%;
+  height: 100%;
 `;
