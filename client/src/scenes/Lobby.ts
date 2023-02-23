@@ -166,8 +166,7 @@ export default class Lobby extends Phaser.Scene {
 
       /* Add overlap between portal and player */
       let boundPortal = this.portal.getBounds();
-      boundPortal.setSize(this.portal.displayWidth - 120, window.innerHeight);
-      boundPortal.setPosition(this.portal.displayWidth - 60);
+      boundPortal.setSize(this.portal.displayWidth - 90, window.innerHeight);
       let boundPlayer = this.player.getBounds();
 
       if (

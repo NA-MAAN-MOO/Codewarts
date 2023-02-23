@@ -64,20 +64,22 @@ export default class Table {
       let editorButton = this.scene.add
         .text(0, 0, str)
         .setStyle(fontStyle)
-        .setOrigin(0.5, 0.5);
+        .setOrigin(0.5, 0.5)
+        .setPadding(15, 5, 15, 5);
       this.editorBtnList.push(editorButton);
       this.editorListDialog.add(
         editorButton.setPosition(
           this.tableObject.x,
-          this.tableObject.y - 120 + 30 * i
+          this.tableObject.y - 120 + 35 * i
         )
       );
     }
     let backButton = this.scene.add
       .text(0, 0, '돌아가기')
-      .setStyle({ fontSize: '20px', color: '#333333', align: 'center' })
-      .setPosition(this.tableObject.x, this.tableObject.y + 30)
-      .setOrigin(0.5, 0.5);
+      .setStyle({ fontSize: '18px', color: '#333333', align: 'center' })
+      .setPosition(this.tableObject.x, this.tableObject.y + 40)
+      .setOrigin(0.5, 0.5)
+      .setPadding(15, 5, 15, 5);
     this.editorBtnList.push(backButton);
     this.editorListDialog.add(backButton);
   }
