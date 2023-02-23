@@ -114,10 +114,16 @@ export default class Lobby extends Phaser.Scene {
     );
 
     const Bodies = this.matter.bodies;
-    this.portalZone = Bodies.rectangle(this.portal.x, this.portal.y, 260, 500, {
-      isSensor: true,
-      label: 'portalSensor',
-    });
+    this.portalZone = Bodies.rectangle(
+      this.portal.x,
+      this.portal.y,
+      this.portal.width,
+      this.portal.height,
+      {
+        isSensor: true,
+        label: 'portalSensor',
+      }
+    );
 
     this.portal.setExistingBody(this.portalZone);
 
@@ -160,6 +166,8 @@ export default class Lobby extends Phaser.Scene {
 
       /* Add overlap between portal and player */
       let boundPortal = this.portal.getBounds();
+      boundPortal.setSize(this.portal.displayWidth - 120, window.innerHeight);
+      boundPortal.setPosition(this.portal.displayWidth - 60);
       let boundPlayer = this.player.getBounds();
 
       if (
