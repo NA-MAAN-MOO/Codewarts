@@ -119,9 +119,9 @@ export default function FormDialog() {
         onOpen={signUpFail}
       />
       <Button
-        variant="contained"
+        variant="outlined"
         color="primary"
-        size="large"
+        size="small"
         onClick={handleClickOpen}
         sx={{ fontFamily: styledTheme.mainFont }}
       >

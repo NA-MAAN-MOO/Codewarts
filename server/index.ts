@@ -221,7 +221,8 @@ io.on('connection', (socket: Socket) => {
         idx: table[1],
         userName: table[2],
         //FIXME:
-        socketId: playerInfo.socketId,
+        // socketId: playerInfo.socketId,
+        socketId: table[3],
       };
       socket.emit('updateEditor', payLoad);
     });
@@ -230,14 +231,16 @@ io.on('connection', (socket: Socket) => {
   socket.on('removeEditor', () => {
     console.log('removeEditor');
     tables.forEach((table: TableType) => {
-      if (table[2] === playerInfo.userName) {
-        socket.broadcast.emit('removeEditor', table);
-        socket.emit('removeEditor', table);
+      // FIXME: 조건식 table[2] === playerInfo.userName 에서 변경
+      if (table[3] === playerInfo.socketId) {
+        // socket.broadcast.emit('removeEditor', table);
+        // socket.emit('removeEditor', table);
+        io.emit('removeEditor', table);
       }
     });
     tables = tables.filter((table: TableType) => {
       // 조건식에 return 붙여야한다.
-      return table[2] !== playerInfo.userName;
+      return table[3] !== playerInfo.socketId;
     });
     console.log(tables);
   });

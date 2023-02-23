@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-const bcrypt = require('bcrypt');
+// const bcrypt = require('bcrypt');
 import jwt from 'jsonwebtoken';
 const AUTH_ERROR = { message: '사용자 인증 오류' };
 import { Token } from '../controllers/userTypes';

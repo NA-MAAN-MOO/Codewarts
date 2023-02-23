@@ -134,13 +134,13 @@ export default class MainScene extends Phaser.Scene {
       open: Phaser.Input.Keyboard.KeyCodes.E,
     });
     this.watchTable = false;
-    this.editorIdx = 4;
+    // this.editorIdx = 4;
 
     let camera = this.cameras.main;
     camera.zoom = 1;
     camera.startFollow(this.player);
     camera.setLerp(0.1, 0.1);
-    // camera.setBounds(0, 0, this.game.config.width, this.game.config.height);
+
     if (!!phaserGame.charKey) {
       createCharacterAnims(phaserGame.charKey, phaserGame.anims);
     }
