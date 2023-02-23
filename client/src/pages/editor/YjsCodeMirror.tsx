@@ -73,6 +73,8 @@ import RenderSvg from 'components/Svg';
 /* toast */
 import { notifyOne, notifyTwo, notifyThree, ToastContainer } from './toast';
 
+import { saveAs } from 'file-saver';
+
 function YjsCodeMirror() {
   /* ref */
   const editor = useRef(null);
@@ -364,6 +366,41 @@ function YjsCodeMirror() {
     }
   };
 
+  /* fetching '.in' file */
+  async function fetchInputFile(url) {
+    const response = await fetch(url);
+    const text = await response.text();
+    return text;
+  }
+
+  const generateFile = (content) => {
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' }); // Create a Blob object with the file content
+    saveAs(blob, 'filename.out'); // Prompt the user to download the file with the specified filename and extension
+    console.log('out 파일 생성 완료');
+  };
+
+  /* 유저가 작성한 코드 가채점하기 위해 서버로 보냄 */
+  const evaluateCode = async () => {
+    if (!ytext.toString()) return;
+
+    // console.log(ytext.toString());
+
+    try {
+      const input = await fetchInputFile('/assets/olympiad/01.in');
+      const { data } = await axios.post(`http://localhost:3001/code_to_run`, {
+        codeToRun: ytext.toString(),
+        //@ts-ignore
+        stdin: input,
+      });
+
+      console.log(data);
+      generateFile(data.output);
+    } catch (error) {
+      console.error(error);
+      alert('채점 실패');
+    }
+  };
+
   return (
     <EditorWrapper className="animate__animated animate__zoomInUp ">
       <EditorInfo>
@@ -625,9 +662,9 @@ function YjsCodeMirror() {
               RUN
             </Button>
           </Tooltip>
-          {/* <Tooltip title="제출하기" arrow> */}
-          {/* 링크로 가서 제출하기 */}
-          {/* <Button
+
+          <Tooltip title="제출하러 가기" arrow>
+            <Button
               color="primary"
               href={
                 bojProbData?.problemId
@@ -638,21 +675,16 @@ function YjsCodeMirror() {
               rel="noreferrer"
             >
               SUBMIT
-            </Button> */}
-          {/* 시연용 토스트 noti!!!!!!!!!!! */}
-          <Button color="primary" onClick={notifyTwo}>
-            SU
-          </Button>
-          {/* </Tooltip> */}
-          <Button color="primary" onClick={notifyOne}>
-            BM
-          </Button>
-          <Button color="primary" onClick={notifyThree}>
-            IT
-          </Button>
+            </Button>
+          </Tooltip>
+
+          <Tooltip title="코드와트 가채점">
+            <Button color="primary" onClick={evaluateCode}>
+              가채점
+            </Button>
+          </Tooltip>
         </ThemeProvider>
 
-        {/* <FormGroup> */}
         <FormControlLabel
           control={
             <MaterialUISwitch
@@ -665,9 +697,7 @@ function YjsCodeMirror() {
           }
           label=""
         />
-        {/* </FormGroup> */}
       </MiddleWrapper>
-      <ToastContainer />
 
       <div
         className="codemirror-editor"

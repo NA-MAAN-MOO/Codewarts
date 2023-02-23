@@ -109,10 +109,12 @@ const StyledTab = styled((props: StyledTabProps) => (
 const ProbSummary = styledc.div`
 // color: 'papayawhip';
 color: #fff;
-font-size: 23px;
+font-size: 20px;
 width: 300px;
-// border: 1px solid yellow;
+border: 1px solid yellow;
 text-align: center;
+// line-height: 56px;
+
 `;
 
 const AlgoInput = styledc.input`
@@ -147,6 +149,7 @@ const AlgoTextField = styled((props: TextFieldProps) => (
   },
   '& input': {
     fontFamily: 'Cascadia Code, Pretendard-Regular',
+    // border: '1px solid red',
     // color: 'papayawhip',
   },
   '& .MuiInputBase-sizeSmall': {
@@ -155,7 +158,6 @@ const AlgoTextField = styled((props: TextFieldProps) => (
   '& textarea': {
     fontFamily: 'Cascadia Code, Pretendard-Regular',
     color: 'papayawhip',
-    // border: '1px solid red',
   },
   // 컴파일칸 라벨
   '& .css-1gds3nb-MuiFormLabel-root-MuiInputLabel-root': {
