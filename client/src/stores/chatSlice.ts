@@ -6,14 +6,14 @@ import { Session } from 'openvidu-browser';
 
 export interface ChatState {
   users: CharInfoType[];
-  sessionIdNow: string;
-  sessionNow: string;
+  // sessionIdNow: string;
+  // sessionNow: string;
 }
 
 const initialState: ChatState = {
   users: [],
-  sessionIdNow: '',
-  sessionNow: '',
+  // sessionIdNow: '',
+  // sessionNow: '',
 };
 
 export const chatSlice = createSlice({
@@ -23,18 +23,18 @@ export const chatSlice = createSlice({
     setUsers: (state, action) => {
       state.users = action.payload;
     },
-    setSession: (state, action) => {
-      const serializedSession = JSON.stringify(action.payload);
-      state.sessionNow = serializedSession;
-    },
+    // setSession: (state, action) => {
+    //   const serializedSession = JSON.stringify(action.payload);
+    //   state.sessionNow = serializedSession;
+    // },
     // getSession: (state) => {
     //   if (!state.sessionNow) return undefined;
     //   const parsedSession = JSON.parse(state.sessionNow);
     //   return parsedSession;
     // },
-    removeSession: (state) => {
-      state.sessionIdNow = '';
-    },
+    // removeSession: (state) => {
+    //   state.sessionIdNow = '';
+    // },
     // addUser: (state, action) => {
     //   state.users = [...state.users, action.payload];
     // },
@@ -47,6 +47,6 @@ export const chatSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setUsers, setSession, removeSession } = chatSlice.actions;
+export const { setUsers } = chatSlice.actions;
 
 export default chatSlice.reducer;

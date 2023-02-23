@@ -8,7 +8,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'stores';
 import axios from 'axios';
-import { setSession, setUsers, removeSession } from 'stores/chatSlice';
+import { setUsers } from 'stores/chatSlice';
 import { Connection } from 'types';
 
 const APPLICATION_SERVER_URL = 'http://localhost:3002';
