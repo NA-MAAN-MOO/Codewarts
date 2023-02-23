@@ -31,7 +31,7 @@ const VoiceRoom = () => {
         <Game
           session={session}
           handleSession={handleSession}
-          roomKey={GAME_STATUS.GAME}
+          roomKey={GAME}
         ></Game>
       ) : (
         <Editor

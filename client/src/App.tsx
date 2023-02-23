@@ -8,12 +8,13 @@ import Start from 'pages/Start';
 import Lobby from 'pages/Lobby';
 import { openEditor, openGame } from 'stores/modeSlice';
 import './codeuk';
+import TestVoiceButtons from 'components/TestVoiceButtons';
 
 function App() {
   const mode = process.env.REACT_APP_MODE;
   const { START, LOBBY, GAME, EDITOR } = GAME_STATUS;
-  const { status } = useSelector((state: RootState) => {
-    return state.mode;
+  const { playerId, status } = useSelector((state: RootState) => {
+    return { ...state.user, ...state.mode };
   });
   const dispatch = useDispatch();
   let loadFlag = false;
@@ -32,10 +33,11 @@ function App() {
       <HoverDiv id="codeuk">
         {status === START ? (
           <Start></Start>
-        ) : status === LOBBY ? (
-          <Lobby></Lobby>
         ) : (
-          <VoiceRoom />
+          <div>
+            {playerId === '개발자' && <TestVoiceButtons />}
+            {status === LOBBY ? <Lobby></Lobby> : <VoiceRoom />}
+          </div>
         )}
       </HoverDiv>
     )

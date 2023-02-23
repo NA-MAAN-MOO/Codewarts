@@ -119,7 +119,6 @@ const Voice = ({ roomKey, session, handleSession }: VoiceProp) => {
           publisher={publisher}
         />
       )}
-      {playerId === '개발자' && <TestVoiceButtons roomKey={roomKey} />}
     </>
   );
 };

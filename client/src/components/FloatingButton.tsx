@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import styled from 'styled-components';
 
-const FloatingButton = (props) => {
+const FloatingButton = ({ ...props }) => {
   return <FloatingBtn {...props}></FloatingBtn>;
 };
 

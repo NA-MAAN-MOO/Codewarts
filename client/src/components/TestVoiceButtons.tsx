@@ -1,11 +1,24 @@
+import React, { useState, useEffect } from 'react';
 import useVoice from 'hooks/useVoice';
-import { VoiceProp } from 'types';
-import GameVoice from 'pages/voice/GameVoice';
 import { GAME_STATUS } from 'utils/Constants';
-import EditorVoice from 'pages/voice/EditorVoice';
+import { useSelector, useDispatch } from 'react-redux';
+import type { RootState } from 'stores';
 
-const TestVoiceButtons = ({ roomKey }: { roomKey: string }) => {
+const TestVoiceButtons = () => {
   const { getSessions, getConnections } = useVoice();
+  const { START, LOBBY, GAME, EDITOR } = GAME_STATUS;
+  const [roomKey, setRoomKey] = useState(GAME);
+  const { status, roomId } = useSelector((state: RootState) => {
+    return { status: state.mode.status, roomId: state.editor.roomId };
+  });
+
+  useEffect(() => {
+    if (status === GAME) {
+      setRoomKey(GAME);
+    } else {
+      setRoomKey(roomId);
+    }
+  }, [status, roomId]);
 
   return (
     <>
