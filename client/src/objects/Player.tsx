@@ -49,7 +49,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         fontFamily: 'Firenze',
       })
       .setStyle({
-        backgroundColor: 'black',
+        backgroundColor: '#ff6600',
         color: 'white',
         fontSize: '18px',
       });
