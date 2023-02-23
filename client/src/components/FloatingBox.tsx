@@ -1,16 +1,13 @@
 import { ReactNode } from 'react';
 import styled from 'styled-components';
 
-const FloatingButton = (props) => {
-  return <FloatingBtn {...props}></FloatingBtn>;
+const FloatingBox = ({ children }: { children: ReactNode }) => {
+  return <FloatingDiv>{children}</FloatingDiv>;
 };
 
-export default FloatingButton;
+export default FloatingBox;
 
-const FloatingBtn = styled.button`
-  border: none;
-  font-family: ${({ theme }) => theme.mainFont};
-  color: white;
+const FloatingDiv = styled.div`
   float: left;
   transition-duration: 0.2s;
   box-shadow: 3px 3px 3px #696969;
@@ -21,10 +18,5 @@ const FloatingBtn = styled.button`
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  min-height: 3rem;
-  &:active {
-    margin-left: 5px;
-    margin-top: 5px;
-    box-shadow: none;
-  }
+  min-height: 2rem;
 `;
