@@ -9,6 +9,7 @@ import { Session, Publisher, Subscriber } from 'openvidu-browser';
 import { useSelector } from 'react-redux';
 import type { RootState } from 'stores';
 import { GameVoiceType } from 'types';
+import FloatingBox from 'components/FloatingBox';
 
 const VoiceBox = ({
   session,
@@ -47,13 +48,14 @@ const VoiceBox = ({
           )
         );
       })}
-      <SvgWrapper>
+      <FloatingBox>
         {volumeOn ? (
           <VolOn
             width="32px"
             height="32px"
             fill="white"
             onClick={handleVolume}
+            style={{ cursor: 'pointer' }}
           />
         ) : (
           <VolOff
@@ -61,6 +63,7 @@ const VoiceBox = ({
             height="32px"
             fill="white"
             onClick={handleVolume}
+            style={{ cursor: 'pointer' }}
           />
         )}
         {micOn ? (
@@ -69,7 +72,7 @@ const VoiceBox = ({
             height="30px"
             fill="white"
             onClick={handleMic}
-            style={{ transform: 'scaleX(-1)' }}
+            style={{ transform: 'scaleX(-1)', cursor: 'pointer' }}
           />
         ) : (
           <MicOff
@@ -77,31 +80,21 @@ const VoiceBox = ({
             height="30px"
             fill="white"
             onClick={handleMic}
-            style={{ transform: 'scaleX(-1)' }}
+            style={{ transform: 'scaleX(-1)', cursor: 'pointer' }}
           />
         )}
-        <div id="session-header">
+        {/* <div id="session-header">
           <input
-            className="btn btn-large btn-danger"
-            type="button"
-            id="buttonLeaveSession"
-            onClick={leaveSession}
-            value="Leave session"
+          className="btn btn-large btn-danger"
+          type="button"
+          id="buttonLeaveSession"
+          onClick={leaveSession}
+          value="Leave session"
           />
-        </div>
-      </SvgWrapper>
+        </div> */}
+      </FloatingBox>
     </>
   );
 };
 
 export default VoiceBox;
-
-const SvgWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  & {
-    cursor: pointer;
-  }
-`;

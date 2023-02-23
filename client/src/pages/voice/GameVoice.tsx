@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Session, Publisher, Subscriber } from 'openvidu-browser';
 import { LoadingOutlined } from '@ant-design/icons';
 import { GameVoiceType } from 'types';
-import FloatingButton from 'components/FloatingButton';
+import FloatingIcon from 'components/FloatingIcon';
 import Drawer from 'components/Drawer';
 import PeopleIcon from '@mui/icons-material/People';
 import CurrentPlayer from 'components/CurrentPlayer';
@@ -17,18 +17,15 @@ const GameVoice = (props: GameVoiceType) => {
   };
   return (
     <>
-      <FloatingButton
+      <FloatingIcon
         icon={PeopleIcon}
         handleClick={() => handleDrawer()}
         top="1%"
         right="1%"
       />
-      <Drawer
-        anchor="right"
-        isOpen={drawerOpen}
-        handleDrawer={handleDrawer}
-        content={CurrentPlayer}
-      />
+      <Drawer anchor="right" isOpen={drawerOpen} handleDrawer={handleDrawer}>
+        <CurrentPlayer handleDrawer={handleDrawer} />
+      </Drawer>
       <AudioBox>
         {!!session ? (
           <VoiceBox {...props} />
@@ -36,13 +33,13 @@ const GameVoice = (props: GameVoiceType) => {
           <ConnectingLine>
             <LoadingOutlined />
             오디오 연결 중...
-            <input
+            {/* <input
               className="btn btn-large btn-danger"
               type="button"
               id="buttonLeaveSession"
               onClick={joinSession}
               value="Join session"
-            />
+            /> */}
           </ConnectingLine>
         )}
       </AudioBox>

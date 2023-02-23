@@ -3,11 +3,10 @@ import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { openGame } from '../stores/modeSlice';
 import { resetRoomId } from 'stores/editorSlice';
-import YjsCodeMirror from './editor/YjsCodeMirror';
 import UserForm from './editor/UserForm';
 import { RootState } from '../stores';
-import Voice from 'pages/Voice';
 import { VoiceProp } from 'types';
+import EditorWrapper from 'pages/editor/EditorWrapper';
 
 const Editor = (props: VoiceProp) => {
   const { roomId } = useSelector((state: RootState) => {
@@ -21,19 +20,10 @@ const Editor = (props: VoiceProp) => {
     dispatch(resetRoomId());
   };
 
-  // useEffect(() => {
-  //   (async () => {
-  //     await handleDisconnect();
-  //   })();
-  // }, []);
-
   return (
     <EditorDiv>
       {roomId ? (
-        <div>
-          <Voice {...props} />
-          <YjsCodeMirror />
-        </div>
+        <EditorWrapper {...props} />
       ) : (
         <div>
           <UserForm />

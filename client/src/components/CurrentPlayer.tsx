@@ -16,13 +16,8 @@ import { RootState } from 'stores';
 import CharRoundLogo from 'components/CharRoundLogo';
 
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
-type DrawerProp = {
-  anchor: Anchor;
-  handleDrawer: () => void;
-  isOpen: boolean;
-};
 
-const CurrentPlayer = ({ anchor, handleDrawer, isOpen }: DrawerProp) => {
+const CurrentPlayer = ({ handleDrawer }: { handleDrawer: () => void }) => {
   const users = useSelector((state: RootState) => {
     return state.chat.users;
   });

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Audio from 'components/Audio';
 import styled from 'styled-components';
+import muiStyled from '@emotion/styled';
 import { ReactComponent as MicOff } from 'assets/icons/mic_off.svg';
 import { ReactComponent as MicOn } from 'assets/icons/mic_on.svg';
 import { ReactComponent as VolOff } from 'assets/icons/volume_off.svg';
@@ -14,10 +15,9 @@ import {
 import { LoadingOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import type { RootState } from 'stores';
-import FloatingButton from 'components/FloatingButton';
-import Drawer from 'components/Drawer';
-import PeopleIcon from '@mui/icons-material/People';
 import CurrentPlayer from 'components/CurrentPlayer';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import IconButton from '@mui/material/IconButton';
 
 type GameVoiceType = {
   session: Session | undefined;
@@ -39,7 +39,7 @@ const EditorVoice = ({
   const { playerId } = useSelector((state: RootState) => {
     return state.user;
   });
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(true);
 
   const handleVolume = () => {
     subscribers.map((sm) => {
@@ -54,21 +54,13 @@ const EditorVoice = ({
   const handleDrawer = () => {
     setDrawerOpen(!drawerOpen);
   };
+  const handleDrawerClose = () => {
+    setDrawerOpen(false);
+  };
 
   return (
     <>
-      <FloatingButton
-        icon={PeopleIcon}
-        handleClick={handleDrawer}
-        top="1%"
-        right="1%"
-      />
-      <Drawer
-        anchor="right"
-        isOpen={drawerOpen}
-        handleDrawer={handleDrawer}
-        content={CurrentPlayer}
-      />
+      <CurrentPlayer handleDrawer={handleDrawer} />
       <AudioBox>
         {!!session ? (
           <>
@@ -168,3 +160,9 @@ const SvgWrapper = styled.div`
     cursor: pointer;
   }
 `;
+
+const DrawerHeader = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'flex-end',
+}));
