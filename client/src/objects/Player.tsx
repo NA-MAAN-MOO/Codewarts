@@ -52,7 +52,8 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         backgroundColor: '#e06609',
         color: 'white',
         fontSize: '18px',
-      });
+      })
+      .setPadding(10, 3, 10, 1);
 
     this.playerNameObject = scene.matter.add.gameObject(this.playerNameBubble);
     this.playerNameObject.setSensor(true);
