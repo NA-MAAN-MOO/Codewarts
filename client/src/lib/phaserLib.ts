@@ -2,6 +2,7 @@ import phaserGame from 'codeuk';
 import store from 'stores';
 import { openGame, openEditor, openLobby, openStart } from 'stores/modeSlice';
 import { GAME_STATUS } from 'utils/Constants';
+import Background from 'scenes/Background';
 
 export const handleScene = (statusTo: string) => {
   switch (statusTo) {

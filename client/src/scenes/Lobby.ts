@@ -16,6 +16,7 @@ export default class Lobby extends Phaser.Scene {
   private portal!: Phaser.Physics.Matter.Sprite;
   private portalZone!: any;
   socketId: any;
+  network: boolean;
 
   socket: Socket | undefined;
   // const {nickName, characterModel} = useSelector((state:RootState)=> state.charactor);
@@ -23,9 +24,7 @@ export default class Lobby extends Phaser.Scene {
   constructor() {
     super('Lobby');
   }
-
-  init() {
-    /* Open socket */
+  async openSocket() {
     phaserGame.socket = io('http://localhost:8080');
     phaserGame.socket.on('start', (payLoad: { socketId: string }) => {
       // Server에서 보내주는 고유 값을 받는다.
@@ -36,26 +35,57 @@ export default class Lobby extends Phaser.Scene {
         charKey: phaserGame.charKey,
         userName: phaserGame.userName,
       });
+      this.network = true;
+      // await createPlayer();
+      return this.network;
     });
   }
 
-  // preload() {
-  //   // Player.preload(this);
-  //   /* Lobby Background image load */
-  //   this.load.image('lobby', 'assets/lobby/lobby_scene.png');
+  createPlayer() {
+    /* Add my player */
+    this.player = new Player({
+      scene: this,
+      x: 10,
+      y: this.scale.height * 0.7,
+      texture: phaserGame.charKey,
+      id: phaserGame.socketId,
+      name: phaserGame.userName,
+      frame: 'down-1',
+    });
 
-  //   this.load.atlas(
-  //     'green',
-  //     'assets/lobby/green.png',
-  //     'assets/lobby/green.json'
-  //   );
+    /* Add Keyboard keys to enable character animation */
+    this.player.inputKeys = this.input.keyboard.addKeys({
+      up: Phaser.Input.Keyboard.KeyCodes.UP,
+      down: Phaser.Input.Keyboard.KeyCodes.DOWN,
+      left: Phaser.Input.Keyboard.KeyCodes.LEFT,
+      right: Phaser.Input.Keyboard.KeyCodes.RIGHT,
+      open: Phaser.Input.Keyboard.KeyCodes.E,
+    });
 
-  //   this.load.atlas(
-  //     'plasma',
-  //     'assets/lobby/plasma.png',
-  //     'assets/lobby/plasma.json'
-  //   );
-  // }
+    /* Lock specific key (up, down) */
+    this.player.inputKeys['up'].enabled = false;
+    this.player.inputKeys['down'].enabled = false;
+
+    if (phaserGame.charKey) {
+      createCharacterAnims(phaserGame.charKey, phaserGame.anims);
+    }
+  }
+  init() {
+    /* Open socket */
+    this.openSocket().then((res) => console.log(res));
+    // phaserGame.socket = io('http://localhost:8080');
+    // phaserGame.socket.on('start', (payLoad: { socketId: string }) => {
+    //   // Server에서 보내주는 고유 값을 받는다.
+    //   phaserGame.socketId = payLoad.socketId;
+    //   phaserGame.charKey = store.getState().user.playerTexture;
+    //   phaserGame.userName = store.getState().user.playerId;
+    //   phaserGame.socket?.emit('savePlayer', {
+    //     charKey: phaserGame.charKey,
+    //     userName: phaserGame.userName,
+    //   });
+    //   this.network = true;
+    // });
+  }
 
   create() {
     /* Add Lobby background */
@@ -97,40 +127,14 @@ export default class Lobby extends Phaser.Scene {
       .sprite(this.scale.width / 4.5, this.scale.height * 0.5, 'plasma', 0)
       .play('plasma');
 
-    if (
-      phaserGame.charKey === undefined ||
-      phaserGame.socketId === undefined ||
-      phaserGame.userName === undefined
-    )
-      return;
+    console.log(phaserGame.charKey);
 
-    /* Add my player */
-    this.player = new Player({
-      scene: this,
-      x: 10,
-      y: this.scale.height * 0.7,
-      texture: phaserGame.charKey,
-      id: phaserGame.socketId,
-      name: phaserGame.userName,
-      frame: 'down-1',
-    });
-
-    /* Add Keyboard keys to enable character animation */
-    this.player.inputKeys = this.input.keyboard.addKeys({
-      up: Phaser.Input.Keyboard.KeyCodes.UP,
-      down: Phaser.Input.Keyboard.KeyCodes.DOWN,
-      left: Phaser.Input.Keyboard.KeyCodes.LEFT,
-      right: Phaser.Input.Keyboard.KeyCodes.RIGHT,
-      open: Phaser.Input.Keyboard.KeyCodes.E,
-    });
-
-    /* Lock specific key (up, down) */
-    this.player.inputKeys['up'].enabled = false;
-    this.player.inputKeys['down'].enabled = false;
-
-    if (!!phaserGame.charKey) {
-      createCharacterAnims(phaserGame.charKey, phaserGame.anims);
-    }
+    // if (
+    //   phaserGame.charKey === undefined ||
+    //   phaserGame.socketId === undefined ||
+    //   phaserGame.userName === undefined
+    // )
+    //   return;
 
     /* Guide to enter classroom */
     this.buttonForList = new Button({
@@ -165,30 +169,61 @@ export default class Lobby extends Phaser.Scene {
 
     this.portal.setExistingBody(this.portalZone);
     // this.createCollisions(this.portalZone);
+    /* Add my player */
+    this.player = new Player({
+      scene: this,
+      x: 10,
+      y: this.scale.height * 0.7,
+      texture: phaserGame.charKey,
+      id: phaserGame.socketId,
+      name: phaserGame.userName,
+      frame: 'down-1',
+    });
+
+    /* Add Keyboard keys to enable character animation */
+    this.player.inputKeys = this.input.keyboard.addKeys({
+      up: Phaser.Input.Keyboard.KeyCodes.UP,
+      down: Phaser.Input.Keyboard.KeyCodes.DOWN,
+      left: Phaser.Input.Keyboard.KeyCodes.LEFT,
+      right: Phaser.Input.Keyboard.KeyCodes.RIGHT,
+      open: Phaser.Input.Keyboard.KeyCodes.E,
+    });
+
+    /* Lock specific key (up, down) */
+    this.player.inputKeys['up'].enabled = false;
+    this.player.inputKeys['down'].enabled = false;
+
+    if (phaserGame.charKey) {
+      createCharacterAnims(phaserGame.charKey, phaserGame.anims);
+    }
   }
 
   update() {
-    /* Control Player Movement */
-    const playerId = store.getState().user.playerId;
-    if (playerId === '') {
-      this.input.keyboard.disableGlobalCapture();
-    }
-
-    this.player.update();
-
-    /* Add overlap between portal and player */
-    let boundPortal = this.portal.getBounds();
-    let boundPlayer = this.player.getBounds();
-
-    if (Phaser.Geom.Intersects.RectangleToRectangle(boundPortal, boundPlayer)) {
-      this.buttonForList.setVisible(true);
-
-      /* If player press key E when overlapping, scene changes */
-      if (this.player.inputKeys.open.isDown) {
-        handleScene(GAME_STATUS.GAME);
+    if (this.player && this.network) {
+      /* Control Player Movement */
+      const playerId = store.getState().user.playerId;
+      if (playerId === '') {
+        this.input.keyboard.disableGlobalCapture();
       }
-    } else {
-      this.buttonForList.setVisible(false);
+
+      this.player.update();
+
+      /* Add overlap between portal and player */
+      let boundPortal = this.portal.getBounds();
+      let boundPlayer = this.player.getBounds();
+
+      if (
+        Phaser.Geom.Intersects.RectangleToRectangle(boundPortal, boundPlayer)
+      ) {
+        this.buttonForList.setVisible(true);
+
+        /* If player press key E when overlapping, scene changes */
+        if (this.player.inputKeys.open.isDown) {
+          handleScene(GAME_STATUS.GAME);
+        }
+      } else {
+        this.buttonForList.setVisible(false);
+      }
     }
   }
 
