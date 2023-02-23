@@ -33,9 +33,10 @@ function App() {
       <HoverDiv id="codeuk">
         {status === START ? (
           <Start></Start>
-        ) : status === LOBBY ? (
-          <Lobby></Lobby>
-        ) : status === GAME ? (
+        ) : // ) : status === LOBBY ? (
+        //   <Lobby></Lobby>
+        //불필요한 로비 삭제
+        status === GAME ? (
           <Game></Game>
         ) : (
           <Editor></Editor>
