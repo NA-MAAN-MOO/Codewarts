@@ -1,4 +1,4 @@
-import { toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const notifyOne = () => {
@@ -40,4 +40,17 @@ const notifyThree = () => {
   });
 };
 
-export { notifyOne, notifyTwo, notifyThree };
+<ToastContainer
+  position="top-center"
+  autoClose={9000}
+  hideProgressBar={false}
+  newestOnTop={false}
+  closeOnClick
+  rtl={false}
+  pauseOnFocusLoss
+  draggable
+  pauseOnHover
+  theme="colored"
+/>;
+
+export { notifyOne, notifyTwo, notifyThree, ToastContainer };

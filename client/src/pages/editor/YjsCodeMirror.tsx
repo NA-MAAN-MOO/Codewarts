@@ -72,8 +72,7 @@ import Chip from '@mui/material/Chip';
 import RenderSvg from 'components/Svg';
 
 /* toast */
-import { notifyOne, notifyTwo, notifyThree } from './toast';
-import { ToastContainer } from 'react-toastify';
+import { notifyOne, notifyTwo, notifyThree, ToastContainer } from './toast';
 
 function YjsCodeMirror() {
   /* ref */
@@ -666,19 +665,7 @@ function YjsCodeMirror() {
         />
         {/* </FormGroup> */}
       </MiddleWrapper>
-      <ToastContainer
-        // containerId="준철실패"
-        position="top-center"
-        autoClose={9000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
+      <ToastContainer />
 
       <div
         className="codemirror-editor"
