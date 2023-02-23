@@ -337,15 +337,15 @@ export default class MainScene extends Phaser.Scene {
           this.tableMap
             .get(this.player.touching[0].body.id)
             ?.editorBtnList[i].setStyle({
-              backgroundColor: '#ff6f00',
-              color: 'white',
+              backgroundColor: 'white',
+              // color: 'white',
             });
         } else {
           this.tableMap
             .get(this.player.touching[0].body.id)
             ?.editorBtnList[i].setStyle({
               backgroundColor: 'transparent',
-              color: '#ff6f00',
+              // color: '#ff6f00',
             });
         }
       }
