@@ -45,8 +45,14 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     this.setFixedRotation();
 
     this.playerNameBubble = this.scene.add
-      .text(this.x, this.y - this.height - 10, this.playerName)
-      .setStyle({ backgroundColor: 'black', color: 'white', fontSize: '18px' });
+      .text(this.x, this.y - this.height - 10, this.playerName, {
+        fontFamily: 'Firenze',
+      })
+      .setStyle({
+        backgroundColor: 'black',
+        color: 'white',
+        fontSize: '18px',
+      });
 
     this.playerNameObject = scene.matter.add.gameObject(this.playerNameBubble);
     this.playerNameObject.setSensor(true);
