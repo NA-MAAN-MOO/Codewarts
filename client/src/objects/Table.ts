@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import Resource from './Resources';
 import Player from './Player';
+import { fontStyle } from '@mui/system';
 
 // type tableStateType = { [index: number]: object };
 const tableInfoModel = {
@@ -38,7 +39,7 @@ export default class Table {
     this.editorListDialog.add(
       this.scene.add
         .graphics()
-        .fillStyle(0xeeeeee, 1)
+        .fillStyle(0xeeeeee, 0.9)
         .fillRoundedRect(
           this.tableObject.x - 135,
           this.tableObject.y - 150,
@@ -49,15 +50,20 @@ export default class Table {
 
     for (let i = 0; i < 4; i++) {
       let str: string = ``;
-      if (this.tableInfo.get(i).username) {
+      let fontStyle: any;
+      let username = this.tableInfo.get(i).username;
+      if (username) {
         // console.log(this.tableInfo.get(i));
-        str = `${this.tableInfo.get(i).username} IDE 열기`;
+        str = `🧙🏻‍♂️${this.tableInfo.get(i).username}의 에디터 열기`;
+        fontStyle = { fontSize: '20px', color: '#e06609' };
       } else {
-        str = `${i + 1}번 방 들어가기`;
+        str = `🔥${i + 1}번 에디터 들어가기`;
+        fontStyle = { fontSize: '20px', color: '#c21723' };
       }
+
       let editorButton = this.scene.add
         .text(0, 0, str)
-        .setStyle({ fontSize: '20px', color: '#ff6f00' })
+        .setStyle(fontStyle)
         .setOrigin(0.5, 0.5);
       this.editorBtnList.push(editorButton);
       this.editorListDialog.add(
@@ -69,7 +75,7 @@ export default class Table {
     }
     let backButton = this.scene.add
       .text(0, 0, '돌아가기')
-      .setStyle({ fontSize: '20px', color: 'black', align: 'center' })
+      .setStyle({ fontSize: '20px', color: '#333333', align: 'center' })
       .setPosition(this.tableObject.x, this.tableObject.y + 30)
       .setOrigin(0.5, 0.5);
     this.editorBtnList.push(backButton);
