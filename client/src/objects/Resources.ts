@@ -109,62 +109,62 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
     this.setOrigin(0.5, 0.5);
   }
 
-  static preload(scene: any) {
-    /* Props */
-    scene.load.image('book', 'assets/room/book.png');
-    scene.load.image('bookshelf_corner', 'assets/room/bookshelf_corner.png');
-    scene.load.image('bookshelf_left', 'assets/room/bookshelf_left.png');
-    scene.load.image('bookshelf_right', 'assets/room/bookshelf_right.png');
-    scene.load.image('chair_back', 'assets/room/chair_back.png');
-    scene.load.image('chair_front', 'assets/room/chair_front.png');
-    scene.load.image('whiteboard', 'assets/room/whiteboard.png');
-    scene.load.image('chalkboard', 'assets/room/chalkboard.png');
-    scene.load.image('cupboard', 'assets/room/cupboard.png');
-    scene.load.image('flower', 'assets/room/flower.png');
-    scene.load.image(
-      'macbook_back_closed',
-      'assets/room/macbook_back_closed.png'
-    );
-    scene.load.image('macbook_back_open', 'assets/room/macbook_back_open.png');
-    scene.load.image(
-      'macbook_front_closed',
-      'assets/room/macbook_front_closed.png'
-    );
-    scene.load.image(
-      'macbook_front_open',
-      'assets/room/macbook_front_open.png'
-    );
-    scene.load.image('mug', 'assets/room/mug.png');
-    scene.load.image('plant_short', 'assets/room/plant_short.png');
-    scene.load.image('teapot', 'assets/room/teapot.png');
-    scene.load.image('wall_candle', 'assets/room/wall_candle.png');
-    scene.load.image('table', 'assets/room/table.png');
-    scene.load.image(
-      'crate_table_flower',
-      'assets/room/crate_table_flower.png'
-    );
-    scene.load.image('crate_table', 'assets/room/crate_table.png');
-    scene.load.image('floor_candle', 'assets/room/floor_candle.png');
-    scene.load.image('painting1', 'assets/room/painting1.png');
-    scene.load.image('painting2', 'assets/room/painting2.png');
-    scene.load.image('painting3', 'assets/room/painting3.png');
-    scene.load.image('plant_long', 'assets/room/plant_long.png');
-    scene.load.image('statue', 'assets/room/statue.png');
-    scene.load.image('table_candle', 'assets/room/table_candle.png');
-    scene.load.image('bench', 'assets/room/bench.png');
+  // static preload(scene: any) {
+  //   /* Props */
+  //   scene.load.image('book', 'assets/room/book.png');
+  //   scene.load.image('bookshelf_corner', 'assets/room/bookshelf_corner.png');
+  //   scene.load.image('bookshelf_left', 'assets/room/bookshelf_left.png');
+  //   scene.load.image('bookshelf_right', 'assets/room/bookshelf_right.png');
+  //   scene.load.image('chair_back', 'assets/room/chair_back.png');
+  //   scene.load.image('chair_front', 'assets/room/chair_front.png');
+  //   scene.load.image('whiteboard', 'assets/room/whiteboard.png');
+  //   scene.load.image('chalkboard', 'assets/room/chalkboard.png');
+  //   scene.load.image('cupboard', 'assets/room/cupboard.png');
+  //   scene.load.image('flower', 'assets/room/flower.png');
+  //   scene.load.image(
+  //     'macbook_back_closed',
+  //     'assets/room/macbook_back_closed.png'
+  //   );
+  //   scene.load.image('macbook_back_open', 'assets/room/macbook_back_open.png');
+  //   scene.load.image(
+  //     'macbook_front_closed',
+  //     'assets/room/macbook_front_closed.png'
+  //   );
+  //   scene.load.image(
+  //     'macbook_front_open',
+  //     'assets/room/macbook_front_open.png'
+  //   );
+  //   scene.load.image('mug', 'assets/room/mug.png');
+  //   scene.load.image('plant_short', 'assets/room/plant_short.png');
+  //   scene.load.image('teapot', 'assets/room/teapot.png');
+  //   scene.load.image('wall_candle', 'assets/room/wall_candle.png');
+  //   scene.load.image('table', 'assets/room/table.png');
+  //   scene.load.image(
+  //     'crate_table_flower',
+  //     'assets/room/crate_table_flower.png'
+  //   );
+  //   scene.load.image('crate_table', 'assets/room/crate_table.png');
+  //   scene.load.image('floor_candle', 'assets/room/floor_candle.png');
+  //   scene.load.image('painting1', 'assets/room/painting1.png');
+  //   scene.load.image('painting2', 'assets/room/painting2.png');
+  //   scene.load.image('painting3', 'assets/room/painting3.png');
+  //   scene.load.image('plant_long', 'assets/room/plant_long.png');
+  //   scene.load.image('statue', 'assets/room/statue.png');
+  //   scene.load.image('table_candle', 'assets/room/table_candle.png');
+  //   scene.load.image('bench', 'assets/room/bench.png');
 
-    /* Chairs where characters sit */
-    for (let i = 0; i < 28; i++) {
-      scene.load.image(
-        `char${i}_chair_back`,
-        `assets/room/sitting/char${i}_chair_back.png`
-      );
-      scene.load.image(
-        `char${i}_chair_front`,
-        `assets/room/sitting/char${i}_chair_front.png`
-      );
-    }
-  }
+  //   /* Chairs where characters sit */
+  //   for (let i = 0; i < 28; i++) {
+  //     scene.load.image(
+  //       `char${i}_chair_back`,
+  //       `assets/room/sitting/char${i}_chair_back.png`
+  //     );
+  //     scene.load.image(
+  //       `char${i}_chair_front`,
+  //       `assets/room/sitting/char${i}_chair_front.png`
+  //     );
+  //   }
+  // }
 
   CreateCollisions(tableSensor: any) {
     this.scene.matterCollision.addOnCollideStart({
