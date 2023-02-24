@@ -57,10 +57,11 @@ export default class Background extends Phaser.Scene {
     );
 
     this.load.atlas(
-      'plasma',
-      'assets/lobby/plasma.png',
-      'assets/lobby/plasma.json'
+      'yellow',
+      'assets/lobby/yellow.png',
+      'assets/lobby/green.json'
     );
+
     /*** Main Scene(classroom) ***/
     /* Map */
     this.load.image('room_map', 'assets/room/room_map.png');
@@ -101,6 +102,18 @@ export default class Background extends Phaser.Scene {
     this.load.image('statue', 'assets/room/statue.png');
     this.load.image('table_candle', 'assets/room/table_candle.png');
     this.load.image('bench', 'assets/room/bench.png');
+    /* Effects */
+    this.load.atlas(
+      'fire',
+      'assets/room/sitting/red_fire.png',
+      'assets/room/sitting/fire.json'
+    );
+
+    this.load.atlas(
+      'gold',
+      'assets/effect/gold.png',
+      'assets/effect/gold.json'
+    );
   }
 
   create(data: { backgroundMode: BackgroundMode }) {
