@@ -43,7 +43,7 @@ const EditorInfo = styledc.div`
   // color: rgba(255, 255, 255, 0.7);
 font-size: 35px; 
 font-weight: 600; 
-margin-top: 3%;
+// margin-top: 3%;
 text-align: center;
 filter: drop-shadow(0px 4px 4px rgba(255, 255, 255, 0.5));
 `;

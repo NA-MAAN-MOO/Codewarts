@@ -16,6 +16,18 @@ const muiTheme = createTheme({
   },
 });
 
+export const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#272822',
+    },
+    secondary: {
+      main: '#FFFFFF',
+    },
+  },
+});
+
 export const styledTheme = {
   logoWidth: '100px',
   logoHeight: '130px',
@@ -24,6 +36,7 @@ export const styledTheme = {
   darkBlue: '#4682B4',
   mainRed: '#A52A2A',
   darkRed: '#800000',
+  lightRed: '#DC143C',
   lightYellow: '#F5DEB3',
   lighterBlue: '#F0F8FF',
   mainFont: 'Firenze',

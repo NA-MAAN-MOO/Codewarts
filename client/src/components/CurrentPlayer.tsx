@@ -3,30 +3,20 @@ import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
 import List from '@mui/material/List';
+import { GAME_STATUS } from 'utils/Constants';
 import Divider from '@mui/material/Divider';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { RootState } from 'stores';
 import CharRoundLogo from 'components/CharRoundLogo';
+import GamePlayerItem from './GamePlayerItem';
 
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
-type DrawerProp = {
-  anchor: Anchor;
-  handleDrawer: () => void;
-  isOpen: boolean;
-};
 
-const CurrentPlayer = ({ anchor, handleDrawer, isOpen }: DrawerProp) => {
-  const users = useSelector((state: RootState) => {
-    return state.chat.users;
+const CurrentPlayer = ({ handleDrawer }: { handleDrawer?: () => void }) => {
+  const { users, status } = useSelector((state: RootState) => {
+    return { ...state.chat, ...state.mode };
   });
-  console.log(users);
 
   return (
     <Box
@@ -38,27 +28,9 @@ const CurrentPlayer = ({ anchor, handleDrawer, isOpen }: DrawerProp) => {
       <Title>현재 접속중인 사람</Title>
       <Divider />
       <List>
-        {users.map(({ name, char }, index) => {
-          return (
-            <ListItem
-              key={name}
-              disablePadding
-              sx={{ display: 'flex', gap: '10px' }}
-            >
-              <ListItemButton onClick={(e) => e.preventDefault()}>
-                <ListItemIcon>
-                  <CharRoundLogo charName={char} />
-                </ListItemIcon>
-                <ListItemText
-                  primary={name}
-                  primaryTypographyProps={{
-                    fontFamily: 'Firenze',
-                  }}
-                />
-              </ListItemButton>
-            </ListItem>
-          );
-        })}
+        {users.map(({ name, char }, index) => (
+          <GamePlayerItem name={name} char={char} />
+        ))}
       </List>
     </Box>
   );

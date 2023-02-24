@@ -1,25 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { openStart, openEditor, openGame, openLobby } from 'stores/modeSlice';
 import Voice from 'pages/Voice';
 import { handleScene } from 'lib/phaserLib';
 import { GAME_STATUS } from 'utils/Constants';
 import Button from '@mui/material/Button';
 import { styledTheme } from 'styles/theme';
+import useVoice from 'hooks/useVoice';
+import { VoiceProp } from 'types';
+import FloatingButton from 'components/FloatingButton';
 
-const Game = () => {
+const Game = (props: VoiceProp) => {
   const dispatch = useDispatch();
-  const handleEditorClick = () => {
-    dispatch(openEditor());
-  };
 
   const handleMainClick = () => {
     handleScene(GAME_STATUS.START);
   };
+
   return (
     <BackgroundDiv>
-      <Voice roomKey={GAME_STATUS.GAME} />
+      <Voice {...props} />
       <BtnDiv>
         {/* <Button
           type="button"
@@ -30,15 +30,9 @@ const Game = () => {
         >
           에디터 키기
         </Button> */}
-        <Button
-          variant="contained"
-          color="secondary"
-          type="button"
-          sx={{ fontFamily: styledTheme.mainFont }}
-          onClick={handleMainClick}
-        >
+        <FloatingButton onClick={handleMainClick}>
           첫 화면으로 가기
-        </Button>
+        </FloatingButton>
       </BtnDiv>
     </BackgroundDiv>
   );
@@ -57,6 +51,6 @@ const BtnDiv = styled.div`
   justify-content: center;
   gap: 10px;
   position: absolute;
-  right: 20px;
-  bottom: 20px;
+  bottom: 30px;
+  right: 25px;
 `;

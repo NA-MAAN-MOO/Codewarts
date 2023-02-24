@@ -1,47 +1,43 @@
 import React, { useEffect } from 'react';
+import VoiceRoom from 'pages/VoiceRoom';
 import { GAME_STATUS } from 'utils/Constants';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from 'stores';
-import Game from 'pages/Game';
 import Start from 'pages/Start';
-import Editor from 'pages/Editor';
-import Lobby from 'pages/Lobby';
-import { openEditor, openGame } from 'stores/modeSlice';
+// import './codeuk';
+import TestVoiceButtons from 'components/TestVoiceButtons';
 
 function App() {
   const mode = process.env.REACT_APP_MODE;
   const { START, LOBBY, GAME, EDITOR } = GAME_STATUS;
-  const { status } = useSelector((state: RootState) => {
-    return state.mode;
+  const { playerId, status } = useSelector((state: RootState) => {
+    return { ...state.user, ...state.mode };
   });
   const dispatch = useDispatch();
-  let loadFlag = false;
+  // let loadFlag = false;
 
-  useEffect(() => {
-    if (mode === EDITOR) {
-      dispatch(openEditor());
-    } else if (mode === GAME) {
-      dispatch(openGame());
-    }
-    loadFlag = true;
-  }, []);
+  // useEffect(() => {
+  //   if (mode === EDITOR) {
+  //     dispatch(openEditor());
+  //   } else if (mode === GAME) {
+  //     dispatch(openGame());
+  //   }
+  //   loadFlag = true;
+  // }, []);
 
   return (
-    loadFlag || (
-      <HoverDiv>
-        {status === START ? (
-          <Start></Start>
-        ) : // ) : status === LOBBY ? (
-        //   <Lobby></Lobby>
-        //불필요한 로비 삭제
-        status === GAME ? (
-          <Game></Game>
-        ) : (
-          <Editor></Editor>
-        )}
-      </HoverDiv>
-    )
+    <HoverDiv>
+      {/* <TestVoiceButtons /> */}
+      {status === START ? (
+        <Start></Start>
+      ) : //불필요한 로비 삭제
+      status === GAME || status === EDITOR ? (
+        <VoiceRoom />
+      ) : (
+        <></>
+      )}
+    </HoverDiv>
   );
 }
 

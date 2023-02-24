@@ -1,19 +1,27 @@
 import { useState, useEffect } from 'react';
-import { OpenVidu, Session } from 'openvidu-browser';
+import {
+  ConnectionEvent,
+  OpenVidu,
+  Session,
+  SessionDisconnectedEvent,
+} from 'openvidu-browser';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'stores';
 import axios from 'axios';
-import { setSession, setUsers, removeSession } from 'stores/chatSlice';
+import { setUsers } from 'stores/chatSlice';
 import { Connection } from 'types';
 
 const APPLICATION_SERVER_URL = 'http://localhost:3002';
 
 export default () => {
   const dispatch = useDispatch();
+  const { playerId: userName } = useSelector((state: RootState) => {
+    return state.user;
+  });
 
   const getConnections = async (sessionId: string) => {
     try {
-      const { data }: { data: Connection[] } = await axios.get(
+      const { data }: { data: Connection[] | false } = await axios.get(
         'http://localhost:3002/get-connections',
         {
           params: { sessionId: sessionId },
@@ -22,7 +30,7 @@ export default () => {
       return data;
     } catch (err) {
       console.log(err);
-      return [];
+      return false;
     }
   };
   const getSessions = async () => {
@@ -31,9 +39,14 @@ export default () => {
   };
 
   const getUsers = async (sessionId: string) => {
+    if (!sessionId) return;
     const users = (await getConnections(sessionId)) || [];
+    if (users.length === 0) {
+      return dispatch(setUsers([]));
+    }
+    const filteredUser = users.filter((user) => !!user.clientData);
     const userInfos = await Promise.all(
-      users.map(async (user, index) => {
+      filteredUser.map(async (user, index) => {
         const name = JSON.parse(user.clientData).user;
         const { data: char } = await axios.get(
           `http://localhost:3003/user/get-char/${name}`
@@ -80,23 +93,46 @@ export default () => {
     }
   };
 
-  const disconnectSession = (session: Session | undefined) => {
-    if (!session) return;
-    session.disconnect();
-    dispatch(removeSession());
+  const disconnectSession = async (session: Session | undefined) => {
+    if (!session) {
+      return;
+    }
+    try {
+      console.log('세션 disconnect');
+      session.disconnect();
+
+      await axios.delete(
+        `${APPLICATION_SERVER_URL}/delete-connection/${session.sessionId}`,
+        {
+          data: {
+            userName: userName,
+          },
+        }
+      );
+      console.log('커넥션 제거 완료');
+      // dispatch(removeSession());
+    } catch (e) {
+      console.log(e);
+    }
   };
 
-  const getToken = async (sessionId: string) => {
-    return await createToken(sessionId);
-  };
+  // const getToken = async (sessionId: string) => {
+  //   return await createToken(sessionId);
+  // };
 
-  const createToken = async (sessionId: string) => {
+  const createToken = async ({
+    sessionId,
+    userName,
+  }: {
+    sessionId: string;
+    userName: string;
+  }) => {
     const response = await axios.post(
       APPLICATION_SERVER_URL +
         '/create-connection/' +
         sessionId +
         '/connections',
-      {},
+      { userName: userName },
       {
         headers: { 'Content-Type': 'application/json' },
       }
@@ -111,7 +147,7 @@ export default () => {
     deleteSubscriber: Function;
     handlePublisher: Function;
     OV: OpenVidu | undefined;
-    userName: String;
+    userName: string;
   }) => {
     const {
       session,
@@ -123,13 +159,26 @@ export default () => {
       handlePublisher,
     } = props;
     try {
-      if (!session) return;
-      const content: Connection[] = (await getConnections(sessionId)) || [];
+      if (!session || !sessionId) return;
+
+      const content: Connection[] | false = await getConnections(sessionId);
+      if (content === false) {
+        // 세션 아직 존재하지 않음
+        return;
+      }
       const isConnectExist = content.some((con: Connection) => {
+        if (!con.clientData) return false;
         const { user } = JSON.parse(con.clientData);
         return user === userName;
       });
       if (isConnectExist) return;
+
+      // Get a token from the OpenVidu deployment
+      const token = await createToken({ sessionId, userName });
+      if (!token) {
+        //이미 커넥션 생성됨
+        return;
+      }
 
       const mySession = session;
 
@@ -157,14 +206,34 @@ export default () => {
         console.warn(exception);
       });
 
-      mySession.on('sessionDisconnected', (event) => {
+      mySession.on('connectionCreated', async (event: ConnectionEvent) => {
+        //세션에 누군가 왔을 때 호출
+        const session = event.target as Session;
+        const sessionId = session.sessionId;
+        await getUsers(sessionId);
+      });
+
+      mySession.on(
+        'sessionDisconnected',
+        async (event: SessionDisconnectedEvent) => {
+          //내가 세션을 나갔을 때 호출
+          // const session = event.target as Session;
+          // const sessionId = session.sessionId;
+          // await getUsers(sessionId);
+        }
+      );
+
+      mySession.on('connectionDestroyed', async (event: ConnectionEvent) => {
         //다른 유저가 세션을 나갔을 때 호출
+        console.log('세션나감');
+        const session = event.target as Session;
+        const sessionId = session.sessionId;
+        deleteSubscriber(event.target);
+        await getUsers(sessionId);
       });
 
       // --- 4) Connect to the session with a valid user token ---
 
-      // Get a token from the OpenVidu deployment
-      const token = await getToken(sessionId);
       // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
       // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
       await mySession.connect(token, { user: userName });
@@ -186,21 +255,57 @@ export default () => {
 
       await mySession.publish(pubNow);
       handlePublisher(pubNow);
-      dispatch(setSession(mySession));
     } catch (error) {
       console.log(error);
     }
   };
 
+  //서버의 ConnectionList를 리셋
+  const resetServerConnList = async () => {
+    try {
+      await axios.delete(`${APPLICATION_SERVER_URL}/reset-connection`);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // const sessionNow = useSelector((state: RootState) => {
+  //   if (!state.chat.sessionNow) return undefined;
+  //   return JSON.parse(state.chat.sessionNow);
+  // });
+
+  // const handleDisconnect = async () => {
+  //   //현재 연결된 세션 있으면, 끊기
+  //   try {
+  //     // if (!sessionIdNow) return;
+
+  //     // const { data: session } = await axios.get(
+  //     //   'http://localhost:3002/get-session-from-id',
+  //     //   {
+  //     //     params: {
+  //     //       sessionId: sessionIdNow,
+  //     //     },
+  //     //   }
+  //     // );
+  //     if (!sessionNow) return;
+
+  //     disconnectSession(sessionNow);
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
+
   return {
     initSession,
     createSession,
     disconnectSession,
-    getToken,
+    // getToken,
     createToken,
     registerSession,
     getConnections,
     getSessions,
     getUsers,
+    resetServerConnList,
+    // handleDisconnect,
   };
 };
