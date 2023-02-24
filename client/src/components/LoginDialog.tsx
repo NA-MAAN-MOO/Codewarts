@@ -98,7 +98,7 @@ const LoginDialog = () => {
           body
         );
         if (response.data.status === 200) {
-          handleScene(GAME_STATUS.LOBBY);
+          // handleScene(GAME_STATUS.LOBBY);
           const { payload } = response.data; //userId, userNickname, userBojId, userLeetId
           //todo payload 값 리덕스에 저장하기
           console.log(

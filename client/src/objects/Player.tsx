@@ -13,7 +13,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
   playerTexture!: string;
   playerNameBubble!: Phaser.GameObjects.Text;
   playerName!: string;
-  // playerNameObject!: any;
+  successEffect!: Phaser.GameObjects.Sprite;
 
   constructor(data: PlayerType) {
     let { scene, x, y, texture, id, name, frame } = data;
@@ -102,6 +102,9 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     playerVelocity.scale(speed);
     this.setVelocity(playerVelocity.x, playerVelocity.y); // 실제로 player오브젝트를 움직인다.
     this.playerNameBubble.setPosition(this.x, this.y - this.height / 2 - 10);
+    if (this.successEffect) {
+      this.successEffect.setPosition(this.x, this.y - 10);
+    }
 
     if (!phaserGame.socket) return;
     phaserGame.socket.emit('movement', {
@@ -111,5 +114,27 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     });
   }
 
-  problemSovedEffect() {}
+  /* Called whenever player solve a problem  */
+  problemSovedEffect() {
+    /* TODO: Add solved state */
+    // if (solved)
+    this.scene.anims.create({
+      key: 'gold',
+      frames: this.scene.anims.generateFrameNames('gold', {
+        start: 0,
+        end: 59,
+        prefix: 'gold-',
+      }),
+      frameRate: 30,
+      repeat: -1,
+    });
+
+    this.successEffect = this.scene.add
+      .sprite(this.x, this.y - 10, 'gold', 0)
+      .play('gold');
+
+    setTimeout(() => {
+      this.successEffect.destroy();
+    }, 10000);
+  }
 }
