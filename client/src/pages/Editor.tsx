@@ -7,6 +7,7 @@ import UserForm from './editor/UserForm';
 import { RootState } from '../stores';
 import { VoiceProp } from 'types';
 import EditorWrapper from 'pages/editor/EditorWrapper';
+import Button from '@mui/material/Button';
 
 const Editor = (props: VoiceProp) => {
   const { roomId } = useSelector((state: RootState) => {
@@ -23,17 +24,17 @@ const Editor = (props: VoiceProp) => {
   return (
     <EditorDiv>
       {roomId ? (
-        <EditorWrapper {...props} />
+        <>
+          <EditorWrapper {...props} />
+          <BtnDiv>
+            <button type="button" onClick={handleExit}>
+              돌아가기
+            </button>
+          </BtnDiv>
+        </>
       ) : (
-        <div>
-          <UserForm />
-        </div>
+        <div>{/* <UserForm /> */}</div>
       )}
-      <BtnDiv>
-        <button type="button" onClick={handleExit}>
-          돌아가기
-        </button>
-      </BtnDiv>
     </EditorDiv>
   );
 };
@@ -45,8 +46,8 @@ const EditorDiv = styled.div`
   height: 100%;
   background-color: white;
   // background-color: #272822; // 에디터 검정
-  // background-color: rgba(0, 0, 0, 0.5); // 검정 투명
-  background-color: rgba(256, 256, 256, 0.7); // 흰색 투명
+  background-color: rgba(0, 0, 0, 0.8); // 검정 투명
+  // background-color: rgba(256, 256, 256, 0.7); // 흰색 투명
   // background-size: cover;
   // background-attachment: fixed;
   position: absolute;
@@ -59,6 +60,6 @@ const BtnDiv = styled.div`
   justify-content: center;
   gap: 10px;
   position: absolute;
-  right: 10px;
-  bottom: 10px;
+  right: 40px;
+  bottom: 20px;
 `;

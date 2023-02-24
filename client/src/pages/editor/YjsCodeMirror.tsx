@@ -62,7 +62,6 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
 import Tooltip from '@mui/material/Tooltip';
 import Divider from '@mui/material/Divider';
-import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import InputIcon from '@mui/icons-material/Input';
@@ -72,8 +71,9 @@ import Chip from '@mui/material/Chip';
 import RenderSvg from 'components/Svg';
 
 /* toast */
-import notify from './toast';
-import { ToastContainer } from 'react-toastify';
+import { notifyOne, notifyTwo, notifyThree, ToastContainer } from './toast';
+
+import { saveAs } from 'file-saver';
 
 function YjsCodeMirror() {
   /* ref */
@@ -158,7 +158,7 @@ function YjsCodeMirror() {
       '.cm-editor': {},
       '.cm-content, .cm-gutter': { minHeight: '30%' },
       '.cm-content': {
-        fontFamily: 'Cascadia Code, EliceDigitalBaeum_Bold',
+        fontFamily: 'Cascadia Code, Pretendard-Regular',
         fontSize: 'large',
       },
       '.cm-gutter': {
@@ -356,15 +356,59 @@ function YjsCodeMirror() {
     inputStdin.current.value = bojProbFullData?.samples?.[key].input;
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      if (algoSelect === 0) {
+        fetchBojProbInfo();
+      } else {
+        fetchLeetProbInfo();
+      }
+    }
+  };
+
+  /* fetching '.in' file */
+  async function fetchInputFile(url) {
+    const response = await fetch(url);
+    const text = await response.text();
+    return text;
+  }
+
+  const generateFile = (content) => {
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' }); // Create a Blob object with the file content
+    saveAs(blob, 'filename.out'); // Prompt the user to download the file with the specified filename and extension
+    console.log('out 파일 생성 완료');
+  };
+
+  /* 유저가 작성한 코드 가채점하기 위해 서버로 보냄 */
+  const evaluateCode = async () => {
+    if (!ytext.toString()) return;
+
+    // console.log(ytext.toString());
+
+    try {
+      const input = await fetchInputFile('/assets/olympiad/01.in');
+      const { data } = await axios.post(`http://localhost:3001/code_to_run`, {
+        codeToRun: ytext.toString(),
+        //@ts-ignore
+        stdin: input,
+      });
+
+      console.log(data);
+      generateFile(data.output);
+    } catch (error) {
+      console.error(error);
+      alert('채점 실패');
+    }
+  };
+
   return (
     <EditorWrapper className="animate__animated animate__zoomInUp ">
       <EditorInfo>
         <div>
-          {/* 🧙🏻‍♂️ */}
           <span
             style={{
               color: 'papayawhip',
-              filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25)',
+              filter: 'drop-shadow(0px 4px 4px rgba(255, 255, 255, 0.5)',
             }}
           >
             {roomId}
@@ -442,14 +486,8 @@ function YjsCodeMirror() {
                       algoSelect === 0 ? bojProbDataRef : leetProbDataRef
                     }
                     autoFocus={true}
-                    type={algoSelect === 0 ? 'number' : 'text'}
-                  />
-                  <AutoFixHighIcon
-                    onClick={
-                      algoSelect === 0 ? fetchBojProbInfo : fetchLeetProbInfo
-                    }
-                    style={{ color: '#ffefd5' }}
-                    fontSize="large"
+                    type="text"
+                    onKeyDown={handleKeyDown}
                   />
                 </>
               </div>
@@ -552,7 +590,7 @@ function YjsCodeMirror() {
                         <Item
                           sx={{
                             color: 'papayawhip',
-                            fontFamily: 'Cascadia Code, EliceDigitalBaeum_Bold',
+                            fontFamily: 'Cascadia Code, Pretendard-Regular',
                             textAlign: 'left',
                           }}
                         >
@@ -576,7 +614,7 @@ function YjsCodeMirror() {
                                 sx={{
                                   color: 'papayawhip',
                                   fontFamily:
-                                    'Cascadia Code, EliceDigitalBaeum_Bold',
+                                    'Cascadia Code, Pretendard-Regular',
                                   textAlign: 'left',
                                 }}
                               >
@@ -624,9 +662,9 @@ function YjsCodeMirror() {
               RUN
             </Button>
           </Tooltip>
-          <Tooltip title="제출하기" arrow>
-            {/* 링크로 가서 제출하기 */}
-            {/* <Button
+
+          <Tooltip title="제출하러 가기" arrow>
+            <Button
               color="primary"
               href={
                 bojProbData?.problemId
@@ -637,15 +675,16 @@ function YjsCodeMirror() {
               rel="noreferrer"
             >
               SUBMIT
-            </Button> */}
-            {/* 시연용 토스트 noti!!!!!!!!!!! */}
-            <Button color="primary" onClick={notify}>
-              SUBMIT
+            </Button>
+          </Tooltip>
+
+          <Tooltip title="코드와트 가채점">
+            <Button color="primary" onClick={evaluateCode}>
+              가채점
             </Button>
           </Tooltip>
         </ThemeProvider>
 
-        {/* <FormGroup> */}
         <FormControlLabel
           control={
             <MaterialUISwitch
@@ -658,20 +697,8 @@ function YjsCodeMirror() {
           }
           label=""
         />
-        {/* </FormGroup> */}
       </MiddleWrapper>
-      <ToastContainer
-        position="top-center"
-        autoClose={9000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
+
       <div
         className="codemirror-editor"
         ref={editor}

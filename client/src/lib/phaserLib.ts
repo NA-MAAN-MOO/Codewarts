@@ -2,8 +2,9 @@ import phaserGame from 'codeuk';
 import store from 'stores';
 import { openGame, openEditor, openLobby, openStart } from 'stores/modeSlice';
 import { GAME_STATUS } from 'utils/Constants';
+import Background from 'scenes/Background';
 
-export const handleScene = (statusTo: string) => {
+export const handleScene = async (statusTo: string, data: any = {}) => {
   switch (statusTo) {
     case GAME_STATUS.START:
       store.dispatch(openStart());
@@ -25,7 +26,7 @@ export const handleScene = (statusTo: string) => {
       if (phaserGame.scene.isSleeping('Lobby')) {
         phaserGame.scene.wake('Lobby');
       } else {
-        phaserGame.scene.start('Lobby');
+        phaserGame.scene.start('Lobby', data);
       }
       break;
     case GAME_STATUS.GAME:

@@ -33,11 +33,14 @@ function App() {
       <HoverDiv id="codeuk">
         {status === START ? (
           <Start></Start>
-        ) : (
+        ) : //불필요한 로비 삭제
+        status === GAME || status === EDITOR ? (
           <div>
             {playerId === '개발자' && <TestVoiceButtons />}
-            {status === LOBBY ? <Lobby></Lobby> : <VoiceRoom />}
+            <VoiceRoom />
           </div>
+        ) : (
+          <></>
         )}
       </HoverDiv>
     )
@@ -50,4 +53,5 @@ const HoverDiv = styled.div`
   position: absolute;
   height: 100%;
   width: 100%;
+  overflow: hidden;
 `;
