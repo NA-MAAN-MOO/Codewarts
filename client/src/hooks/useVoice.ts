@@ -10,6 +10,7 @@ import { RootState } from 'stores';
 import axios from 'axios';
 import { setUsers } from 'stores/chatSlice';
 import { Connection } from 'types';
+import _ from 'lodash';
 
 const APPLICATION_SERVER_URL = 'http://localhost:3002';
 
@@ -51,14 +52,23 @@ export default () => {
         const { data: char } = await axios.get(
           `http://localhost:3003/user/get-char/${name}`
         );
+        if (!char) {
+          return null;
+        }
         return { name, char };
       })
     );
-    const uniqueUserList = userInfos.filter(
-      (char, index, self) =>
-        index ===
-        self.findIndex((p) => p.name === char.name && p.char === char.char)
-    );
+    const flattedList = userInfos.filter((d) => !!d);
+    const uniqueUserList = _.uniq(flattedList);
+    // const uniqueUserList = userInfos
+    //   .filter((d) => !!d)
+    //   .filter(
+    //     (char, index, self) =>
+    //       index ===
+    //       self.findIndex(
+    //         (p) => p?.name === char?.name && p?.char === char?.char
+    //       )
+    //   );
     dispatch(setUsers(uniqueUserList));
   };
 
