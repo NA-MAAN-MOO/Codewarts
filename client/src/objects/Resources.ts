@@ -6,10 +6,13 @@ import Table from './Table';
 
 export default class Resource extends Phaser.Physics.Matter.Sprite {
   tableSensor!: any;
+
   buttonEditor!: any;
   mainScene: Phaser.Scene;
   buttonToEditor!: any;
-  // macbookList!: any[];
+  whiteboardButton!: any;
+
+  object!: any;
 
   constructor(data: any) {
     let { scene, resource, polygon, index } = data;
@@ -22,7 +25,7 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
 
     this.mainScene = scene;
 
-    scene.add.existing(this);
+    this.object = scene.add.existing(this);
 
     const Body = scene.matter.body;
     const Bodies = scene.matter.bodies;
@@ -34,13 +37,22 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
       resource.name === 'painting3' ||
       resource.name === 'floor_candle'
     ) {
+      if (resource.name === 'table_candle') {
+        this.object.setDepth(55);
+      } else if (resource.name === 'floor_candle') {
+        this.object.setDepth(45);
+      }
       verticeCollider = Bodies.fromVertices(this.x, this.y, polygon, {
         isSensor: true,
       });
     }
-
     /* Disable chair collision & Add chair resource table info */
     if (resource.name === 'chair_back' || resource.name === 'chair_front') {
+      if (resource.name === 'chair_back') {
+        this.object.setDepth(35);
+      } else {
+        this.object.setDepth(20);
+      }
       // Sensor
       verticeCollider = Bodies.fromVertices(this.x, this.y, polygon, {
         isSensor: true,
@@ -64,6 +76,7 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
 
     /* Add table interaction */
     if (resource.name === 'table') {
+      this.object.setDepth(30);
       // @ts-ignore
       let tableCollider = Bodies.circle(this.x - 10, this.y + 10, 115, {
         isSensor: true,
@@ -81,7 +94,7 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
         new Table(this.mainScene, this, compoundBody.id)
       );
 
-      this.CreateCollisions(tableCollider);
+      this.createTableInteraction(tableCollider);
       this.setExistingBody(compoundBody);
     }
 
@@ -90,6 +103,7 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
       resource.name == 'macbook_front_closed' ||
       resource.name == 'macbook_back_closed'
     ) {
+      this.object.setDepth(40);
       if (index < 2) {
         scene.macbookList[0].push(this);
       } else if (index < 4) {
@@ -109,9 +123,9 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
     this.setOrigin(0.5, 0.5);
   }
 
-  CreateCollisions(tableSensor: any) {
+  createTableInteraction(sensor: any) {
     this.scene.matterCollision.addOnCollideStart({
-      objectA: [tableSensor],
+      objectA: [sensor],
       callback: (other: any) => {
         if (
           other.bodyB.isSensor &&
@@ -134,10 +148,10 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
 
           // 딱 하나만 볼 수 있게하기
           // @ts-ignore
-          const table = this.mainScene.tableMap.get(this.body.id);
-          this.mainScene.input.keyboard.on('keydown-E', () =>
-            console.log(table.tableId)
-          );
+          // const table = this.mainScene.tableMap.get(this.body.id);
+          // this.mainScene.input.keyboard.on('keydown-E', () =>
+          //   console.log(table.tableId)
+          // );
 
           //TODO: 여기에서 사용자가 키보드 누르면 상호작용 하도록 만듦
           //@ts-ignore
@@ -149,7 +163,7 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
     });
 
     this.scene.matterCollision.addOnCollideEnd({
-      objectA: [tableSensor],
+      objectA: [sensor],
       callback: (other: any) => {
         if (this.buttonEditor) {
           //@ts-ignore

@@ -5,6 +5,7 @@ import { PlayerType } from 'types';
 import Button from './Button';
 
 export default class Player extends Phaser.Physics.Matter.Sprite {
+  object!: any;
   socketId!: string;
   touching!: MatterJS.BodyType[];
   inputKeys!: Phaser.Input.Keyboard.Key | {};
@@ -12,7 +13,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
   playerTexture!: string;
   playerNameBubble!: Phaser.GameObjects.Text;
   playerName!: string;
-  // playerNameObject!: any;
+  successEffect!: Phaser.GameObjects.Sprite;
 
   constructor(data: PlayerType) {
     let { scene, x, y, texture, id, name, frame } = data;
@@ -23,7 +24,8 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     this.playerTexture = texture;
     this.playerName = name;
     this.touching = [];
-    this.scene.add.existing(this); // 플레이어 객체가 생기는 시점.
+    this.object = this.scene.add.existing(this); // 플레이어 객체가 생기는 시점.
+    this.object.setDepth(50);
 
     // const { Body, Bodies } = Phaser.Physics.Matter.Matter;
     const Body = this.scene.matter.body;
@@ -53,7 +55,8 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         color: 'white',
         fontSize: '18px',
       })
-      .setPadding(10, 3, 10, 1);
+      .setPadding(10, 3, 10, 1)
+      .setDepth(50);
 
     this.playerNameObject = scene.matter.add.gameObject(this.playerNameBubble);
     this.playerNameObject.setSensor(true);
@@ -63,7 +66,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     return this.body.velocity;
   }
 
-  update() {
+  move() {
     // 초마다 60프레임마다(?) 호출되는 것, 매 틱마다 업데이트 되야하는 것인듯.
     const speed = 5;
     let playerVelocity = new Phaser.Math.Vector2(); //  2D 벡터
@@ -99,11 +102,10 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     playerVelocity.scale(speed);
     this.setVelocity(playerVelocity.x, playerVelocity.y); // 실제로 player오브젝트를 움직인다.
     this.playerNameBubble.setPosition(this.x, this.y - this.height / 2 - 10);
+    if (this.successEffect) {
+      this.successEffect.setPosition(this.x, this.y - 10);
+    }
 
-    // const { socket } = this.scene as MainScene;
-    // if (!socket) {
-    //   return;
-    // }
     if (!phaserGame.socket) return;
     phaserGame.socket.emit('movement', {
       x: this.x,
@@ -112,46 +114,27 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     });
   }
 
-  //   CreateCollisions(playerSensor: MatterJS.BodyType) {
-  //     this.scene.matterCollision.addOnCollideStart({
-  //       objectA: [playerSensor],
-  //       callback: (other) => {
-  //         // console.log("from player: ", other);
-  //         if (
-  //           other.gameObjectB['texture'] &&
-  //           other.gameObjectB.texture.key === 'table'
-  //         ) {
-  //           this.touching.push(other.gameObjectB);
+  /* Called whenever player solve a problem  */
+  problemSolvedEffect() {
+    /* TODO: Add solved state */
+    // if (solved)
+    this.scene.anims.create({
+      key: 'gold',
+      frames: this.scene.anims.generateFrameNames('gold', {
+        start: 0,
+        end: 59,
+        prefix: 'gold-',
+      }),
+      frameRate: 30,
+      repeat: -1,
+    });
 
-  //           this.buttonEditor = new Button({
-  //             scene: this.scene,
-  //             x: other.gameObjectB.x,
-  //             y: other.gameObjectB.y - 20,
-  //             text: 'E를 눌러 참여하기',
-  //             style: {
-  //               fontSize: '20px',
-  //               backgroundColor: 'white',
-  //               color: 'black',
-  //               resolution: 20,
-  //             },
-  //           }).getBtn();
-  //           this.buttonEditor.setInteractive(); // 이거 해줘야 function 들어감!!!!! 3시간 버린듯;v
-  //         }
-  //       },
-  //       context: this.scene,
-  //     });
+    this.successEffect = this.scene.add
+      .sprite(this.x, this.y - 10, 'gold', 0)
+      .play('gold');
 
-  //     this.scene.matterCollision.addOnCollideEnd({
-  //       objectA: [playerSensor],
-  //       callback: (other: any) => {
-  //         this.touching = this.touching.filter(
-  //           (gameObject) => gameObject !== other.gameObjectB
-  //         );
-  //         if (this.buttonEditor) {
-  //           this.buttonEditor.destroy();
-  //         }
-  //       },
-  //       context: this.scene,
-  //     });
-  //   }
+    setTimeout(() => {
+      this.successEffect.destroy();
+    }, 10000);
+  }
 }

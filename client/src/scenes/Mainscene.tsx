@@ -3,6 +3,7 @@
 import { createCharacterAnims } from '../anims/CharacterAnims';
 import OtherPlayer from '../objects/OtherPlayer';
 import Player from '../objects/Player';
+import Table from 'objects/Table';
 import Resource from '../objects/Resources';
 import { io, Socket } from 'socket.io-client';
 import store from 'stores';
@@ -10,7 +11,6 @@ import { openEditor, openGame } from 'stores/modeSlice';
 import { setRoomId, setUserName } from 'stores/editorSlice';
 // import { addUser, removeUser } from 'stores/chatSlice';
 import { GAME_STATUS } from 'utils/Constants';
-import Table from 'objects/Table';
 import phaserGame from 'codeuk';
 import { NONE } from 'phaser';
 import { MotionType, PlayerType, ServerPlayerType } from 'types';
@@ -18,6 +18,7 @@ import { soundToggles } from '../App';
 import SoundPlayer from 'hooks/useSoundPlayer';
 //@ts-ignore
 import friendSoundFile from '../assets/sound_effect/friend_sound.mp3';
+import Button from 'objects/Button';
 
 export default class MainScene extends Phaser.Scene {
   // class 속성 명시는 constructor 이전에 명시하면 되는듯
@@ -41,6 +42,8 @@ export default class MainScene extends Phaser.Scene {
   idxDown?: Phaser.Input.Keyboard.Key;
   idxEnter?: Phaser.Input.Keyboard.Key;
   idxUp?: Phaser.Input.Keyboard.Key;
+  whiteboard: Resource;
+  whiteboardButton!: Button;
 
   constructor() {
     // Scene의 key값은 MainScene
@@ -80,12 +83,15 @@ export default class MainScene extends Phaser.Scene {
     /* Adding Object Layers from TiledJSON */
     this.map.objects.forEach((objLayer) => {
       objLayer.objects.forEach((objs, i) => {
-        new Resource({
+        let resource = new Resource({
           scene: this,
           resource: objs,
           polygon: polygons[objs.name],
           index: i,
         });
+        if (objs.name === 'whiteboard') {
+          this.whiteboard = resource;
+        }
       });
     });
 
@@ -131,10 +137,9 @@ export default class MainScene extends Phaser.Scene {
       open: Phaser.Input.Keyboard.KeyCodes.E,
     });
     this.watchTable = false;
-    // this.editorIdx = 4;
 
     let camera = this.cameras.main;
-    camera.zoom = 1;
+    camera.zoom = 1.0;
     camera.startFollow(this.player);
     camera.setLerp(0.1, 0.1);
 
@@ -258,9 +263,45 @@ export default class MainScene extends Phaser.Scene {
         }
       }
     });
+    this.whiteboardButton = new Button({
+      scene: this,
+      x: this.whiteboard.x,
+      y: this.whiteboard.y,
+      text: 'E를 눌러 화이트보드 보기',
+      style: {
+        fontSize: '20px',
+        backgroundColor: 'white',
+        color: 'black',
+        resolution: 20,
+      },
+    }).getBtn();
+    this.whiteboardButton.setVisible(false);
+
+    /* If player solve a problem, turn the solved effect on */
+    // this.player.problemSolvedEffect();
   }
 
   update() {
+    /*---- Whiteboard Interaction ----*/
+    let boundWhiteboard = this.whiteboard.getBounds();
+    boundWhiteboard.setSize(
+      this.whiteboard.width * 1.2,
+      this.whiteboard.height * 1.2
+    );
+    let boundPlayer = this.player?.getBounds();
+    if (
+      Phaser.Geom.Intersects.RectangleToRectangle(boundWhiteboard, boundPlayer)
+    ) {
+      this.whiteboardButton.setVisible(true);
+      if (this.player.inputKeys.open.isDown) {
+        console.log('화이트보드에서 E 누름');
+      }
+    } else {
+      this.whiteboardButton.setVisible(false);
+    }
+    /*-------------------------------*/
+
+    /*--------------------내 에디터 열었을 때----------------------------*/
     if (store.getState().mode.status !== GAME_STATUS.GAME) {
       if (this.openMyEditor) {
         // console.log('1차관문, 여기 왔으면 내 에디터 열었다는 뜻');
@@ -269,6 +310,7 @@ export default class MainScene extends Phaser.Scene {
       this.isKeyDisable = true;
       return;
     }
+    /*----------------------내 에디터 닫았을 때--------------------------*/
     if (this.isKeyDisable) {
       if (phaserGame.userName === this.editorOwner) {
         // console.log('2차관문, 여기오면 내 에디터 닫았다는 뜻');
@@ -281,6 +323,7 @@ export default class MainScene extends Phaser.Scene {
       this.input.keyboard.enableGlobalCapture();
       this.isKeyDisable = false;
     }
+    /*-----------테이블에서 E 누르고, 리스트 보고 있는 상태--------------*/
     if (this.watchTable) {
       // this.player.setStatic(true);
       if (
@@ -297,12 +340,13 @@ export default class MainScene extends Phaser.Scene {
       ) {
         this.editorIdx -= 1;
       }
-      // *** IDE 들어가기 or 돌아가기 버튼을 누른다면 ***
+      /*------------IDE 들어가기 or 돌아가기 버튼을 누른다면-------------*/
       if (this.idxEnter && Phaser.Input.Keyboard.JustDown(this.idxEnter)) {
         if (!this.player) {
           return;
         }
         switch (this.editorIdx) {
+          //돌아가기 버튼 누르면
           case 4:
             this.input.keyboard.disableGlobalCapture();
 
@@ -318,6 +362,7 @@ export default class MainScene extends Phaser.Scene {
               .get(this.player.touching[0].body.id)
               ?.clearEditorList();
             break;
+          // 에디터 들어가기 버튼 누르면
           default:
             this.input.keyboard.disableGlobalCapture();
             this.player.inputKeys = this.input.keyboard.addKeys({
@@ -338,6 +383,7 @@ export default class MainScene extends Phaser.Scene {
       // 돌아가기 눌러서 table의 editorList 없어졌을 때 버그 안 생기도록 추가한 라인
       if (!this.watchTable) return;
 
+      /*--------------에디터 리스트 보여주는 부분--------------- */
       for (let i = 0; i < 5; i++) {
         if (i === this.editorIdx) {
           this.tableMap
@@ -358,7 +404,7 @@ export default class MainScene extends Phaser.Scene {
 
       return;
     }
-    // 키보드 E키를 눌렀을 때 (테이블 상호작용 시작)
+    /*----------키보드 E키를 눌렀을 때 (테이블 상호작용 시작)---------------*/
     if (Phaser.Input.Keyboard.JustDown(this.player.inputKeys.open)) {
       if (this.player.touching.length !== 0) {
         this.editorIdx = 0;
@@ -383,7 +429,7 @@ export default class MainScene extends Phaser.Scene {
       }
     }
     this.player.setStatic(false);
-    this.player.update();
+    this.player.move();
   }
 
   addOtherPlayers(playerInfo: ServerPlayerType) {
