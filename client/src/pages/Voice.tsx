@@ -7,10 +7,9 @@ import { VoiceProp } from 'types';
 import GameVoice from 'pages/voice/GameVoice';
 import { GAME_STATUS } from 'utils/Constants';
 import EditorVoice from 'pages/voice/EditorVoice';
-import TestVoiceButtons from 'components/TestVoiceButtons';
 
 //Voice 방 컴포넌트
-const Voice = ({ roomKey, session, handleSession }: VoiceProp) => {
+const Voice = ({ roomKey, session, handleSession, ...rest }: VoiceProp) => {
   const [OV, setOV] = useState<OpenVidu>();
   const [subscribers, setSubscribers] = useState<Array<Subscriber>>([]);
   const [publisher, setPublisher] = useState<Publisher>();
@@ -117,6 +116,7 @@ const Voice = ({ roomKey, session, handleSession }: VoiceProp) => {
           leaveSession={leaveSession}
           joinSession={joinSession}
           publisher={publisher}
+          {...rest}
         />
       )}
     </>

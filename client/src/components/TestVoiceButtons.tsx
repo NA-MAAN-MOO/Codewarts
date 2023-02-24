@@ -21,7 +21,7 @@ const TestVoiceButtons = () => {
   }, [status, roomId]);
 
   return (
-    <>
+    <div>
       <button
         onClick={async () => {
           const conn = await getConnections(roomKey);
@@ -50,7 +50,7 @@ const TestVoiceButtons = () => {
       >
         전체 세션 가져오기
       </button>
-    </>
+    </div>
   );
 };
 
