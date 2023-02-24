@@ -30,7 +30,7 @@ function App() {
 
   return (
     <HoverDiv>
-      {playerId === '개발자' && <TestVoiceButtons />}
+      <TestVoiceButtons />
       {status === START ? (
         <Start></Start>
       ) : //불필요한 로비 삭제

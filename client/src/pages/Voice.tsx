@@ -20,7 +20,6 @@ const Voice = ({ roomKey, session, handleSession, ...rest }: VoiceProp) => {
     initSession,
     getUsers,
     getSessions,
-    getConnections,
   } = useVoice();
 
   const onBeforeUnload = (e: BeforeUnloadEvent) => {

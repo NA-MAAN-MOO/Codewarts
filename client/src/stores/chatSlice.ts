@@ -11,7 +11,7 @@ export interface ChatState {
 }
 
 const initialState: ChatState = {
-  users: [],
+  users: [], //현재 내가 있는 chat Room의 유저들
   // sessionIdNow: '',
   // sessionNow: '',
 };

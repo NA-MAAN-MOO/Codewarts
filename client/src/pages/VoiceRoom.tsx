@@ -14,6 +14,7 @@ const VoiceRoom = () => {
   const { status, roomId } = useSelector((state: RootState) => {
     return { status: state.mode.status, roomId: state.editor.roomId };
   });
+
   const handleSession = (newSession: Session | undefined) => {
     setSession(newSession);
   };
@@ -21,8 +22,10 @@ const VoiceRoom = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    disconnectSession(session);
-    setSession(undefined);
+    if (!!session) {
+      disconnectSession(session);
+      setSession(undefined);
+    }
   }, [status, roomId]);
 
   return (
