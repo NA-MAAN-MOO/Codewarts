@@ -24,8 +24,8 @@ const Editor = () => {
   const handleExit = () => {
     disconnectSession(session);
     dispatch(openGame());
-    if (!socket) return;
-    socket.disconnect();
+    if (isChecked) dispatch(toggleWhiteboard());
+    if (socket) socket.disconnect();
   };
   const handleBoard = () => {
     dispatch(toggleWhiteboard());
@@ -106,6 +106,7 @@ const BtnDiv = styled.div`
 `;
 const Whiteboard = styled.div<{ isChecked: boolean }>`
   display: ${(props) => (props.isChecked ? 'fixed' : 'none')};
+  overflow: ${(props) => (props.isChecked ? 'hidden' : 'visible')};
   width: 100%;
   height: 100%;
 `;
