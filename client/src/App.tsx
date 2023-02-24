@@ -5,9 +5,7 @@ import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from 'stores';
 import Start from 'pages/Start';
-import Lobby from 'pages/Lobby';
-import { openEditor, openGame } from 'stores/modeSlice';
-import './codeuk';
+// import './codeuk';
 import TestVoiceButtons from 'components/TestVoiceButtons';
 
 function App() {
