@@ -3,6 +3,7 @@ import modeReducer from './modeSlice';
 import editorReducer from './editorSlice';
 import userReducer from './userSlice';
 import chatReducer from './chatSlice';
+import boardReducer from './whiteboardSlice';
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     editor: editorReducer,
     user: userReducer,
     chat: chatReducer,
+    board: boardReducer,
   },
 });
 
