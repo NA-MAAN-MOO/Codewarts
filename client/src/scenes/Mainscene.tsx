@@ -3,6 +3,7 @@
 import { createCharacterAnims } from '../anims/CharacterAnims';
 import OtherPlayer from '../objects/OtherPlayer';
 import Player from '../objects/Player';
+import Table from 'objects/Table';
 import Resource from '../objects/Resources';
 import { io, Socket } from 'socket.io-client';
 import store from 'stores';
@@ -10,10 +11,10 @@ import { openEditor, openGame } from 'stores/modeSlice';
 import { setRoomId, setUserName } from 'stores/editorSlice';
 // import { addUser, removeUser } from 'stores/chatSlice';
 import { GAME_STATUS } from 'utils/Constants';
-import Table from 'objects/Table';
 import phaserGame from 'codeuk';
 import { NONE } from 'phaser';
 import { MotionType, PlayerType, ServerPlayerType } from 'types';
+import Button from 'objects/Button';
 
 export default class MainScene extends Phaser.Scene {
   // class 속성 명시는 constructor 이전에 명시하면 되는듯
@@ -37,6 +38,8 @@ export default class MainScene extends Phaser.Scene {
   idxDown?: Phaser.Input.Keyboard.Key;
   idxEnter?: Phaser.Input.Keyboard.Key;
   idxUp?: Phaser.Input.Keyboard.Key;
+  whiteboard: Resource;
+  whiteboardButton!: Button;
 
   constructor() {
     // Scene의 key값은 MainScene
@@ -75,12 +78,15 @@ export default class MainScene extends Phaser.Scene {
     /* Adding Object Layers from TiledJSON */
     this.map.objects.forEach((objLayer) => {
       objLayer.objects.forEach((objs, i) => {
-        new Resource({
+        let resource = new Resource({
           scene: this,
           resource: objs,
           polygon: polygons[objs.name],
           index: i,
         });
+        if (objs.name === 'whiteboard') {
+          this.whiteboard = resource;
+        }
       });
     });
 
@@ -129,7 +135,7 @@ export default class MainScene extends Phaser.Scene {
     // this.editorIdx = 4;
 
     let camera = this.cameras.main;
-    camera.zoom = 1;
+    camera.zoom = 1.0;
     camera.startFollow(this.player);
     camera.setLerp(0.1, 0.1);
 
@@ -252,9 +258,43 @@ export default class MainScene extends Phaser.Scene {
         }
       }
     });
+    this.whiteboardButton = new Button({
+      scene: this,
+      x: this.whiteboard.x,
+      y: this.whiteboard.y,
+      text: 'E를 눌러 화이트보드 보기',
+      style: {
+        fontSize: '20px',
+        backgroundColor: 'white',
+        color: 'black',
+        resolution: 20,
+      },
+    }).getBtn();
+    this.whiteboardButton.setVisible(false);
+
+    /* If player solve a problem, turn the solved effect on */
+    // this.player.problemSovedEffect();
   }
 
   update() {
+    /*---- Whiteboard Interaction ----*/
+    let boundWhiteboard = this.whiteboard.getBounds();
+    boundWhiteboard.setSize(
+      this.whiteboard.width * 1.2,
+      this.whiteboard.height * 1.2
+    );
+    let boundPlayer = this.player?.getBounds();
+    if (
+      Phaser.Geom.Intersects.RectangleToRectangle(boundWhiteboard, boundPlayer)
+    ) {
+      this.whiteboardButton.setVisible(true);
+      if (this.player.inputKeys.open.isDown) {
+        console.log('화이트보드에서 E 누름');
+      }
+    } else {
+      this.whiteboardButton.setVisible(false);
+    }
+    /*-------------------------------*/
     if (store.getState().mode.status !== GAME_STATUS.GAME) {
       if (this.openMyEditor) {
         // console.log('1차관문, 여기 왔으면 내 에디터 열었다는 뜻');

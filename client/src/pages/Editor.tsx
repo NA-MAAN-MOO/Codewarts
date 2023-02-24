@@ -13,13 +13,19 @@ import YjsCodeMirror from 'pages/editor/YjsCodeMirror';
 import Voice from 'pages/Voice';
 import IconButton from '@mui/material/IconButton';
 import { VoiceProp } from 'types';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { openGame } from 'stores/modeSlice';
+import { RootState } from '../stores';
 import { resetRoomId } from 'stores/editorSlice';
+import Button from '@mui/material/Button';
 import Header from 'components/editor/Header';
 import { darkTheme } from 'styles/theme';
 import CloseIcon from '@mui/icons-material/Close';
 import PeopleIcon from '@mui/icons-material/People';
+import Board from './Board';
+import { toggleWhiteboard } from 'stores/whiteboardSlice';
+import { Socket } from 'socket.io-client';
+import Background from 'scenes/Background';
 
 const drawerWidth = 240;
 
@@ -76,6 +82,9 @@ const DrawerHeader = muiStyled('div')(({ theme }) => ({
 }));
 
 const Editor = (props: VoiceProp) => {
+  const { roomId, session, isChecked } = useSelector((state: RootState) => {
+    return { ...state.editor, ...state.chat, isChecked: state.board.isChecked };
+  });
   const theme = useTheme();
   const [open, setOpen] = useState(true);
   const dispatch = useDispatch();
@@ -86,72 +95,107 @@ const Editor = (props: VoiceProp) => {
 
   const handleDrawerClose = () => {
     setOpen(false);
+    const [socket, setSocket] = useState<Socket>();
   };
 
   const handleExit = () => {
     dispatch(openGame());
     dispatch(resetRoomId());
+    if (isChecked) dispatch(toggleWhiteboard());
+    if (socket) socket.disconnect();
+  };
+  const handleBoard = () => {
+    dispatch(toggleWhiteboard());
+  };
+
+  const handleSocket = (soc: Socket) => {
+    setSocket(soc);
   };
   return (
-    <EditorDiv>
-      <ThemeProvider theme={darkTheme}>
-        <Box
-          sx={{ display: 'flex' }}
-          className="animate__animated animate__zoomInUp "
-        >
-          <AppBar position="fixed" open={open} color="transparent">
-            <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
-              <Header />
-              <BtnDiv>
-                <CloseIcon
-                  style={{ color: 'white', cursor: 'pointer' }}
-                  onClick={handleExit}
-                />
-                <IconButton
-                  color="secondary"
-                  aria-label="open drawer"
-                  edge="end"
-                  onClick={handleDrawerOpen}
-                  sx={{ ...(open && { display: 'none' }) }}
-                >
-                  <PeopleIcon />
-                </IconButton>
-              </BtnDiv>
-            </Toolbar>
-          </AppBar>
-          <Main open={open}>
-            <DrawerHeader />
-            <YjsCodeMirror />
-          </Main>
-          <Drawer
-            sx={{
-              width: drawerWidth,
-              flexShrink: 0,
-              '& .MuiDrawer-paper': {
-                width: drawerWidth,
-                backgroundColor: darkTheme.palette.primary.main,
-              },
-            }}
-            variant="persistent"
-            anchor="right"
-            open={open}
+    <>
+      <BackgroundDiv />
+      <EditorDiv>
+        <ThemeProvider theme={darkTheme}>
+          <Box
+            sx={{ display: 'flex' }}
+            className="animate__animated animate__zoomInUp "
           >
-            <Voice handleDrawerClose={handleDrawerClose} {...props} />
-          </Drawer>
-        </Box>
-      </ThemeProvider>
-    </EditorDiv>
+            <AppBar position="fixed" open={open} color="transparent">
+              <Toolbar
+                sx={{ display: 'flex', justifyContent: 'space-between' }}
+              >
+                <Header />
+                <BtnDiv>
+                  <CloseIcon
+                    style={{ color: 'white', cursor: 'pointer' }}
+                    onClick={handleExit}
+                  />
+                  <IconButton
+                    color="secondary"
+                    aria-label="open drawer"
+                    edge="end"
+                    onClick={handleDrawerOpen}
+                    sx={{ ...(open && { display: 'none' }) }}
+                  >
+                    <PeopleIcon />
+                  </IconButton>
+                </BtnDiv>
+              </Toolbar>
+            </AppBar>
+            <Main open={open}>
+              <DrawerHeader />
+              <YjsCodeMirror />
+            </Main>
+            <Drawer
+              sx={{
+                width: drawerWidth,
+                flexShrink: 0,
+                '& .MuiDrawer-paper': {
+                  width: drawerWidth,
+                  backgroundColor: darkTheme.palette.primary.main,
+                },
+              }}
+              variant="persistent"
+              anchor="right"
+              open={open}
+            >
+              <Voice handleDrawerClose={handleDrawerClose} {...props} />
+            </Drawer>
+          </Box>
+        </ThemeProvider>
+      </EditorDiv>
+      <Whiteboard isChecked={isChecked}>
+        <Board roomKey={roomId} handleSocket={handleSocket} />
+      </Whiteboard>
+      <BtnDiv>
+        <Button
+          variant="contained"
+          color="primary"
+          size="small"
+          onClick={handleBoard}
+        >
+          화이트보드 켜기 / 끄기
+        </Button>
+      </BtnDiv>
+    </>
   );
 };
 
 export default Editor;
 
+const BackgroundDiv = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8); // 검정 투명
+  position: fixed;
+`;
+
 const EditorDiv = styled.div`
   width: 100%;
   height: 100%;
-  background-color: white;
+  // background-color: white;
   // background-color: #272822; // 에디터 검정
-  background-color: rgba(0, 0, 0, 0.8); // 검정 투명
+  // background-color: rgba(0, 0, 0, 0.8); // 검정 투명
   // background-color: rgba(256, 256, 256, 0.7); // 흰색 투명
   // background-size: cover;
   // background-attachment: fixed;
@@ -165,4 +209,13 @@ const BtnDiv = styled.div`
   align-items: center;
   justify-content: center;
   gap: 10px;
+  position: fixed;
+  right: 40px;
+  bottom: 20px;
+`;
+const Whiteboard = styled.div<{ isChecked: boolean }>`
+  display: ${(props) => (props.isChecked ? 'fixed' : 'none')};
+  overflow: ${(props) => (props.isChecked ? 'hidden' : 'visible')};
+  width: 100%;
+  height: 100%;
 `;
