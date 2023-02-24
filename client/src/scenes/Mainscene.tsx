@@ -132,7 +132,6 @@ export default class MainScene extends Phaser.Scene {
       open: Phaser.Input.Keyboard.KeyCodes.E,
     });
     this.watchTable = false;
-    // this.editorIdx = 4;
 
     let camera = this.cameras.main;
     camera.zoom = 1.0;
@@ -295,6 +294,8 @@ export default class MainScene extends Phaser.Scene {
       this.whiteboardButton.setVisible(false);
     }
     /*-------------------------------*/
+
+    /*--------------------내 에디터 열었을 때----------------------------*/
     if (store.getState().mode.status !== GAME_STATUS.GAME) {
       if (this.openMyEditor) {
         // console.log('1차관문, 여기 왔으면 내 에디터 열었다는 뜻');
@@ -303,6 +304,7 @@ export default class MainScene extends Phaser.Scene {
       this.isKeyDisable = true;
       return;
     }
+    /*----------------------내 에디터 닫았을 때--------------------------*/
     if (this.isKeyDisable) {
       if (phaserGame.userName === this.editorOwner) {
         // console.log('2차관문, 여기오면 내 에디터 닫았다는 뜻');
@@ -315,6 +317,7 @@ export default class MainScene extends Phaser.Scene {
       this.input.keyboard.enableGlobalCapture();
       this.isKeyDisable = false;
     }
+    /*-----------테이블에서 E 누르고, 리스트 보고 있는 상태--------------*/
     if (this.watchTable) {
       // this.player.setStatic(true);
       if (
@@ -331,12 +334,13 @@ export default class MainScene extends Phaser.Scene {
       ) {
         this.editorIdx -= 1;
       }
-      // *** IDE 들어가기 or 돌아가기 버튼을 누른다면 ***
+      /*------------IDE 들어가기 or 돌아가기 버튼을 누른다면-------------*/
       if (this.idxEnter && Phaser.Input.Keyboard.JustDown(this.idxEnter)) {
         if (!this.player) {
           return;
         }
         switch (this.editorIdx) {
+          //돌아가기 버튼 누르면
           case 4:
             this.input.keyboard.disableGlobalCapture();
 
@@ -352,6 +356,7 @@ export default class MainScene extends Phaser.Scene {
               .get(this.player.touching[0].body.id)
               ?.clearEditorList();
             break;
+          // 에디터 들어가기 버튼 누르면
           default:
             this.input.keyboard.disableGlobalCapture();
             this.player.inputKeys = this.input.keyboard.addKeys({
@@ -372,6 +377,7 @@ export default class MainScene extends Phaser.Scene {
       // 돌아가기 눌러서 table의 editorList 없어졌을 때 버그 안 생기도록 추가한 라인
       if (!this.watchTable) return;
 
+      /*--------------에디터 리스트 보여주는 부분--------------- */
       for (let i = 0; i < 5; i++) {
         if (i === this.editorIdx) {
           this.tableMap
@@ -392,7 +398,7 @@ export default class MainScene extends Phaser.Scene {
 
       return;
     }
-    // 키보드 E키를 눌렀을 때 (테이블 상호작용 시작)
+    /*----------키보드 E키를 눌렀을 때 (테이블 상호작용 시작)---------------*/
     if (Phaser.Input.Keyboard.JustDown(this.player.inputKeys.open)) {
       if (this.player.touching.length !== 0) {
         this.editorIdx = 0;
@@ -417,7 +423,7 @@ export default class MainScene extends Phaser.Scene {
       }
     }
     this.player.setStatic(false);
-    this.player.update();
+    this.player.move();
   }
 
   addOtherPlayers(playerInfo: ServerPlayerType) {

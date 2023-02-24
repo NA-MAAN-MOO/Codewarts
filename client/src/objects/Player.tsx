@@ -66,7 +66,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     return this.body.velocity;
   }
 
-  update() {
+  move() {
     // 초마다 60프레임마다(?) 호출되는 것, 매 틱마다 업데이트 되야하는 것인듯.
     const speed = 5;
     let playerVelocity = new Phaser.Math.Vector2(); //  2D 벡터
