@@ -71,9 +71,12 @@ import Chip from '@mui/material/Chip';
 import RenderSvg from 'components/Svg';
 
 /* toast */
-import { notifyOne, notifyTwo, notifyThree, ToastContainer } from './toast';
-
-import { saveAs } from 'file-saver';
+import {
+  notifySuccess,
+  notifyFail,
+  notifyThree,
+  ToastContainer,
+} from './toast';
 
 function YjsCodeMirror() {
   /* ref */
@@ -95,6 +98,8 @@ function YjsCodeMirror() {
   let [bojUserData, setBojUserData] = useState();
   let [bojProbData, setBojProbData] = useState();
   let [bojProbFullData, setBojProbFullData] = useState();
+  let [markingPercent, setMarkingPercent] = useState(0);
+  const [algoSelect, setAlgoSelect] = useState(0); // 백준(0), 리트코드(1)
 
   /* roomName 스트링 값 수정하지 말 것(※ 수정할 거면 전부 수정해야 함) */
   const roomName = `ROOMNAME${roomId}`;
@@ -138,20 +143,14 @@ function YjsCodeMirror() {
     clientID: provider.awareness.clientID, // A unique identifier that identifies this client.
   });
 
-  /* provider의 정보 출력 */
+  /* websocket provider의 정보 출력 */
   console.log(provider.awareness.getLocalState());
-  // console.log('클라이언트ID ' + provider.awareness.clientID);
-  // console.log(provider.awareness.states.values().next().value['name']); // 모든 client의 state
-  // console.log(provider.awareness.getStates().get(2127960527).user.name); // get(clientID)
-  // provider.awareness.getStates().forEach((key, value) => {
-  //   console.log(key, value);
-  // });
 
   useEffect(() => {
     /* editor theme 설정 */
     let basicThemeSet = EditorView.theme({
       '&': {
-        height: '500px',
+        height: '400px',
         // minHeight: '500px',
         borderRadius: '.5em', // '.cm-gutters'와 같이 조절할 것
       },
@@ -227,9 +226,6 @@ function YjsCodeMirror() {
       setEditorTheme(okaidia);
     }
   }
-
-  /* 백준(0), 리트코드(1) 선택 */
-  const [algoSelect, setAlgoSelect] = useState(0);
 
   const selectChange = (event, newValue: number) => {
     setAlgoSelect(newValue);
@@ -368,41 +364,67 @@ function YjsCodeMirror() {
 
   /* fetching '.in' file */
   async function fetchInputFileText(url) {
-    const response = await fetch(url);
-    const text = await response.text();
-    return text;
+    try {
+      const response = await fetch(url);
+      const text = await response.text();
+      return text;
+    } catch {
+      console.log('input 파일 fetching 실패');
+      return null;
+    }
   }
-
-  const generateFile = (content) => {
-    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' }); // Create a Blob object with the file content
-    saveAs(blob, 'filename.out'); // Prompt the user to download the file with the specified filename and extension
-    console.log('out 파일 생성 완료');
-  };
 
   /* 유저가 작성한 코드 가채점하기 위해 서버로 보냄 */
   const evaluateCode = async () => {
-    if (!ytext.toString()) return;
+    if (!ytext.toString()) {
+      alert('채점을 위해 코드를 작성해주세요');
+      return;
+    }
 
-    // console.log(ytext.toString());
+    // 현재는 '19940 피자오븐' 문제만 가채점 가능!
+    if (bojProbData?.problemId !== 19940) {
+      alert('채점 가능한 문제 선택해주세요: 19940번');
+      return;
+    }
+
+    let totalCases = 2; // 19940번 테스트 케이스 개수
+    let hitCount = 0;
 
     try {
-      const input = await fetchInputFileText('/assets/olympiad/02.in');
-      const { data } = await axios.post(`http://localhost:3001/code_to_run`, {
-        codeToRun: ytext.toString(),
-        //@ts-ignore
-        stdin: input,
-      });
+      for (let i = 1; i < 50; i++) {
+        const fetchInput = await fetchInputFileText(
+          `/assets/olympiad/0${i}.in`
+        );
 
-      // generateFile(data.output);
-      const fetchoutput = await fetchInputFileText('assets/olympiad/02.out');
-      const jdoodleoutput = data.output;
+        if (fetchInput === null || fetchInput?.startsWith('<!DOCTYPE html>')) {
+          console.log('더 이상 채점할 파일이 없어요!!');
+          break;
+        }
 
-      console.log(jdoodleoutput);
+        const { data } = await axios.post(`http://localhost:3001/code_to_run`, {
+          codeToRun: ytext.toString(),
+          //@ts-ignore
+          stdin: fetchInput,
+        });
 
-      if (jdoodleoutput === fetchoutput) {
-        alert('맞음');
+        const fetchOutput = await fetchInputFileText(
+          `assets/olympiad/0${i}.out`
+        );
+        const jdoodleOutput = data.output;
+
+        if (jdoodleOutput === fetchOutput) {
+          console.log(`${i}번 테스트 케이스 맞음`);
+          hitCount++;
+        } else {
+          console.log(`${i}번 테스트 케이스 틀림`);
+        }
+        setMarkingPercent(`${(hitCount / totalCases) * 100}`);
+      }
+      console.log(`${markingPercent} 점`);
+      if (markingPercent === '100') {
+        notifySuccess(roomId, bojProbData.problemId);
       } else {
-        alert('틀림');
+        notifyFail(roomId, bojProbData.problemId);
       }
     } catch (error) {
       console.error(error);
@@ -412,6 +434,7 @@ function YjsCodeMirror() {
 
   return (
     <EditorWrapper className="animate__animated animate__zoomInUp ">
+      <ToastContainer />
       <EditorInfo>
         <div>
           <span
@@ -667,11 +690,17 @@ function YjsCodeMirror() {
       <MiddleWrapper>
         <ThemeProvider theme={theme}>
           <Tooltip title="코드 실행하기" arrow>
-            <Button onClick={runCode} color="primary">
-              RUN
+            <Button
+              onClick={runCode}
+              color="primary"
+              style={{
+                fontFamily: 'Cascadia Code, Pretendard-Regular',
+                fontSize: '17px',
+              }}
+            >
+              ▶️ RUN
             </Button>
           </Tooltip>
-
           <Tooltip title="제출하러 가기" arrow>
             <Button
               color="primary"
@@ -682,16 +711,27 @@ function YjsCodeMirror() {
               }
               target="_blank"
               rel="noreferrer"
+              style={{
+                fontFamily: 'Cascadia Code, Pretendard-Regular',
+                fontSize: '17px',
+              }}
             >
               SUBMIT
             </Button>
           </Tooltip>
-
           <Tooltip title="코드와트 가채점">
-            <Button color="primary" onClick={evaluateCode}>
+            <Button
+              color="primary"
+              onClick={evaluateCode}
+              style={{
+                fontFamily: 'Cascadia Code, Pretendard-Regular',
+                fontSize: '17px',
+              }}
+            >
               가채점
             </Button>
           </Tooltip>
+          <span style={{ color: 'white' }}>채점진행 : {markingPercent}%</span>
         </ThemeProvider>
 
         <FormControlLabel

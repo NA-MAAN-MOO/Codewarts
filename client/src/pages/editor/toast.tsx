@@ -1,8 +1,9 @@
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import 'styles/fonts.css'; /* FONT */
 
-const notifyOne = () => {
-  toast.success(`🦄 염혜지님 성공!`, {
+const notifySuccess = (userName: string, problemId: number) => {
+  toast.success(`🦄 ${userName}님 ${problemId}번 문제 성공!`, {
     position: 'top-center',
     autoClose: 8000,
     hideProgressBar: false,
@@ -14,8 +15,8 @@ const notifyOne = () => {
   });
 };
 
-const notifyTwo = () => {
-  toast.warning('❌ 김준철님 실패!', {
+const notifyFail = (userName: string, problemId: number) => {
+  toast.warning(`❌ ${userName}님 ${problemId}번 문제 실패!`, {
     position: 'top-center',
     autoClose: 8000,
     hideProgressBar: false,
@@ -51,6 +52,9 @@ const notifyThree = () => {
   draggable
   pauseOnHover
   theme="colored"
+  style={{
+    fontFamily: 'Cascadia Code, Pretendard-Regular',
+  }}
 />;
 
-export { notifyOne, notifyTwo, notifyThree, ToastContainer };
+export { notifySuccess, notifyFail, notifyThree, ToastContainer };

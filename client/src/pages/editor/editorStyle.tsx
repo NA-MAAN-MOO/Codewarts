@@ -217,6 +217,8 @@ const MiddleWrapper = styledc.div`
   martgin-top: 10px;
   font-size: 20px;
   text-align: right;
+  font-family: 'Cascadia Code', 'Pretendard-Regular';
+  color: papayawhip;
 `;
 
 /* 다크/라이트 토글 스위치 테마 */
