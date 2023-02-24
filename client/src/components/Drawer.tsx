@@ -13,8 +13,8 @@ type DrawerProp = {
 };
 
 const Drawer = (props: DrawerProp) => {
-  const { anchor, handleDrawer, isOpen } = props;
-  return <MuiDrawer open={isOpen} onClose={handleDrawer} {...props} />;
+  const { handleDrawer, isOpen, ...rest } = props;
+  return <MuiDrawer open={isOpen} onClose={handleDrawer} {...rest} />;
 };
 
 export default Drawer;
