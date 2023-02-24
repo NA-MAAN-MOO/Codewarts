@@ -115,7 +115,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
   }
 
   /* Called whenever player solve a problem  */
-  problemSovedEffect() {
+  problemSolvedEffect() {
     /* TODO: Add solved state */
     // if (solved)
     this.scene.anims.create({
