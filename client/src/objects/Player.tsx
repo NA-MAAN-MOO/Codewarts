@@ -3,6 +3,7 @@ import phaserGame from 'codeuk';
 import Phaser from 'phaser';
 import { PlayerType } from 'types';
 import Button from './Button';
+import Resource from './Resources';
 
 export default class Player extends Phaser.Physics.Matter.Sprite {
   object!: any;
@@ -14,6 +15,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
   playerNameBubble!: Phaser.GameObjects.Text;
   playerName!: string;
   successEffect!: Phaser.GameObjects.Sprite;
+  fire!: Phaser.GameObjects.Sprite;
 
   constructor(data: PlayerType) {
     let { scene, x, y, texture, id, name, frame } = data;
@@ -112,6 +114,33 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
       y: this.y,
       motion: motion,
     });
+  }
+
+  addFireEffect(chair: Resource) {
+    /* Add fire effect */
+    this.fire = this.scene.add.sprite(
+      chair.x,
+      chair.y - this.height * 1.4,
+      'fire',
+      0
+    );
+    this.fire.setDisplaySize(this.playerNameBubble.width + 9, this.fire.height);
+    this.fire.setDepth(57);
+    this.fire.anims.create({
+      key: 'fire',
+      frames: this.fire.anims.generateFrameNames('fire', {
+        start: 0,
+        end: 5,
+        prefix: 'fire-',
+      }),
+      frameRate: 40,
+      repeat: -1,
+    });
+    this.fire.play('fire');
+  }
+
+  removeFireEffect() {
+    this.fire.destroy();
   }
 
   /* Called whenever player solve a problem  */
