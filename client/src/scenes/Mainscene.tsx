@@ -271,6 +271,9 @@ export default class MainScene extends Phaser.Scene {
       },
     }).getBtn();
     this.whiteboardButton.setVisible(false);
+
+    /* If player solve a problem, turn the solved effect on */
+    // this.player.problemSovedEffect();
   }
 
   update() {

@@ -108,6 +108,12 @@ export default class Background extends Phaser.Scene {
       'assets/room/sitting/red_fire.png',
       'assets/room/sitting/fire.json'
     );
+
+    this.load.atlas(
+      'gold',
+      'assets/effect/gold.png',
+      'assets/effect/gold.json'
+    );
   }
 
   create(data: { backgroundMode: BackgroundMode }) {
