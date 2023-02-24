@@ -57,12 +57,8 @@ export default class MainScene extends Phaser.Scene {
 
   create() {
     /* Transition */
-    this.cameras.main.fadeFrom(
-      1200,
-      Phaser.Math.Between(50, 255),
-      Phaser.Math.Between(50, 255),
-      Phaser.Math.Between(50, 255)
-    );
+    this.cameras.main.fadeFrom(1200, 0, 0, 0);
+    console.log('몇번불림');
     const newFriendSoundToggle = SoundPlayer(friendSoundFile);
     // this.getOut = false;
     this.openMyEditor = false;
