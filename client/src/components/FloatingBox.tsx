@@ -20,4 +20,9 @@ const FloatingDiv = styled.div`
   gap: 1rem;
   min-height: 2rem;
   border: 3px ridge ${({ theme }) => theme.lightRed};
+  color: white;
+  font-family: ${({ theme }) => theme.mainFont};
+  position: absolute;
+  bottom: 30px;
+  left: 25px;
 `;
