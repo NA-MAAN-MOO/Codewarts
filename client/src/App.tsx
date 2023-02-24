@@ -17,33 +17,29 @@ function App() {
     return { ...state.user, ...state.mode };
   });
   const dispatch = useDispatch();
-  let loadFlag = false;
+  // let loadFlag = false;
 
-  useEffect(() => {
-    if (mode === EDITOR) {
-      dispatch(openEditor());
-    } else if (mode === GAME) {
-      dispatch(openGame());
-    }
-    loadFlag = true;
-  }, []);
+  // useEffect(() => {
+  //   if (mode === EDITOR) {
+  //     dispatch(openEditor());
+  //   } else if (mode === GAME) {
+  //     dispatch(openGame());
+  //   }
+  //   loadFlag = true;
+  // }, []);
 
   return (
-    loadFlag || (
-      <HoverDiv id="codeuk">
-        {status === START ? (
-          <Start></Start>
-        ) : //불필요한 로비 삭제
-        status === GAME || status === EDITOR ? (
-          <div>
-            {playerId === '개발자' && <TestVoiceButtons />}
-            <VoiceRoom />
-          </div>
-        ) : (
-          <></>
-        )}
-      </HoverDiv>
-    )
+    <HoverDiv>
+      {playerId === '개발자' && <TestVoiceButtons />}
+      {status === START ? (
+        <Start></Start>
+      ) : //불필요한 로비 삭제
+      status === GAME || status === EDITOR ? (
+        <VoiceRoom />
+      ) : (
+        <></>
+      )}
+    </HoverDiv>
   );
 }
 
