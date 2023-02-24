@@ -103,10 +103,6 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     this.setVelocity(playerVelocity.x, playerVelocity.y); // 실제로 player오브젝트를 움직인다.
     this.playerNameBubble.setPosition(this.x, this.y - this.height / 2 - 10);
 
-    // const { socket } = this.scene as MainScene;
-    // if (!socket) {
-    //   return;
-    // }
     if (!phaserGame.socket) return;
     phaserGame.socket.emit('movement', {
       x: this.x,
@@ -115,46 +111,5 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     });
   }
 
-  //   CreateCollisions(playerSensor: MatterJS.BodyType) {
-  //     this.scene.matterCollision.addOnCollideStart({
-  //       objectA: [playerSensor],
-  //       callback: (other) => {
-  //         // console.log("from player: ", other);
-  //         if (
-  //           other.gameObjectB['texture'] &&
-  //           other.gameObjectB.texture.key === 'table'
-  //         ) {
-  //           this.touching.push(other.gameObjectB);
-
-  //           this.buttonEditor = new Button({
-  //             scene: this.scene,
-  //             x: other.gameObjectB.x,
-  //             y: other.gameObjectB.y - 20,
-  //             text: 'E를 눌러 참여하기',
-  //             style: {
-  //               fontSize: '20px',
-  //               backgroundColor: 'white',
-  //               color: 'black',
-  //               resolution: 20,
-  //             },
-  //           }).getBtn();
-  //           this.buttonEditor.setInteractive(); // 이거 해줘야 function 들어감!!!!! 3시간 버린듯;v
-  //         }
-  //       },
-  //       context: this.scene,
-  //     });
-
-  //     this.scene.matterCollision.addOnCollideEnd({
-  //       objectA: [playerSensor],
-  //       callback: (other: any) => {
-  //         this.touching = this.touching.filter(
-  //           (gameObject) => gameObject !== other.gameObjectB
-  //         );
-  //         if (this.buttonEditor) {
-  //           this.buttonEditor.destroy();
-  //         }
-  //       },
-  //       context: this.scene,
-  //     });
-  //   }
+  problemSovedEffect() {}
 }

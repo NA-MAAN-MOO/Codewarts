@@ -57,10 +57,11 @@ export default class Background extends Phaser.Scene {
     );
 
     this.load.atlas(
-      'plasma',
-      'assets/lobby/plasma.png',
-      'assets/lobby/plasma.json'
+      'yellow',
+      'assets/lobby/yellow.png',
+      'assets/lobby/green.json'
     );
+
     /*** Main Scene(classroom) ***/
     /* Map */
     this.load.image('room_map', 'assets/room/room_map.png');
