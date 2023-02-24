@@ -28,7 +28,7 @@ function App() {
 
   return (
     <HoverDiv>
-      <TestVoiceButtons />
+      {/* <TestVoiceButtons /> */}
       {status === START ? (
         <Start></Start>
       ) : //불필요한 로비 삭제
