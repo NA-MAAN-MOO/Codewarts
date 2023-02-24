@@ -29,7 +29,7 @@ const CurrentPlayer = ({ handleDrawer }: { handleDrawer?: () => void }) => {
       <Divider />
       <List>
         {users.map(({ name, char }, index) => (
-          <GamePlayerItem name={name} char={char} />
+          <GamePlayerItem name={name} char={char} key={name} />
         ))}
       </List>
     </Box>
