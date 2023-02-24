@@ -30,7 +30,7 @@ function App() {
 
   return (
     loadFlag || (
-      <HoverDiv id="codeuk">
+      <HoverDiv>
         {status === START ? (
           <Start></Start>
         ) : status === LOBBY ? (

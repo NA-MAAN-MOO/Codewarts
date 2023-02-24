@@ -14,7 +14,22 @@ const io = socket(server2, {
 io.on('connection', onConnection);
 
 function onConnection(socket: any) {
-  socket.on('drawing', (data: any) => socket.broadcast.emit('drawing', data));
+  console.log('connection');
+
+  socket.on('joinRoom', (roomKey: string) => {
+    console.log('joinRoom', roomKey);
+    socket.join(roomKey);
+  });
+
+  socket.on('drawing', (data: any) => {
+    // console.log('drawing', data.roomKey);
+    socket.to(data.roomKey).emit('drawing', data);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('disconnect');
+  });
 }
+
 const port = 3004;
 server2.listen(port, () => console.log(`server is running on port ${port}`));

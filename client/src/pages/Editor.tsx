@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { openGame } from '../stores/modeSlice';
@@ -8,6 +9,7 @@ import Voice from 'pages/Voice';
 import useVoice from 'hooks/useVoice';
 import Board from './Board';
 import { toggleWhiteboard } from 'stores/whiteboardSlice';
+import { Socket } from 'socket.io-client';
 
 const Editor = () => {
   const { roomId, session, isChecked } = useSelector((state: RootState) => {
@@ -15,13 +17,20 @@ const Editor = () => {
   });
   const dispatch = useDispatch();
   const { disconnectSession } = useVoice();
+  const [socket, setSocket] = useState<Socket>();
 
   const handleExit = () => {
     disconnectSession(session);
     dispatch(openGame());
+    if (!socket) return;
+    socket.disconnect();
   };
   const handleBoard = () => {
     dispatch(toggleWhiteboard());
+  };
+
+  const handleSocket = (soc: Socket) => {
+    setSocket(soc);
   };
   return (
     <EditorDiv>
@@ -30,7 +39,7 @@ const Editor = () => {
           <Voice roomKey={roomId} />
           <YjsCodeMirror />
           <Whiteboard isChecked={isChecked}>
-            <Board />
+            <Board roomKey={roomId} handleSocket={handleSocket} />
           </Whiteboard>
         </div>
       ) : (

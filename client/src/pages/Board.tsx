@@ -2,7 +2,8 @@ import React, { useRef, useEffect } from 'react';
 import io from 'socket.io-client';
 import './styles/board.css';
 
-const Board = () => {
+const Board = (props: any) => {
+  const { handleSocket } = props;
   const canvasRef = useRef(null);
   const colorsRef = useRef(null);
   const socketRef: any = useRef();
@@ -62,6 +63,7 @@ const Board = () => {
       const h = canvas.height;
 
       socketRef.current.emit('drawing', {
+        roomKey: props.roomKey,
         x0: x0 / w,
         y0: y0 / h,
         x1: x1 / w,
@@ -161,8 +163,13 @@ const Board = () => {
     };
 
     socketRef.current = io('localhost:3004');
+    handleSocket(socketRef.current);
+    socketRef.current.emit('joinRoom', props.roomKey);
     socketRef.current.on('drawing', onDrawingEvent);
   }, []);
+  // const disconnectBoard = () => {
+  //   socketRef.current.disconnect();
+  // };
 
   // ------------- The Canvas and color elements --------------------------
 
