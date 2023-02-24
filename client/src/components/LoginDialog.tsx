@@ -128,7 +128,7 @@ const LoginDialog = () => {
 
   return (
     <Wrapper
-      className="animate__animated animate__fadeIn"
+      className="animate__animated animate__fadeIn animate__delay-4s"
       style={{ position: 'absolute' }}
     >
       <MySnackbar

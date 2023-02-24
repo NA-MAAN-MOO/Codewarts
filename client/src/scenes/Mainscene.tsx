@@ -14,6 +14,10 @@ import Table from 'objects/Table';
 import phaserGame from 'codeuk';
 import { NONE } from 'phaser';
 import { MotionType, PlayerType, ServerPlayerType } from 'types';
+import { soundToggles } from '../App';
+import SoundPlayer from 'hooks/useSoundPlayer';
+//@ts-ignore
+import friendSoundFile from '../assets/sound_effect/friend_sound.mp3';
 
 export default class MainScene extends Phaser.Scene {
   // class 속성 명시는 constructor 이전에 명시하면 되는듯
@@ -49,6 +53,7 @@ export default class MainScene extends Phaser.Scene {
   }
 
   create() {
+    const newFriendSoundToggle = SoundPlayer(friendSoundFile);
     // this.getOut = false;
     this.openMyEditor = false;
     this.editorOwner = '';
@@ -157,6 +162,7 @@ export default class MainScene extends Phaser.Scene {
 
     phaserGame.socket.on('newPlayer', (payLoad: ServerPlayerType) => {
       //새 플레이어가 들어옴
+      newFriendSoundToggle();
       const otherPlayerInfo = {
         x: payLoad.x,
         y: payLoad.y,

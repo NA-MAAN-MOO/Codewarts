@@ -8,7 +8,6 @@ import Start from 'pages/Start';
 import Editor from 'pages/Editor';
 import Lobby from 'pages/Lobby';
 import { openEditor, openGame } from 'stores/modeSlice';
-import './codeuk';
 
 function App() {
   const mode = process.env.REACT_APP_MODE;
@@ -29,8 +28,8 @@ function App() {
   }, []);
 
   return (
-    loadFlag || (
-      <HoverDiv id="codeuk">
+    <>
+      <HoverDiv>
         {status === START ? (
           <Start></Start>
         ) : // ) : status === LOBBY ? (
@@ -42,7 +41,7 @@ function App() {
           <Editor></Editor>
         )}
       </HoverDiv>
-    )
+    </>
   );
 }
 
@@ -52,5 +51,4 @@ const HoverDiv = styled.div`
   position: absolute;
   height: 100%;
   width: 100%;
-  overflow: hidden;
 `;
