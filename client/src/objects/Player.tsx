@@ -5,6 +5,7 @@ import { PlayerType } from 'types';
 import Button from './Button';
 
 export default class Player extends Phaser.Physics.Matter.Sprite {
+  object!: any;
   socketId!: string;
   touching!: MatterJS.BodyType[];
   inputKeys!: Phaser.Input.Keyboard.Key | {};
@@ -23,7 +24,8 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     this.playerTexture = texture;
     this.playerName = name;
     this.touching = [];
-    this.scene.add.existing(this); // 플레이어 객체가 생기는 시점.
+    this.object = this.scene.add.existing(this); // 플레이어 객체가 생기는 시점.
+    this.object.setDepth(50);
 
     // const { Body, Bodies } = Phaser.Physics.Matter.Matter;
     const Body = this.scene.matter.body;
@@ -53,7 +55,8 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         color: 'white',
         fontSize: '18px',
       })
-      .setPadding(10, 3, 10, 1);
+      .setPadding(10, 3, 10, 1)
+      .setDepth(50);
 
     this.playerNameObject = scene.matter.add.gameObject(this.playerNameBubble);
     this.playerNameObject.setSensor(true);

@@ -12,6 +12,8 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
   buttonToEditor!: any;
   whiteboardButton!: any;
 
+  object!: any;
+
   constructor(data: any) {
     let { scene, resource, polygon, index } = data;
     super(
@@ -23,7 +25,7 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
 
     this.mainScene = scene;
 
-    scene.add.existing(this);
+    this.object = scene.add.existing(this);
 
     const Body = scene.matter.body;
     const Bodies = scene.matter.bodies;
@@ -35,13 +37,20 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
       resource.name === 'painting3' ||
       resource.name === 'floor_candle'
     ) {
+      if (resource.name === 'table_candle') {
+        this.object.setDepth(40);
+      }
       verticeCollider = Bodies.fromVertices(this.x, this.y, polygon, {
         isSensor: true,
       });
     }
-
     /* Disable chair collision & Add chair resource table info */
     if (resource.name === 'chair_back' || resource.name === 'chair_front') {
+      if (resource.name === 'chair_back') {
+        this.object.setDepth(35);
+      } else {
+        this.object.setDepth(20);
+      }
       // Sensor
       verticeCollider = Bodies.fromVertices(this.x, this.y, polygon, {
         isSensor: true,
@@ -65,6 +74,7 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
 
     /* Add table interaction */
     if (resource.name === 'table') {
+      this.object.setDepth(30);
       // @ts-ignore
       let tableCollider = Bodies.circle(this.x - 10, this.y + 10, 115, {
         isSensor: true,
@@ -91,6 +101,7 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
       resource.name == 'macbook_front_closed' ||
       resource.name == 'macbook_back_closed'
     ) {
+      this.object.setDepth(40);
       if (index < 2) {
         scene.macbookList[0].push(this);
       } else if (index < 4) {

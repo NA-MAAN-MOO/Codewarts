@@ -101,6 +101,12 @@ export default class Background extends Phaser.Scene {
     this.load.image('statue', 'assets/room/statue.png');
     this.load.image('table_candle', 'assets/room/table_candle.png');
     this.load.image('bench', 'assets/room/bench.png');
+    /* Effects */
+    this.load.atlas(
+      'fire',
+      'assets/room/sitting/blue_fire.png',
+      'assets/room/sitting/blue_fire.json'
+    );
   }
 
   create(data: { backgroundMode: BackgroundMode }) {

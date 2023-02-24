@@ -21,6 +21,7 @@ export default class Table {
   buttonToEditor: any;
   editorListDialog!: Phaser.GameObjects.Container;
   editorBtnList!: any;
+  fire!: Phaser.GameObjects.Sprite;
 
   constructor(scene: Phaser.Scene, tableObject: Resource, tableId: number) {
     this.usercount = 0;
@@ -81,7 +82,7 @@ export default class Table {
       .setOrigin(0.5, 0.5)
       .setPadding(15, 5, 15, 5);
     this.editorBtnList.push(backButton);
-    this.editorListDialog.add(backButton);
+    this.editorListDialog.add(backButton).setDepth(60);
   }
 
   clearEditorList() {
@@ -145,13 +146,33 @@ export default class Table {
     let chair: Resource = this.tableInfo.get(index)['chair'];
 
     chair.setTexture(`${player.playerTexture}_${chair.texture.key}`);
-
+    // chair.setDepth(20);
+    // this.tableObject.setDepth(30);
     player.setVisible(false);
     player.setPosition(chair.x, chair.y);
     player.playerNameBubble.setPosition(
       chair.x,
       chair.y - player.height / 2 - 25
     );
+
+    /* TODO: Chair front / back에 따라 depth 다르게  */
+    this.fire = this.scene.add.sprite(
+      chair.x,
+      chair.y - player.height * 1.4,
+      'fire',
+      0
+    );
+    this.fire.anims.create({
+      key: 'fire',
+      frames: this.fire.anims.generateFrameNames('fire', {
+        start: 0,
+        end: 5,
+        prefix: 'fire-',
+      }),
+      frameRate: 40,
+      repeat: -1,
+    });
+    this.fire.play('fire');
   }
 
   standUpFromChair(index: number, player: Player) {
@@ -162,6 +183,7 @@ export default class Table {
       chair.setTexture(`chair_back`);
     }
 
+    this.fire.destroy();
     player.setVisible(true);
   }
 
