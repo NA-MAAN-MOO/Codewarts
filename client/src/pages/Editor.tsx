@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { openGame } from '../stores/modeSlice';
-import { resetRoomId } from 'stores/editorSlice';
-import UserForm from './editor/UserForm';
 import { RootState } from '../stores';
 import { VoiceProp } from 'types';
 import EditorWrapper from 'pages/editor/EditorWrapper';
@@ -16,21 +13,11 @@ const Editor = (props: VoiceProp) => {
   const dispatch = useDispatch();
   // const { disconnectSession, handleDisconnect } = useVoice();
 
-  const handleExit = () => {
-    dispatch(openGame());
-    dispatch(resetRoomId());
-  };
-
   return (
     <EditorDiv>
       {roomId ? (
         <>
           <EditorWrapper {...props} />
-          <BtnDiv>
-            <button type="button" onClick={handleExit}>
-              돌아가기
-            </button>
-          </BtnDiv>
         </>
       ) : (
         <div>{/* <UserForm /> */}</div>
@@ -53,13 +40,4 @@ const EditorDiv = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-`;
-const BtnDiv = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  position: absolute;
-  right: 40px;
-  bottom: 20px;
 `;

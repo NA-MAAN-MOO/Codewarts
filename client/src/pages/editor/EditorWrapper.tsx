@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { styled, useTheme } from '@mui/material/styles';
+import { styled as muiStyled, useTheme } from '@mui/material/styles';
+import styled from 'styled-components';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
@@ -14,10 +15,15 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { VoiceProp } from 'types';
+import { useDispatch } from 'react-redux';
+import { openGame } from 'stores/modeSlice';
+import { resetRoomId } from 'stores/editorSlice';
 
 const drawerWidth = 240;
 
-const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
+const Main = muiStyled('main', {
+  shouldForwardProp: (prop) => prop !== 'open',
+})<{
   open?: boolean;
 }>(({ theme, open }) => ({
   flexGrow: 1,
@@ -40,7 +46,7 @@ interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
 }
 
-const AppBar = styled(MuiAppBar, {
+const AppBar = muiStyled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
 })<AppBarProps>(({ theme, open }) => ({
   transition: theme.transitions.create(['margin', 'width'], {
@@ -57,7 +63,7 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-const DrawerHeader = styled('div')(({ theme }) => ({
+const DrawerHeader = muiStyled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   padding: theme.spacing(0, 1),
@@ -69,6 +75,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 export default function EditorWrapper(props: VoiceProp) {
   const theme = useTheme();
   const [open, setOpen] = useState(true);
+  const dispatch = useDispatch();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -76,6 +83,10 @@ export default function EditorWrapper(props: VoiceProp) {
 
   const handleDrawerClose = () => {
     setOpen(false);
+  };
+  const handleExit = () => {
+    dispatch(openGame());
+    dispatch(resetRoomId());
   };
 
   return (
@@ -85,6 +96,11 @@ export default function EditorWrapper(props: VoiceProp) {
           <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
             Persistent drawer
           </Typography>
+          <BtnDiv>
+            <button type="button" onClick={handleExit}>
+              돌아가기
+            </button>
+          </BtnDiv>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -127,3 +143,11 @@ export default function EditorWrapper(props: VoiceProp) {
     </Box>
   );
 }
+
+const BtnDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 4px solid red;
+`;
