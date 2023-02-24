@@ -35,8 +35,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":1248.01526455337,
-                 "y":512.12850053853
+                 "x":1235.51526455337,
+                 "y":522.355773265803
                 },
             
                 {
@@ -54,8 +54,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":1318.69626455337,
-                 "y":549.12950053853
+                 "x":1306.19626455337,
+                 "y":559.356773265803
                 },
             
                 {
@@ -73,8 +73,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":1679.52333611779,
-                 "y":733.726598973463
+                 "x":1667.02333611779,
+                 "y":743.953871700736
                 },
             
                 {
@@ -92,8 +92,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":1750.21333611779,
-                 "y":770.727598973464
+                 "x":1737.71333611779,
+                 "y":780.954871700737
                 },
             
                 {
@@ -268,8 +268,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":204,
-                 "x":1216.38475581388,
-                 "y":581.670759501724
+                 "x":1203.88475581388,
+                 "y":591.898032228997
                 },
             
                 {
@@ -281,8 +281,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":204,
-                 "x":1650.11270914171,
-                 "y":802.466522853438
+                 "x":1637.61270914171,
+                 "y":812.693795580711
                 },
             
                 {
@@ -363,8 +363,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":1163.89126455336,
-                 "y":571.00550053853
+                 "x":1151.39126455336,
+                 "y":581.232773265803
                 },
             
                 {
@@ -382,8 +382,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":1241.02826455337,
-                 "y":606.48450053853
+                 "x":1228.52826455337,
+                 "y":616.711773265803
                 },
             
                 {
@@ -395,8 +395,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":1597.29333611779,
-                 "y":791.741598973463
+                 "x":1584.79333611779,
+                 "y":801.968871700736
                 },
             
                 {
@@ -414,8 +414,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":1674.43333611779,
-                 "y":827.220598973464
+                 "x":1661.93333611779,
+                 "y":837.447871700737
                 },
             
                 {
@@ -800,8 +800,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":32,
-                 "x":1285.07626455336,
-                 "y":458.749500538531
+                 "x":1272.57626455336,
+                 "y":468.976773265804
                 },
             
                 {
@@ -819,8 +819,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":32,
-                 "x":1353.80426455336,
-                 "y":494.430500538531
+                 "x":1341.30426455336,
+                 "y":504.657773265804
                 },
             
                 {
@@ -838,8 +838,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":32,
-                 "x":1719.28333611779,
-                 "y":681.057598973464
+                 "x":1706.78333611779,
+                 "y":691.284871700737
                 },
             
                 {
@@ -857,8 +857,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":32,
-                 "x":1788.01333611779,
-                 "y":716.738598973464
+                 "x":1775.51333611779,
+                 "y":726.965871700737
                 },
             
                 {
@@ -1039,8 +1039,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":32,
-                 "x":1255.85826455336,
-                 "y":475.51750053853
+                 "x":1243.35826455336,
+                 "y":485.744773265803
                 },
             
                 {
@@ -1058,8 +1058,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":32,
-                 "x":1324.36426455336,
-                 "y":510.009500538531
+                 "x":1311.86426455336,
+                 "y":520.236773265804
                 },
             
                 {
@@ -1077,8 +1077,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":32,
-                 "x":1690.05333611779,
-                 "y":697.464598973463
+                 "x":1677.55333611779,
+                 "y":707.691871700736
                 },
             
                 {
@@ -1096,8 +1096,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":32,
-                 "x":1758.55333611779,
-                 "y":731.956598973463
+                 "x":1746.05333611779,
+                 "y":742.183871700736
                 },
             
                 {
@@ -1309,74 +1309,6 @@
     
         {
          "draworder":"topdown",
-         "id":14,
-         "name":"cupboard",
-         "objects":[
-                {
-                 "class":"",
-                 "gid":6,
-                 "height":164,
-                 "id":100,
-                 "name":"cupboard",
-                 "properties":[
-                        {
-                         "name":"collision",
-                         "type":"bool",
-                         "value":true
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":148,
-                 "x":1655.0964480606,
-                 "y":494.15508780437
-                },
-            
-                {
-                 "class":"",
-                 "gid":6,
-                 "height":164,
-                 "id":101,
-                 "name":"cupboard",
-                 "properties":[
-                        {
-                         "name":"collision",
-                         "type":"bool",
-                         "value":true
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":148,
-                 "x":1719.2364480606,
-                 "y":526.14508780437
-                },
-            
-                {
-                 "class":"",
-                 "gid":6,
-                 "height":164,
-                 "id":102,
-                 "name":"cupboard",
-                 "properties":[
-                        {
-                         "name":"collision",
-                         "type":"bool",
-                         "value":true
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":148,
-                 "x":1783.7164480606,
-                 "y":557.834087804371
-                }],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "x":0,
-         "y":0
-        },
-    
-        {
-         "draworder":"topdown",
          "id":15,
          "name":"plant_short",
          "objects":[
@@ -1481,123 +1413,14 @@
                 {
                  "class":"",
                  "gid":19,
-                 "height":182,
-                 "id":150,
+                 "height":256,
+                 "id":569,
                  "name":"whiteboard",
                  "rotation":0,
                  "visible":true,
-                 "width":208,
-                 "x":1691.24416394512,
-                 "y":451.127480275437
-                }],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "x":0,
-         "y":0
-        },
-    
-        {
-         "draworder":"topdown",
-         "id":20,
-         "name":"mug",
-         "objects":[
-                {
-                 "class":"",
-                 "gid":11,
-                 "height":32,
-                 "id":119,
-                 "name":"mug",
-                 "properties":[
-                        {
-                         "name":"noCollision",
-                         "type":"bool",
-                         "value":true
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":32,
-                 "x":1830.63908984678,
-                 "y":467.007000974524
-                },
-            
-                {
-                 "class":"",
-                 "gid":11,
-                 "height":32,
-                 "id":120,
-                 "name":"mug",
-                 "properties":[
-                        {
-                         "name":"noCollision",
-                         "type":"bool",
-                         "value":true
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":32,
-                 "x":1840.2364480606,
-                 "y":462.24408780437
-                }],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "x":0,
-         "y":0
-        },
-    
-        {
-         "draworder":"topdown",
-         "id":21,
-         "name":"book",
-         "objects":[
-                {
-                 "class":"",
-                 "gid":10,
-                 "height":164,
-                 "id":118,
-                 "name":"book",
-                 "properties":[
-                        {
-                         "name":"noCollision",
-                         "type":"bool",
-                         "value":true
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":148,
-                 "x":1656.6564480606,
-                 "y":442.97308780437
-                }],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "x":0,
-         "y":0
-        },
-    
-        {
-         "draworder":"topdown",
-         "id":22,
-         "name":"teapot",
-         "objects":[
-                {
-                 "class":"",
-                 "gid":12,
-                 "height":32,
-                 "id":121,
-                 "name":"teapot",
-                 "properties":[
-                        {
-                         "name":"noCollision",
-                         "type":"bool",
-                         "value":true
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":32,
-                 "x":1821.1164480606,
-                 "y":452.66808780437
+                 "width":256,
+                 "x":1660.50574712644,
+                 "y":496.965517241379
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1626,8 +1449,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":1249.10855822922,
-                 "y":498.823362134453
+                 "x":1236.60855822922,
+                 "y":509.050634861726
                 },
             
                 {
@@ -1645,8 +1468,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":148,
-                 "x":1682.55665493896,
-                 "y":720.576214994033
+                 "x":1670.05665493896,
+                 "y":730.803487721306
                 },
             
                 {
@@ -1940,8 +1763,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":42,
- "nextobjectid":568,
+ "nextlayerid":43,
+ "nextobjectid":571,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",
@@ -3370,14 +3193,20 @@
         {
          "columns":1,
          "firstgid":19,
+         "grid":
+            {
+             "height":182,
+             "orientation":"orthogonal",
+             "width":208
+            },
          "image":"whiteboard.png",
-         "imageheight":182,
-         "imagewidth":208,
+         "imageheight":256,
+         "imagewidth":256,
          "margin":0,
          "name":"whiteboard",
          "spacing":0,
          "tilecount":1,
-         "tileheight":182,
+         "tileheight":256,
          "tiles":[
                 {
                  "id":0,
@@ -3398,24 +3227,24 @@
                                     },
                                 
                                     {
-                                     "x":0.351679268507121,
-                                     "y":59.0821171091964
+                                     "x":-4.6092060587205,
+                                     "y":125.100052617687
                                     },
                                 
                                     {
-                                     "x":180.76314401266,
-                                     "y":147.705292772991
+                                     "x":189.921701539849,
+                                     "y":222.881785808671
                                     },
                                 
                                     {
-                                     "x":183.22489889221,
-                                     "y":95.656761033937
+                                     "x":187.040964528539,
+                                     "y":93.3671216521396
                                     }],
                              "rotation":0,
                              "visible":true,
                              "width":0,
-                             "x":10.5503780552136,
-                             "y":10.1986987867065
+                             "x":37.6444440731491,
+                             "y":25.4629613320223
                             }],
                      "opacity":1,
                      "type":"objectgroup",
@@ -3424,7 +3253,7 @@
                      "y":0
                     }
                 }],
-         "tilewidth":208
+         "tilewidth":256
         },
     
         {
@@ -3616,7 +3445,6 @@
                  "objectgroup":
                     {
                      "draworder":"index",
-                     "id":2,
                      "name":"",
                      "objects":[
                             {
@@ -3907,7 +3735,6 @@
                  "objectgroup":
                     {
                      "draworder":"index",
-                     "id":2,
                      "name":"",
                      "objects":[
                             {
@@ -4008,7 +3835,6 @@
                  "objectgroup":
                     {
                      "draworder":"index",
-                     "id":2,
                      "name":"",
                      "objects":[
                             {
@@ -4094,7 +3920,6 @@
                  "objectgroup":
                     {
                      "draworder":"index",
-                     "id":2,
                      "name":"",
                      "objects":[
                             {
@@ -4155,7 +3980,6 @@
                  "objectgroup":
                     {
                      "draworder":"index",
-                     "id":2,
                      "name":"",
                      "objects":[
                             {

@@ -7,9 +7,11 @@ import UserForm from './editor/UserForm';
 import { RootState } from '../stores';
 import Voice from 'pages/Voice';
 import useVoice from 'hooks/useVoice';
+import Button from '@mui/material/Button';
 import Board from './Board';
 import { toggleWhiteboard } from 'stores/whiteboardSlice';
 import { Socket } from 'socket.io-client';
+import Background from 'scenes/Background';
 
 const Editor = () => {
   const { roomId, session, isChecked } = useSelector((state: RootState) => {
@@ -33,41 +35,60 @@ const Editor = () => {
     setSocket(soc);
   };
   return (
-    <EditorDiv>
-      {roomId ? (
-        <div>
-          <Voice roomKey={roomId} />
-          <YjsCodeMirror />
+    <>
+      {roomId && (
+        <>
+          <BackgroundDiv />
+          <EditorDiv>
+            <div>
+              <Voice roomKey={roomId} />
+            </div>
+            <YjsCodeMirror />
+          </EditorDiv>
           <Whiteboard isChecked={isChecked}>
             <Board roomKey={roomId} handleSocket={handleSocket} />
           </Whiteboard>
-        </div>
-      ) : (
-        <div>
-          <UserForm />
-        </div>
+          <BtnDiv>
+            <Button
+              variant="contained"
+              color="primary"
+              size="small"
+              onClick={handleBoard}
+            >
+              화이트보드 켜기 / 끄기
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              size="small"
+              // style={{ position: 'fixed' }}
+              onClick={handleExit}
+            >
+              돌아가기
+            </Button>
+          </BtnDiv>
+        </>
       )}
-      <BtnDiv>
-        <button type="button" onClick={handleBoard}>
-          화이트보드 켜기 / 끄기
-        </button>
-        <button type="button" onClick={handleExit}>
-          돌아가기
-        </button>
-      </BtnDiv>
-    </EditorDiv>
+    </>
   );
 };
 
 export default Editor;
 
+const BackgroundDiv = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8); // 검정 투명
+  position: fixed;
+`;
+
 const EditorDiv = styled.div`
   width: 100%;
   height: 100%;
-  background-color: white;
+  // background-color: white;
   // background-color: #272822; // 에디터 검정
-  // background-color: rgba(0, 0, 0, 0.5); // 검정 투명
-  background-color: rgba(256, 256, 256, 0.7); // 흰색 투명
+  // background-color: rgba(0, 0, 0, 0.8); // 검정 투명
+  // background-color: rgba(256, 256, 256, 0.7); // 흰색 투명
   // background-size: cover;
   // background-attachment: fixed;
   position: absolute;
@@ -79,9 +100,9 @@ const BtnDiv = styled.div`
   align-items: center;
   justify-content: center;
   gap: 10px;
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
+  position: fixed;
+  right: 40px;
+  bottom: 20px;
 `;
 const Whiteboard = styled.div<{ isChecked: boolean }>`
   display: ${(props) => (props.isChecked ? 'fixed' : 'none')};
