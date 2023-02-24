@@ -367,7 +367,7 @@ function YjsCodeMirror() {
   };
 
   /* fetching '.in' file */
-  async function fetchInputFile(url) {
+  async function fetchInputFileText(url) {
     const response = await fetch(url);
     const text = await response.text();
     return text;
@@ -386,15 +386,24 @@ function YjsCodeMirror() {
     // console.log(ytext.toString());
 
     try {
-      const input = await fetchInputFile('/assets/olympiad/01.in');
+      const input = await fetchInputFileText('/assets/olympiad/02.in');
       const { data } = await axios.post(`http://localhost:3001/code_to_run`, {
         codeToRun: ytext.toString(),
         //@ts-ignore
         stdin: input,
       });
 
-      console.log(data);
-      generateFile(data.output);
+      // generateFile(data.output);
+      const fetchoutput = await fetchInputFileText('assets/olympiad/02.out');
+      const jdoodleoutput = data.output;
+
+      console.log(jdoodleoutput);
+
+      if (jdoodleoutput === fetchoutput) {
+        alert('맞음');
+      } else {
+        alert('틀림');
+      }
     } catch (error) {
       console.error(error);
       alert('채점 실패');
