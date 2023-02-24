@@ -13,7 +13,7 @@ export default class Button {
   constructor(data: ButtonProp) {
     let { scene, x, y, text, style } = data;
     this.button = scene.add
-      .text(x, y, text)
+      .text(x, y, text, { fontFamily: 'Prentendard' })
       .setOrigin(0.5)
       .setPadding(3)
       .setStyle(style)

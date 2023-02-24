@@ -51,11 +51,16 @@ export default class Lobby extends Phaser.Scene {
   create() {
     /* Add Lobby background */
     const bg = this.add.image(
-      window.innerWidth / 2,
-      window.innerHeight / 2,
+      this.cameras.main.width / 2,
+      this.cameras.main.height / 2,
       'lobby'
     );
-    bg.setDisplaySize(window.innerWidth, window.innerHeight);
+    const scale = Math.max(
+      this.cameras.main.width / bg.width,
+      this.cameras.main.height / bg.height
+    );
+    // bg.setDisplaySize(window.innerWidth, window.innerHeight);
+    bg.setScale(scale).setScrollFactor(0);
 
     /* Add portal */
     this.anims.create({
@@ -70,23 +75,23 @@ export default class Lobby extends Phaser.Scene {
     });
 
     this.anims.create({
-      key: 'plasma',
-      frames: this.anims.generateFrameNames('plasma', {
+      key: 'yellow',
+      frames: this.anims.generateFrameNames('yellow', {
         start: 0,
-        end: 191,
-        prefix: 'plasma-',
+        end: 90,
+        prefix: `thing-`,
       }),
       frameRate: 60,
       repeat: -1,
     });
 
     this.add
-      .sprite(this.scale.width / 1.2, this.scale.height * 0.5, 'green', 0)
-      .play('green');
+      .sprite(this.scale.width / 1.2, this.scale.height * 0.5, 'yellow', 0)
+      .play('yellow');
 
     this.portal = this.matter.add
-      .sprite(this.scale.width / 4.5, this.scale.height * 0.5, 'plasma', 0)
-      .play('plasma');
+      .sprite(this.scale.width / 4.7, this.scale.height * 0.5, 'green', 0)
+      .play('green');
 
     /* Guide to enter classroom */
     this.buttonForList = new Button({
@@ -98,7 +103,7 @@ export default class Lobby extends Phaser.Scene {
         //https://photonstorm.github.io/phaser3-docs/Phaser.Types.GameObjects.Text.html#.TextStyle
         backgroundColor: '#fff',
         color: '#111',
-        fontSize: '20px',
+        fontSize: '24px',
         resolution: 20,
       },
     }).getBtn();
@@ -166,7 +171,8 @@ export default class Lobby extends Phaser.Scene {
 
       /* Add overlap between portal and player */
       let boundPortal = this.portal.getBounds();
-      boundPortal.setSize(this.portal.displayWidth - 90, window.innerHeight);
+      boundPortal.setSize(this.portal.displayWidth - 200, window.innerHeight);
+      boundPortal.setPosition(boundPortal.x + 100);
       let boundPlayer = this.player.getBounds();
 
       if (
