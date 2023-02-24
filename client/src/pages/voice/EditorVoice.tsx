@@ -42,7 +42,6 @@ const EditorVoice = (props: GameVoiceType) => {
   const { session, joinSession, handleDrawerClose } = props;
   const theme = useTheme();
 
-  console.log(session);
   return (
     <>
       <DrawerHeader>
