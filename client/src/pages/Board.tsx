@@ -41,12 +41,12 @@ const Board = (props: any) => {
     // ------------------------------- create the drawing ----------------------------
 
     const drawLine = (
-      x0: any,
-      y0: any,
-      x1: any,
-      y1: any,
-      color: any,
-      emit: any
+      x0: number,
+      y0: number,
+      x1: number,
+      y1: number,
+      color: string,
+      emit: boolean
     ) => {
       context.beginPath();
       context.moveTo(x0, y0);
@@ -113,7 +113,7 @@ const Board = (props: any) => {
 
     // ----------- limit the number of events per second -----------------------
 
-    const throttle = (callback: any, delay: any) => {
+    const throttle = (callback: any, delay: number) => {
       let previousCall = new Date().getTime();
       return function () {
         const time = new Date().getTime();
