@@ -142,6 +142,7 @@ export default class Lobby extends Phaser.Scene {
       name: this.playerId,
       frame: 'down-1',
     });
+    // this.player.scale *= 1.5;
 
     /* Add Keyboard keys to enable character animation */
     this.player.inputKeys = this.input.keyboard.addKeys({
@@ -195,8 +196,8 @@ export default class Lobby extends Phaser.Scene {
       if (this.sceneChange) {
         this.player.angle -= 5;
         this.player.y -= window.innerHeight / 800;
-        this.player.displayWidth -= this.player.width / 200;
-        this.player.displayHeight -= this.player.height / 200;
+        this.player.displayWidth -= this.player.width / 150;
+        this.player.displayHeight -= this.player.height / 150;
         this.cameras.main.alpha -= 0.005;
         this.cameras.main.shake(undefined, 0.005);
       }
