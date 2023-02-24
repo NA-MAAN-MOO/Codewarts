@@ -6,10 +6,11 @@ import Table from './Table';
 
 export default class Resource extends Phaser.Physics.Matter.Sprite {
   tableSensor!: any;
+
   buttonEditor!: any;
   mainScene: Phaser.Scene;
   buttonToEditor!: any;
-  // macbookList!: any[];
+  whiteboardButton!: any;
 
   constructor(data: any) {
     let { scene, resource, polygon, index } = data;
@@ -81,7 +82,7 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
         new Table(this.mainScene, this, compoundBody.id)
       );
 
-      this.CreateCollisions(tableCollider);
+      this.createTableInteraction(tableCollider);
       this.setExistingBody(compoundBody);
     }
 
@@ -109,9 +110,9 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
     this.setOrigin(0.5, 0.5);
   }
 
-  CreateCollisions(tableSensor: any) {
+  createTableInteraction(sensor: any) {
     this.scene.matterCollision.addOnCollideStart({
-      objectA: [tableSensor],
+      objectA: [sensor],
       callback: (other: any) => {
         if (
           other.bodyB.isSensor &&
@@ -134,10 +135,10 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
 
           // 딱 하나만 볼 수 있게하기
           // @ts-ignore
-          const table = this.mainScene.tableMap.get(this.body.id);
-          this.mainScene.input.keyboard.on('keydown-E', () =>
-            console.log(table.tableId)
-          );
+          // const table = this.mainScene.tableMap.get(this.body.id);
+          // this.mainScene.input.keyboard.on('keydown-E', () =>
+          //   console.log(table.tableId)
+          // );
 
           //TODO: 여기에서 사용자가 키보드 누르면 상호작용 하도록 만듦
           //@ts-ignore
@@ -149,7 +150,7 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
     });
 
     this.scene.matterCollision.addOnCollideEnd({
-      objectA: [tableSensor],
+      objectA: [sensor],
       callback: (other: any) => {
         if (this.buttonEditor) {
           //@ts-ignore

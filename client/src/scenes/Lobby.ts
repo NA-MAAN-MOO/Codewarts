@@ -130,7 +130,7 @@ export default class Lobby extends Phaser.Scene {
     /* Add my player */
     this.player = new Player({
       scene: this,
-      x: 10,
+      x: 40,
       y: this.scale.height * 0.7,
       texture: this.playerTexture,
       id: phaserGame.socketId,
