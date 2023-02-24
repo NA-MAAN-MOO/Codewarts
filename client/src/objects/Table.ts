@@ -154,7 +154,7 @@ export default class Table {
       chair.x,
       chair.y - player.height / 2 - 25
     );
-
+    player.playerNameBubble.setDepth(60);
     /* Add fire effect */
     this.fire = this.scene.add.sprite(
       chair.x,
@@ -166,6 +166,7 @@ export default class Table {
       player.playerNameBubble.width + 9,
       this.fire.height
     );
+    this.fire.setDepth(57);
     this.fire.anims.create({
       key: 'fire',
       frames: this.fire.anims.generateFrameNames('fire', {
@@ -186,7 +187,7 @@ export default class Table {
     } else {
       chair.setTexture(`chair_back`);
     }
-
+    player.playerNameBubble.setDepth(50);
     this.fire.destroy();
     player.setVisible(true);
   }

@@ -38,7 +38,7 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
       resource.name === 'floor_candle'
     ) {
       if (resource.name === 'table_candle') {
-        this.object.setDepth(40);
+        this.object.setDepth(55);
       } else if (resource.name === 'floor_candle') {
         this.object.setDepth(45);
       }
