@@ -106,18 +106,6 @@ export default class Table {
     }
   }
 
-  /* Remove current user from a table (Delete my info from a table) */
-  removeCurrentUser(idx: number) {
-    this.tableInfo.get(idx).username = undefined;
-    this.tableInfo.get(idx).roomId = undefined;
-  }
-
-  /* Join an Editor room in a Table (other user's Editor room) */
-  join(currentUser: any, roomId: any) {}
-
-  /* Leave an Editor room in a Table (other user's Editor room) */
-  leave(currentUser: any, roomId: any) {}
-
   registerLaptop(index: number, laptop: any) {
     this.tableInfo.get(index)['laptop'] = laptop;
   }
