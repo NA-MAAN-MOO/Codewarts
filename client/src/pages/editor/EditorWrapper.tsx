@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import { styled as muiStyled, useTheme } from '@mui/material/styles';
+import {
+  styled as muiStyled,
+  ThemeProvider,
+  useTheme,
+} from '@mui/material/styles';
 import styled from 'styled-components';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import CssBaseline from '@mui/material/CssBaseline';
 import YjsCodeMirror from 'pages/editor/YjsCodeMirror';
 import Voice from 'pages/Voice';
 import Typography from '@mui/material/Typography';
@@ -18,6 +21,8 @@ import { VoiceProp } from 'types';
 import { useDispatch } from 'react-redux';
 import { openGame } from 'stores/modeSlice';
 import { resetRoomId } from 'stores/editorSlice';
+import Header from 'components/editor/Header';
+import { darkTheme } from 'styles/theme';
 
 const drawerWidth = 240;
 
@@ -53,6 +58,8 @@ const AppBar = muiStyled(MuiAppBar, {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
+  border: '2px solid red',
+  display: 'flex',
   ...(open && {
     width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(['margin', 'width'], {
@@ -90,56 +97,60 @@ export default function EditorWrapper(props: VoiceProp) {
   };
 
   return (
-    <Box sx={{ display: 'flex' }}>
-      <AppBar position="fixed" open={open}>
-        <Toolbar>
-          <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
-            Persistent drawer
-          </Typography>
-          <BtnDiv>
-            <button type="button" onClick={handleExit}>
-              돌아가기
-            </button>
-          </BtnDiv>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="end"
-            onClick={handleDrawerOpen}
-            sx={{ ...(open && { display: 'none' }) }}
-          >
-            <MenuIcon />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-      <Main open={open}>
-        <DrawerHeader />
-        <YjsCodeMirror />
-      </Main>
-      <Drawer
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          '& .MuiDrawer-paper': {
+    <Box
+      sx={{ display: 'flex' }}
+      className="animate__animated animate__zoomInUp "
+    >
+      <ThemeProvider theme={darkTheme}>
+        <AppBar position="fixed" open={open} color="transparent">
+          <Toolbar>
+            <Header />
+            <BtnDiv>
+              <button type="button" onClick={handleExit}>
+                돌아가기
+              </button>
+            </BtnDiv>
+            <IconButton
+              color="secondary"
+              aria-label="open drawer"
+              edge="end"
+              onClick={handleDrawerOpen}
+              sx={{ ...(open && { display: 'none' }) }}
+            >
+              <MenuIcon />
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+        <Main open={open}>
+          <DrawerHeader />
+          <YjsCodeMirror />
+        </Main>
+        <Drawer
+          sx={{
             width: drawerWidth,
-          },
-        }}
-        variant="persistent"
-        anchor="right"
-        open={open}
-      >
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
-            )}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
-        <Voice {...props} />
-      </Drawer>
+            flexShrink: 0,
+            '& .MuiDrawer-paper': {
+              width: drawerWidth,
+              backgroundColor: darkTheme.palette.primary.main,
+            },
+          }}
+          variant="persistent"
+          anchor="right"
+          open={open}
+        >
+          <DrawerHeader>
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === 'rtl' ? (
+                <ChevronLeftIcon />
+              ) : (
+                <ChevronRightIcon />
+              )}
+            </IconButton>
+          </DrawerHeader>
+          <Divider />
+          <Voice {...props} />
+        </Drawer>
+      </ThemeProvider>
     </Box>
   );
 }
@@ -149,5 +160,4 @@ const BtnDiv = styled.div`
   align-items: center;
   justify-content: center;
   gap: 10px;
-  border: 4px solid red;
 `;
