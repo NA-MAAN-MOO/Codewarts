@@ -143,11 +143,11 @@ export default class Table {
   }
 
   sitOnChair(index: number, player: Player) {
+    /* Change chair texture */
     let chair: Resource = this.tableInfo.get(index)['chair'];
-
     chair.setTexture(`${player.playerTexture}_${chair.texture.key}`);
-    // chair.setDepth(20);
-    // this.tableObject.setDepth(30);
+
+    /* Make player not visible */
     player.setVisible(false);
     player.setPosition(chair.x, chair.y);
     player.playerNameBubble.setPosition(
@@ -155,12 +155,16 @@ export default class Table {
       chair.y - player.height / 2 - 25
     );
 
-    /* TODO: Chair front / back에 따라 depth 다르게  */
+    /* Add fire effect */
     this.fire = this.scene.add.sprite(
       chair.x,
       chair.y - player.height * 1.4,
       'fire',
       0
+    );
+    this.fire.setDisplaySize(
+      player.playerNameBubble.width + 9,
+      this.fire.height
     );
     this.fire.anims.create({
       key: 'fire',
