@@ -7,7 +7,7 @@ const Header = () => {
 
   return (
     <EditorInfo>
-      <div>
+      <div style={{ color: 'lightgray' }}>
         <span
           style={{
             color: 'papayawhip',

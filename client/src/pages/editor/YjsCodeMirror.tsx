@@ -404,8 +404,6 @@ function YjsCodeMirror() {
 
   return (
     <EditorWrapper>
-      <Header />
-
       <AlgoInfoWrap>
         <Box
           sx={{

@@ -23,6 +23,8 @@ import { openGame } from 'stores/modeSlice';
 import { resetRoomId } from 'stores/editorSlice';
 import Header from 'components/editor/Header';
 import { darkTheme } from 'styles/theme';
+import CloseIcon from '@mui/icons-material/Close';
+import CurrentPlayer from 'components/CurrentPlayer';
 
 const drawerWidth = 240;
 
@@ -58,7 +60,6 @@ const AppBar = muiStyled(MuiAppBar, {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  border: '2px solid red',
   display: 'flex',
   ...(open && {
     width: `calc(100% - ${drawerWidth}px)`,
@@ -91,34 +92,39 @@ export default function EditorWrapper(props: VoiceProp) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const handleDrawer = () => {
+    setOpen(!open);
+  };
   const handleExit = () => {
     dispatch(openGame());
     dispatch(resetRoomId());
   };
 
   return (
-    <Box
-      sx={{ display: 'flex' }}
-      className="animate__animated animate__zoomInUp "
-    >
-      <ThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={darkTheme}>
+      <Box
+        sx={{ display: 'flex' }}
+        className="animate__animated animate__zoomInUp "
+      >
         <AppBar position="fixed" open={open} color="transparent">
-          <Toolbar>
+          <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Header />
             <BtnDiv>
-              <button type="button" onClick={handleExit}>
-                돌아가기
-              </button>
+              <CloseIcon
+                style={{ color: 'white', cursor: 'pointer' }}
+                onClick={handleExit}
+              />
+              <IconButton
+                color="secondary"
+                aria-label="open drawer"
+                edge="end"
+                onClick={handleDrawerOpen}
+                sx={{ ...(open && { display: 'none' }) }}
+              >
+                <MenuIcon />
+              </IconButton>
             </BtnDiv>
-            <IconButton
-              color="secondary"
-              aria-label="open drawer"
-              edge="end"
-              onClick={handleDrawerOpen}
-              sx={{ ...(open && { display: 'none' }) }}
-            >
-              <MenuIcon />
-            </IconButton>
           </Toolbar>
         </AppBar>
         <Main open={open}>
@@ -148,10 +154,11 @@ export default function EditorWrapper(props: VoiceProp) {
             </IconButton>
           </DrawerHeader>
           <Divider />
-          <Voice {...props} />
+          <CurrentPlayer handleDrawer={handleDrawer} />
         </Drawer>
-      </ThemeProvider>
-    </Box>
+      </Box>
+      <Voice {...props} />
+    </ThemeProvider>
   );
 }
 
