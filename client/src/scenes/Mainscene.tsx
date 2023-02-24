@@ -14,6 +14,10 @@ import { GAME_STATUS } from 'utils/Constants';
 import phaserGame from 'codeuk';
 import { NONE } from 'phaser';
 import { MotionType, PlayerType, ServerPlayerType } from 'types';
+import { soundToggles } from '../App';
+import SoundPlayer from 'hooks/useSoundPlayer';
+//@ts-ignore
+import friendSoundFile from '../assets/sound_effect/friend_sound.mp3';
 import Button from 'objects/Button';
 
 export default class MainScene extends Phaser.Scene {
@@ -52,6 +56,7 @@ export default class MainScene extends Phaser.Scene {
   }
 
   create() {
+    const newFriendSoundToggle = SoundPlayer(friendSoundFile);
     // this.getOut = false;
     this.openMyEditor = false;
     this.editorOwner = '';
@@ -162,6 +167,7 @@ export default class MainScene extends Phaser.Scene {
 
     phaserGame.socket.on('newPlayer', (payLoad: ServerPlayerType) => {
       //새 플레이어가 들어옴
+      newFriendSoundToggle();
       const otherPlayerInfo = {
         x: payLoad.x,
         y: payLoad.y,

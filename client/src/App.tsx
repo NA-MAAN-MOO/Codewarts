@@ -8,7 +8,6 @@ import Start from 'pages/Start';
 import Editor from 'pages/Editor';
 import Lobby from 'pages/Lobby';
 import { openEditor, openGame } from 'stores/modeSlice';
-import './codeuk';
 
 function App() {
   const mode = process.env.REACT_APP_MODE;
