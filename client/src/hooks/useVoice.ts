@@ -260,6 +260,15 @@ export default () => {
     }
   };
 
+  //서버의 ConnectionList를 리셋
+  const resetServerConnList = async () => {
+    try {
+      await axios.delete(`${APPLICATION_SERVER_URL}/reset-connection`);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   // const sessionNow = useSelector((state: RootState) => {
   //   if (!state.chat.sessionNow) return undefined;
   //   return JSON.parse(state.chat.sessionNow);
@@ -296,6 +305,7 @@ export default () => {
     getConnections,
     getSessions,
     getUsers,
+    resetServerConnList,
     // handleDisconnect,
   };
 };

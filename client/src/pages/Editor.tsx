@@ -25,7 +25,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import Board from './Board';
 import { toggleWhiteboard } from 'stores/whiteboardSlice';
 import { Socket } from 'socket.io-client';
-import Background from 'scenes/Background';
+import FloatingButton from 'components/FloatingButton';
 
 const drawerWidth = 240;
 
@@ -82,12 +82,13 @@ const DrawerHeader = muiStyled('div')(({ theme }) => ({
 }));
 
 const Editor = (props: VoiceProp) => {
-  const { roomId, session, isChecked } = useSelector((state: RootState) => {
+  const { roomId, isChecked } = useSelector((state: RootState) => {
     return { ...state.editor, ...state.chat, isChecked: state.board.isChecked };
   });
   const theme = useTheme();
   const [open, setOpen] = useState(true);
   const dispatch = useDispatch();
+  const [socket, setSocket] = useState<Socket>();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -95,7 +96,6 @@ const Editor = (props: VoiceProp) => {
 
   const handleDrawerClose = () => {
     setOpen(false);
-    const [socket, setSocket] = useState<Socket>();
   };
 
   const handleExit = () => {
@@ -167,16 +167,16 @@ const Editor = (props: VoiceProp) => {
       <Whiteboard isChecked={isChecked}>
         <Board roomKey={roomId} handleSocket={handleSocket} />
       </Whiteboard>
-      <BtnDiv>
-        <Button
+      <FixedBtnDiv>
+        <FloatingButton
           variant="contained"
-          color="primary"
+          // color="primary"
           size="small"
           onClick={handleBoard}
         >
           화이트보드 켜기 / 끄기
-        </Button>
-      </BtnDiv>
+        </FloatingButton>
+      </FixedBtnDiv>
     </>
   );
 };
@@ -205,6 +205,12 @@ const EditorDiv = styled.div`
 `;
 
 const BtnDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+`;
+const FixedBtnDiv = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;

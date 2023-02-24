@@ -45,10 +45,10 @@ export const createConnection = async (req: Request, res: Response) => {
 
     //이미 해당 유저의 커넥션 있는지 확인
     const conKey = `${sessionId}:${userName}`;
-    if (!!connectionList[conKey]) {
-      //이미 커넥션 있으면
-      return res.send(null);
-    }
+    // if (!!connectionList[conKey]) {
+    //   //이미 커넥션 있으면
+    //   return res.send(null);
+    // }
 
     const connection = await session.createConnection(req.body);
     connectionList[conKey] = connection;
@@ -133,11 +133,11 @@ export const deleteSession = async (req: Request, res: Response) => {
     );
 
     //connectionList에서도 제거해줌
-    Object.keys(connectionList)
-      .filter((key) => !key.includes(sessionId))
-      .reduce((cur, key) => {
-        return Object.assign(cur, { [key]: connectionList[key] });
-      }, {});
+    // Object.keys(connectionList)
+    //   .filter((key) => !key.includes(sessionId))
+    //   .reduce((cur, key) => {
+    //     return Object.assign(cur, { [key]: connectionList[key] });
+    //   }, {});
 
     res.status(200).end();
   } catch (err: unknown) {
@@ -155,10 +155,21 @@ export const deleteConnection = async (req: Request, res: Response) => {
     const conKey = `${sessionId}:${userName}`;
 
     //connectionList에 conKey 없으면 리턴
-    if (!connectionList[conKey]) return res.status(200).end();
+    // if (!connectionList[conKey]) return res.status(200).end();
 
     //connectionList에서 해당 커넥션 제거해 주기
-    delete connectionList[conKey];
+    // delete connectionList[conKey];
+    res.status(200).end();
+  } catch (err: unknown) {
+    console.log(err);
+    res.status(500).send(err);
+  }
+};
+
+//서버의 ConnectionList 리셋
+export const resetConnection = async (req: Request, res: Response) => {
+  try {
+    // connectionList = {};
     res.status(200).end();
   } catch (err: unknown) {
     console.log(err);

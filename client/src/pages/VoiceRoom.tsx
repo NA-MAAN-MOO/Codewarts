@@ -6,6 +6,7 @@ import type { RootState } from 'stores';
 import Game from 'pages/Game';
 import Editor from 'pages/Editor';
 import { GAME_STATUS } from 'utils/Constants';
+import { stringToAscii } from 'lib/voiceLib';
 
 const VoiceRoom = () => {
   const [session, setSession] = useState<Session>();
@@ -14,7 +15,7 @@ const VoiceRoom = () => {
   const { status, roomId } = useSelector((state: RootState) => {
     return { status: state.mode.status, roomId: state.editor.roomId };
   });
-
+  const [roomKey, setRoomKey] = useState(roomId);
   const handleSession = (newSession: Session | undefined) => {
     setSession(newSession);
   };
@@ -28,6 +29,10 @@ const VoiceRoom = () => {
     }
   }, [status, roomId]);
 
+  useEffect(() => {
+    setRoomKey(stringToAscii(roomId));
+  }, [roomId]);
+
   return (
     <>
       {status === GAME ? (
@@ -40,7 +45,7 @@ const VoiceRoom = () => {
         <Editor
           session={session}
           handleSession={handleSession}
-          roomKey={roomId}
+          roomKey={roomKey}
         ></Editor>
       )}
     </>

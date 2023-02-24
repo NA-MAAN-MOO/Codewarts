@@ -7,6 +7,7 @@ import { VoiceProp } from 'types';
 import GameVoice from 'pages/voice/GameVoice';
 import { GAME_STATUS } from 'utils/Constants';
 import EditorVoice from 'pages/voice/EditorVoice';
+import { stringToAscii } from 'lib/voiceLib';
 
 //Voice 방 컴포넌트
 const Voice = ({ roomKey, session, handleSession, ...rest }: VoiceProp) => {
@@ -19,11 +20,12 @@ const Voice = ({ roomKey, session, handleSession, ...rest }: VoiceProp) => {
     registerSession,
     initSession,
     getUsers,
-    getSessions,
+    resetServerConnList,
   } = useVoice();
 
-  const onBeforeUnload = (e: BeforeUnloadEvent) => {
+  const onBeforeUnload = async (e: BeforeUnloadEvent) => {
     leaveSession();
+    await resetServerConnList();
   };
   const { playerId, status } = useSelector((state: RootState) => {
     return { ...state.user, ...state.mode };
@@ -71,6 +73,7 @@ const Voice = ({ roomKey, session, handleSession, ...rest }: VoiceProp) => {
 
     //roomKey를 바탕으로 sessionId를 가져온다.
     //가져온 sessionId와 만든 세션을 서버에서 생성한다.
+
     const result = await createSession(roomKey);
     if (!result) {
       return;
