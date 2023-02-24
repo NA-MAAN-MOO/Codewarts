@@ -19,4 +19,5 @@ const FloatingDiv = styled.div`
   justify-content: center;
   gap: 1rem;
   min-height: 2rem;
+  border: 3px ridge ${({ theme }) => theme.lightRed};
 `;
