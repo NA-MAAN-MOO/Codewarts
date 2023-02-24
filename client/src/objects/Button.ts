@@ -17,6 +17,7 @@ export default class Button {
       .setOrigin(0.5)
       .setPadding(3)
       .setStyle(style)
+      .setDepth(60)
       //   .setInteractive({ useHandCursor: true })
       //   .on('pointerdown', () => callback())
       .setVisible(true);
