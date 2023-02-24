@@ -39,6 +39,8 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
     ) {
       if (resource.name === 'table_candle') {
         this.object.setDepth(40);
+      } else if (resource.name === 'floor_candle') {
+        this.object.setDepth(45);
       }
       verticeCollider = Bodies.fromVertices(this.x, this.y, polygon, {
         isSensor: true,
