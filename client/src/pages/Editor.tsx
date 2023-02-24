@@ -1,29 +1,106 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import {
+  styled as muiStyled,
+  ThemeProvider,
+  useTheme,
+} from '@mui/material/styles';
 import styled from 'styled-components';
-import { useSelector, useDispatch } from 'react-redux';
-import { openGame } from '../stores/modeSlice';
-import YjsCodeMirror from './editor/YjsCodeMirror';
-import UserForm from './editor/UserForm';
-import { RootState } from '../stores';
+import Box from '@mui/material/Box';
+import Drawer from '@mui/material/Drawer';
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import YjsCodeMirror from 'pages/editor/YjsCodeMirror';
 import Voice from 'pages/Voice';
-import useVoice from 'hooks/useVoice';
+import IconButton from '@mui/material/IconButton';
+import { VoiceProp } from 'types';
+import { useSelector, useDispatch } from 'react-redux';
+import { openGame } from 'stores/modeSlice';
+import { RootState } from '../stores';
+import { resetRoomId } from 'stores/editorSlice';
 import Button from '@mui/material/Button';
+import Header from 'components/editor/Header';
+import { darkTheme } from 'styles/theme';
+import CloseIcon from '@mui/icons-material/Close';
+import PeopleIcon from '@mui/icons-material/People';
 import Board from './Board';
 import { toggleWhiteboard } from 'stores/whiteboardSlice';
 import { Socket } from 'socket.io-client';
-import Background from 'scenes/Background';
+import FloatingButton from 'components/FloatingButton';
 
-const Editor = () => {
-  const { roomId, session, isChecked } = useSelector((state: RootState) => {
+const drawerWidth = 240;
+
+const Main = muiStyled('main', {
+  shouldForwardProp: (prop) => prop !== 'open',
+})<{
+  open?: boolean;
+}>(({ theme, open }) => ({
+  flexGrow: 1,
+  padding: theme.spacing(3),
+  transition: theme.transitions.create('margin', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  marginRight: -drawerWidth,
+  ...(open && {
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginRight: 0,
+  }),
+}));
+
+interface AppBarProps extends MuiAppBarProps {
+  open?: boolean;
+}
+
+const AppBar = muiStyled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== 'open',
+})<AppBarProps>(({ theme, open }) => ({
+  transition: theme.transitions.create(['margin', 'width'], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  display: 'flex',
+  ...(open && {
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginRight: drawerWidth,
+  }),
+}));
+
+const DrawerHeader = muiStyled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  padding: theme.spacing(0, 1),
+  // necessary for content to be below app bar
+  ...theme.mixins.toolbar,
+  justifyContent: 'flex-start',
+}));
+
+const Editor = (props: VoiceProp) => {
+  const { roomId, isChecked } = useSelector((state: RootState) => {
     return { ...state.editor, ...state.chat, isChecked: state.board.isChecked };
   });
+  const theme = useTheme();
+  const [open, setOpen] = useState(true);
   const dispatch = useDispatch();
-  const { disconnectSession } = useVoice();
   const [socket, setSocket] = useState<Socket>();
 
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
   const handleExit = () => {
-    disconnectSession(session);
     dispatch(openGame());
+    dispatch(resetRoomId());
     if (isChecked) dispatch(toggleWhiteboard());
     if (socket) socket.disconnect();
   };
@@ -36,39 +113,70 @@ const Editor = () => {
   };
   return (
     <>
-      {roomId && (
-        <>
-          <BackgroundDiv />
-          <EditorDiv>
-            <div>
-              <Voice roomKey={roomId} />
-            </div>
-            <YjsCodeMirror />
-          </EditorDiv>
-          <Whiteboard isChecked={isChecked}>
-            <Board roomKey={roomId} handleSocket={handleSocket} />
-          </Whiteboard>
-          <BtnDiv>
-            <Button
-              variant="contained"
-              color="primary"
-              size="small"
-              onClick={handleBoard}
+      <BackgroundDiv />
+      <EditorDiv>
+        <ThemeProvider theme={darkTheme}>
+          <Box
+            sx={{ display: 'flex' }}
+            className="animate__animated animate__zoomInUp "
+          >
+            <AppBar position="fixed" open={open} color="transparent">
+              <Toolbar
+                sx={{ display: 'flex', justifyContent: 'space-between' }}
+              >
+                <Header />
+                <BtnDiv>
+                  <CloseIcon
+                    style={{ color: 'white', cursor: 'pointer' }}
+                    onClick={handleExit}
+                  />
+                  <IconButton
+                    color="secondary"
+                    aria-label="open drawer"
+                    edge="end"
+                    onClick={handleDrawerOpen}
+                    sx={{ ...(open && { display: 'none' }) }}
+                  >
+                    <PeopleIcon />
+                  </IconButton>
+                </BtnDiv>
+              </Toolbar>
+            </AppBar>
+            <Main open={open}>
+              <DrawerHeader />
+              <YjsCodeMirror />
+            </Main>
+            <Drawer
+              sx={{
+                width: drawerWidth,
+                flexShrink: 0,
+                '& .MuiDrawer-paper': {
+                  width: drawerWidth,
+                  backgroundColor: darkTheme.palette.primary.main,
+                },
+              }}
+              variant="persistent"
+              anchor="right"
+              open={open}
             >
-              화이트보드 켜기 / 끄기
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              size="small"
-              // style={{ position: 'fixed' }}
-              onClick={handleExit}
-            >
-              돌아가기
-            </Button>
-          </BtnDiv>
-        </>
-      )}
+              <Voice handleDrawerClose={handleDrawerClose} {...props} />
+            </Drawer>
+          </Box>
+        </ThemeProvider>
+      </EditorDiv>
+      <Whiteboard isChecked={isChecked}>
+        <Board roomKey={roomId} handleSocket={handleSocket} />
+      </Whiteboard>
+      <FixedBtnDiv>
+        <FloatingButton
+          variant="contained"
+          // color="primary"
+          size="small"
+          onClick={handleBoard}
+        >
+          화이트보드 켜기 / 끄기
+        </FloatingButton>
+      </FixedBtnDiv>
     </>
   );
 };
@@ -95,7 +203,14 @@ const EditorDiv = styled.div`
   top: 0;
   left: 0;
 `;
+
 const BtnDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+`;
+const FixedBtnDiv = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;

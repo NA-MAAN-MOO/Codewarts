@@ -36,7 +36,7 @@ import USERINFOQUERY from '../../graphql/userInfoQuery';
 import './YjsCodeMirror.css';
 import 'animate.css';
 import {
-  Header,
+  Header as Tab,
   AlgoInput,
   AlgoInputWrap,
   AlgoTextField,
@@ -66,6 +66,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import InputIcon from '@mui/icons-material/Input';
 import Chip from '@mui/material/Chip';
+import Header from 'components/editor/Header';
 
 /* solvedAC badge svg */
 import RenderSvg from 'components/Svg';
@@ -434,25 +435,8 @@ function YjsCodeMirror() {
   };
 
   return (
-    <EditorWrapper className="animate__animated animate__zoomInUp ">
+    <EditorWrapper>
       <ToastContainer />
-      <EditorInfo>
-        <div>
-          <span
-            style={{
-              color: 'papayawhip',
-              filter: 'drop-shadow(0px 4px 4px rgba(255, 255, 255, 0.5)',
-            }}
-          >
-            {roomId}
-          </span>
-          님의 에디터
-          <span style={{ fontSize: '10px', color: 'grey' }}>
-            나: {userName}
-          </span>
-        </div>
-      </EditorInfo>
-
       <AlgoInfoWrap>
         <Box
           sx={{
@@ -463,7 +447,7 @@ function YjsCodeMirror() {
             boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)',
           }}
         >
-          <Header>
+          <Tab>
             <StyledTabs
               value={algoSelect}
               onChange={selectChange}
@@ -525,7 +509,7 @@ function YjsCodeMirror() {
                 </>
               </div>
             </AlgoInputWrap>
-          </Header>
+          </Tab>
         </Box>
       </AlgoInfoWrap>
 

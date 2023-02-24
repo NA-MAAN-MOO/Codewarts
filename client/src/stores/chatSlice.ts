@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createSelector } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { GAME_STATUS } from '../utils/Constants';
 import { CharInfoType } from 'types';
@@ -6,12 +6,14 @@ import { Session } from 'openvidu-browser';
 
 export interface ChatState {
   users: CharInfoType[];
-  session: Session | undefined;
+  // sessionIdNow: string;
+  // sessionNow: string;
 }
 
 const initialState: ChatState = {
-  users: [],
-  session: undefined,
+  users: [], //현재 내가 있는 chat Room의 유저들
+  // sessionIdNow: '',
+  // sessionNow: '',
 };
 
 export const chatSlice = createSlice({
@@ -21,12 +23,18 @@ export const chatSlice = createSlice({
     setUsers: (state, action) => {
       state.users = action.payload;
     },
-    setSession: (state, action) => {
-      state.session = action.payload;
-    },
-    removeSession: (state) => {
-      state.session = undefined;
-    },
+    // setSession: (state, action) => {
+    //   const serializedSession = JSON.stringify(action.payload);
+    //   state.sessionNow = serializedSession;
+    // },
+    // getSession: (state) => {
+    //   if (!state.sessionNow) return undefined;
+    //   const parsedSession = JSON.parse(state.sessionNow);
+    //   return parsedSession;
+    // },
+    // removeSession: (state) => {
+    //   state.sessionIdNow = '';
+    // },
     // addUser: (state, action) => {
     //   state.users = [...state.users, action.payload];
     // },
@@ -39,6 +47,6 @@ export const chatSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setUsers, setSession, removeSession } = chatSlice.actions;
+export const { setUsers } = chatSlice.actions;
 
 export default chatSlice.reducer;

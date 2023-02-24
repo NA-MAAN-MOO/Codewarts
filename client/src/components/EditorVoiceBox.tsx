@@ -5,13 +5,11 @@ import { ReactComponent as MicOff } from 'assets/icons/mic_off.svg';
 import { ReactComponent as MicOn } from 'assets/icons/mic_on.svg';
 import { ReactComponent as VolOff } from 'assets/icons/volume_off.svg';
 import { ReactComponent as VolOn } from 'assets/icons/volume_on.svg';
-import { Session, Publisher, Subscriber } from 'openvidu-browser';
 import { useSelector } from 'react-redux';
 import type { RootState } from 'stores';
 import { GameVoiceType } from 'types';
-import FloatingBox from 'components/FloatingBox';
 
-const VoiceBox = ({
+const EditorVoiceBox = ({
   session,
   subscribers,
   publisher,
@@ -48,7 +46,7 @@ const VoiceBox = ({
           )
         );
       })}
-      <FloatingBox>
+      <div>
         {volumeOn ? (
           <VolOn
             width="32px"
@@ -83,18 +81,9 @@ const VoiceBox = ({
             style={{ transform: 'scaleX(-1)', cursor: 'pointer' }}
           />
         )}
-        {/* <div id="session-header">
-          <input
-          className="btn btn-large btn-danger"
-          type="button"
-          id="buttonLeaveSession"
-          onClick={leaveSession}
-          value="Leave session"
-          />
-        </div> */}
-      </FloatingBox>
+      </div>
     </>
   );
 };
 
-export default VoiceBox;
+export default EditorVoiceBox;

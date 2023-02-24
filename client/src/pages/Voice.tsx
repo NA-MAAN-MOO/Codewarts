@@ -1,24 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import type { RootState } from 'stores';
-import {
-  OpenVidu,
-  Session,
-  StreamManager,
-  SessionEventMap,
-  Subscriber,
-  Publisher,
-} from 'openvidu-browser';
+import { OpenVidu, Subscriber, Publisher } from 'openvidu-browser';
 import useVoice from 'hooks/useVoice';
 import { VoiceProp } from 'types';
 import GameVoice from 'pages/voice/GameVoice';
 import { GAME_STATUS } from 'utils/Constants';
 import EditorVoice from 'pages/voice/EditorVoice';
+import { stringToAscii } from 'lib/voiceLib';
 
 //Voice 방 컴포넌트
-const Voice = ({ roomKey }: VoiceProp) => {
+const Voice = ({ roomKey, session, handleSession, ...rest }: VoiceProp) => {
   const [OV, setOV] = useState<OpenVidu>();
-  const [session, setSession] = useState<Session>();
   const [subscribers, setSubscribers] = useState<Array<Subscriber>>([]);
   const [publisher, setPublisher] = useState<Publisher>();
   const {
@@ -27,27 +20,21 @@ const Voice = ({ roomKey }: VoiceProp) => {
     registerSession,
     initSession,
     getUsers,
-    getSessions,
-    getConnections,
+    resetServerConnList,
   } = useVoice();
 
-  const onBeforeUnload = (e: BeforeUnloadEvent) => {
+  const onBeforeUnload = async (e: BeforeUnloadEvent) => {
     leaveSession();
+    await resetServerConnList();
   };
-  const { playerId, status, users } = useSelector((state: RootState) => {
-    return { ...state.user, ...state.mode, ...state.chat };
+  const { playerId, status } = useSelector((state: RootState) => {
+    return { ...state.user, ...state.mode };
   });
 
   useEffect(() => {
     window.addEventListener('beforeunload', onBeforeUnload);
 
-    (async () => {
-      if (session) return;
-      await joinSession();
-    })();
-
     return function cleanup() {
-      disconnectSession(session);
       window.removeEventListener('beforeunload', onBeforeUnload);
     };
   }, []);
@@ -75,7 +62,7 @@ const Voice = ({ roomKey }: VoiceProp) => {
 
     // Empty all properties...
     setOV(undefined);
-    setSession(undefined);
+    handleSession(undefined);
     setSubscribers([]);
     setPublisher(undefined);
   };
@@ -86,19 +73,21 @@ const Voice = ({ roomKey }: VoiceProp) => {
 
     //roomKey를 바탕으로 sessionId를 가져온다.
     //가져온 sessionId와 만든 세션을 서버에서 생성한다.
+
     const result = await createSession(roomKey);
     if (!result) {
       return;
     }
-    setSession(session);
+    handleSession(session);
     setOV(OV);
   };
 
   useEffect(() => {
-    if (!session) {
-      return;
-    }
     (async () => {
+      if (!session) {
+        await joinSession();
+        return;
+      }
       await registerSession({
         session,
         sessionId: roomKey,
@@ -111,10 +100,6 @@ const Voice = ({ roomKey }: VoiceProp) => {
       await getUsers(roomKey);
     })();
   }, [session]);
-
-  // useEffect(() => {
-  //   console.log(users);
-  // }, [users]);
 
   return (
     <>
@@ -133,32 +118,9 @@ const Voice = ({ roomKey }: VoiceProp) => {
           leaveSession={leaveSession}
           joinSession={joinSession}
           publisher={publisher}
+          {...rest}
         />
       )}
-      <button
-        onClick={async () => {
-          const conn = await getConnections(roomKey);
-          console.log(conn);
-        }}
-      >
-        현재 세션 커넥션 가져오기
-      </button>
-      <button
-        onClick={async () => {
-          const conn = await getConnections(GAME_STATUS.GAME);
-          console.log(conn);
-        }}
-      >
-        메인 세션 커넥션 가져오기
-      </button>
-      <button
-        onClick={async () => {
-          const ses = await getSessions();
-          console.log(ses);
-        }}
-      >
-        전체 세션 가져오기
-      </button>
     </>
   );
 };
