@@ -167,7 +167,7 @@ export default class Lobby extends Phaser.Scene {
         this.input.keyboard.disableGlobalCapture();
       }
 
-      this.player.update();
+      this.player.move();
 
       /* Add overlap between portal and player */
       let boundPortal = this.portal.getBounds();
