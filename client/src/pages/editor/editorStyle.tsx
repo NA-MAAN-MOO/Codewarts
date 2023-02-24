@@ -111,7 +111,7 @@ const ProbSummary = styledc.div`
 color: #fff;
 font-size: 20px;
 width: 300px;
-border: 1px solid yellow;
+// border: 1px solid yellow;
 text-align: center;
 // line-height: 56px;
 

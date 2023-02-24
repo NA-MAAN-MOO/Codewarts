@@ -420,7 +420,8 @@ function YjsCodeMirror() {
         }
         setMarkingPercent(`${(hitCount / totalCases) * 100}`);
       }
-      console.log(`${markingPercent} 점`);
+
+      // 현재 비동기적으로 작동함
       if (markingPercent === '100') {
         notifySuccess(roomId, bojProbData.problemId);
       } else {
