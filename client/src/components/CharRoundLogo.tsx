@@ -24,5 +24,5 @@ const CuttedWrapper = styled.div`
   width: 50px;
   border-radius: 100%;
   height: 50px;
-  // overflow: hidden;
+  overflow: hidden;
 `;
