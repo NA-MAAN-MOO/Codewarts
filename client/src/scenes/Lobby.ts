@@ -198,7 +198,7 @@ export default class Lobby extends Phaser.Scene {
         this.player.displayWidth -= this.player.width / 200;
         this.player.displayHeight -= this.player.height / 200;
         this.cameras.main.alpha -= 0.005;
-        this.cameras.main.shake(undefined, 0.01);
+        this.cameras.main.shake(undefined, 0.005);
       }
     }
   }
