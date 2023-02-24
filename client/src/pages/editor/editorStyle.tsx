@@ -111,7 +111,7 @@ const ProbSummary = styledc.div`
 color: #fff;
 font-size: 20px;
 width: 300px;
-border: 1px solid yellow;
+// border: 1px solid yellow;
 text-align: center;
 // line-height: 56px;
 
@@ -217,6 +217,8 @@ const MiddleWrapper = styledc.div`
   martgin-top: 10px;
   font-size: 20px;
   text-align: right;
+  font-family: 'Cascadia Code', 'Pretendard-Regular';
+  color: papayawhip;
 `;
 
 /* 다크/라이트 토글 스위치 테마 */
