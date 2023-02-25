@@ -260,6 +260,10 @@ function YjsCodeMirror() {
 
       <MiddleWrapper>
         <ThemeProvider theme={theme}>
+          <EditorThemeSwitch
+            editorThemeMode={editorThemeMode}
+            setEditorTheme={setEditorTheme}
+          />
           <RunButton
             ytext={ytext}
             setCompileOutput={setCompileOutput}
@@ -283,11 +287,6 @@ function YjsCodeMirror() {
             min={0}
             max={100}
             label={`채점 진행률: ${markingPercent}%`}
-          />
-
-          <EditorThemeSwitch
-            editorThemeMode={editorThemeMode}
-            setEditorTheme={setEditorTheme}
           />
         </ThemeProvider>
       </MiddleWrapper>

@@ -3,6 +3,7 @@
   height: 20px;
   border: 1px solid black;
   position: relative;
+  margin-bottom: 10px;
 }
 
 .bar {
