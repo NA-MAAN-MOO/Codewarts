@@ -73,7 +73,7 @@ export default () => {
       })
     );
     const flattedList = userInfos.filter((d) => !!d);
-    const uniqueUserList = _.uniq(flattedList);
+    const uniqueUserList = _.uniqBy(flattedList, ['char', 'name']);
     // const uniqueUserList = userInfos
     //   .filter((d) => !!d)
     //   .filter(
