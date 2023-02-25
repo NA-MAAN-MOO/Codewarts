@@ -33,6 +33,8 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
     if (scene.scene.key === 'Lobby') {
       this.scale *= 2.3;
+    } else {
+      this.scale *= 1.3;
     }
 
     /* Add player sensor & collision body */
@@ -56,7 +58,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
     /* Add player name bubble */
     this.playerNameBubble = this.scene.add
-      .text(this.x, this.y - this.height - 10, this.playerName, {
+      .text(this.x, this.y - this.height * 0.8, this.playerName, {
         fontFamily: 'Firenze',
       })
       .setStyle({
@@ -115,7 +117,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     if (this.scene.scene.key === 'Lobby') {
       this.playerNameBubble.setPosition(this.x, this.y - this.height - 20);
     } else {
-      this.playerNameBubble.setPosition(this.x, this.y - this.height / 2 - 10);
+      this.playerNameBubble.setPosition(this.x, this.y - this.height * 0.8);
     }
 
     if (this.successEffect) {
