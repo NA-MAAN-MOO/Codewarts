@@ -301,6 +301,7 @@ export default class MainScene extends Phaser.Scene {
       this.whiteboardButton.setVisible(true);
       if (this.player.inputKeys.open.isDown) {
         console.log('화이트보드에서 E 누름');
+        this.player?.updateDialogBubble('🤣');
       }
     } else {
       this.whiteboardButton.setVisible(false);
