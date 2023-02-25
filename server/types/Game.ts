@@ -8,6 +8,7 @@ export type PlayerType = {
   state: 'resume' | 'paused';
   x: number;
   y: number;
+  playerCollider: boolean;
 };
 
 //[id, idx, userName, socketId]
