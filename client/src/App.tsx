@@ -7,10 +7,11 @@ import type { RootState } from 'stores';
 import Start from 'pages/Start';
 // import './codeuk';
 import TestVoiceButtons from 'components/TestVoiceButtons';
+import Whiteboard from 'pages/Whiteboard';
 
 function App() {
   const mode = process.env.REACT_APP_MODE;
-  const { START, LOBBY, GAME, EDITOR } = GAME_STATUS;
+  const { START, LOBBY, GAME, EDITOR, WHITEBOARD } = GAME_STATUS;
   const { playerId, status } = useSelector((state: RootState) => {
     return { ...state.user, ...state.mode };
   });
@@ -34,6 +35,9 @@ function App() {
       ) : //불필요한 로비 삭제
       status === GAME || status === EDITOR ? (
         <VoiceRoom />
+      ) : status === WHITEBOARD ? (
+        // FIXME: whiteboard component 추가
+        <Whiteboard />
       ) : (
         <></>
       )}

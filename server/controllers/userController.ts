@@ -127,6 +127,7 @@ export const getChar = async (req: Request, res: Response) => {
     res.status(500).send(e);
   }
 };
+
 // const isPasswordCorrect = await bcrypt.compare(userPw, foundUser.userPw);
 // if (isPasswordCorrect) {
 //   const accessToken = jwt.sign(
