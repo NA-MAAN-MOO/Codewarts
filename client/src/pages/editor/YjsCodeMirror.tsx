@@ -33,7 +33,7 @@ import USERINFOQUERY from '../../graphql/userInfoQuery';
 import './YjsCodeMirror.css';
 import 'animate.css';
 import {
-  Header as Tab,
+  HeaderTab,
   AlgoInput,
   AlgoInputWrap,
   AlgoTextField,
@@ -325,6 +325,7 @@ function YjsCodeMirror() {
   return (
     <EditorWrapper>
       <ToastContainer />
+
       <AlgoInfoWrap>
         <Box
           sx={{
@@ -335,7 +336,7 @@ function YjsCodeMirror() {
             boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)',
           }}
         >
-          <Tab>
+          <HeaderTab>
             <StyledTabs
               value={algoSelect}
               onChange={selectChange}
@@ -391,7 +392,7 @@ function YjsCodeMirror() {
                 />
               </div>
             </AlgoInputWrap>
-          </Tab>
+          </HeaderTab>
         </Box>
       </AlgoInfoWrap>
 

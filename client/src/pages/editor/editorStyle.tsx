@@ -53,7 +53,7 @@ margin-top: 20px;
 width: 100%;
 `;
 
-const Header = styledc.div`
+const HeaderTab = styledc.div`
 display: flex;
 justify-content: space-between;
 // border: 1px solid blue;
@@ -306,7 +306,7 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
 }));
 
 export {
-  Header,
+  HeaderTab,
   AlgoInput,
   AlgoInputWrap,
   AlgoTextField,
