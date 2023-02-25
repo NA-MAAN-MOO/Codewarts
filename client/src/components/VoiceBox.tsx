@@ -71,7 +71,7 @@ const VoiceBox = ({
           <VolumeSet />
         </FloatingBox>
       ) : (
-        <div>
+        <div style={{ display: 'flex', gap: '5px' }}>
           <VolumeSet />
         </div>
       )}

@@ -5,12 +5,18 @@ type IconType = {
   color?: string;
   isMute?: boolean;
   handleMic?: () => void;
+  size?: string;
 };
-const MicIcon = ({ color = 'white', isMute = false, handleMic }: IconType) => {
+const MicIcon = ({
+  color = 'white',
+  isMute = false,
+  handleMic,
+  size = '30px',
+}: IconType) => {
   return isMute ? (
     <MicOff
-      width="30px"
-      height="30px"
+      width={size}
+      height={size}
       fill={color}
       onClick={handleMic || undefined}
       style={{
@@ -20,8 +26,8 @@ const MicIcon = ({ color = 'white', isMute = false, handleMic }: IconType) => {
     />
   ) : (
     <MicOn
-      width="30px"
-      height="30px"
+      width={size}
+      height={size}
       fill={color}
       onClick={handleMic || undefined}
       style={{

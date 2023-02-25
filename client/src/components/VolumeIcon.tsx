@@ -7,18 +7,20 @@ type IconType = {
   color?: string;
   isMute?: boolean;
   handleVolume?: () => void;
+  size?: string;
 };
 
 const VolumeIcon = ({
   color = 'white',
   isMute = false,
   handleVolume,
+  size = '32px',
 }: IconType) => {
   return isMute ? (
     color === 'white' ? (
       <VolOff
-        width="32px"
-        height="32px"
+        width={size}
+        height={size}
         onClick={handleVolume || undefined}
         style={{
           cursor: handleVolume ? 'pointer' : 'auto',
@@ -26,9 +28,9 @@ const VolumeIcon = ({
       />
     ) : (
       <VolOffGray
-        width="32px"
+        width={size}
         fill={color}
-        height="32px"
+        height={size}
         onClick={handleVolume || undefined}
         style={{
           cursor: handleVolume ? 'pointer' : 'auto',
@@ -37,8 +39,8 @@ const VolumeIcon = ({
     )
   ) : color === 'white' ? (
     <VolOn
-      width="32px"
-      height="32px"
+      width={size}
+      height={size}
       onClick={handleVolume || undefined}
       style={{
         cursor: handleVolume ? 'pointer' : 'auto',
@@ -46,8 +48,8 @@ const VolumeIcon = ({
     />
   ) : (
     <VolOnGray
-      width="32px"
-      height="32px"
+      width={size}
+      height={size}
       onClick={handleVolume || undefined}
       style={{
         cursor: handleVolume ? 'pointer' : 'auto',

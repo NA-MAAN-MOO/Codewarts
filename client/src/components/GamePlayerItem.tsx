@@ -16,7 +16,7 @@ const GamePlayerItem = ({ name, char }: { name: string; char: string }) => {
   );
   return (
     <ListItem key={name} disablePadding sx={{ display: 'flex', gap: '10px' }}>
-      <ListItemButton onClick={(e) => e.preventDefault()}>
+      <ListItemButton onClick={(e) => e.preventDefault()} sx={{ gap: '5px' }}>
         <ListItemIcon>
           <CharRoundLogo charName={char} />
         </ListItemIcon>
@@ -26,8 +26,12 @@ const GamePlayerItem = ({ name, char }: { name: string; char: string }) => {
             fontFamily: 'Firenze',
           }}
         />
-        {volMuteInfo?.[name] && <VolumeIcon color="gray" isMute={true} />}
-        {micMuteInfo?.[name] && <MicIcon color="gray" isMute={true} />}
+        {volMuteInfo?.[name] && (
+          <VolumeIcon color="gray" isMute={true} size="23px" />
+        )}
+        {micMuteInfo?.[name] && (
+          <MicIcon color="gray" isMute={true} size="23px" />
+        )}
       </ListItemButton>
     </ListItem>
   );
