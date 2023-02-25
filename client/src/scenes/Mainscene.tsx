@@ -165,6 +165,7 @@ export default class MainScene extends Phaser.Scene {
         socketId: payLoad.socketId,
         state: payLoad.state,
         userName: payLoad.userName,
+        playerCollider: payLoad.playerCollider,
       });
     });
 
@@ -178,6 +179,7 @@ export default class MainScene extends Phaser.Scene {
         socketId: payLoad.socketId,
         state: payLoad.state,
         userName: payLoad.userName,
+        playerCollider: payLoad.playerCollider,
       };
       this.addOtherPlayers(otherPlayerInfo);
       // store.dispatch(addUser(payLoad.userName));
@@ -209,6 +211,19 @@ export default class MainScene extends Phaser.Scene {
         }
       });
     });
+
+    // playerCollider가 변경되면 데이터를 받아서 변경시켜준다.
+    phaserGame.socket.on(
+      'changePlayerCollider',
+      (payLoad: ServerPlayerType) => {
+        console.log('여기 오냐 안오냐?', payLoad);
+        this.otherPlayers.forEach((otherPlayer) => {
+          if (otherPlayer.socketId === payLoad.socketId) {
+            otherPlayer.playerCollider.isSensor = payLoad.playerCollider;
+          }
+        });
+      }
+    );
 
     phaserGame.socket.emit('currentEditors');
     // TODO: 강제로 해당 tableMap.get(id)를 새로 그리라고 해야한다. 02.14
@@ -285,7 +300,6 @@ export default class MainScene extends Phaser.Scene {
   }
 
   update() {
-    this.player.playerCollider.isSensor = this.watchTable;
     /*---- Whiteboard Interaction ----*/
     let boundWhiteboard = this.whiteboard.getBounds();
     boundWhiteboard.setSize(
@@ -322,6 +336,9 @@ export default class MainScene extends Phaser.Scene {
           phaserGame.socket.emit('removeEditor');
         }
       }
+      this.player.playerCollider.isSensor = false;
+      console.log('에디터 닫았을 때');
+      phaserGame.socket.emit('changePlayerCollider', false);
       this.editorOwner = '';
       this.openMyEditor = false;
       this.input.keyboard.enableGlobalCapture();
@@ -329,6 +346,7 @@ export default class MainScene extends Phaser.Scene {
     }
     /*-----------테이블에서 E 누르고, 리스트 보고 있는 상태--------------*/
     if (this.watchTable) {
+      console.log('에디터 리스트 볼 때');
       // this.player.setStatic(true);
       if (
         this.idxDown &&
@@ -362,6 +380,13 @@ export default class MainScene extends Phaser.Scene {
               open: Phaser.Input.Keyboard.KeyCodes.E,
             });
             this.watchTable = false;
+            // 돌아갈때는 내 충돌 설정을 변경시킨다.
+            this.player.playerCollider.isSensor = false;
+            // TODO: 이 시점에 다른 유저들에게 내 상태변경 통보
+            console.log(
+              "phaserGame.socket.emit('changePlayerCollider', false);"
+            );
+            phaserGame.socket.emit('changePlayerCollider', false);
             this.tableMap
               .get(this.player.touching[0].body.id)
               ?.clearEditorList();
@@ -377,6 +402,7 @@ export default class MainScene extends Phaser.Scene {
               open: Phaser.Input.Keyboard.KeyCodes.E,
             });
             this.watchTable = false;
+            // 비록 테이블 에디터 리스트는 꺼지지만, 내 충돌 설정을 변경되지 않는다.
             this.enterEditor(this.player.touching[0].body.id, this.editorIdx);
             this.tableMap
               .get(this.player.touching[0].body.id)
@@ -408,7 +434,6 @@ export default class MainScene extends Phaser.Scene {
           }
         }
       }
-
       return;
     }
     /*----------키보드 E키를 눌렀을 때 (테이블 상호작용 시작)---------------*/
@@ -417,8 +442,11 @@ export default class MainScene extends Phaser.Scene {
         this.editorIdx = 0;
 
         this.watchTable = true;
-        // this.player.playerCollider.isSensor = true;
-        // this.player.setStatic(true);
+        // 에디터 키면 유령되자.
+        this.player.playerCollider.isSensor = true;
+        // TODO: 이 시점에 다른 유저들에게 내 상태변경 통보
+        console.log("phaserGame.socket.emit('changePlayerCollider', true);");
+        phaserGame.socket.emit('changePlayerCollider', true);
         console.log(this.player);
         console.log('플레이어 멈춤');
 
@@ -454,6 +482,8 @@ export default class MainScene extends Phaser.Scene {
       frame: 'down-1', // atlas.json의 첫번째 filename
       name: playerInfo.userName,
     });
+    // collisionState가 true면 유령, false면 충돌
+    otherPlayer.playerCollider.isSensor = playerInfo.playerCollider;
     if (playerInfo.state === 'paused') {
       otherPlayer.setStatic(true);
     }
