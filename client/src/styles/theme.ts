@@ -13,6 +13,9 @@ const muiTheme = createTheme({
       dark: '#800000',
       light: '#F5DEB3',
     },
+    info: {
+      main: '#272822',
+    },
   },
 });
 
@@ -23,6 +26,9 @@ export const darkTheme = createTheme({
       main: '#272822',
     },
     secondary: {
+      main: '#FFFFFF',
+    },
+    info: {
       main: '#FFFFFF',
     },
   },
