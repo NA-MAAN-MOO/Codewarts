@@ -1,6 +1,9 @@
 import axios, { AxiosError } from 'axios';
 import { Request, Response } from 'express';
 import { OpenVidu, Session } from 'openvidu-node-client';
+import { MUTE_TYPE } from '../constants';
+import MicMuteInfo from '../services/MicMuteInfo';
+import VolMuteInfo from '../services/VolMuteInfo';
 import { IsRoomExist as ConnectionList } from '../types/Voice';
 
 // Environment variable: URL where our OpenVidu server is listening
@@ -171,6 +174,40 @@ export const resetConnection = async (req: Request, res: Response) => {
   try {
     // connectionList = {};
     res.status(200).end();
+  } catch (err: unknown) {
+    console.log(err);
+    res.status(500).send(err);
+  }
+};
+
+// 뮤트/언뮤트 처리
+export const toggleMute = async (req: Request, res: Response) => {
+  try {
+    const { type } = req.params;
+    const { userName } = req.body;
+
+    if (type === MUTE_TYPE.VOL) {
+      //볼륨 뮤트/언뮤트
+      VolMuteInfo.switch(userName);
+    } else {
+      // 마이크 뮤트/언뮤트
+      MicMuteInfo.switch(userName);
+    }
+    res.status(200).end();
+  } catch (err: unknown) {
+    console.log(err);
+    res.status(500).send(err);
+  }
+};
+
+// 뮤트/언뮤트 가져오기
+export const getMuteInfo = async (req: Request, res: Response) => {
+  try {
+    const result = {
+      [MUTE_TYPE.VOL]: VolMuteInfo,
+      [MUTE_TYPE.MIC]: MicMuteInfo,
+    };
+    res.send(result).end();
   } catch (err: unknown) {
     console.log(err);
     res.status(500).send(err);

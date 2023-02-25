@@ -115,3 +115,6 @@ export type Connection = {
 
 //{닉네임 : 캐릭터} 타입
 export type CharInfoType = Record<string, string>;
+
+//{닉네임 : true/false} 타입
+export type MuteInfoType = Record<string, boolean>;

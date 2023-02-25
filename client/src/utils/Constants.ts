@@ -4,3 +4,8 @@ export const GAME_STATUS = {
   GAME: 'GAME',
   EDITOR: 'EDITOR',
 };
+
+export const MUTE_TYPE = {
+  VOL: 'VOL',
+  MIC: 'MIC',
+};

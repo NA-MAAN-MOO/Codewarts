@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import modeReducer from './modeSlice';
 import editorReducer from './editorSlice';
 import userReducer from './userSlice';
-import chatReducer from './chatSlice';
+import chatReducer, { fetchMuteInfo } from 'stores/chatSlice';
 import boardReducer from './whiteboardSlice';
 
 export const store = configureStore({
@@ -14,6 +14,8 @@ export const store = configureStore({
     board: boardReducer,
   },
 });
+
+store.dispatch(fetchMuteInfo());
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;

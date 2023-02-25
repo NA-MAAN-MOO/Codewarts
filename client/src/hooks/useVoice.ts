@@ -8,11 +8,13 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'stores';
 import axios from 'axios';
-import { setUsers } from 'stores/chatSlice';
+import { setUsers, toggleMicMute, toggleVolMute } from 'stores/chatSlice';
 import { Connection } from 'types';
 import _ from 'lodash';
+import { MUTE_TYPE } from 'utils/Constants';
 
-const APPLICATION_SERVER_URL = 'http://localhost:3002';
+const APPLICATION_SERVER_URL =
+  process.env.REACT_APP_VOICE_URL || 'http://localhost:3002';
 
 export default () => {
   const dispatch = useDispatch();
@@ -23,7 +25,7 @@ export default () => {
   const getConnections = async (sessionId: string) => {
     try {
       const { data }: { data: Connection[] | false } = await axios.get(
-        'http://localhost:3002/get-connections',
+        `${APPLICATION_SERVER_URL}/get-connections`,
         {
           params: { sessionId: sessionId },
         }
@@ -35,7 +37,10 @@ export default () => {
     }
   };
   const getSessions = async () => {
-    const { data } = await axios.get('http://localhost:3002/get-sessions', {});
+    const { data } = await axios.get(
+      `${APPLICATION_SERVER_URL}/get-sessions`,
+      {}
+    );
     return data;
   };
 
@@ -216,25 +221,25 @@ export default () => {
         console.warn(exception);
       });
 
+      //세션에 누군가 왔을 때 호출
       mySession.on('connectionCreated', async (event: ConnectionEvent) => {
-        //세션에 누군가 왔을 때 호출
         const session = event.target as Session;
         const sessionId = session.sessionId;
         await getUsers(sessionId);
       });
 
+      //내가 세션을 나갔을 때 호출
       mySession.on(
         'sessionDisconnected',
         async (event: SessionDisconnectedEvent) => {
-          //내가 세션을 나갔을 때 호출
           // const session = event.target as Session;
           // const sessionId = session.sessionId;
           // await getUsers(sessionId);
         }
       );
 
+      //다른 유저가 세션을 나갔을 때 호출
       mySession.on('connectionDestroyed', async (event: ConnectionEvent) => {
-        //다른 유저가 세션을 나갔을 때 호출
         console.log('세션나감');
         const session = event.target as Session;
         const sessionId = session.sessionId;
@@ -242,7 +247,25 @@ export default () => {
         await getUsers(sessionId);
       });
 
-      // --- 4) Connect to the session with a valid user token ---
+      //유저의 볼륨 음소거 시그널을 받았을 때
+      mySession.on(`signal:${MUTE_TYPE.VOL}`, async (event) => {
+        console.log('볼륨 음소거 시그널 로직');
+        const user = event.data;
+        if (!user) {
+          return;
+        }
+        await toggleMute({ type: MUTE_TYPE.VOL, userName: user });
+      });
+
+      //유저의 마이크 음소거 시그널을 받았을 때
+      mySession.on(`signal:${MUTE_TYPE.MIC}`, async (event) => {
+        console.log('마이크 음소거 시그널 로직');
+        const user = event.data;
+        if (!user) {
+          return;
+        }
+        await toggleMute({ type: MUTE_TYPE.MIC, userName: user });
+      });
 
       // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
       // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
@@ -290,7 +313,7 @@ export default () => {
   //     // if (!sessionIdNow) return;
 
   //     // const { data: session } = await axios.get(
-  //     //   'http://localhost:3002/get-session-from-id',
+  //     //   `${APPLICATION_SERVER_URL}/get-session-from-id`,
   //     //   {
   //     //     params: {
   //     //       sessionId: sessionIdNow,
@@ -304,6 +327,27 @@ export default () => {
   //     console.log(e);
   //   }
   // };
+
+  const toggleMute = async ({
+    type,
+    userName,
+  }: {
+    type: string;
+    userName: string;
+  }) => {
+    try {
+      await axios.post(`${APPLICATION_SERVER_URL}/toggle-mute/${type}`, {
+        userName: userName,
+      });
+      if (type === MUTE_TYPE.VOL) {
+        dispatch(toggleVolMute(userName));
+      } else if (type === MUTE_TYPE.MIC) {
+        dispatch(toggleMicMute(userName));
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return {
     initSession,

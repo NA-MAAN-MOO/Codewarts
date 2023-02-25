@@ -1,17 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
-import MuiDrawer from '@mui/material/Drawer';
-import Button from '@mui/material/Button';
 import List from '@mui/material/List';
-import { GAME_STATUS } from 'utils/Constants';
 import Divider from '@mui/material/Divider';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { RootState } from 'stores';
-import CharRoundLogo from 'components/CharRoundLogo';
 import GamePlayerItem from './GamePlayerItem';
-
-type Anchor = 'top' | 'left' | 'bottom' | 'right';
 
 const CurrentPlayer = ({ handleDrawer }: { handleDrawer?: () => void }) => {
   const { users, status } = useSelector((state: RootState) => {

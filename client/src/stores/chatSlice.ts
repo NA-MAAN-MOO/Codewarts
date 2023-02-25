@@ -1,17 +1,33 @@
-import { createSlice, createSelector } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { GAME_STATUS } from '../utils/Constants';
-import { CharInfoType } from 'types';
+import { GAME_STATUS, MUTE_TYPE } from '../utils/Constants';
+import { CharInfoType, MuteInfoType } from 'types';
 import { Session } from 'openvidu-browser';
+import axios from 'axios';
+
+const APPLICATION_SERVER_URL =
+  process.env.REACT_APP_VOICE_URL || 'http://localhost:3002';
 
 export interface ChatState {
   users: CharInfoType[];
+  volMuteInfo: MuteInfoType;
+  micMuteInfo: MuteInfoType;
   // sessionIdNow: string;
   // sessionNow: string;
 }
 
+export const fetchMuteInfo = createAsyncThunk(
+  'char/fetchMuteInfo',
+  async () => {
+    const { data } = await axios.get(`${APPLICATION_SERVER_URL}/get-mute-info`);
+    return data;
+  }
+);
+
 const initialState: ChatState = {
   users: [], //현재 내가 있는 chat Room의 유저들
+  volMuteInfo: {},
+  micMuteInfo: {},
   // sessionIdNow: '',
   // sessionNow: '',
 };
@@ -22,6 +38,22 @@ export const chatSlice = createSlice({
   reducers: {
     setUsers: (state, action) => {
       state.users = action.payload;
+    },
+    toggleVolMute: (state, action) => {
+      const user = action.payload;
+      if (!state.volMuteInfo[user]) {
+        state.volMuteInfo[user] = true;
+      } else {
+        state.volMuteInfo[user] = !state.volMuteInfo[user];
+      }
+    },
+    toggleMicMute: (state, action) => {
+      const user = action.payload;
+      if (!state.micMuteInfo[user]) {
+        state.micMuteInfo[user] = true;
+      } else {
+        state.micMuteInfo[user] = !state.micMuteInfo[user];
+      }
     },
     // setSession: (state, action) => {
     //   const serializedSession = JSON.stringify(action.payload);
@@ -44,9 +76,15 @@ export const chatSlice = createSlice({
     //   state.users = state.users.filter((item) => item !== targetName);
     // },
   },
+  extraReducers: (builder) => {
+    builder.addCase(fetchMuteInfo.fulfilled, (state, action) => {
+      state.volMuteInfo = action.payload[MUTE_TYPE.VOL];
+      state.micMuteInfo = action.payload[MUTE_TYPE.MIC];
+    });
+  },
 });
 
 // Action creators are generated for each case reducer function
-export const { setUsers } = chatSlice.actions;
+export const { setUsers, toggleVolMute, toggleMicMute } = chatSlice.actions;
 
 export default chatSlice.reducer;
