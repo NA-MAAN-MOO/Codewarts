@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'stores';
 
 /* toast */
-import { notifySuccess, notifyFail } from '../../pages/editor/toast';
+import { notifySuccess, notifyFail } from './toast';
 
 //@ts-ignore
 function EvaluateButton(props) {

@@ -43,7 +43,7 @@ import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 
 /* toast */
-import { ToastContainer } from './toast';
+import { ToastContainer } from '../../components/editor/toast';
 
 /* components */
 import EditorThemeSwitch from 'components/editor/EditorThemeSwitch';
@@ -53,6 +53,7 @@ import EvaluateButton from 'components/editor/EvaluateButton';
 import CompilerField from 'components/editor/CompilerField';
 import AlgoHeaderTab from 'components/editor/AlgoHeaderTab';
 import AlgoInfoAccordion from 'components/editor/AlgoInfoAccordion';
+import EvaluateGauge from 'components/editor/EvaluateGauge';
 
 function YjsCodeMirror() {
   /* ref */
@@ -277,7 +278,13 @@ function YjsCodeMirror() {
             markingPercent={markingPercent}
             setMarkingPercent={setMarkingPercent}
           />
-          <span style={{ color: 'white' }}>채점진행 : {markingPercent}%</span>
+          <EvaluateGauge
+            value={markingPercent}
+            min={0}
+            max={100}
+            label={`채점 진행률: ${markingPercent}%`}
+          />
+
           <EditorThemeSwitch
             editorThemeMode={editorThemeMode}
             setEditorTheme={setEditorTheme}

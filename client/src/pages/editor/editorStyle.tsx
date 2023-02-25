@@ -1,6 +1,5 @@
 import styledc from 'styled-components';
 import { styled, alpha, createTheme } from '@mui/material/styles';
-
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Switch from '@mui/material/Switch';
