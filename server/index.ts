@@ -236,8 +236,6 @@ io.on('connection', (socket: Socket) => {
     tables.forEach((table: TableType) => {
       // FIXME: 조건식 table[2] === playerInfo.userName 에서 변경
       if (table[3] === playerInfo.socketId) {
-        // socket.broadcast.emit('removeEditor', table);
-        // socket.emit('removeEditor', table);
         io.emit('removeEditor', table);
       }
     });
