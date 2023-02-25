@@ -299,7 +299,7 @@ export default class MainScene extends Phaser.Scene {
       Phaser.Geom.Intersects.RectangleToRectangle(boundWhiteboard, boundPlayer)
     ) {
       this.whiteboardButton.setVisible(true);
-      if (this.player.inputKeys.open.isDown) {
+      if (Phaser.Input.Keyboard.JustDown(this.player?.inputKeys.open)) {
         console.log('화이트보드에서 E 누름');
         store.dispatch(openWhiteboard());
       }
