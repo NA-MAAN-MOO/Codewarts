@@ -26,25 +26,16 @@ import {
 import { okaidia } from '@uiw/codemirror-theme-okaidia';
 
 /* GraphQL queries */
-import PROBLEMQUERY from '../../graphql/problemQuery';
 import USERINFOQUERY from '../../graphql/userInfoQuery';
 
 /* UI */
 import './YjsCodeMirror.css';
 import 'animate.css';
 import {
-  HeaderTab,
-  AlgoInput,
-  AlgoInputWrap,
-  AlgoTextField,
-  ProbSummary,
-  ProfileInfo,
   Item,
   MiddleWrapper,
   EditorWrapper,
   AlgoInfoWrap,
-  StyledTab,
-  StyledTabs,
   AccordionSummary,
   Accordion,
   theme,
@@ -57,18 +48,17 @@ import Tooltip from '@mui/material/Tooltip';
 import Divider from '@mui/material/Divider';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import InputIcon from '@mui/icons-material/Input';
-import Chip from '@mui/material/Chip';
 
 /* toast */
 import { ToastContainer } from './toast';
 
 /* components */
-import RenderSvg from 'components/Svg';
 import EditorThemeSwitch from 'components/editor/EditorThemeSwitch';
 import RunButton from 'components/editor/RunButton';
 import SubmitButton from 'components/editor/SubmitButton';
 import EvaluateButton from 'components/editor/EvaluateButton';
 import CompilerField from 'components/editor/CompilerField';
+import AlgoHeaderTab from 'components/editor/AlgoHeaderTab';
 
 function YjsCodeMirror() {
   /* ref */
@@ -187,74 +177,6 @@ function YjsCodeMirror() {
     return () => view?.destroy();
   }, [editorThemeMode]);
 
-  const selectChange = (event, newValue: number) => {
-    setAlgoSelect(newValue);
-  };
-
-  /* leetcode 문제 정보 가져오기 */
-  const fetchLeetProbInfo = async () => {
-    if (leetProbDataRef.current === null) return;
-
-    const problemQueryVariable = {
-      //@ts-ignore
-      titleSlug: leetProbDataRef.current.value,
-    };
-
-    try {
-      const response = await axios.post(
-        'https://cors-anywhere.herokuapp.com/https://leetcode.com/graphql',
-        {
-          query: PROBLEMQUERY,
-          variables: problemQueryVariable,
-        }
-      );
-
-      let probData = response.data;
-      console.log(probData.data);
-      setLeetProbData(probData.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  /* 백준 문제 정보 가져오기 */
-  const fetchBojProbInfo = async () => {
-    if (bojProbDataRef.current === null) return;
-
-    let probId = bojProbDataRef.current.value;
-    console.log(probId);
-
-    try {
-      const response = await axios.get(
-        `https://solved.ac/api/v3/problem/show?problemId=${probId}`
-      );
-
-      let probData = response.data;
-      console.log(probData);
-      setBojProbData(probData);
-      fetchBojProbFullData(probId);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  /* 서버로 몽고DB에 저장된 백준 문제 정보 요청 */
-  async function fetchBojProbFullData(probId: string) {
-    if (bojProbDataRef.current === null) return;
-
-    try {
-      const response = await axios.get(
-        `http://localhost:3001/bojdata?probId=${probId}`
-      );
-
-      let probFullData = response.data[0];
-      console.log(probFullData);
-      setBojProbFullData(probFullData);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
   /* leetcode 유저 정보 가져오기 */
   const fetchLeetUserData = async () => {
     if (leetUserNameRef.current === null) return;
@@ -312,16 +234,6 @@ function YjsCodeMirror() {
     inputStdin.current.value = bojProbFullData?.samples?.[key].input;
   };
 
-  const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      if (algoSelect === 0) {
-        fetchBojProbInfo();
-      } else {
-        fetchLeetProbInfo();
-      }
-    }
-  };
-
   return (
     <EditorWrapper>
       <ToastContainer />
@@ -336,63 +248,17 @@ function YjsCodeMirror() {
             boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)',
           }}
         >
-          <HeaderTab>
-            <StyledTabs
-              value={algoSelect}
-              onChange={selectChange}
-              aria-label="algo-selector"
-            >
-              <StyledTab label="Baekjoon" />
-              <StyledTab label="LeetCode" />
-            </StyledTabs>
-
-            {algoSelect === 0 && bojProbData?.level ? (
-              <ProbSummary>
-                <div>
-                  <RenderSvg svgName={bojProbData.level} />
-                  <span>
-                    {bojProbData?.problemId}번 {bojProbData?.titleKo}
-                  </span>
-                </div>
-              </ProbSummary>
-            ) : leetProbData?.question.questionId ? (
-              <ProbSummary>
-                <div>
-                  <span>
-                    <Chip
-                      label={leetProbData?.question.difficulty}
-                      color={
-                        leetProbData?.question.difficulty === 'Easy'
-                          ? 'success'
-                          : leetProbData?.question.difficulty === 'Medium'
-                          ? 'warning'
-                          : 'error'
-                      }
-                    />{' '}
-                    {leetProbData?.question.questionId}번{' '}
-                    {leetProbData?.question.title}
-                  </span>
-                </div>
-              </ProbSummary>
-            ) : null}
-
-            <AlgoInputWrap>
-              <div>
-                <AlgoTextField
-                  id="reddit-input"
-                  label={
-                    algoSelect === 0 ? '백준 문제 번호' : 'leetcode-title-slug'
-                  }
-                  variant="filled"
-                  size="small"
-                  inputRef={algoSelect === 0 ? bojProbDataRef : leetProbDataRef}
-                  autoFocus={true}
-                  type="text"
-                  onKeyDown={handleKeyDown}
-                />
-              </div>
-            </AlgoInputWrap>
-          </HeaderTab>
+          <AlgoHeaderTab
+            algoSelect={algoSelect}
+            setAlgoSelect={setAlgoSelect}
+            bojProbData={bojProbData}
+            setBojProbData={setBojProbData}
+            leetProbData={leetProbData}
+            setLeetProbData={setLeetProbData}
+            bojProbDataRef={bojProbDataRef}
+            leetProbDataRef={leetProbDataRef}
+            setBojProbFullData={setBojProbFullData}
+          />
         </Box>
       </AlgoInfoWrap>
 
