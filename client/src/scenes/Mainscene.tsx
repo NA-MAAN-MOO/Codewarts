@@ -285,6 +285,7 @@ export default class MainScene extends Phaser.Scene {
   }
 
   update() {
+    this.player.playerCollider.isSensor = this.watchTable;
     /*---- Whiteboard Interaction ----*/
     let boundWhiteboard = this.whiteboard.getBounds();
     boundWhiteboard.setSize(
@@ -416,7 +417,10 @@ export default class MainScene extends Phaser.Scene {
         this.editorIdx = 0;
 
         this.watchTable = true;
-        this.player.setStatic(true);
+        // this.player.playerCollider.isSensor = true;
+        // this.player.setStatic(true);
+        console.log(this.player);
+        console.log('플레이어 멈춤');
 
         let tableId = this.player.touching[0].body.id;
         let tableInstance = this.tableMap.get(tableId);
