@@ -64,6 +64,7 @@ import Chip from '@mui/material/Chip';
 import RenderSvg from 'components/Svg';
 import EditorThemeSwitch from 'components/editor/EditorThemeSwitch';
 import RunButton from 'components/editor/RunButton';
+import SubmitButton from 'components/editor/SubmitButton';
 
 /* toast */
 import {
@@ -631,24 +632,11 @@ function YjsCodeMirror() {
             setCpuTime={setCpuTime}
             inputStdin={inputStdin.current}
           />
-          <Tooltip title="제출하러 가기" arrow>
-            <Button
-              color="primary"
-              href={
-                bojProbData?.problemId
-                  ? `https://acmicpc.net/problem/${bojProbData?.problemId}`
-                  : `https://leetcode.com/problems/${leetProbData?.question.titleSlug}`
-              }
-              target="_blank"
-              rel="noreferrer"
-              style={{
-                fontFamily: 'Cascadia Code, Pretendard-Regular',
-                fontSize: '17px',
-              }}
-            >
-              SUBMIT
-            </Button>
-          </Tooltip>
+          <SubmitButton
+            algoSelect={algoSelect}
+            bojProbData={bojProbData}
+            leetProbData={leetProbData}
+          />
           <Tooltip title="코드와트 가채점">
             <Button
               color="primary"
