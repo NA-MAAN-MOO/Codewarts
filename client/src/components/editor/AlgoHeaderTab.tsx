@@ -1,4 +1,3 @@
-//@ts-nocheck
 import axios from 'axios';
 
 /* GraphQL queries */
@@ -28,6 +27,7 @@ function AlgoHeaderTab(props) {
     setBojProbFullData,
   } = props;
 
+  //@ts-ignore
   const selectChange = (event, newValue: number) => {
     setAlgoSelect(newValue);
   };
@@ -96,6 +96,7 @@ function AlgoHeaderTab(props) {
     }
   };
 
+  //@ts-ignore
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       if (algoSelect === 0) {
