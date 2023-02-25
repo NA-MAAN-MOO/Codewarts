@@ -34,18 +34,24 @@ function EvaluateButton(props) {
     }
 
     // 현재는 '19940 피자오븐' 문제만 가채점 가능!
-    if (bojProbData?.problemId !== 19940) {
-      alert('채점 가능한 문제 선택해주세요: 19940번');
+    if (bojProbData?.problemId !== 19940 && bojProbData?.problemId !== 19939) {
+      alert('채점 가능한 문제 선택해주세요:  19940번, 19939번');
       return;
     }
 
-    let totalCases = 2; // 19940번 테스트 케이스 개수
     let hitCount = 0;
+    let totalCases = 0; // 전체 testcase 개수
+
+    if (bojProbData?.problemId === 19940) {
+      totalCases = 2; // 19940번 테스트 케이스 개수
+    } else {
+      totalCases = 25; // 19939번 테스트 케이스 개수
+    }
 
     try {
       for (let i = 1; i < 50; i++) {
         const fetchInput = await fetchInputFileText(
-          `/assets/olympiad/${bojProbData?.problemId}/0${i}.in`
+          `/assets/olympiad/${bojProbData?.problemId}/${i}.in`
         );
 
         if (fetchInput === null || fetchInput?.startsWith('<!DOCTYPE html>')) {
@@ -61,7 +67,7 @@ function EvaluateButton(props) {
         });
 
         const fetchOutput = await fetchInputFileText(
-          `assets/olympiad/${bojProbData?.problemId}/0${i}.out`
+          `assets/olympiad/${bojProbData?.problemId}/${i}.out`
         );
         const jdoodleOutput = data.output;
 
@@ -83,7 +89,6 @@ function EvaluateButton(props) {
   useEffect(() => {
     if (!bojProbData?.problemId) return;
     if (진행완료 === false) {
-      // console.log('진행완료 :', 진행완료);
       // console.log('아직 채점 다 안 끝났어요~');
       return;
     }
