@@ -7,18 +7,17 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'stores';
 import VolumeIcon from 'components/VolumeIcon';
 import MicIcon from 'components/MicIcon';
-import { ReactComponent as MicOff } from 'assets/icons/mic_off.svg';
-import { ReactComponent as VolOff } from 'assets/icons/volume_off.svg';
 
 const GamePlayerItem = ({ name, char }: { name: string; char: string }) => {
-  const { volMuteInfo, micMuteInfo } = useSelector(
-    (state: RootState) => state.chat
+  const { volMuteInfo, micMuteInfo, playerId } = useSelector(
+    (state: RootState) => ({ ...state.chat, ...state.user })
   );
+
   return (
     <ListItem key={name} disablePadding sx={{ display: 'flex', gap: '10px' }}>
       <ListItemButton onClick={(e) => e.preventDefault()} sx={{ gap: '5px' }}>
         <ListItemIcon>
-          <CharRoundLogo charName={char} />
+          <CharRoundLogo charName={char} isSpecial={playerId === name} />
         </ListItemIcon>
         <ListItemText
           primary={name}
