@@ -68,6 +68,7 @@ import EditorThemeSwitch from 'components/editor/EditorThemeSwitch';
 import RunButton from 'components/editor/RunButton';
 import SubmitButton from 'components/editor/SubmitButton';
 import EvaluateButton from 'components/editor/EvaluateButton';
+import CompilerField from 'components/editor/CompilerField';
 
 function YjsCodeMirror() {
   /* ref */
@@ -561,18 +562,6 @@ function YjsCodeMirror() {
             bojProbData={bojProbData}
             leetProbData={leetProbData}
           />
-          {/* <Tooltip title="코드와트 가채점">
-            <Button
-              color="primary"
-              onClick={evaluateCode}
-              style={{
-                fontFamily: 'Cascadia Code, Pretendard-Regular',
-                fontSize: '17px',
-              }}
-            >
-              가채점
-            </Button>
-          </Tooltip> */}
           <EvaluateButton
             ytext={ytext}
             bojProbData={bojProbData}
@@ -580,7 +569,6 @@ function YjsCodeMirror() {
             setMarkingPercent={setMarkingPercent}
           />
           <span style={{ color: 'white' }}>채점진행 : {markingPercent}%</span>
-
           <EditorThemeSwitch
             editorThemeMode={editorThemeMode}
             setEditorTheme={setEditorTheme}
@@ -609,79 +597,12 @@ function YjsCodeMirror() {
           filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
         }}
       >
-        {/* <Grid container spacing={1.5} columns={16}> */}
-        <Grid container spacing={1.5}>
-          <Grid xs>
-            <Item>
-              <AlgoTextField
-                id="standard-multiline-static"
-                label="INPUT"
-                multiline
-                fullWidth
-                rows={8}
-                variant="standard"
-                inputRef={inputStdin}
-                InputLabelProps={{ shrink: true }}
-                InputProps={{
-                  disableUnderline: false,
-                }}
-              />
-            </Item>
-          </Grid>
-
-          <Grid xs>
-            <Item>
-              <Grid container spacing={1.5}>
-                <Grid xs sx={{ p: 0 }}>
-                  <AlgoTextField
-                    id="standard-read-only-input"
-                    variant="standard"
-                    label="TIME"
-                    size="small"
-                    fullWidth
-                    InputProps={{
-                      readOnly: true,
-                      disableUnderline: true,
-                    }}
-                    InputLabelProps={{ shrink: true }}
-                    value={cpuTime}
-                  />
-                </Grid>
-
-                <Grid xs sx={{ p: 0 }}>
-                  <AlgoTextField
-                    id="standard-read-only-input"
-                    variant="standard"
-                    label="MEMORY"
-                    size="small"
-                    fullWidth
-                    InputProps={{
-                      readOnly: true,
-                      disableUnderline: true,
-                    }}
-                    InputLabelProps={{ shrink: true }}
-                    value={memory}
-                  />
-                </Grid>
-              </Grid>
-              <AlgoTextField
-                id="standard-multiline-static"
-                label="OUTPUT"
-                multiline
-                fullWidth
-                rows={6}
-                variant="standard"
-                InputProps={{
-                  readOnly: true,
-                }}
-                InputLabelProps={{ shrink: true }}
-                value={
-                  compileOutput ? compileOutput.replace(/<br>/g, '\n') : null
-                }
-              />
-            </Item>
-          </Grid>
-        </Grid>
+        <CompilerField
+          inputStdin={inputStdin}
+          cpuTime={cpuTime}
+          memory={memory}
+          compileOutput={compileOutput}
+        />
       </Box>
     </EditorWrapper>
   );
