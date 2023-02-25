@@ -2,13 +2,21 @@ import { useState, useEffect } from 'react';
 import {
   ConnectionEvent,
   OpenVidu,
+  Publisher,
   Session,
   SessionDisconnectedEvent,
+  Subscriber,
 } from 'openvidu-browser';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'stores';
 import axios from 'axios';
-import { setUsers, toggleMicMute, toggleVolMute } from 'stores/chatSlice';
+import {
+  setUsers,
+  toggleMicMute,
+  toggleMyMicMute,
+  toggleMyVolMute,
+  toggleVolMute,
+} from 'stores/chatSlice';
 import { Connection } from 'types';
 import _ from 'lodash';
 import { MUTE_TYPE } from 'utils/Constants';
@@ -18,9 +26,10 @@ const APPLICATION_SERVER_URL =
 
 export default () => {
   const dispatch = useDispatch();
-  const { playerId: userName } = useSelector((state: RootState) => {
-    return state.user;
-  });
+  const { playerId, myVolMute, myMicMute, volMuteInfo, micMuteInfo } =
+    useSelector((state: RootState) => {
+      return { ...state.user, ...state.chat };
+    });
 
   const getConnections = async (sessionId: string) => {
     try {
@@ -120,7 +129,7 @@ export default () => {
         `${APPLICATION_SERVER_URL}/delete-connection/${session.sessionId}`,
         {
           data: {
-            userName: userName,
+            userName: playerId,
           },
         }
       );
@@ -163,6 +172,8 @@ export default () => {
     handlePublisher: Function;
     OV: OpenVidu | undefined;
     userName: string;
+    subscribers: Subscriber[];
+    publisher?: Publisher;
   }) => {
     const {
       session,
@@ -172,6 +183,8 @@ export default () => {
       OV,
       userName,
       handlePublisher,
+      subscribers,
+      publisher,
     } = props;
     try {
       if (!session || !sessionId) return;
@@ -247,9 +260,8 @@ export default () => {
         await getUsers(sessionId);
       });
 
-      //유저의 볼륨 음소거 시그널을 받았을 때
+      //유저가 볼륨 음소거를 했다는 시그널을 받았을 때
       mySession.on(`signal:${MUTE_TYPE.VOL}`, async (event) => {
-        console.log('볼륨 음소거 시그널 로직');
         const user = event.data;
         if (!user) {
           return;
@@ -257,14 +269,26 @@ export default () => {
         await toggleMute({ type: MUTE_TYPE.VOL, userName: user });
       });
 
-      //유저의 마이크 음소거 시그널을 받았을 때
+      //유저가 마이크 음소거를 했다는 시그널을 받았을 때
       mySession.on(`signal:${MUTE_TYPE.MIC}`, async (event) => {
-        console.log('마이크 음소거 시그널 로직');
         const user = event.data;
         if (!user) {
           return;
         }
         await toggleMute({ type: MUTE_TYPE.MIC, userName: user });
+      });
+
+      //방장이 내게 볼륨 음소거를 시켰을 때
+      mySession.on(`signal:${MUTE_TYPE.SET_VOL}`, async (event) => {
+        //로직
+        handleMyVolumeMute({ subscribers, session });
+      });
+
+      //방장이 내게 마이크 음소거를 시켰을 때
+      mySession.on(`signal:${MUTE_TYPE.SET_MIC}`, async (event) => {
+        //로직
+        if (!publisher) return;
+        handleMyMicMute({ publisher, session });
       });
 
       // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
@@ -349,6 +373,40 @@ export default () => {
     }
   };
 
+  //내 볼륨 뮤트
+  const handleMyVolumeMute = ({
+    subscribers,
+    session,
+  }: {
+    subscribers: Subscriber[];
+    session: Session;
+  }) => {
+    subscribers.map((sm) => {
+      sm.subscribeToAudio(!myVolMute);
+    });
+    dispatch(toggleMyVolMute());
+    session?.signal({
+      type: MUTE_TYPE.VOL,
+      data: playerId,
+    });
+  };
+
+  //내 마이크 뮤트
+  const handleMyMicMute = ({
+    publisher,
+    session,
+  }: {
+    publisher: Publisher;
+    session: Session;
+  }) => {
+    if (!!publisher) publisher.publishAudio(!myMicMute);
+    dispatch(toggleMyMicMute());
+    session?.signal({
+      type: MUTE_TYPE.MIC,
+      data: playerId,
+    });
+  };
+
   return {
     initSession,
     createSession,
@@ -361,5 +419,7 @@ export default () => {
     getUsers,
     resetServerConnList,
     // handleDisconnect,
+    handleMyVolumeMute,
+    handleMyMicMute,
   };
 };

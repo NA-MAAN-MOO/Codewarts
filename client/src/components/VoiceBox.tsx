@@ -10,6 +10,7 @@ import { MUTE_TYPE } from 'utils/Constants';
 import MicIcon from 'components/MicIcon';
 import VolumeIcon from 'components/VolumeIcon';
 import { toggleMyMicMute, toggleMyVolMute } from 'stores/chatSlice';
+import AudioList from 'components/AudioList';
 
 const VoiceBox = ({
   session,
@@ -56,16 +57,7 @@ const VoiceBox = ({
   );
   return (
     <>
-      {subscribers.map((sub, i) => {
-        const { user } = JSON.parse(sub.stream.connection.data);
-        return (
-          user !== playerId && (
-            <div key={user} style={{ display: 'hidden' }}>
-              <Audio streamManager={sub} />
-            </div>
-          )
-        );
-      })}
+      <AudioList subscribers={subscribers} />
       {useFloatBox ? (
         <FloatingBox>
           <VolumeSet />

@@ -185,6 +185,7 @@ export default class Lobby extends Phaser.Scene {
         /* If player press key E when overlapping, scene changes */
         if (Phaser.Input.Keyboard.JustDown(this.player.inputKeys.open)) {
           this.sceneChange = true;
+          this.player.inputKeys['open'].enabled = false;
 
           setTimeout(() => handleScene(GAME_STATUS.GAME), 1000);
         }

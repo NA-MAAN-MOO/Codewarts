@@ -96,6 +96,8 @@ const Voice = ({ roomKey, session, handleSession, ...rest }: VoiceProp) => {
         handlePublisher,
         OV,
         userName: playerId,
+        subscribers,
+        publisher,
       });
       await getUsers(roomKey);
     })();

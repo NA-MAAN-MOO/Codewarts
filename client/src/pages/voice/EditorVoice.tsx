@@ -19,6 +19,7 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import Divider from '@mui/material/Divider';
+import AudioList from 'components/AudioList';
 
 type GameVoiceType = {
   session: Session | undefined;
@@ -39,7 +40,7 @@ const DrawerHeader = muiStyled('div')(({ theme }) => ({
 }));
 
 const EditorVoice = (props: GameVoiceType) => {
-  const { session, joinSession, handleDrawerClose } = props;
+  const { session, joinSession, handleDrawerClose, subscribers } = props;
   const theme = useTheme();
 
   return (
@@ -48,11 +49,11 @@ const EditorVoice = (props: GameVoiceType) => {
         <IconButton onClick={handleDrawerClose}>
           <ChevronRightIcon />
         </IconButton>
-        <VoiceBox {...props} useFloatBox={false} />
+        <AudioList subscribers={subscribers} />
       </DrawerHeader>
       <Divider />
       {!!session ? (
-        <CurrentPlayer />
+        <CurrentPlayer {...props} />
       ) : (
         <div
           style={{

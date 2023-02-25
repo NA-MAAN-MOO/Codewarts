@@ -1,0 +1,92 @@
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { useSelector, useDispatch } from 'react-redux';
+import type { RootState } from 'stores';
+import { GameVoiceType } from 'types';
+import { MUTE_TYPE } from 'utils/Constants';
+import MicIcon from 'components/MicIcon';
+import VolumeIcon from 'components/VolumeIcon';
+import {
+  toggleMyMicMute,
+  toggleMyVolMute,
+  toggleVolMute,
+  toggleMicMute,
+} from 'stores/chatSlice';
+import useVoice from 'hooks/useVoice';
+
+const VoiceItem = ({
+  session,
+  subscribers,
+  publisher,
+  name,
+  isMe = false, //내 보이스 목록 아이템인지
+  isSuperior = false, //내가 에디터 주인인지
+}: GameVoiceType & {
+  name: string;
+  char: string;
+  isMe?: boolean;
+  isSuperior?: boolean;
+}) => {
+  const dispatch = useDispatch();
+  const { handleMyMicMute, handleMyVolumeMute } = useVoice();
+  const { playerId, myVolMute, myMicMute, volMuteInfo, micMuteInfo } =
+    useSelector((state: RootState) => {
+      return { ...state.user, ...state.chat };
+    });
+
+  const isVolMute = isMe ? myVolMute : volMuteInfo[name];
+  const isMicMute = isMe ? myMicMute : micMuteInfo[name];
+
+  //내 볼륨 음소거 처리
+  const handleMyVolume = () => {
+    if (!session) return;
+    handleMyVolumeMute({ subscribers, session });
+  };
+
+  //내 마이크 음소거 처리
+  const handleMyMic = () => {
+    if (!session || !publisher) return;
+    handleMyMicMute({ publisher, session });
+  };
+
+  //내 방에 들어온 다른 사람 볼륨 음소거 처리
+  const handleGuestVolume = () => {
+    if (!session) return console.log('세션없음');
+    session.signal({
+      type: MUTE_TYPE.SET_VOL,
+      to: [session.connection],
+    });
+  };
+
+  //내 방에 들어온 다른 사람 마이크 음소거 처리
+  const handleGuestMic = () => {
+    if (!session) return console.log('세션없음');
+    session.signal({
+      type: MUTE_TYPE.SET_MIC,
+      to: [session.connection],
+    });
+  };
+
+  return (
+    <>
+      <div style={{ display: 'flex', gap: '5px' }}>
+        <VolumeIcon
+          color={isMe || isSuperior ? 'white' : 'gray'}
+          handleVolume={
+            isMe ? handleMyVolume : isSuperior ? handleGuestVolume : undefined
+          }
+          isMute={isVolMute}
+        />
+        <MicIcon
+          color={isMe || isSuperior ? 'white' : 'gray'}
+          handleMic={
+            isMe ? handleMyMic : isSuperior ? handleGuestMic : undefined
+          }
+          isMute={isMicMute}
+        />
+      </div>
+    </>
+  );
+};
+
+export default VoiceItem;

@@ -24,7 +24,7 @@ const GameVoice = (props: GameVoiceType) => {
         right="1%"
       />
       <Drawer anchor="right" isOpen={drawerOpen} handleDrawer={handleDrawer}>
-        <CurrentPlayer handleDrawer={handleDrawer} />
+        <CurrentPlayer handleDrawer={handleDrawer} {...props} />
       </Drawer>
       {!!session ? (
         <VoiceBox {...props} />
