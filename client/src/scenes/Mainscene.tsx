@@ -58,12 +58,13 @@ export default class MainScene extends Phaser.Scene {
   create() {
     /* Transition */
     this.cameras.main.fadeFrom(1200, 0, 0, 0);
-    console.log('몇번불림');
+
+    /* Sound effect */
     const newFriendSoundToggle = SoundPlayer(friendSoundFile);
-    // this.getOut = false;
+
     this.openMyEditor = false;
     this.editorOwner = '';
-    // 생성해야 하는 것, 게임 오브젝트 등
+
     /* Setting room map ground */
     this.map = this.make.tilemap({ key: 'room_map_tile' }); //Json file key (1st parameter in tilemapTiledJSON)
     const room_map_tileset = this.map.addTilesetImage('room_map', 'room_map'); // 1st param: tilesets.name in Json file
@@ -142,7 +143,7 @@ export default class MainScene extends Phaser.Scene {
     this.watchTable = false;
 
     let camera = this.cameras.main;
-    camera.zoom = 1.2;
+    camera.zoom = 1.0;
     camera.startFollow(this.player);
     camera.setLerp(0.1, 0.1);
 
@@ -243,7 +244,7 @@ export default class MainScene extends Phaser.Scene {
     /* 내가 에디터를 종료할 때 */
     // TODO: 강제로 보고있는 다른 유저들 강퇴 (상태값 바꿔야함 - 게임모드로)
     phaserGame.socket.on('removeEditor', (payLoad: any) => {
-      console.log('방 빼요');
+      // console.log('방 빼요');
       if (
         this.editorOwner === payLoad[2] &&
         phaserGame.userName !== payLoad[2]
@@ -266,6 +267,8 @@ export default class MainScene extends Phaser.Scene {
         }
       }
     });
+
+    /* Whiteboard Interaction Dialog */
     this.whiteboardButton = new Button({
       scene: this,
       x: this.whiteboard.x,
