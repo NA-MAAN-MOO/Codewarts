@@ -24,7 +24,6 @@ import {
   standardKeymap,
 } from '@codemirror/commands';
 import { okaidia } from '@uiw/codemirror-theme-okaidia';
-import { solarizedLight } from '@uiw/codemirror-theme-solarized';
 
 /* GraphQL queries */
 import PROBLEMQUERY from '../../graphql/problemQuery';
@@ -64,6 +63,7 @@ import Chip from '@mui/material/Chip';
 /* components */
 import RenderSvg from 'components/Svg';
 import EditorThemeSwitch from 'components/editor/EditorThemeSwitch';
+import RunButton from 'components/editor/RunButton';
 
 /* toast */
 import {
@@ -189,38 +189,6 @@ function YjsCodeMirror() {
     /* view 중복 생성 방지 */
     return () => view?.destroy();
   }, [editorThemeMode]);
-
-  /* 유저가 작성한 코드를 컴파일하기 위해 서버로 보냄 */
-  const runCode = async () => {
-    if (!inputStdin.current) return;
-
-    console.log(inputStdin.current?.value);
-
-    try {
-      const { data } = await axios.post(`http://localhost:3001/code_to_run`, {
-        codeToRun: ytext.toString(),
-        //@ts-ignore
-        stdin: inputStdin.current?.value,
-      });
-
-      console.log(data); // 전체 reponse body (output, statusCode, memory, cpuTime)
-      setCompileOutput(data.output.replace(/\n/g, '<br>'));
-      setMemory(data.memory);
-      setCpuTime(data.cpuTime);
-    } catch (error) {
-      console.error(error);
-      alert('코드 서버로 보내기 실패');
-    }
-  };
-
-  /* 다크/라이트 모드 테마 토글 */
-  function switchTheme(checked: boolean) {
-    if (editorThemeMode === okaidia) {
-      setEditorTheme(solarizedLight);
-    } else {
-      setEditorTheme(okaidia);
-    }
-  }
 
   const selectChange = (event, newValue: number) => {
     setAlgoSelect(newValue);
@@ -656,18 +624,13 @@ function YjsCodeMirror() {
 
       <MiddleWrapper>
         <ThemeProvider theme={theme}>
-          <Tooltip title="코드 실행하기" arrow>
-            <Button
-              onClick={runCode}
-              color="primary"
-              style={{
-                fontFamily: 'Cascadia Code, Pretendard-Regular',
-                fontSize: '17px',
-              }}
-            >
-              ▶️ RUN
-            </Button>
-          </Tooltip>
+          <RunButton
+            ytext={ytext}
+            setCompileOutput={setCompileOutput}
+            setMemory={setMemory}
+            setCpuTime={setCpuTime}
+            inputStdin={inputStdin.current}
+          />
           <Tooltip title="제출하러 가기" arrow>
             <Button
               color="primary"
@@ -699,12 +662,12 @@ function YjsCodeMirror() {
             </Button>
           </Tooltip>
           <span style={{ color: 'white' }}>채점진행 : {markingPercent}%</span>
-        </ThemeProvider>
 
-        <EditorThemeSwitch
-          editorThemeMode={editorThemeMode}
-          setEditorTheme={setEditorTheme}
-        />
+          <EditorThemeSwitch
+            editorThemeMode={editorThemeMode}
+            setEditorTheme={setEditorTheme}
+          />
+        </ThemeProvider>
       </MiddleWrapper>
 
       <div
