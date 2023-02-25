@@ -45,7 +45,7 @@ function EvaluateButton(props) {
     if (bojProbData?.problemId === 19940) {
       totalCases = 2; // 19940번 테스트 케이스 개수
     } else {
-      totalCases = 25; // 19939번 테스트 케이스 개수
+      totalCases = 10; // 19939번 테스트 케이스 개수
     }
 
     try {

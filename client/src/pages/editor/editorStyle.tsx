@@ -36,9 +36,10 @@ const EditorWrapper = styledc.div`
   width: 95%;
   margin: 0 auto;
   font-family: 'Cascadia Code', 'Pretendard-Regular';
-`;
+  `;
 
 const EditorInfo = styledc.div`
+  font-family: 'Cascadia Code', 'Pretendard-Regular';
   // color: rgba(255, 255, 255, 0.7);
 font-size: 35px; 
 font-weight: 600; 

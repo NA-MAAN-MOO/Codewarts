@@ -17,7 +17,7 @@ const Header = () => {
           {roomId}
         </span>
         님의 에디터
-        <span style={{ fontSize: '10px', color: 'grey' }}>나: {userName}</span>
+        {/* <span style={{ fontSize: '10px', color: 'grey' }}>나: {userName}</span> */}
       </div>
     </EditorInfo>
   );
