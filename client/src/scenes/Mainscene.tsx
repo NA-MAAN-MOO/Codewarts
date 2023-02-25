@@ -59,10 +59,10 @@ export default class MainScene extends Phaser.Scene {
     /* Transition */
     this.cameras.main.fadeFrom(1200, 0, 0, 0);
     const newFriendSoundToggle = SoundPlayer(friendSoundFile);
-    // this.getOut = false;
+
     this.openMyEditor = false;
     this.editorOwner = '';
-    // 생성해야 하는 것, 게임 오브젝트 등
+
     /* Setting room map ground */
     this.map = this.make.tilemap({ key: 'room_map_tile' }); //Json file key (1st parameter in tilemapTiledJSON)
     const room_map_tileset = this.map.addTilesetImage('room_map', 'room_map'); // 1st param: tilesets.name in Json file
@@ -141,7 +141,7 @@ export default class MainScene extends Phaser.Scene {
     this.watchTable = false;
 
     let camera = this.cameras.main;
-    camera.zoom = 1.2;
+    camera.zoom = 1.0;
     camera.startFollow(this.player);
     camera.setLerp(0.1, 0.1);
 
@@ -273,6 +273,8 @@ export default class MainScene extends Phaser.Scene {
         }
       }
     });
+
+    /* Whiteboard Interaction Dialog */
     this.whiteboardButton = new Button({
       scene: this,
       x: this.whiteboard.x,

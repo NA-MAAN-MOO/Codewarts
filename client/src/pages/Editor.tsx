@@ -17,7 +17,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { openGame } from 'stores/modeSlice';
 import { RootState } from '../stores';
 import { resetRoomId } from 'stores/editorSlice';
-import Button from '@mui/material/Button';
 import Header from 'components/editor/Header';
 import { darkTheme } from 'styles/theme';
 import CloseIcon from '@mui/icons-material/Close';
