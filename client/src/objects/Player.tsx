@@ -33,9 +33,11 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
     if (scene.scene.key === 'Lobby') {
       this.scale *= 2.3;
+    } else {
+      this.scale *= 1.3;
     }
 
-    // const { Body, Bodies } = Phaser.Physics.Matter.Matter;
+    /* Add player sensor & collision body */
     const Body = this.scene.matter.body;
     const Bodies = this.scene.matter.bodies;
     let playerCollider = Bodies.circle(this.x, this.y, 20, {
@@ -54,8 +56,9 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     this.setExistingBody(compoundBody);
     this.setFixedRotation();
 
+    /* Add player name bubble */
     this.playerNameBubble = this.scene.add
-      .text(this.x, this.y - this.height - 10, this.playerName, {
+      .text(this.x, this.y - this.height * 0.8, this.playerName, {
         fontFamily: 'Firenze',
       })
       .setStyle({
@@ -78,7 +81,6 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
   }
 
   move() {
-    // 초마다 60프레임마다(?) 호출되는 것, 매 틱마다 업데이트 되야하는 것인듯.
     const speed = 5;
     let playerVelocity = new Phaser.Math.Vector2(); //  2D 벡터
     let motion = 'idle';
@@ -115,7 +117,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     if (this.scene.scene.key === 'Lobby') {
       this.playerNameBubble.setPosition(this.x, this.y - this.height - 20);
     } else {
-      this.playerNameBubble.setPosition(this.x, this.y - this.height / 2 - 10);
+      this.playerNameBubble.setPosition(this.x, this.y - this.height * 0.8);
     }
 
     if (this.successEffect) {

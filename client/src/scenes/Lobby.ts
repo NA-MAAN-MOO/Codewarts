@@ -111,6 +111,7 @@ export default class Lobby extends Phaser.Scene {
     this.buttonForList.setVisible(false);
     this.buttonForList.setScrollFactor(0);
 
+    /* Set game world bounds */
     this.matter.world.setBounds(
       0,
       0,
@@ -118,6 +119,7 @@ export default class Lobby extends Phaser.Scene {
       this.scale.height
     );
 
+    /* Set portal overlap range */
     const Bodies = this.matter.bodies;
     this.portalZone = Bodies.rectangle(
       this.portal.x,
@@ -142,7 +144,6 @@ export default class Lobby extends Phaser.Scene {
       name: this.playerId,
       frame: 'down-1',
     });
-    // this.player.scale *= 1.5;
 
     /* Add Keyboard keys to enable character animation */
     this.player.inputKeys = this.input.keyboard.addKeys({
@@ -184,15 +185,14 @@ export default class Lobby extends Phaser.Scene {
         /* If player press key E when overlapping, scene changes */
         if (Phaser.Input.Keyboard.JustDown(this.player.inputKeys.open)) {
           this.sceneChange = true;
-          // this.player.angle -= 5;
 
-          // 왜 분신술하는지...?
           setTimeout(() => handleScene(GAME_STATUS.GAME), 1000);
-          // handleScene(GAME_STATUS.GAME);
         }
       } else {
         this.buttonForList.setVisible(false);
       }
+
+      /* Transition animation */
       if (this.sceneChange) {
         this.player.angle -= 5;
         this.player.y -= window.innerHeight / 800;
