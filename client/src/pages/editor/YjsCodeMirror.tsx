@@ -50,7 +50,6 @@ import {
   theme,
 } from './editorStyle';
 import 'styles/fonts.css'; /* FONT */
-import Button from '@mui/material/Button';
 import { ThemeProvider } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -60,19 +59,15 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import InputIcon from '@mui/icons-material/Input';
 import Chip from '@mui/material/Chip';
 
+/* toast */
+import { ToastContainer } from './toast';
+
 /* components */
 import RenderSvg from 'components/Svg';
 import EditorThemeSwitch from 'components/editor/EditorThemeSwitch';
 import RunButton from 'components/editor/RunButton';
 import SubmitButton from 'components/editor/SubmitButton';
-
-/* toast */
-import {
-  notifySuccess,
-  notifyFail,
-  notifyThree,
-  ToastContainer,
-} from './toast';
+import EvaluateButton from 'components/editor/EvaluateButton';
 
 function YjsCodeMirror() {
   /* ref */
@@ -326,77 +321,6 @@ function YjsCodeMirror() {
     }
   };
 
-  /* fetching '.in' file */
-  async function fetchInputFileText(url) {
-    try {
-      const response = await fetch(url);
-      const text = await response.text();
-      return text;
-    } catch {
-      console.log('input 파일 fetching 실패');
-      return null;
-    }
-  }
-
-  /* 유저가 작성한 코드 가채점하기 위해 서버로 보냄 */
-  const evaluateCode = async () => {
-    if (!ytext.toString()) {
-      alert('채점을 위해 코드를 작성해주세요');
-      return;
-    }
-
-    // 현재는 '19940 피자오븐' 문제만 가채점 가능!
-    if (bojProbData?.problemId !== 19940) {
-      alert('채점 가능한 문제 선택해주세요: 19940번');
-      return;
-    }
-
-    let totalCases = 2; // 19940번 테스트 케이스 개수
-    let hitCount = 0;
-
-    try {
-      for (let i = 1; i < 50; i++) {
-        const fetchInput = await fetchInputFileText(
-          `/assets/olympiad/0${i}.in`
-        );
-
-        if (fetchInput === null || fetchInput?.startsWith('<!DOCTYPE html>')) {
-          console.log('더 이상 채점할 파일이 없어요!!');
-          break;
-        }
-
-        const { data } = await axios.post(`http://localhost:3001/code_to_run`, {
-          codeToRun: ytext.toString(),
-          //@ts-ignore
-          stdin: fetchInput,
-        });
-
-        const fetchOutput = await fetchInputFileText(
-          `assets/olympiad/0${i}.out`
-        );
-        const jdoodleOutput = data.output;
-
-        if (jdoodleOutput === fetchOutput) {
-          console.log(`${i}번 테스트 케이스 맞음`);
-          hitCount++;
-        } else {
-          console.log(`${i}번 테스트 케이스 틀림`);
-        }
-        setMarkingPercent(`${(hitCount / totalCases) * 100}`);
-      }
-
-      // 현재 비동기적으로 작동함
-      if (markingPercent === '100') {
-        notifySuccess(roomId, bojProbData.problemId);
-      } else {
-        notifyFail(roomId, bojProbData.problemId);
-      }
-    } catch (error) {
-      console.error(error);
-      alert('채점 실패');
-    }
-  };
-
   return (
     <EditorWrapper>
       <ToastContainer />
@@ -637,7 +561,7 @@ function YjsCodeMirror() {
             bojProbData={bojProbData}
             leetProbData={leetProbData}
           />
-          <Tooltip title="코드와트 가채점">
+          {/* <Tooltip title="코드와트 가채점">
             <Button
               color="primary"
               onClick={evaluateCode}
@@ -648,7 +572,13 @@ function YjsCodeMirror() {
             >
               가채점
             </Button>
-          </Tooltip>
+          </Tooltip> */}
+          <EvaluateButton
+            ytext={ytext}
+            bojProbData={bojProbData}
+            markingPercent={markingPercent}
+            setMarkingPercent={setMarkingPercent}
+          />
           <span style={{ color: 'white' }}>채점진행 : {markingPercent}%</span>
 
           <EditorThemeSwitch
