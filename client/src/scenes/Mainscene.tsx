@@ -58,7 +58,6 @@ export default class MainScene extends Phaser.Scene {
   create() {
     /* Transition */
     this.cameras.main.fadeFrom(1200, 0, 0, 0);
-    console.log('몇번불림');
     const newFriendSoundToggle = SoundPlayer(friendSoundFile);
     // this.getOut = false;
     this.openMyEditor = false;
@@ -216,7 +215,6 @@ export default class MainScene extends Phaser.Scene {
     phaserGame.socket.on(
       'changePlayerCollider',
       (payLoad: ServerPlayerType) => {
-        console.log('여기 오냐 안오냐?', payLoad);
         this.otherPlayers.forEach((otherPlayer) => {
           if (otherPlayer.socketId === payLoad.socketId) {
             otherPlayer.playerCollider.isSensor = payLoad.playerCollider;
@@ -258,12 +256,10 @@ export default class MainScene extends Phaser.Scene {
     /* 내가 에디터를 종료할 때 */
     // TODO: 강제로 보고있는 다른 유저들 강퇴 (상태값 바꿔야함 - 게임모드로)
     phaserGame.socket.on('removeEditor', (payLoad: any) => {
-      console.log('방 빼요');
       if (
         this.editorOwner === payLoad[2] &&
         phaserGame.userName !== payLoad[2]
       ) {
-        console.log('방 빼요');
         store.dispatch(openGame());
       }
       // removeCurrentUser하려면 updateTable(idx, '')하면 됨
@@ -324,6 +320,7 @@ export default class MainScene extends Phaser.Scene {
       if (this.openMyEditor) {
         // console.log('1차관문, 여기 왔으면 내 에디터 열었다는 뜻');
       }
+      console.log('1111111여기서 삭제된다');
       this.input.keyboard.disableGlobalCapture();
       this.isKeyDisable = true;
       return;
@@ -346,7 +343,6 @@ export default class MainScene extends Phaser.Scene {
     }
     /*-----------테이블에서 E 누르고, 리스트 보고 있는 상태--------------*/
     if (this.watchTable) {
-      console.log('에디터 리스트 볼 때');
       // this.player.setStatic(true);
       if (
         this.idxDown &&
@@ -370,6 +366,7 @@ export default class MainScene extends Phaser.Scene {
         switch (this.editorIdx) {
           //돌아가기 버튼 누르면
           case 4:
+            console.log('2222222여기서 삭제된다');
             this.input.keyboard.disableGlobalCapture();
 
             this.player.inputKeys = this.input.keyboard.addKeys({
@@ -383,9 +380,6 @@ export default class MainScene extends Phaser.Scene {
             // 돌아갈때는 내 충돌 설정을 변경시킨다.
             this.player.playerCollider.isSensor = false;
             // TODO: 이 시점에 다른 유저들에게 내 상태변경 통보
-            console.log(
-              "phaserGame.socket.emit('changePlayerCollider', false);"
-            );
             phaserGame.socket.emit('changePlayerCollider', false);
             this.tableMap
               .get(this.player.touching[0].body.id)
@@ -393,6 +387,7 @@ export default class MainScene extends Phaser.Scene {
             break;
           // 에디터 들어가기 버튼 누르면
           default:
+            console.log('3333333여기서 삭제된다');
             this.input.keyboard.disableGlobalCapture();
             this.player.inputKeys = this.input.keyboard.addKeys({
               up: Phaser.Input.Keyboard.KeyCodes.UP,
@@ -445,15 +440,13 @@ export default class MainScene extends Phaser.Scene {
         // 에디터 키면 유령되자.
         this.player.playerCollider.isSensor = true;
         // TODO: 이 시점에 다른 유저들에게 내 상태변경 통보
-        console.log("phaserGame.socket.emit('changePlayerCollider', true);");
         phaserGame.socket.emit('changePlayerCollider', true);
-        console.log(this.player);
         console.log('플레이어 멈춤');
 
         let tableId = this.player.touching[0].body.id;
         let tableInstance = this.tableMap.get(tableId);
         tableInstance?.openEditorList();
-
+        console.log('4444444여기서 삭제된다');
         this.input.keyboard.disableGlobalCapture();
         this.idxDown = this.input.keyboard.addKey(
           Phaser.Input.Keyboard.KeyCodes.DOWN
