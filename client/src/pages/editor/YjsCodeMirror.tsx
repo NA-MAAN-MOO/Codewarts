@@ -2,8 +2,6 @@
 /* react */
 import { useRef, useEffect, useState } from 'react';
 import { RootState } from 'stores';
-
-/* lib */
 import * as random from 'lib0/random';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
@@ -45,11 +43,9 @@ import {
   Item,
   MiddleWrapper,
   EditorWrapper,
-  EditorInfo,
   AlgoInfoWrap,
   StyledTab,
   StyledTabs,
-  MaterialUISwitch,
   AccordionSummary,
   Accordion,
   theme,
@@ -57,19 +53,17 @@ import {
 import 'styles/fonts.css'; /* FONT */
 import Button from '@mui/material/Button';
 import { ThemeProvider } from '@mui/material/styles';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
 import Tooltip from '@mui/material/Tooltip';
 import Divider from '@mui/material/Divider';
 import AccordionDetails from '@mui/material/AccordionDetails';
-import Typography from '@mui/material/Typography';
 import InputIcon from '@mui/icons-material/Input';
 import Chip from '@mui/material/Chip';
-import Header from 'components/editor/Header';
 
-/* solvedAC badge svg */
+/* components */
 import RenderSvg from 'components/Svg';
+import EditorThemeSwitch from 'components/editor/EditorThemeSwitch';
 
 /* toast */
 import {
@@ -489,24 +483,18 @@ function YjsCodeMirror() {
 
             <AlgoInputWrap>
               <div>
-                <>
-                  <AlgoTextField
-                    id="reddit-input"
-                    label={
-                      algoSelect === 0
-                        ? '백준 문제 번호'
-                        : 'leetcode-title-slug'
-                    }
-                    variant="filled"
-                    size="small"
-                    inputRef={
-                      algoSelect === 0 ? bojProbDataRef : leetProbDataRef
-                    }
-                    autoFocus={true}
-                    type="text"
-                    onKeyDown={handleKeyDown}
-                  />
-                </>
+                <AlgoTextField
+                  id="reddit-input"
+                  label={
+                    algoSelect === 0 ? '백준 문제 번호' : 'leetcode-title-slug'
+                  }
+                  variant="filled"
+                  size="small"
+                  inputRef={algoSelect === 0 ? bojProbDataRef : leetProbDataRef}
+                  autoFocus={true}
+                  type="text"
+                  onKeyDown={handleKeyDown}
+                />
               </div>
             </AlgoInputWrap>
           </Tab>
@@ -544,7 +532,6 @@ function YjsCodeMirror() {
           {algoSelect === 0 && bojProbFullData?.prob_input ? (
             <Accordion>
               <AccordionSummary
-                // expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel2a-content"
                 id="panel2a-header"
               >
@@ -569,7 +556,6 @@ function YjsCodeMirror() {
           ) : (
             <Accordion>
               <AccordionSummary
-                // expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel2a-content"
                 id="panel2a-header"
               >
@@ -592,80 +578,76 @@ function YjsCodeMirror() {
           bojProbFullData?.samples ? (
             <Accordion>
               <AccordionSummary
-                // expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel2a-content"
                 id="panel2a-header"
               >
                 예제
               </AccordionSummary>
               <AccordionDetails>
-                <Typography>
-                  <Grid container spacing={3}>
-                    {algoSelect === 1 &&
-                    leetProbData?.question.exampleTestcases ? (
-                      <Grid xs>
-                        <Item
-                          sx={{
-                            color: 'papayawhip',
-                            fontFamily: 'Cascadia Code, Pretendard-Regular',
-                            textAlign: 'left',
+                <Grid container spacing={3}>
+                  {algoSelect === 1 &&
+                  leetProbData?.question.exampleTestcases ? (
+                    <Grid xs>
+                      <Item
+                        sx={{
+                          color: 'papayawhip',
+                          fontFamily: 'Cascadia Code, Pretendard-Regular',
+                          textAlign: 'left',
+                        }}
+                      >
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html:
+                              leetProbData?.question.exampleTestcases.replace(
+                                /\n/g,
+                                '<br>'
+                              ),
                           }}
-                        >
-                          <div
-                            dangerouslySetInnerHTML={{
-                              __html:
-                                leetProbData?.question.exampleTestcases.replace(
-                                  /\n/g,
-                                  '<br>'
-                                ),
-                            }}
-                          />
-                        </Item>
-                      </Grid>
-                    ) : bojProbFullData?.samples ? (
-                      Object.entries(bojProbFullData?.samples).map(
-                        ([key, value]) => {
-                          return (
-                            <Grid xs key={key}>
-                              <Item
-                                sx={{
-                                  color: 'papayawhip',
-                                  fontFamily:
-                                    'Cascadia Code, Pretendard-Regular',
-                                  textAlign: 'left',
+                        />
+                      </Item>
+                    </Grid>
+                  ) : bojProbFullData?.samples ? (
+                    Object.entries(bojProbFullData?.samples).map(
+                      ([key, value]) => {
+                        return (
+                          <Grid xs key={key}>
+                            <Item
+                              sx={{
+                                color: 'papayawhip',
+                                fontFamily: 'Cascadia Code, Pretendard-Regular',
+                                textAlign: 'left',
+                              }}
+                            >
+                              <span className="samples-title">
+                                예제{key} INPUT
+                              </span>
+                              <Tooltip title="INPUT 칸으로 복사하기" arrow>
+                                <InputIcon onClick={() => copyToInput(key)} />
+                              </Tooltip>
+                              <div
+                                dangerouslySetInnerHTML={{
+                                  __html: bojProbFullData?.samples?.[
+                                    key
+                                  ].input.replace(/\n/g, '<br>'),
                                 }}
-                              >
-                                <span className="samples-title">
-                                  예제{key} INPUT
-                                </span>
-                                <Tooltip title="INPUT 칸으로 복사하기" arrow>
-                                  <InputIcon onClick={() => copyToInput(key)} />
-                                </Tooltip>
-                                <div
-                                  dangerouslySetInnerHTML={{
-                                    __html: bojProbFullData?.samples?.[
-                                      key
-                                    ].input.replace(/\n/g, '<br>'),
-                                  }}
-                                />
-                                <span className="samples-title">
-                                  예제{key} OUTPUT
-                                </span>
-                                <div
-                                  dangerouslySetInnerHTML={{
-                                    __html: bojProbFullData?.samples?.[
-                                      key
-                                    ].output.replace(/\n/g, '<br>'),
-                                  }}
-                                />
-                              </Item>
-                            </Grid>
-                          );
-                        }
-                      )
-                    ) : null}
-                  </Grid>
-                </Typography>
+                              />
+                              <span className="samples-title">
+                                예제{key} OUTPUT
+                              </span>
+                              <div
+                                dangerouslySetInnerHTML={{
+                                  __html: bojProbFullData?.samples?.[
+                                    key
+                                  ].output.replace(/\n/g, '<br>'),
+                                }}
+                              />
+                            </Item>
+                          </Grid>
+                        );
+                      }
+                    )
+                  ) : null}
+                </Grid>
               </AccordionDetails>
             </Accordion>
           ) : null}
@@ -719,17 +701,9 @@ function YjsCodeMirror() {
           <span style={{ color: 'white' }}>채점진행 : {markingPercent}%</span>
         </ThemeProvider>
 
-        <FormControlLabel
-          control={
-            <MaterialUISwitch
-              sx={{ m: 1 }}
-              defaultChecked
-              onClick={(checked) => {
-                switchTheme(checked);
-              }}
-            />
-          }
-          label=""
+        <EditorThemeSwitch
+          editorThemeMode={editorThemeMode}
+          setEditorTheme={setEditorTheme}
         />
       </MiddleWrapper>
 
