@@ -19,7 +19,7 @@ export default class Lobby extends Phaser.Scene {
   private playerId: string;
   private playerTexture: string;
   private network: boolean;
-
+  private sceneChange!: any = false;
   socket: Socket | undefined;
   // const {nickName, characterModel} = useSelector((state:RootState)=> state.charactor);
 
@@ -142,6 +142,7 @@ export default class Lobby extends Phaser.Scene {
       name: this.playerId,
       frame: 'down-1',
     });
+    // this.player.scale *= 1.5;
 
     /* Add Keyboard keys to enable character animation */
     this.player.inputKeys = this.input.keyboard.addKeys({
@@ -181,11 +182,24 @@ export default class Lobby extends Phaser.Scene {
         this.buttonForList.setVisible(true);
 
         /* If player press key E when overlapping, scene changes */
-        if (this.player.inputKeys.open.isDown) {
-          handleScene(GAME_STATUS.GAME);
+        if (Phaser.Input.Keyboard.JustDown(this.player.inputKeys.open)) {
+          this.sceneChange = true;
+          // this.player.angle -= 5;
+
+          // 왜 분신술하는지...?
+          setTimeout(() => handleScene(GAME_STATUS.GAME), 1000);
+          // handleScene(GAME_STATUS.GAME);
         }
       } else {
         this.buttonForList.setVisible(false);
+      }
+      if (this.sceneChange) {
+        this.player.angle -= 5;
+        this.player.y -= window.innerHeight / 800;
+        this.player.displayWidth -= this.player.width / 150;
+        this.player.displayHeight -= this.player.height / 150;
+        this.cameras.main.alpha -= 0.005;
+        this.cameras.main.shake(undefined, 0.005);
       }
     }
   }

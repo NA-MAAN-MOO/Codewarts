@@ -56,6 +56,9 @@ export default class MainScene extends Phaser.Scene {
   }
 
   create() {
+    /* Transition */
+    this.cameras.main.fadeFrom(1200, 0, 0, 0);
+    console.log('몇번불림');
     const newFriendSoundToggle = SoundPlayer(friendSoundFile);
     // this.getOut = false;
     this.openMyEditor = false;
@@ -139,7 +142,7 @@ export default class MainScene extends Phaser.Scene {
     this.watchTable = false;
 
     let camera = this.cameras.main;
-    camera.zoom = 1.0;
+    camera.zoom = 1.2;
     camera.startFollow(this.player);
     camera.setLerp(0.1, 0.1);
 
@@ -384,21 +387,24 @@ export default class MainScene extends Phaser.Scene {
       if (!this.watchTable) return;
 
       /*--------------에디터 리스트 보여주는 부분--------------- */
-      for (let i = 0; i < 5; i++) {
-        if (i === this.editorIdx) {
-          this.tableMap
-            .get(this.player.touching[0].body.id)
-            ?.editorBtnList[i].setStyle({
-              backgroundColor: 'white',
-              // color: 'white',
-            });
-        } else {
-          this.tableMap
-            .get(this.player.touching[0].body.id)
-            ?.editorBtnList[i].setStyle({
-              backgroundColor: 'transparent',
-              // color: '#ff6f00',
-            });
+      // FIXME: body 못 읽는 부분, 일단은 touching에 무언가가 있을 때만 그려주도록 함
+      if (this.player.touching.length !== 0) {
+        for (let i = 0; i < 5; i++) {
+          if (i === this.editorIdx) {
+            this.tableMap
+              .get(this.player.touching[0].body.id)
+              ?.editorBtnList[i].setStyle({
+                backgroundColor: 'white',
+                // color: 'white',
+              });
+          } else {
+            this.tableMap
+              .get(this.player.touching[0].body.id)
+              ?.editorBtnList[i].setStyle({
+                backgroundColor: 'transparent',
+                // color: '#ff6f00',
+              });
+          }
         }
       }
 

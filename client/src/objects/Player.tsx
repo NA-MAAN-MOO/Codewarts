@@ -2,7 +2,8 @@
 import phaserGame from 'codeuk';
 import Phaser from 'phaser';
 import { PlayerType } from 'types';
-import Button from './Button';
+import Resource from './Resources';
+import Lobby from 'pages/Lobby';
 
 export default class Player extends Phaser.Physics.Matter.Sprite {
   object!: any;
@@ -14,6 +15,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
   playerNameBubble!: Phaser.GameObjects.Text;
   playerName!: string;
   successEffect!: Phaser.GameObjects.Sprite;
+  fire!: Phaser.GameObjects.Sprite;
 
   constructor(data: PlayerType) {
     let { scene, x, y, texture, id, name, frame } = data;
@@ -24,8 +26,14 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     this.playerTexture = texture;
     this.playerName = name;
     this.touching = [];
+
     this.object = this.scene.add.existing(this); // 플레이어 객체가 생기는 시점.
     this.object.setDepth(50);
+    console.log(scene);
+
+    if (scene.scene.key === 'Lobby') {
+      this.scale *= 2.3;
+    }
 
     // const { Body, Bodies } = Phaser.Physics.Matter.Matter;
     const Body = this.scene.matter.body;
@@ -58,6 +66,9 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
       .setPadding(10, 3, 10, 1)
       .setDepth(50);
 
+    if (scene.scene.key === 'Lobby') {
+      this.playerNameBubble.setPosition(this.x, this.y - this.height - 20);
+    }
     this.playerNameObject = scene.matter.add.gameObject(this.playerNameBubble);
     this.playerNameObject.setSensor(true);
   }
@@ -101,7 +112,12 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     playerVelocity.normalize(); // 대각선인 경우 1.4의 속도이기 때문에 정규화(normalize)를 통해 속도를 1로 만든다. 이 주석에서 속도란, speed가 아니라 좌표 변화량을 뜻한다.
     playerVelocity.scale(speed);
     this.setVelocity(playerVelocity.x, playerVelocity.y); // 실제로 player오브젝트를 움직인다.
-    this.playerNameBubble.setPosition(this.x, this.y - this.height / 2 - 10);
+    if (this.scene.scene.key === 'Lobby') {
+      this.playerNameBubble.setPosition(this.x, this.y - this.height - 20);
+    } else {
+      this.playerNameBubble.setPosition(this.x, this.y - this.height / 2 - 10);
+    }
+
     if (this.successEffect) {
       this.successEffect.setPosition(this.x, this.y - 10);
     }
@@ -112,6 +128,33 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
       y: this.y,
       motion: motion,
     });
+  }
+
+  addFireEffect(chair: Resource) {
+    /* Add fire effect */
+    this.fire = this.scene.add.sprite(
+      chair.x,
+      chair.y - this.height * 1.4,
+      'fire',
+      0
+    );
+    this.fire.setDisplaySize(this.playerNameBubble.width + 9, this.fire.height);
+    this.fire.setDepth(57);
+    this.fire.anims.create({
+      key: 'fire',
+      frames: this.fire.anims.generateFrameNames('fire', {
+        start: 0,
+        end: 5,
+        prefix: 'fire-',
+      }),
+      frameRate: 40,
+      repeat: -1,
+    });
+    this.fire.play('fire');
+  }
+
+  removeFireEffect() {
+    this.fire.destroy();
   }
 
   /* Called whenever player solve a problem  */

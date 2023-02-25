@@ -21,7 +21,7 @@ export default class Table {
   buttonToEditor: any;
   editorListDialog!: Phaser.GameObjects.Container;
   editorBtnList!: any;
-  fire!: Phaser.GameObjects.Sprite;
+  fires!: Phaser.GameObjects.Sprite[];
 
   constructor(scene: Phaser.Scene, tableObject: Resource, tableId: number) {
     this.usercount = 0;
@@ -106,18 +106,6 @@ export default class Table {
     }
   }
 
-  /* Remove current user from a table (Delete my info from a table) */
-  removeCurrentUser(idx: number) {
-    this.tableInfo.get(idx).username = undefined;
-    this.tableInfo.get(idx).roomId = undefined;
-  }
-
-  /* Join an Editor room in a Table (other user's Editor room) */
-  join(currentUser: any, roomId: any) {}
-
-  /* Leave an Editor room in a Table (other user's Editor room) */
-  leave(currentUser: any, roomId: any) {}
-
   registerLaptop(index: number, laptop: any) {
     this.tableInfo.get(index)['laptop'] = laptop;
   }
@@ -155,29 +143,7 @@ export default class Table {
       chair.y - player.height / 2 - 25
     );
     player.playerNameBubble.setDepth(60);
-    /* Add fire effect */
-    this.fire = this.scene.add.sprite(
-      chair.x,
-      chair.y - player.height * 1.4,
-      'fire',
-      0
-    );
-    this.fire.setDisplaySize(
-      player.playerNameBubble.width + 9,
-      this.fire.height
-    );
-    this.fire.setDepth(57);
-    this.fire.anims.create({
-      key: 'fire',
-      frames: this.fire.anims.generateFrameNames('fire', {
-        start: 0,
-        end: 5,
-        prefix: 'fire-',
-      }),
-      frameRate: 40,
-      repeat: -1,
-    });
-    this.fire.play('fire');
+    player.addFireEffect(chair);
   }
 
   standUpFromChair(index: number, player: Player) {
@@ -188,8 +154,10 @@ export default class Table {
       chair.setTexture(`chair_back`);
     }
     player.playerNameBubble.setDepth(50);
-    this.fire.destroy();
+    // console.log('standUpFromChair 불림 ', this.fire);
+
     player.setVisible(true);
+    player.removeFireEffect();
   }
 
   updateTable(idx: number, userName: string, player: Player) {
@@ -199,10 +167,11 @@ export default class Table {
     this.tableInfo.get(idx)['username'] = userName;
     this.tableInfo.get(idx)['roomId'] = userName;
 
-    if (userName) {
+    if (!(userName === '')) {
       this.sitOnChair(idx, player);
     } else {
       this.standUpFromChair(idx, player);
+      console.log('일어나');
     }
   }
 }
