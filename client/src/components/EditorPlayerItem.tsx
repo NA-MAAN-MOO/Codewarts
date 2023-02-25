@@ -37,12 +37,6 @@ const EditorPlayerItem = (
           isMe={name === playerId}
           {...props}
         />
-        {/* {volMuteInfo?.[name] && (
-          <VolumeIcon color="gray" isMute={true} size="23px" />
-        )}
-        {micMuteInfo?.[name] && (
-          <MicIcon color="gray" isMute={true} size="23px" />
-        )} */}
       </StyledItem>
     </ListItem>
   );

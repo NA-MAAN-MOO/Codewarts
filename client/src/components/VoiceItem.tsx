@@ -13,6 +13,7 @@ import {
   toggleMicMute,
 } from 'stores/chatSlice';
 import useVoice from 'hooks/useVoice';
+import { styledTheme } from 'styles/theme';
 
 const VoiceItem = ({
   session,
@@ -76,6 +77,7 @@ const VoiceItem = ({
             isMe ? handleMyVolume : isSuperior ? handleGuestVolume : undefined
           }
           isMute={isVolMute}
+          size={styledTheme.smallIconSize}
         />
         <MicIcon
           color={isMe || isSuperior ? 'white' : 'gray'}
@@ -83,6 +85,7 @@ const VoiceItem = ({
             isMe ? handleMyMic : isSuperior ? handleGuestMic : undefined
           }
           isMute={isMicMute}
+          size={styledTheme.smallIconSize}
         />
       </div>
     </>

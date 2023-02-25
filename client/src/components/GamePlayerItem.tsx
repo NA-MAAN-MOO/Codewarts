@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'stores';
 import VolumeIcon from 'components/VolumeIcon';
 import MicIcon from 'components/MicIcon';
+import { styledTheme } from 'styles/theme';
 
 const GamePlayerItem = ({ name, char }: { name: string; char: string }) => {
   const { volMuteInfo, micMuteInfo, playerId } = useSelector(
@@ -26,10 +27,18 @@ const GamePlayerItem = ({ name, char }: { name: string; char: string }) => {
           }}
         />
         {volMuteInfo?.[name] && (
-          <VolumeIcon color="gray" isMute={true} size="23px" />
+          <VolumeIcon
+            color="gray"
+            isMute={true}
+            size={styledTheme.smallIconSize}
+          />
         )}
         {micMuteInfo?.[name] && (
-          <MicIcon color="gray" isMute={true} size="23px" />
+          <MicIcon
+            color="gray"
+            isMute={true}
+            size={styledTheme.smallIconSize}
+          />
         )}
       </ListItemButton>
     </ListItem>
