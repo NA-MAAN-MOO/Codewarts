@@ -16,7 +16,8 @@ const VoiceBox = ({
   publisher,
   leaveSession,
   joinSession,
-}: GameVoiceType) => {
+  useFloatBox = true,
+}: GameVoiceType & { useFloatBox?: boolean }) => {
   const [volumeOn, setVolumeOn] = useState(true);
   const [micOn, setMicOn] = useState(true);
   const { playerId } = useSelector((state: RootState) => {
@@ -45,6 +46,16 @@ const VoiceBox = ({
     });
   };
 
+  const VolumeSet = () => (
+    <>
+      <VolumeIcon
+        color="white"
+        handleVolume={handleVolume}
+        isMute={!volumeOn}
+      />
+      <MicIcon color="white" handleMic={handleMic} isMute={!micOn} />
+    </>
+  );
   return (
     <>
       {subscribers.map((sub, i) => {
@@ -57,23 +68,15 @@ const VoiceBox = ({
           )
         );
       })}
-      <FloatingBox>
-        <VolumeIcon
-          color="white"
-          handleVolume={handleVolume}
-          isMute={!volumeOn}
-        />
-        <MicIcon color="white" handleMic={handleMic} isMute={!micOn} />
-        {/* <div id="session-header">
-          <input
-          className="btn btn-large btn-danger"
-          type="button"
-          id="buttonLeaveSession"
-          onClick={leaveSession}
-          value="Leave session"
-          />
-        </div> */}
-      </FloatingBox>
+      {useFloatBox ? (
+        <FloatingBox>
+          <VolumeSet />
+        </FloatingBox>
+      ) : (
+        <div>
+          <VolumeSet />
+        </div>
+      )}
     </>
   );
 };

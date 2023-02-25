@@ -8,7 +8,7 @@ import {
 } from 'openvidu-browser';
 import { LoadingOutlined } from '@ant-design/icons';
 import CurrentPlayer from 'components/CurrentPlayer';
-import EditorVoiceBox from 'components/EditorVoiceBox';
+import VoiceBox from 'components/VoiceBox';
 import {
   styled as muiStyled,
   ThemeProvider,
@@ -48,7 +48,7 @@ const EditorVoice = (props: GameVoiceType) => {
         <IconButton onClick={handleDrawerClose}>
           <ChevronRightIcon />
         </IconButton>
-        <EditorVoiceBox {...props} />
+        <VoiceBox {...props} useFloatBox={false} />
       </DrawerHeader>
       <Divider />
       {!!session ? (
