@@ -9,6 +9,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import axios, { AxiosError } from 'axios';
 import { styledTheme } from 'styles/theme';
 import MySnackbar from './MySnackbar';
+import { ThemeProvider } from '@mui/system';
 
 export default function FormDialog() {
   const [openSignUpForm, setOpenSignUpForm] = React.useState(false);
@@ -121,7 +122,7 @@ export default function FormDialog() {
       <Button
         variant="outlined"
         color="primary"
-        size="small"
+        size="large"
         onClick={handleClickOpen}
         sx={{ fontFamily: styledTheme.mainFont }}
       >

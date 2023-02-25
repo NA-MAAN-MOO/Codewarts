@@ -11,6 +11,7 @@ import { Navigation } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import logo from 'assets/images/logo.png';
+import logo_new from 'assets/images/logo_new.png';
 import chars from 'assets/characters';
 import { styledTheme } from 'styles/theme';
 import {
@@ -138,7 +139,7 @@ const LoginDialog = () => {
         onOpen={openLoginWarn}
       />
       <img
-        src={logo}
+        src={logo_new}
         style={{ width: styledTheme.logoWidth, height: styledTheme.logoHeight }}
       />
       {/* <RoomName>
@@ -187,6 +188,7 @@ const LoginDialog = () => {
             error={userIdFieldEmpty}
             helperText={userIdFieldEmpty && 'ID를 입력해 주세요.'}
             value={userId}
+            // margin="dense"
             onInput={(e) => {
               setUserId((e.target as HTMLInputElement).value);
             }}
@@ -199,6 +201,7 @@ const LoginDialog = () => {
             label="PASSWORD"
             variant="outlined"
             value={userPw}
+            margin="dense"
             error={userPwFieldEmpty}
             helperText={userPwFieldEmpty && 'Password를 입력해 주세요.'}
             onInput={(e) => {
@@ -211,10 +214,10 @@ const LoginDialog = () => {
             <Button
               variant="contained"
               color="primary"
-              size="small"
+              size="large"
               type="submit"
               form="login"
-              sx={{ fontFamily: styledTheme.mainFont }}
+              sx={{ fontFamily: styledTheme.mainFont, marginBottom: '10px' }}
             >
               시작하기
             </Button>
@@ -233,7 +236,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: white;
+  background-color: rgba(255, 255, 255, 0.85);
   border-radius: 16px;
   padding: 36px 60px;
   box-shadow: 0px 0px 5px #0000006f;
@@ -246,20 +249,21 @@ const Content = styled.form`
 
 const Left = styled.div`
   margin-right: 48px;
+  margin-top: -8px;
 
   --swiper-navigation-size: 24px;
 
   .swiper {
     width: 160px;
-    height: 220px;
+    height: 200px;
     border-radius: 8px;
     overflow: hidden;
   }
 
   .swiper-slide {
     width: 160px;
-    height: 220px;
-    background: ${({ theme }) => theme.lighterBlue};
+    height: 215px;
+    // background: ${({ theme }) => theme.lighterBlue};
     display: flex;
     justify-content: center;
     align-items: center;
@@ -267,9 +271,14 @@ const Left = styled.div`
 
   .swiper-slide img {
     display: block;
-    width: 95px;
+    width: 97px;
     height: 136px;
     object-fit: contain;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
   }
 `;
 
@@ -281,9 +290,10 @@ const Right = styled.div`
 `;
 
 const Bottom = styled.div`
-  display: flex;
+  // display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-top: 20px;
 `;
 
 const Warning = styled.div`
