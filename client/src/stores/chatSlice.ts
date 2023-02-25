@@ -12,10 +12,11 @@ export interface ChatState {
   users: CharInfoType[];
   volMuteInfo: MuteInfoType;
   micMuteInfo: MuteInfoType;
-  // sessionIdNow: string;
-  // sessionNow: string;
+  myVolMute: boolean;
+  myMicMute: boolean;
 }
 
+//유저 뮤트 정보 가져와서 initial state에 넣어둠
 export const fetchMuteInfo = createAsyncThunk(
   'char/fetchMuteInfo',
   async () => {
@@ -28,8 +29,8 @@ const initialState: ChatState = {
   users: [], //현재 내가 있는 chat Room의 유저들
   volMuteInfo: {},
   micMuteInfo: {},
-  // sessionIdNow: '',
-  // sessionNow: '',
+  myVolMute: false,
+  myMicMute: false,
 };
 
 export const chatSlice = createSlice({
@@ -54,6 +55,12 @@ export const chatSlice = createSlice({
       } else {
         state.micMuteInfo[user] = !state.micMuteInfo[user];
       }
+    },
+    toggleMyVolMute: (state) => {
+      state.myVolMute = !state.myVolMute;
+    },
+    toggleMyMicMute: (state) => {
+      state.myMicMute = !state.myMicMute;
     },
     // setSession: (state, action) => {
     //   const serializedSession = JSON.stringify(action.payload);
@@ -85,6 +92,12 @@ export const chatSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setUsers, toggleVolMute, toggleMicMute } = chatSlice.actions;
+export const {
+  setUsers,
+  toggleVolMute,
+  toggleMicMute,
+  toggleMyVolMute,
+  toggleMyMicMute,
+} = chatSlice.actions;
 
 export default chatSlice.reducer;
