@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Tooltip from '@mui/material/Tooltip';
 import Button from '@mui/material/Button';
@@ -11,6 +12,7 @@ import { notifySuccess, notifyFail } from './toast';
 function EvaluateButton(props) {
   const { userName, roomId } = useSelector((state: RootState) => state.editor);
   const { ytext, bojProbData, markingPercent, setMarkingPercent } = props;
+  let [진행완료, set진행완료] = useState(false);
 
   /* fetching '.in' file */
   async function fetchInputFileText(url: string) {
@@ -43,11 +45,12 @@ function EvaluateButton(props) {
     try {
       for (let i = 1; i < 50; i++) {
         const fetchInput = await fetchInputFileText(
-          `/assets/olympiad/0${i}.in`
+          `/assets/olympiad/${bojProbData?.problemId}/0${i}.in`
         );
 
         if (fetchInput === null || fetchInput?.startsWith('<!DOCTYPE html>')) {
           console.log('더 이상 채점할 파일이 없어요!!');
+          set진행완료(true);
           break;
         }
 
@@ -58,7 +61,7 @@ function EvaluateButton(props) {
         });
 
         const fetchOutput = await fetchInputFileText(
-          `assets/olympiad/0${i}.out`
+          `assets/olympiad/${bojProbData?.problemId}/0${i}.out`
         );
         const jdoodleOutput = data.output;
 
@@ -68,20 +71,30 @@ function EvaluateButton(props) {
         } else {
           console.log(`${i}번 테스트 케이스 틀림`);
         }
-        setMarkingPercent(`${(hitCount / totalCases) * 100}`);
-      }
 
-      // 현재 비동기적으로 작동함
-      if (markingPercent === '100') {
-        notifySuccess(roomId, bojProbData.problemId);
-      } else {
-        notifyFail(roomId, bojProbData.problemId);
+        setMarkingPercent(`${(hitCount / totalCases) * 100}`);
       }
     } catch (error) {
       console.error(error);
       alert('채점 실패');
     }
   };
+
+  useEffect(() => {
+    if (!bojProbData?.problemId) return;
+    if (진행완료 === false) {
+      // console.log('진행완료 :', 진행완료);
+      // console.log('아직 채점 다 안 끝났어요~');
+      return;
+    }
+    if (markingPercent === '100') {
+      notifySuccess(roomId, bojProbData.problemId);
+      set진행완료(false);
+    } else {
+      notifyFail(roomId, bojProbData.problemId);
+      set진행완료(false);
+    }
+  }, [markingPercent, 진행완료]);
 
   return (
     <>

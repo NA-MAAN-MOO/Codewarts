@@ -286,7 +286,7 @@ function YjsCodeMirror() {
             value={markingPercent}
             min={0}
             max={100}
-            label={`채점 진행률: ${markingPercent}%`}
+            label={`정답 게이지: ${markingPercent}%`}
           />
         </ThemeProvider>
       </MiddleWrapper>
