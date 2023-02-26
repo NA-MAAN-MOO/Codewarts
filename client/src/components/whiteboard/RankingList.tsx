@@ -1,15 +1,9 @@
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import { useEffect, useState } from 'react';
-import Divider from '@mui/material/Divider';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-// import RankingTab from './RankingTab';
 import RankingTable from './RankingTable';
 
 export default function RankingList(props: any) {
@@ -63,5 +57,3 @@ export default function RankingList(props: any) {
     </Box>
   );
 }
-
-// {info.id}
