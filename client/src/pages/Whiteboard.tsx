@@ -52,8 +52,8 @@ function Whiteboard() {
           />
           <MainField />
         </Box>
+        <CloseButton handleBack={handleBack} />
       </Background>
-      <CloseButton handleBack={handleBack} />
     </>
   );
 }

@@ -6,7 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { useEffect } from 'react';
+import RenderTier from './RenderTier';
 
 const colNames = [
   '순위',
@@ -17,36 +17,16 @@ const colNames = [
   '맞힌문제',
 ];
 
+interface InfoType {
+  nickname: string;
+  bojId: string;
+  tier: number;
+  maxStreak: number;
+  solved: number;
+}
+
 export default function RankingTable(props: any) {
   const { bojInfos } = props;
-
-  //   const sortInfoByTier = () => {
-  //     let newArray = [...bojInfos];
-  //     newArray.sort((a, b) => b.tier - a.tier);
-  //     setbojInfos(newArray);
-  //   };
-
-  //   const sortInfoByStreak = () => {
-  //     let newArray = [...bojInfos];
-  //     newArray.sort((a, b) => b.maxStreak - a.maxStreak);
-  //     setbojInfos(newArray);
-  //   };
-
-  //   const sortInfoBySolved = () => {
-  //     let newArray = [...bojInfos];
-  //     newArray.sort((a, b) => b.solved - a.solved);
-  //     setbojInfos(newArray);
-  //   };
-
-  //   useEffect(() => {
-  //     tabValue === 0
-  //       ? sortInfoByTier()
-  //       : tabValue === 1
-  //       ? sortInfoByStreak()
-  //       : sortInfoBySolved();
-  //   }, []);
-
-  //   useEffect(() => sortbojInfos(), []);
 
   return (
     <TableContainer component={Paper}>
@@ -59,7 +39,7 @@ export default function RankingTable(props: any) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {bojInfos.map((info: any, index: number) => (
+          {bojInfos.map((info: InfoType, index: number) => (
             <TableRow
               key={index}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -69,9 +49,11 @@ export default function RankingTable(props: any) {
               </TableCell>
               <TableCell align="center">{info.nickname}</TableCell>
               <TableCell align="center">{info.bojId}</TableCell>
-              <TableCell align="center">{info.tier}</TableCell>
-              <TableCell align="center">{info.maxStreak}</TableCell>
-              <TableCell align="center">{info.solved}</TableCell>
+              <TableCell align="center">
+                <RenderTier svgName={info.tier} />
+              </TableCell>
+              <TableCell align="center">{info.maxStreak}일</TableCell>
+              <TableCell align="center">{info.solved}개</TableCell>
             </TableRow>
           ))}
         </TableBody>
