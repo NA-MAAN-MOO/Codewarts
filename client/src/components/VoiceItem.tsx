@@ -53,10 +53,9 @@ const VoiceItem = ({
   //내 방에 들어온 다른 사람 볼륨 음소거 처리
   const handleGuestVolume = () => {
     if (!session) return console.log('세션없음');
-    console.log(session.connection);
     session.signal({
       type: MUTE_TYPE.SET_VOL,
-      to: [session.connection],
+      data: name,
     });
   };
 
@@ -65,7 +64,7 @@ const VoiceItem = ({
     if (!session) return console.log('세션없음');
     session.signal({
       type: MUTE_TYPE.SET_MIC,
-      to: [session.connection],
+      data: name,
     });
   };
 
