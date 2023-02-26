@@ -54,7 +54,7 @@ export const createConnection = async (req: Request, res: Response) => {
     // }
 
     const connection = await session.createConnection(req.body);
-    connectionList[conKey] = connection;
+    // connectionList[conKey] = connection;
 
     console.log('connection created');
     res.send(connection.token);
@@ -150,35 +150,35 @@ export const deleteSession = async (req: Request, res: Response) => {
 };
 
 //특정 커넥션 제거(voiceController에 있는 connectionList에서 지운다는 개념)
-export const deleteConnection = async (req: Request, res: Response) => {
-  try {
-    const { sessionId } = req.params;
-    const { userName } = req.body;
+// export const deleteConnection = async (req: Request, res: Response) => {
+//   try {
+//     const { sessionId } = req.params;
+//     const { userName } = req.body;
 
-    const conKey = `${sessionId}:${userName}`;
+//     const conKey = `${sessionId}:${userName}`;
 
-    //connectionList에 conKey 없으면 리턴
-    // if (!connectionList[conKey]) return res.status(200).end();
+//     //connectionList에 conKey 없으면 리턴
+//     // if (!connectionList[conKey]) return res.status(200).end();
 
-    //connectionList에서 해당 커넥션 제거해 주기
-    // delete connectionList[conKey];
-    res.status(200).end();
-  } catch (err: unknown) {
-    console.log(err);
-    res.status(500).send(err);
-  }
-};
+//     //connectionList에서 해당 커넥션 제거해 주기
+//     // delete connectionList[conKey];
+//     res.status(200).end();
+//   } catch (err: unknown) {
+//     console.log(err);
+//     res.status(500).send(err);
+//   }
+// };
 
 //서버의 ConnectionList 리셋
-export const resetConnection = async (req: Request, res: Response) => {
-  try {
-    // connectionList = {};
-    res.status(200).end();
-  } catch (err: unknown) {
-    console.log(err);
-    res.status(500).send(err);
-  }
-};
+// export const resetConnection = async (req: Request, res: Response) => {
+//   try {
+//     // connectionList = {};
+//     res.status(200).end();
+//   } catch (err: unknown) {
+//     console.log(err);
+//     res.status(500).send(err);
+//   }
+// };
 
 // 뮤트/언뮤트 처리
 export const toggleMute = async (req: Request, res: Response) => {

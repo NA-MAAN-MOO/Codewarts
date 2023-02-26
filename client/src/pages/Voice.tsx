@@ -20,12 +20,12 @@ const Voice = ({ roomKey, session, handleSession, ...rest }: VoiceProp) => {
     registerSession,
     initSession,
     getUsers,
-    resetServerConnList,
+    // resetServerConnList,
   } = useVoice();
 
   const onBeforeUnload = async (e: BeforeUnloadEvent) => {
     leaveSession();
-    await resetServerConnList();
+    // await resetServerConnList();
   };
   const { playerId, status } = useSelector((state: RootState) => {
     return { ...state.user, ...state.mode };
@@ -97,7 +97,6 @@ const Voice = ({ roomKey, session, handleSession, ...rest }: VoiceProp) => {
         OV,
         userName: playerId,
         subscribers,
-        publisher,
       });
       await getUsers(roomKey);
     })();
