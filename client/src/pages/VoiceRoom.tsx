@@ -18,10 +18,10 @@ const VoiceRoom = () => {
   );
   const { disconnectSession } = useVoice();
   const { START, LOBBY, GAME, EDITOR } = GAME_STATUS;
-  const { status, roomId } = useSelector((state: RootState) => {
-    return { status: state.mode.status, roomId: state.editor.roomId };
+  const { status, editorName } = useSelector((state: RootState) => {
+    return { status: state.mode.status, editorName: state.editor.editorName };
   });
-  const [roomKey, setRoomKey] = useState(roomId);
+  const [roomKey, setRoomKey] = useState(editorName);
   const handleSession = (newSession: Session | undefined) => {
     setSession(newSession);
   };
@@ -40,11 +40,11 @@ const VoiceRoom = () => {
       disconnectSession(session);
       setSession(undefined);
     }
-  }, [status, roomId]);
+  }, [status, editorName]);
 
   useEffect(() => {
-    setRoomKey(stringToAscii(roomId));
-  }, [roomId]);
+    setRoomKey(stringToAscii(editorName));
+  }, [editorName]);
 
   useEffect(() => {
     if (socket && status === GAME) {

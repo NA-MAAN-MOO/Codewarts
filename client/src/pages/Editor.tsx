@@ -16,7 +16,7 @@ import { VoiceProp, YjsProp } from 'types';
 import { useSelector, useDispatch } from 'react-redux';
 import { openGame } from 'stores/modeSlice';
 import { RootState } from '../stores';
-import { resetRoomId } from 'stores/editorSlice';
+import { resetEditorName } from 'stores/editorSlice';
 import Header from 'components/editor/Header';
 import { darkTheme } from 'styles/theme';
 import CloseIcon from '@mui/icons-material/Close';
@@ -81,7 +81,7 @@ const DrawerHeader = muiStyled('div')(({ theme }) => ({
 }));
 
 const Editor = (props: VoiceProp & YjsProp) => {
-  const { roomId, isChecked } = useSelector((state: RootState) => {
+  const { editorName, isChecked } = useSelector((state: RootState) => {
     return { ...state.editor, ...state.chat, isChecked: state.board.isChecked };
   });
   const theme = useTheme();
@@ -100,7 +100,7 @@ const Editor = (props: VoiceProp & YjsProp) => {
 
   const handleExit = () => {
     dispatch(openGame());
-    dispatch(resetRoomId());
+    dispatch(resetEditorName());
     if (isChecked) dispatch(toggleWhiteboard());
     // if (socket) socket.disconnect();
   };
@@ -167,7 +167,7 @@ const Editor = (props: VoiceProp & YjsProp) => {
         </ThemeProvider>
       </EditorDiv>
       <Whiteboard isChecked={isChecked}>
-        <Board roomKey={roomId} handleSocket={handleSocket} />
+        <Board roomKey={editorName} handleSocket={handleSocket} />
       </Whiteboard>
       <FixedBtnDiv>
         <FloatingButton

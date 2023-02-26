@@ -8,7 +8,7 @@ import Resource from '../objects/Resources';
 import { io, Socket } from 'socket.io-client';
 import store from 'stores';
 import { openEditor, openGame } from 'stores/modeSlice';
-import { setRoomId, setUserName } from 'stores/editorSlice';
+import { setEditorName, setUserName } from 'stores/editorSlice';
 // import { addUser, removeUser } from 'stores/chatSlice';
 import { GAME_STATUS } from 'utils/Constants';
 import phaserGame from 'codeuk';
@@ -294,7 +294,7 @@ export default class MainScene extends Phaser.Scene {
 
     // Listen for the "Big Deal" event on the client side
     phaserGame.socket?.on('Big Deal', (payload) => {
-      showSuccessToast(payload.roomId, payload.problemId);
+      showSuccessToast(payload.editorName, payload.problemId);
       newHitSoundToggle();
       /* If player solve a problem, turn the solved effect on */
       // this.player.problemSolvedEffect();
@@ -540,14 +540,14 @@ export default class MainScene extends Phaser.Scene {
       this.editorOwner = phaserGame.userName;
 
       phaserGame.socket.emit('addEditor', payLoad);
-      store.dispatch(setRoomId(phaserGame.userName));
+      store.dispatch(setEditorName(phaserGame.userName));
       store.dispatch(setUserName(phaserGame.userName));
       // 에디터 창 열기
       store.dispatch(openEditor());
       /*----다른 사람 에디터에 들어가면----*/
     } else {
       this.editorOwner = targetTable.tableInfo.get(idx).username;
-      store.dispatch(setRoomId(this.editorOwner));
+      store.dispatch(setEditorName(this.editorOwner));
       store.dispatch(setUserName(phaserGame.userName));
       // 에디터 창 열기
       store.dispatch(openEditor());

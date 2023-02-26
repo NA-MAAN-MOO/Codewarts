@@ -15,8 +15,8 @@ import {
   ToastContainer,
 } from '../components/editor/toast'; /* toast for event alarm */
 
-const showSuccessToast = (roomId: string, problemId: number) => {
-  notifySuccess(roomId, problemId);
+const showSuccessToast = (editorName: string, problemId: number) => {
+  notifySuccess(editorName, problemId);
 };
 
 const Game = (props: VoiceProp) => {

@@ -70,7 +70,9 @@ function YjsCodeMirror(props: YjsProp) {
   let mySocket = getPhaserSocket();
 
   /* states */
-  const { userName, roomId } = useSelector((state: RootState) => state.editor);
+  const { userName, editorName } = useSelector(
+    (state: RootState) => state.editor
+  );
   let [compileOutput, setCompileOutput] = useState();
   let [cpuTime, setCpuTime] = useState();
   let [memory, setMemory] = useState();
@@ -87,7 +89,7 @@ function YjsCodeMirror(props: YjsProp) {
 
   const { handleProvider, provider } = props;
   /* roomName 스트링 값 수정하지 말 것(※ 수정할 거면 전부 수정해야 함) */
-  const roomName = `ROOMNAME${roomId}`;
+  const roomName = `ROOMNAME${editorName}`;
 
   const usercolors = [
     { color: '#30bced', light: '#30bced33' },
@@ -116,7 +118,7 @@ function YjsCodeMirror(props: YjsProp) {
         `ws://localhost:1234/`, // serverUrl
         roomName,
         ydoc
-        // { params: { auth: roomId } } // Specify a query-string that will be url-encoded and attached to the `serverUrl`
+        // { params: { auth: editorName } } // Specify a query-string that will be url-encoded and attached to the `serverUrl`
       )
     );
     console.log('provider 생성 시점');

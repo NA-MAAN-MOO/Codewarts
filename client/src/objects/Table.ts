@@ -6,7 +6,7 @@ import { fontStyle } from '@mui/system';
 // type tableStateType = { [index: number]: object };
 const tableInfoModel = {
   username: '',
-  roomId: 0,
+  editorName: 0,
   laptop: undefined,
   chair: undefined,
 };
@@ -91,7 +91,7 @@ export default class Table {
   }
 
   /* Add current user to a table (Open my Editor room) */
-  addCurrentUser(editorIdx: number, username: string, roomId: any) {
+  addCurrentUser(editorIdx: number, username: string, editorName: any) {
     if (this.usercount >= 4) {
       return;
     }
@@ -99,7 +99,7 @@ export default class Table {
     if (!this.tableInfo.get(editorIdx).username) {
       let targetPlace = this.tableInfo.get(editorIdx);
       targetPlace[username] = username;
-      targetPlace[roomId] = roomId;
+      targetPlace[editorName] = editorName;
       this.usercount++;
       // 맥북 texture 바꾸기
       // this.updateLaptopImage(i);
@@ -165,7 +165,7 @@ export default class Table {
     this.updateLaptopImage(idx);
 
     this.tableInfo.get(idx)['username'] = userName;
-    this.tableInfo.get(idx)['roomId'] = userName;
+    this.tableInfo.get(idx)['editorName'] = userName;
 
     if (!(userName === '')) {
       this.sitOnChair(idx, player);

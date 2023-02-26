@@ -264,7 +264,7 @@ io.on('connection', (socket: Socket) => {
 
   // Listen for the "Big Deal" event on the client side
   socket.on('Big Deal', (payload) => {
-    console.log(`${payload.roomId}`);
+    console.log(`${payload.editorName}`);
     socket.broadcast.emit('Big Deal', payload);
   });
 });
