@@ -6,8 +6,10 @@ import {
   getSessions,
   getSessionFromId,
   deleteSession,
-  deleteConnection,
-  resetConnection,
+  // deleteConnection,
+  // resetConnection,
+  toggleMute,
+  getMuteInfo,
 } from '../controllers/voiceController';
 
 const router = express.Router();
@@ -18,7 +20,9 @@ router.get('/get-connections', getConnections);
 router.get('/get-sessions', getSessions);
 router.get('/get-session-from-id', getSessionFromId);
 router.delete('/delete-session/:sessionId', deleteSession);
-router.delete('/delete-connection/:sessionId', deleteConnection);
-router.delete('/reset-connection', resetConnection);
+// router.delete('/delete-connection/:sessionId', deleteConnection);
+// router.delete('/reset-connection', resetConnection);
+router.post('/toggle-mute/:type', toggleMute);
+router.get('/get-mute-info', getMuteInfo);
 
 export default router;
