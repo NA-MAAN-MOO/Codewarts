@@ -12,8 +12,8 @@ const TestVoiceButtons = () => {
   const { getSessions, getConnections } = useVoice();
   const { START, LOBBY, GAME, EDITOR } = GAME_STATUS;
   const [roomKey, setRoomKey] = useState(GAME);
-  const { status, roomId } = useSelector((state: RootState) => {
-    return { status: state.mode.status, roomId: state.editor.roomId };
+  const { status, editorName } = useSelector((state: RootState) => {
+    return { status: state.mode.status, editorName: state.editor.editorName };
   });
   const [sessionId, setSessionId] = useState('');
 
@@ -21,9 +21,9 @@ const TestVoiceButtons = () => {
     if (status === GAME) {
       setRoomKey(GAME);
     } else {
-      setRoomKey(roomId);
+      setRoomKey(editorName);
     }
-  }, [status, roomId]);
+  }, [status, editorName]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSessionId(e.target.value);

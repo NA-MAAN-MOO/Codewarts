@@ -8,7 +8,7 @@ import Resource from '../objects/Resources';
 import { io, Socket } from 'socket.io-client';
 import store from 'stores';
 import { openEditor, openGame } from 'stores/modeSlice';
-import { setRoomId, setUserName } from 'stores/editorSlice';
+import { setEditorName, setUserName } from 'stores/editorSlice';
 // import { addUser, removeUser } from 'stores/chatSlice';
 import { GAME_STATUS } from 'utils/Constants';
 import phaserGame from 'codeuk';
@@ -18,7 +18,9 @@ import { soundToggles } from '../App';
 import SoundPlayer from 'hooks/useSoundPlayer';
 //@ts-ignore
 import friendSoundFile from '../assets/sound_effect/friend_sound.mp3';
+import hitSoundFile from '../assets/sound_effect/hit_sound.mp3';
 import Button from 'objects/Button';
+import { Game, showSuccessToast } from 'pages/Game';
 
 export default class MainScene extends Phaser.Scene {
   // class 속성 명시는 constructor 이전에 명시하면 되는듯
@@ -58,9 +60,8 @@ export default class MainScene extends Phaser.Scene {
   create() {
     /* Transition */
     this.cameras.main.fadeFrom(1200, 0, 0, 0);
-
-    /* Sound effect */
     const newFriendSoundToggle = SoundPlayer(friendSoundFile);
+    const newHitSoundToggle = SoundPlayer(hitSoundFile);
 
     this.openMyEditor = false;
     this.editorOwner = '';
@@ -122,7 +123,7 @@ export default class MainScene extends Phaser.Scene {
       scene: this,
       x: this.x,
       y: this.y,
-      // Lobby에서 받은 값으로 유저 생성
+      /*----Lobby에서 받은 값으로 유저 생성----*/
       texture: phaserGame.charKey, // 이미지 이름
       id: phaserGame.socketId,
       name: phaserGame.userName,
@@ -152,13 +153,12 @@ export default class MainScene extends Phaser.Scene {
     }
 
     if (!phaserGame.socket) return;
-
+    /*----서버에 내 캐릭터 좌표 통보----*/
     phaserGame.socket.emit('loadNewPlayer', { x: this.x, y: this.y });
-
-    // 기존 유저 그려줘! 하고 요청하기
+    /*----기존 유저 데이터 서버에 요청----*/
     phaserGame.socket.emit('currentPlayers');
+    /*----기존 유저 생성----*/
     phaserGame.socket.on('currentPlayers', (payLoad: ServerPlayerType) => {
-      console.log('currentPlayers');
       this.addOtherPlayers({
         x: payLoad.x,
         y: payLoad.y,
@@ -166,11 +166,12 @@ export default class MainScene extends Phaser.Scene {
         socketId: payLoad.socketId,
         state: payLoad.state,
         userName: payLoad.userName,
+        playerCollider: payLoad.playerCollider,
       });
     });
 
+    /*----새 플레이어 접속----*/
     phaserGame.socket.on('newPlayer', (payLoad: ServerPlayerType) => {
-      //새 플레이어가 들어옴
       newFriendSoundToggle();
       const otherPlayerInfo = {
         x: payLoad.x,
@@ -179,19 +180,24 @@ export default class MainScene extends Phaser.Scene {
         socketId: payLoad.socketId,
         state: payLoad.state,
         userName: payLoad.userName,
+        playerCollider: payLoad.playerCollider,
       };
       this.addOtherPlayers(otherPlayerInfo);
       // store.dispatch(addUser(payLoad.userName));
     });
+    /*----접속 해제된 유저 삭제----*/
     phaserGame.socket.on('playerDisconnect', (socketId) => {
       this.removePlayer(socketId);
     });
+    /*----유저 움직임 동기화----*/
     phaserGame.socket.on('updateLocation', (payLoad) => {
       this.updateLocation(payLoad);
     });
+    /*----pause상태 동기화----*/
     this.game.events.on('pause', () => {
       phaserGame.socket?.emit('pauseCharacter');
     });
+    /*----pause된 유저 동기화----*/
     phaserGame.socket.on('pauseCharacter', (socketId: string) => {
       this.otherPlayers.forEach((otherPlayer: OtherPlayer) => {
         if (otherPlayer.socketId === socketId) {
@@ -199,10 +205,11 @@ export default class MainScene extends Phaser.Scene {
         }
       });
     });
-
+    /*---resume상태 동기화----*/
     this.game.events.on('resume', () => {
       phaserGame.socket?.emit('resumeCharacter');
     });
+    /*----resume된 유저 동기화----*/
     phaserGame.socket.on('resumeCharacter', (socketId) => {
       this.otherPlayers.forEach((otherPlayer) => {
         if (otherPlayer.socketId === socketId) {
@@ -210,27 +217,34 @@ export default class MainScene extends Phaser.Scene {
         }
       });
     });
-
+    /*----유저 객체 충돌 상태 동기화----*/
+    phaserGame.socket.on(
+      'changePlayerCollider',
+      (payLoad: ServerPlayerType) => {
+        this.otherPlayers.forEach((otherPlayer) => {
+          if (otherPlayer.socketId === payLoad.socketId) {
+            otherPlayer.playerCollider.isSensor = payLoad.playerCollider;
+          }
+        });
+      }
+    );
+    /*----현재 에디터 현황 서버에 요청----*/
     phaserGame.socket.emit('currentEditors');
-    // TODO: 강제로 해당 tableMap.get(id)를 새로 그리라고 해야한다. 02.14
+    /*----에디터 활성화 동기화----*/
     phaserGame.socket.on(
       'updateEditor',
       (payLoad: {
         id: string;
         idx: number;
         userName: string;
-        //FIXME:
         socketId: string;
       }) => {
         console.log('updateEditor');
         const table = this.tableMap.get(payLoad.id);
         if (table) {
-          //FIXME: 내 에디터 업데이트
           if (phaserGame.socketId === payLoad.socketId) {
             table.updateTable(payLoad.idx, payLoad.userName, this.player);
-          }
-          //FIXME: socketId가 일치하는 other player를 앉힘
-          else {
+          } else {
             this.otherPlayers.forEach((otherPlayer: OtherPlayer) => {
               if (otherPlayer.socketId === payLoad.socketId) {
                 table.updateTable(payLoad.idx, payLoad.userName, otherPlayer);
@@ -240,22 +254,17 @@ export default class MainScene extends Phaser.Scene {
         }
       }
     );
-
-    /* 내가 에디터를 종료할 때 */
-    // TODO: 강제로 보고있는 다른 유저들 강퇴 (상태값 바꿔야함 - 게임모드로)
+    /*----에디터 비활성화 동기화----*/
     phaserGame.socket.on('removeEditor', (payLoad: any) => {
-      // console.log('방 빼요');
       if (
         this.editorOwner === payLoad[2] &&
         phaserGame.userName !== payLoad[2]
       ) {
-        console.log('방 빼요');
         store.dispatch(openGame());
       }
       // removeCurrentUser하려면 updateTable(idx, '')하면 됨
       const table = this.tableMap.get(payLoad[0]);
       if (table) {
-        //FIXME: 일어나게 하기
         if (phaserGame.socketId === payLoad[3]) {
           table.updateTable(payLoad[1], '', this.player);
         } else {
@@ -283,8 +292,13 @@ export default class MainScene extends Phaser.Scene {
     }).getBtn();
     this.whiteboardButton.setVisible(false);
 
-    /* If player solve a problem, turn the solved effect on */
-    // this.player.problemSolvedEffect();
+    // Listen for the "Big Deal" event on the client side
+    phaserGame.socket?.on('Big Deal', (payload) => {
+      showSuccessToast(payload.editorName, payload.problemId);
+      newHitSoundToggle();
+      /* If player solve a problem, turn the solved effect on */
+      // this.player.problemSolvedEffect();
+    });
   }
 
   update() {
@@ -305,25 +319,26 @@ export default class MainScene extends Phaser.Scene {
     } else {
       this.whiteboardButton.setVisible(false);
     }
-    /*-------------------------------*/
 
-    /*--------------------내 에디터 열었을 때----------------------------*/
+    /*--------------------에디터 열었을 때----------------------------*/
     if (store.getState().mode.status !== GAME_STATUS.GAME) {
       if (this.openMyEditor) {
-        // console.log('1차관문, 여기 왔으면 내 에디터 열었다는 뜻');
+        /*----내 에디터 열었을 때----*/
       }
       this.input.keyboard.disableGlobalCapture();
       this.isKeyDisable = true;
       return;
     }
-    /*----------------------내 에디터 닫았을 때--------------------------*/
+    /*----------------------에디터 닫았을 때--------------------------*/
     if (this.isKeyDisable) {
       if (phaserGame.userName === this.editorOwner) {
-        // console.log('2차관문, 여기오면 내 에디터 닫았다는 뜻');
+        /*----내 에디터 닫았을 때----*/
         if (phaserGame.socket) {
           phaserGame.socket.emit('removeEditor');
         }
       }
+      this.player.playerCollider.isSensor = false;
+      phaserGame.socket.emit('changePlayerCollider', false);
       this.editorOwner = '';
       this.openMyEditor = false;
       this.input.keyboard.enableGlobalCapture();
@@ -331,7 +346,6 @@ export default class MainScene extends Phaser.Scene {
     }
     /*-----------테이블에서 E 누르고, 리스트 보고 있는 상태--------------*/
     if (this.watchTable) {
-      // this.player.setStatic(true);
       if (
         this.idxDown &&
         Phaser.Input.Keyboard.JustDown(this.idxDown) &&
@@ -352,7 +366,7 @@ export default class MainScene extends Phaser.Scene {
           return;
         }
         switch (this.editorIdx) {
-          //돌아가기 버튼 누르면
+          /*----돌아가기----*/
           case 4:
             this.input.keyboard.disableGlobalCapture();
 
@@ -364,11 +378,14 @@ export default class MainScene extends Phaser.Scene {
               open: Phaser.Input.Keyboard.KeyCodes.E,
             });
             this.watchTable = false;
+            // 돌아갈때는 내 충돌 설정을 변경시킨다.
+            this.player.playerCollider.isSensor = false;
+            phaserGame.socket.emit('changePlayerCollider', false);
             this.tableMap
               .get(this.player.touching[0].body.id)
               ?.clearEditorList();
             break;
-          // 에디터 들어가기 버튼 누르면
+          /*----에디터 들어가기----*/
           default:
             this.input.keyboard.disableGlobalCapture();
             this.player.inputKeys = this.input.keyboard.addKeys({
@@ -410,7 +427,6 @@ export default class MainScene extends Phaser.Scene {
           }
         }
       }
-
       return;
     }
     /*----------키보드 E키를 눌렀을 때 (테이블 상호작용 시작)---------------*/
@@ -419,12 +435,12 @@ export default class MainScene extends Phaser.Scene {
         this.editorIdx = 0;
 
         this.watchTable = true;
-        this.player.setStatic(true);
+        this.player.playerCollider.isSensor = true;
+        phaserGame.socket.emit('changePlayerCollider', true);
 
         let tableId = this.player.touching[0].body.id;
         let tableInstance = this.tableMap.get(tableId);
         tableInstance?.openEditorList();
-
         this.input.keyboard.disableGlobalCapture();
         this.idxDown = this.input.keyboard.addKey(
           Phaser.Input.Keyboard.KeyCodes.DOWN
@@ -443,16 +459,16 @@ export default class MainScene extends Phaser.Scene {
 
   addOtherPlayers(playerInfo: ServerPlayerType) {
     const otherPlayer = new OtherPlayer({
-      // playerInfo를 바탕으로 새로운 플레이어 객체를 그려준다.
-      // 해당 플레이어 객체를 움직이려면 어쩔까?
       scene: this,
       x: playerInfo.x,
       y: playerInfo.y,
-      texture: playerInfo.charKey, // 이미지 이름
+      texture: playerInfo.charKey,
       id: playerInfo.socketId,
-      frame: 'down-1', // atlas.json의 첫번째 filename
+      /*----atlas.json의 첫번째 filename----*/
+      frame: 'down-1',
       name: playerInfo.userName,
     });
+    otherPlayer.playerCollider.isSensor = playerInfo.playerCollider;
     if (playerInfo.state === 'paused') {
       otherPlayer.setStatic(true);
     }
@@ -503,7 +519,7 @@ export default class MainScene extends Phaser.Scene {
   }
 
   enterEditor(tableId: any, idx: number) {
-    // *** 내 에디터에 들어가면 ***
+    /*----내 에디터에 들어가면----*/
     let targetTable = this.tableMap.get(tableId);
     if (!targetTable.tableInfo.get(idx).username) {
       // 실제로 에디터 창 열어주는 부분
@@ -524,15 +540,14 @@ export default class MainScene extends Phaser.Scene {
       this.editorOwner = phaserGame.userName;
 
       phaserGame.socket.emit('addEditor', payLoad);
-      store.dispatch(setRoomId(phaserGame.userName));
+      store.dispatch(setEditorName(phaserGame.userName));
       store.dispatch(setUserName(phaserGame.userName));
       // 에디터 창 열기
       store.dispatch(openEditor());
-      // *** 다른 사람 에디터에 들어가면 ***
+      /*----다른 사람 에디터에 들어가면----*/
     } else {
       this.editorOwner = targetTable.tableInfo.get(idx).username;
-      // console.log(this.editorOwner);
-      store.dispatch(setRoomId(this.editorOwner));
+      store.dispatch(setEditorName(this.editorOwner));
       store.dispatch(setUserName(phaserGame.userName));
       // 에디터 창 열기
       store.dispatch(openEditor());

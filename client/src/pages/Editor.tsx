@@ -12,12 +12,11 @@ import Toolbar from '@mui/material/Toolbar';
 import YjsCodeMirror from 'pages/editor/YjsCodeMirror';
 import Voice from 'pages/Voice';
 import IconButton from '@mui/material/IconButton';
-import { VoiceProp } from 'types';
+import { VoiceProp, YjsProp } from 'types';
 import { useSelector, useDispatch } from 'react-redux';
 import { openGame } from 'stores/modeSlice';
 import { RootState } from '../stores';
-import { resetRoomId } from 'stores/editorSlice';
-import Button from '@mui/material/Button';
+import { resetEditorName } from 'stores/editorSlice';
 import Header from 'components/editor/Header';
 import { darkTheme } from 'styles/theme';
 import CloseIcon from '@mui/icons-material/Close';
@@ -81,14 +80,15 @@ const DrawerHeader = muiStyled('div')(({ theme }) => ({
   justifyContent: 'flex-start',
 }));
 
-const Editor = (props: VoiceProp) => {
-  const { roomId, isChecked } = useSelector((state: RootState) => {
+const Editor = (props: VoiceProp & YjsProp) => {
+  const { editorName, isChecked } = useSelector((state: RootState) => {
     return { ...state.editor, ...state.chat, isChecked: state.board.isChecked };
   });
   const theme = useTheme();
   const [open, setOpen] = useState(true);
   const dispatch = useDispatch();
-  const [socket, setSocket] = useState<Socket>();
+  // const [socket, setSocket] = useState<Socket>();
+  const { handleSocket, handleProvider, provider } = props;
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -100,17 +100,16 @@ const Editor = (props: VoiceProp) => {
 
   const handleExit = () => {
     dispatch(openGame());
-    dispatch(resetRoomId());
+    dispatch(resetEditorName());
     if (isChecked) dispatch(toggleWhiteboard());
-    if (socket) socket.disconnect();
+    // if (socket) socket.disconnect();
   };
   const handleBoard = () => {
     dispatch(toggleWhiteboard());
   };
 
-  const handleSocket = (soc: Socket) => {
-    setSocket(soc);
-  };
+  console.log('Edirot 컴포넌트 호출 시점');
+
   return (
     <>
       <BackgroundDiv />
@@ -144,7 +143,10 @@ const Editor = (props: VoiceProp) => {
             </AppBar>
             <Main open={open}>
               <DrawerHeader />
-              <YjsCodeMirror />
+              <YjsCodeMirror
+                handleProvider={handleProvider}
+                provider={provider}
+              />
             </Main>
             <Drawer
               sx={{
@@ -165,7 +167,7 @@ const Editor = (props: VoiceProp) => {
         </ThemeProvider>
       </EditorDiv>
       <Whiteboard isChecked={isChecked}>
-        <Board roomKey={roomId} handleSocket={handleSocket} />
+        <Board roomKey={editorName} handleSocket={handleSocket} />
       </Whiteboard>
       <FixedBtnDiv>
         <FloatingButton

@@ -4,12 +4,12 @@ import { GAME_STATUS } from '../utils/Constants';
 
 export interface EditorState {
   userName: string;
-  roomId: string;
+  editorName: string;
 }
 
 const initialState: EditorState = {
   userName: '',
-  roomId: '',
+  editorName: '',
 };
 
 export const editorSlice = createSlice({
@@ -19,16 +19,17 @@ export const editorSlice = createSlice({
     setUserName: (state, action: PayloadAction<string>) => {
       state.userName = action.payload;
     },
-    setRoomId: (state, action: PayloadAction<string>) => {
-      state.roomId = action.payload;
+    setEditorName: (state, action: PayloadAction<string>) => {
+      state.editorName = action.payload;
     },
-    resetRoomId: (state) => {
-      state.roomId = '';
+    resetEditorName: (state) => {
+      state.editorName = '';
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setUserName, setRoomId, resetRoomId } = editorSlice.actions;
+export const { setUserName, setEditorName, resetEditorName } =
+  editorSlice.actions;
 
 export default editorSlice.reducer;
