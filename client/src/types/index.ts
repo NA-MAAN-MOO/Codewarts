@@ -42,6 +42,7 @@ export type PlayerType = {
   frame?: string;
   state?: string;
   name: string;
+  playerCollider: boolean;
 };
 
 export type ServerPlayerType = {
@@ -51,6 +52,7 @@ export type ServerPlayerType = {
   socketId: string;
   state: string;
   userName: string;
+  playerCollider: boolean;
 };
 
 export type MotionType = {
