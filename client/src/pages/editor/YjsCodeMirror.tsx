@@ -54,16 +54,20 @@ import CompilerField from 'components/editor/CompilerField';
 import AlgoHeaderTab from 'components/editor/AlgoHeaderTab';
 import AlgoInfoAccordion from 'components/editor/AlgoInfoAccordion';
 import EvaluateGauge from 'components/editor/EvaluateGauge';
+
+/* network */
+import { getPhaserSocket } from 'network/phaserSocket';
 import { YjsProp } from 'types';
 
 function YjsCodeMirror(props: YjsProp) {
   /* ref */
   const editor = useRef(null);
-  const inputStdin = useRef();
+  const inputStdin = useRef(null);
   const leetUserNameRef = useRef(null);
   const leetProbDataRef = useRef(null);
   const bojUserNameRef = useRef(null);
   const bojProbDataRef = useRef(null);
+  let mySocket = getPhaserSocket();
 
   /* states */
   const { userName, roomId } = useSelector((state: RootState) => state.editor);
@@ -305,6 +309,7 @@ function YjsCodeMirror(props: YjsProp) {
             bojProbData={bojProbData}
             markingPercent={markingPercent}
             setMarkingPercent={setMarkingPercent}
+            mySocket={mySocket}
           />
           <EvaluateGauge
             value={markingPercent}

@@ -261,6 +261,12 @@ io.on('connection', (socket: Socket) => {
     };
     socket.broadcast.emit('changePlayerCollider', payLoad);
   });
+
+  // Listen for the "Big Deal" event on the client side
+  socket.on('Big Deal', (payload) => {
+    console.log(`${payload.roomId}`);
+    socket.broadcast.emit('Big Deal', payload);
+  });
 });
 
 //8080 서버 연결
@@ -277,5 +283,5 @@ voiceServer.listen(3002, () => {
 });
 /* DB 로직 서버 포트 : 3003 */
 dbServer.listen(3003, () => {
-  console.log(`server running on port 3003`);
+  console.log(`DB server running on port 3003`);
 });

@@ -18,7 +18,9 @@ import { soundToggles } from '../App';
 import SoundPlayer from 'hooks/useSoundPlayer';
 //@ts-ignore
 import friendSoundFile from '../assets/sound_effect/friend_sound.mp3';
+import hitSoundFile from '../assets/sound_effect/hit_sound.mp3';
 import Button from 'objects/Button';
+import { Game, showSuccessToast } from 'pages/Game';
 
 export default class MainScene extends Phaser.Scene {
   // class 속성 명시는 constructor 이전에 명시하면 되는듯
@@ -59,6 +61,7 @@ export default class MainScene extends Phaser.Scene {
     /* Transition */
     this.cameras.main.fadeFrom(1200, 0, 0, 0);
     const newFriendSoundToggle = SoundPlayer(friendSoundFile);
+    const newHitSoundToggle = SoundPlayer(hitSoundFile);
 
     this.openMyEditor = false;
     this.editorOwner = '';
@@ -289,8 +292,13 @@ export default class MainScene extends Phaser.Scene {
     }).getBtn();
     this.whiteboardButton.setVisible(false);
 
-    /* If player solve a problem, turn the solved effect on */
-    // this.player.problemSolvedEffect();
+    // Listen for the "Big Deal" event on the client side
+    phaserGame.socket?.on('Big Deal', (payload) => {
+      showSuccessToast(payload.roomId, payload.problemId);
+      newHitSoundToggle();
+      /* If player solve a problem, turn the solved effect on */
+      // this.player.problemSolvedEffect();
+    });
   }
 
   update() {
