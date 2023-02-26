@@ -1,37 +1,49 @@
 import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
-import MuiDrawer from '@mui/material/Drawer';
-import Button from '@mui/material/Button';
 import List from '@mui/material/List';
-import { GAME_STATUS } from 'utils/Constants';
 import Divider from '@mui/material/Divider';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { RootState } from 'stores';
-import CharRoundLogo from 'components/CharRoundLogo';
-import GamePlayerItem from './GamePlayerItem';
+import GamePlayerItem from 'components/GamePlayerItem';
+import EditorPlayerItem from 'components/EditorPlayerItem';
+import { GAME_STATUS } from 'utils/Constants';
+import { GameVoiceType } from 'types';
 
-type Anchor = 'top' | 'left' | 'bottom' | 'right';
-
-const CurrentPlayer = ({ handleDrawer }: { handleDrawer?: () => void }) => {
+const CurrentPlayer = ({
+  handleDrawer,
+  ...rest
+}: GameVoiceType & {
+  handleDrawer?: () => void;
+}) => {
   const { users, status } = useSelector((state: RootState) => {
     return { ...state.chat, ...state.mode };
   });
 
   return (
     <Box
-      sx={{ width: 250 }}
+      sx={{ width: 240 }}
       role="presentation"
       // onClick={handleDrawer}
       onKeyDown={handleDrawer}
     >
       <Title>현재 접속중인 사람</Title>
       <Divider />
-      <List>
-        {users.map(({ name, char }, index) => (
-          <GamePlayerItem name={name} char={char} />
-        ))}
-      </List>
+      {status === GAME_STATUS.GAME ? (
+        <List>
+          {users.map(({ name, char }, index) => (
+            <GamePlayerItem name={name} char={char} key={name} />
+          ))}
+        </List>
+      ) : (
+        status === GAME_STATUS.EDITOR && (
+          <List>
+            {users.map(({ name, char }, index) => (
+              <EditorPlayerItem name={name} char={char} key={name} {...rest} />
+            ))}
+          </List>
+        )
+      )}
     </Box>
   );
 };

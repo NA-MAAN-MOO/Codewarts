@@ -17,6 +17,8 @@ import { PlayerType, TableType, CharInfoType } from './types/Game';
 import CharInfo from './services/CharInfo';
 
 import cookieParser from 'cookie-parser';
+import VolMuteInfo from './services/VolMuteInfo';
+import MicMuteInfo from './services/MicMuteInfo';
 
 const port = process.env.PORT || 8080;
 const mongoPassword = process.env.MONGO_PW;
@@ -91,6 +93,8 @@ io.on('connection', (socket: Socket) => {
       playerInfo.charKey = charKey;
       playerInfo.userName = userName;
       CharInfo.set(userName, charKey);
+      VolMuteInfo.set(userName, false);
+      MicMuteInfo.set(userName, false);
     }
   );
 
