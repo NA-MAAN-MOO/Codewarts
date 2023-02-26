@@ -380,10 +380,12 @@ export default () => {
     session,
   }: {
     subscribers: Subscriber[];
-    session: Session;
+    session?: Session;
   }) => {
+    if (!session) return;
+    //false일 때 뮤트 처리됨
     subscribers.map((sm) => {
-      sm.subscribeToAudio(!myVolMute);
+      sm.subscribeToAudio(myVolMute);
     });
     dispatch(toggleMyVolMute());
     session?.signal({
@@ -397,10 +399,12 @@ export default () => {
     publisher,
     session,
   }: {
-    publisher: Publisher;
-    session: Session;
+    publisher?: Publisher;
+    session?: Session;
   }) => {
-    if (!!publisher) publisher.publishAudio(!myMicMute);
+    if (!session || !publisher) return;
+    //false일 때 뮤트 처리됨
+    publisher.publishAudio(myMicMute);
     dispatch(toggleMyMicMute());
     session?.signal({
       type: MUTE_TYPE.MIC,

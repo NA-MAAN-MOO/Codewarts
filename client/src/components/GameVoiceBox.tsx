@@ -1,7 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Audio from 'components/Audio';
-import styled from 'styled-components';
-import { Session, Publisher, Subscriber } from 'openvidu-browser';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from 'stores';
 import { GameVoiceType } from 'types';
@@ -11,6 +8,7 @@ import MicIcon from 'components/MicIcon';
 import VolumeIcon from 'components/VolumeIcon';
 import { toggleMyMicMute, toggleMyVolMute } from 'stores/chatSlice';
 import AudioList from 'components/AudioList';
+import useVoice from 'hooks/useVoice';
 
 const GameVoiceBox = ({
   session,
@@ -22,27 +20,16 @@ const GameVoiceBox = ({
   const { playerId, myVolMute, myMicMute } = useSelector((state: RootState) => {
     return { ...state.user, ...state.chat };
   });
+  const { handleMyVolumeMute, handleMyMicMute } = useVoice();
 
   //볼륨 음소거 처리
   const handleVolume = () => {
-    subscribers.map((sm) => {
-      sm.subscribeToAudio(!myVolMute);
-    });
-    dispatch(toggleMyVolMute());
-    session?.signal({
-      type: MUTE_TYPE.VOL,
-      data: playerId,
-    });
+    handleMyVolumeMute({ session, subscribers });
   };
 
   //마이크 음소거 처리
   const handleMic = () => {
-    if (!!publisher) publisher.publishAudio(!myMicMute);
-    dispatch(toggleMyMicMute());
-    session?.signal({
-      type: MUTE_TYPE.MIC,
-      data: playerId,
-    });
+    handleMyMicMute({ publisher, session });
   };
 
   const VolumeSet = () => (
