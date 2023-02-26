@@ -15,7 +15,7 @@ const EditorPlayerItem = (
   props: GameVoiceType & { name: string; char: string }
 ) => {
   const { name, char, ...rest } = props;
-  const { volMuteInfo, micMuteInfo, playerId, roomId } = useSelector(
+  const { volMuteInfo, micMuteInfo, playerId, editorName } = useSelector(
     (state: RootState) => ({ ...state.chat, ...state.user, ...state.editor })
   );
   const dispatch = useDispatch();
@@ -33,7 +33,7 @@ const EditorPlayerItem = (
           }}
         />
         <VoiceItem
-          isSuperior={playerId === roomId}
+          isSuperior={playerId === editorName}
           isMe={name === playerId}
           {...props}
         />
