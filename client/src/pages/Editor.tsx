@@ -27,7 +27,7 @@ import { toggleWhiteboard } from 'stores/whiteboardSlice';
 import { Socket } from 'socket.io-client';
 import FloatingButton from 'components/FloatingButton';
 
-const drawerWidth = 240;
+const drawerWidth = 245;
 
 const Main = muiStyled('main', {
   shouldForwardProp: (prop) => prop !== 'open',

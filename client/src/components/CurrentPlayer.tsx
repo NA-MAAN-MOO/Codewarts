@@ -22,7 +22,7 @@ const CurrentPlayer = ({
 
   return (
     <Box
-      sx={{ width: '100%', minWidth: 250 }}
+      sx={{ width: 240 }}
       role="presentation"
       // onClick={handleDrawer}
       onKeyDown={handleDrawer}

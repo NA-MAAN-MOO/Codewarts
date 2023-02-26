@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import VoiceBox from 'components/VoiceBox';
-import styled from 'styled-components';
 import { LoadingOutlined } from '@ant-design/icons';
 import { GameVoiceType } from 'types';
 import FloatingIcon from 'components/FloatingIcon';
@@ -15,6 +14,7 @@ const GameVoice = (props: GameVoiceType) => {
   const handleDrawer = () => {
     setDrawerOpen(!drawerOpen);
   };
+
   return (
     <>
       <FloatingIcon
