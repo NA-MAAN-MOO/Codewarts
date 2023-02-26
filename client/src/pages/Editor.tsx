@@ -12,7 +12,7 @@ import Toolbar from '@mui/material/Toolbar';
 import YjsCodeMirror from 'pages/editor/YjsCodeMirror';
 import Voice from 'pages/Voice';
 import IconButton from '@mui/material/IconButton';
-import { VoiceProp } from 'types';
+import { VoiceProp, YjsProp } from 'types';
 import { useSelector, useDispatch } from 'react-redux';
 import { openGame } from 'stores/modeSlice';
 import { RootState } from '../stores';
@@ -80,14 +80,15 @@ const DrawerHeader = muiStyled('div')(({ theme }) => ({
   justifyContent: 'flex-start',
 }));
 
-const Editor = (props: VoiceProp) => {
+const Editor = (props: VoiceProp & YjsProp) => {
   const { roomId, isChecked } = useSelector((state: RootState) => {
     return { ...state.editor, ...state.chat, isChecked: state.board.isChecked };
   });
   const theme = useTheme();
   const [open, setOpen] = useState(true);
   const dispatch = useDispatch();
-  const [socket, setSocket] = useState<Socket>();
+  // const [socket, setSocket] = useState<Socket>();
+  const { handleSocket, handleProvider, provider } = props;
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -101,15 +102,14 @@ const Editor = (props: VoiceProp) => {
     dispatch(openGame());
     dispatch(resetRoomId());
     if (isChecked) dispatch(toggleWhiteboard());
-    if (socket) socket.disconnect();
+    // if (socket) socket.disconnect();
   };
   const handleBoard = () => {
     dispatch(toggleWhiteboard());
   };
 
-  const handleSocket = (soc: Socket) => {
-    setSocket(soc);
-  };
+  console.log('Edirot 컴포넌트 호출 시점');
+
   return (
     <>
       <BackgroundDiv />
@@ -143,7 +143,10 @@ const Editor = (props: VoiceProp) => {
             </AppBar>
             <Main open={open}>
               <DrawerHeader />
-              <YjsCodeMirror />
+              <YjsCodeMirror
+                handleProvider={handleProvider}
+                provider={provider}
+              />
             </Main>
             <Drawer
               sx={{

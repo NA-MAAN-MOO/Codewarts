@@ -3,7 +3,7 @@
 import { useRef, useEffect, useState } from 'react';
 import { RootState } from 'stores';
 import * as random from 'lib0/random';
-import { useSelector } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import axios from 'axios';
 
 /* yjs */
@@ -54,8 +54,9 @@ import CompilerField from 'components/editor/CompilerField';
 import AlgoHeaderTab from 'components/editor/AlgoHeaderTab';
 import AlgoInfoAccordion from 'components/editor/AlgoInfoAccordion';
 import EvaluateGauge from 'components/editor/EvaluateGauge';
+import { YjsProp } from 'types';
 
-function YjsCodeMirror() {
+function YjsCodeMirror(props: YjsProp) {
   /* ref */
   const editor = useRef(null);
   const inputStdin = useRef();
@@ -77,7 +78,10 @@ function YjsCodeMirror() {
   let [bojProbFullData, setBojProbFullData] = useState();
   let [markingPercent, setMarkingPercent] = useState(0);
   const [algoSelect, setAlgoSelect] = useState(0); // 백준(0), 리트코드(1)
+  const [undoManager, setUndoManager] = useState();
+  const [ytext, setYtext] = useState();
 
+  const { handleProvider, provider } = props;
   /* roomName 스트링 값 수정하지 말 것(※ 수정할 거면 전부 수정해야 함) */
   const roomName = `ROOMNAME${roomId}`;
 
@@ -94,37 +98,57 @@ function YjsCodeMirror() {
 
   // select a random color for this user
   const userColor = usercolors[random.uint32() % usercolors.length];
-  const ydoc = new Y.Doc();
 
-  // Websocket Provider setting
-  const provider = new WebsocketProvider(
-    `ws://localhost:1234/`, // serverUrl
-    roomName,
-    ydoc
-    // { params: { auth: roomId } } // Specify a query-string that will be url-encoded and attached to the `serverUrl`
-  );
-
-  provider.on('status', (event: any) => {
-    console.log(event.status); // logs "connected" or "disconnected"
-  });
-  const ytext = ydoc.getText('codemirror');
-
-  const undoManager = new Y.UndoManager(ytext);
-
-  /* provider의 awareness setting */
-  provider.awareness.setLocalStateField('user', {
-    name: userName, // 커서에 표시되는 이름
-    color: userColor.color, // should be a hex color
-    colorLight: userColor.light,
-    roomName: roomName,
-    clientID: provider.awareness.clientID, // A unique identifier that identifies this client.
-  });
-
-  /* websocket provider의 정보 출력 */
-  console.log(provider.awareness.getLocalState());
+  const [ydoc, setYdoc] = useState();
 
   useEffect(() => {
+    setYdoc(new Y.Doc());
+  }, []);
+
+  useEffect(() => {
+    if (!ydoc) return;
+    handleProvider(
+      new WebsocketProvider(
+        `ws://localhost:1234/`, // serverUrl
+        roomName,
+        ydoc
+        // { params: { auth: roomId } } // Specify a query-string that will be url-encoded and attached to the `serverUrl`
+      )
+    );
+    console.log('provider 생성 시점');
+  }, [ydoc]);
+
+  useEffect(() => {
+    if (!provider) return;
+    console.log(provider);
+    provider.on('status', (event: any) => {
+      console.log(event.status); // logs "connected" or "disconnected"
+    });
+    setYtext(ydoc.getText('codemirror'));
+  }, [provider]);
+  // Websocket Provider setting
+
+  useEffect(() => {
+    if (!ytext) return;
+    // const undoManager = new Y.UndoManager(ytext);
+    setUndoManager(new Y.UndoManager(ytext));
+    /* provider의 awareness setting */
+    provider.awareness.setLocalStateField('user', {
+      name: userName, // 커서에 표시되는 이름
+      color: userColor.color, // should be a hex color
+      colorLight: userColor.light,
+      roomName: roomName,
+      clientID: provider.awareness.clientID, // A unique identifier that identifies this client.
+    });
+
+    /* websocket provider의 정보 출력 */
+    console.log(provider.awareness.getLocalState());
+  }, [ytext]);
+
+  useEffect(() => {
+    // handleProvider(provider);
     /* editor theme 설정 */
+    if (!provider || !undoManager) return;
     let basicThemeSet = EditorView.theme({
       '&': {
         height: '400px',
@@ -170,7 +194,7 @@ function YjsCodeMirror() {
 
     /* view 중복 생성 방지 */
     return () => view?.destroy();
-  }, [editorThemeMode]);
+  }, [editorThemeMode, provider, undoManager]);
 
   /* leetcode 유저 정보 가져오기 */
   const fetchLeetUserData = async () => {
@@ -321,5 +345,4 @@ function YjsCodeMirror() {
     </EditorWrapper>
   );
 }
-
 export default YjsCodeMirror;
