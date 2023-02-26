@@ -9,6 +9,8 @@ import { RootState } from 'stores';
 import { notifySuccess, notifyFail } from './toast';
 //@ts-ignore
 import missSoundFile from '../../assets/sound_effect/miss_sound.mp3';
+//@ts-ignore
+import hitSoundFile from '../../assets/sound_effect/hit_sound.mp3';
 import SoundPlayer from 'hooks/useSoundPlayer';
 
 //@ts-ignore
@@ -20,6 +22,7 @@ function EvaluateButton(props) {
     props;
   let [진행완료, set진행완료] = useState(false);
   const newMissSoundToggle = SoundPlayer(missSoundFile);
+  const newHitSoundToggle = SoundPlayer(hitSoundFile);
 
   /* fetching '.in' file */
   async function fetchInputFileText(url: string) {
@@ -32,6 +35,15 @@ function EvaluateButton(props) {
       return null;
     }
   }
+
+  /* 유저가 가채점 성공시 소켓 이벤트 발동 */
+  const broadcastSuccess = () => {
+    mySocket?.emit('Big Deal', {
+      editorName: editorName,
+      problemId: bojProbData?.problemId || null,
+      broadcast: true,
+    });
+  };
 
   /* 유저가 작성한 코드 가채점하기 위해 서버로 보냄 */
   const evaluateCode = async () => {
@@ -101,12 +113,13 @@ function EvaluateButton(props) {
     }
     if (markingPercent === '100') {
       notifySuccess(editorName, bojProbData.problemId);
-      set진행완료(false);
+      newHitSoundToggle();
+      broadcastSuccess();
     } else {
       notifyFail(editorName, bojProbData.problemId);
-      set진행완료(false);
       newMissSoundToggle();
     }
+    set진행완료(false);
   }, [markingPercent, 진행완료]);
 
   return (
@@ -123,18 +136,10 @@ function EvaluateButton(props) {
           가채점
         </Button>
       </Tooltip>
-      <button
-        onClick={() => {
-          // 문제 맞춘거 소켓 이벤트 발동!!
-          mySocket?.emit('Big Deal', {
-            editorName: editorName,
-            problemId: bojProbData?.problemId || null,
-            broadcast: true,
-          });
-        }}
-      >
-        {editorName}님이 문제 맞췄다고 알려라
-      </button>
+      {/* ▼ 문제 성공 알림을 테스트하고 싶으면 주석 해제 */}
+      {/* <button onClick={broadcastSuccess}>
+        테스트버튼: "{editorName}"님이 문제 맞췄다고 알리기
+      </button> */}
     </>
   );
 }
