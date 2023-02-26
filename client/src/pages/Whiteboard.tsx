@@ -5,16 +5,27 @@ import { openGame } from 'stores/modeSlice';
 import store from 'stores';
 import { setFlagsFromString } from 'v8';
 
+interface DetailInfo {
+  bojId: string;
+  id: string;
+  maxStreak: number;
+  nickname: string;
+  rating: number;
+  tier: number;
+}
+
 function Whiteboard() {
-  let [bojInfos, setbojInfos] = useState<any[]>([]);
+  const initialState: [] = [];
+
+  let [bojInfos, setbojInfos] = useState<DetailInfo[]>(initialState);
   let [showInfoFlag, setFlag] = useState(true);
 
   //TODO: export해서 phaser main scene에서 불리게? 또는 Lobby? redis에 저장까지
   const getBojInfos = async () => {
     try {
       const response = await axios.get(`http://localhost:3003/boj-infos`);
-      setbojInfos(response.data);
-      console.log(bojInfos);
+      await setbojInfos(response.data);
+      //   console.log(bojInfos);
     } catch (e) {
       console.error(e);
     }
@@ -28,8 +39,7 @@ function Whiteboard() {
   }, []);
 
   const handleBack = async () => {
-    //FIXME: 화이트보드에 있는 내용 지우거나 redis에 저장해서 불러오기
-    setbojInfos([]);
+    await setbojInfos([]);
     store.dispatch(openGame());
   };
 

@@ -5,17 +5,33 @@ dotenv.config();
 import { Request, Response } from 'express';
 
 const { MongoClient } = require('mongodb');
+import { ObjectId } from 'mongoose';
 const mongoPassword = process.env.MONGO_PW;
 
 import axios, { AxiosResponse } from 'axios';
 
-let response: {}[] = [];
+interface DatumType {
+  _id: ObjectId;
+  userId: string;
+  userPw: string;
+  userNickname: string;
+  userBojId: string;
+  userLeetId: string;
+}
 
-// interface;
+interface ResponseType {
+  nickname: string;
+  id: string;
+  bojId: string;
+  tier: number;
+  rating: number;
+  maxStreak: number;
+}
+
+let response: ResponseType[] = [];
 
 /* Get each user's data */
 const getEachUserBojInfo = async (bojId: string) => {
-  //   console.log(bojId);
   try {
     return await axios.get(
       `https://solved.ac/api/v3/user/show?handle=${bojId}`
@@ -26,11 +42,12 @@ const getEachUserBojInfo = async (bojId: string) => {
 };
 
 /* Recreate response based on info through solved.ac api */
-//FIXME: type 관련 고치기
-const regenerateData = async (datum: {}[]) => {
+const regenerateData = async (datum: DatumType[]) => {
   for await (const data of datum) {
     // console.log(data);
-    const eachData: any = await getEachUserBojInfo(data.userBojId);
+    const eachData: false | AxiosResponse<any, any> = await getEachUserBojInfo(
+      data.userBojId
+    );
     // console.log(eachData.data);
 
     if (!!eachData) {
@@ -54,6 +71,7 @@ export const getUsersBojInfo = async (req: Request, res: Response) => {
     useUnifiedTopology: true,
   });
 
+  /* Connect to DB */
   const dbconnect = async () => {
     try {
       await client.connect();
@@ -68,13 +86,12 @@ export const getUsersBojInfo = async (req: Request, res: Response) => {
   const db = client.db('codewart');
   const collection = db.collection('users');
 
-  /* All users' datum in the DB */
+  /* Get all users' datum in the DB */
   const datum = await collection
     .find({}, { _id: false, userBojId: true, userNickname: true, userId: true })
     .toArray();
 
   await regenerateData(datum);
-  console.log(response);
 
   /* Send response */
   if (response.length === 0) {
@@ -82,4 +99,7 @@ export const getUsersBojInfo = async (req: Request, res: Response) => {
   } else {
     res.status(200).send(response);
   }
+
+  /* Empty data */
+  response = [];
 };
