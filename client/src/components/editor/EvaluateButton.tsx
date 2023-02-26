@@ -7,12 +7,17 @@ import { RootState } from 'stores';
 
 /* toast */
 import { notifySuccess, notifyFail } from './toast';
+//@ts-ignore
+import missSoundFile from '../../assets/sound_effect/miss_sound.mp3';
+import SoundPlayer from 'hooks/useSoundPlayer';
 
 //@ts-ignore
 function EvaluateButton(props) {
   const { userName, roomId } = useSelector((state: RootState) => state.editor);
-  const { ytext, bojProbData, markingPercent, setMarkingPercent } = props;
+  const { ytext, bojProbData, markingPercent, setMarkingPercent, mySocket } =
+    props;
   let [진행완료, set진행완료] = useState(false);
+  const newMissSoundToggle = SoundPlayer(missSoundFile);
 
   /* fetching '.in' file */
   async function fetchInputFileText(url: string) {
@@ -98,6 +103,7 @@ function EvaluateButton(props) {
     } else {
       notifyFail(roomId, bojProbData.problemId);
       set진행완료(false);
+      newMissSoundToggle();
     }
   }, [markingPercent, 진행완료]);
 
@@ -115,6 +121,18 @@ function EvaluateButton(props) {
           가채점
         </Button>
       </Tooltip>
+      <button
+        onClick={() => {
+          // 문제 맞춘거 소켓 이벤트 발동!!
+          mySocket?.emit('Big Deal', {
+            roomId: roomId,
+            problemId: bojProbData?.problemId || null,
+            broadcast: true,
+          });
+        }}
+      >
+        {roomId}님이 문제 맞췄다고 알려라
+      </button>
     </>
   );
 }

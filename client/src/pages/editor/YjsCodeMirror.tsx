@@ -55,14 +55,18 @@ import AlgoHeaderTab from 'components/editor/AlgoHeaderTab';
 import AlgoInfoAccordion from 'components/editor/AlgoInfoAccordion';
 import EvaluateGauge from 'components/editor/EvaluateGauge';
 
+/* network */
+import { getPhaserSocket } from 'network/phaserSocket';
+
 function YjsCodeMirror() {
   /* ref */
   const editor = useRef(null);
-  const inputStdin = useRef();
+  const inputStdin = useRef(null);
   const leetUserNameRef = useRef(null);
   const leetProbDataRef = useRef(null);
   const bojUserNameRef = useRef(null);
   const bojProbDataRef = useRef(null);
+  let mySocket = getPhaserSocket();
 
   /* states */
   const { userName, roomId } = useSelector((state: RootState) => state.editor);
@@ -107,6 +111,7 @@ function YjsCodeMirror() {
   provider.on('status', (event: any) => {
     console.log(event.status); // logs "connected" or "disconnected"
   });
+
   const ytext = ydoc.getText('codemirror');
 
   const undoManager = new Y.UndoManager(ytext);
@@ -121,7 +126,8 @@ function YjsCodeMirror() {
   });
 
   /* websocket provider의 정보 출력 */
-  console.log(provider.awareness.getLocalState());
+  // console.log(provider.awareness.getLocalState());
+  // console.log(provider.awareness.getStates());
 
   useEffect(() => {
     /* editor theme 설정 */
@@ -169,7 +175,9 @@ function YjsCodeMirror() {
     });
 
     /* view 중복 생성 방지 */
-    return () => view?.destroy();
+    return () => {
+      view?.destroy();
+    };
   }, [editorThemeMode]);
 
   /* leetcode 유저 정보 가져오기 */
@@ -281,6 +289,7 @@ function YjsCodeMirror() {
             bojProbData={bojProbData}
             markingPercent={markingPercent}
             setMarkingPercent={setMarkingPercent}
+            mySocket={mySocket}
           />
           <EvaluateGauge
             value={markingPercent}

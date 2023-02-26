@@ -3,7 +3,7 @@ import { Session } from 'openvidu-browser';
 import useVoice from 'hooks/useVoice';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from 'stores';
-import Game from 'pages/Game';
+import { Game } from 'pages/Game';
 import Editor from 'pages/Editor';
 import { GAME_STATUS } from 'utils/Constants';
 import { stringToAscii } from 'lib/voiceLib';

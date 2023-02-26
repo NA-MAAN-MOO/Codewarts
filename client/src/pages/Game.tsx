@@ -9,6 +9,15 @@ import { styledTheme } from 'styles/theme';
 import useVoice from 'hooks/useVoice';
 import { VoiceProp } from 'types';
 import FloatingButton from 'components/FloatingButton';
+import {
+  notifySuccess,
+  notifyFail,
+  ToastContainer,
+} from '../components/editor/toast'; /* toast for event alarm */
+
+const showSuccessToast = (roomId: string, problemId: number) => {
+  notifySuccess(roomId, problemId);
+};
 
 const Game = (props: VoiceProp) => {
   const dispatch = useDispatch();
@@ -19,6 +28,7 @@ const Game = (props: VoiceProp) => {
 
   return (
     <BackgroundDiv>
+      <ToastContainer />
       <Voice {...props} />
       <BtnDiv>
         {/* <Button
@@ -38,7 +48,7 @@ const Game = (props: VoiceProp) => {
   );
 };
 
-export default Game;
+export { Game, showSuccessToast };
 
 const BackgroundDiv = styled.div`
   width: 100%;
