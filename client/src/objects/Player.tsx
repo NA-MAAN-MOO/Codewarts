@@ -132,7 +132,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     if (this.playerDialogBubble) {
       this.playerDialogBubble.setPosition(
         this.x - this.width,
-        this.y - this.height - 20
+        this.y - this.height - 80
       );
     }
     if (!phaserGame.socket) return;
@@ -200,9 +200,10 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     this.clearDialogBubble();
 
     this.playerDialogBubble = this.scene.add
-      .text(this.x - this.width, this.y - this.height - 20, content)
-      .setStyle({ fontSize: '30px', color: 'white' })
-      .setPadding(5, 5, 5, 5);
+      .text(this.x - this.width, this.y - this.height - 80, content)
+      .setStyle({ fontSize: '60px', color: 'white' })
+      .setDepth(50)
+      .setPadding(5, 15, 5, 5);
 
     // preprocessing for dialog bubble text (maximum 70 characters)
     // const dialogBubbleText =
@@ -253,14 +254,13 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     // console.log(this.playerDialogBubble);
 
     // // After 6 seconds, clear the dialog bubble
-    this.timeoutID = window.setTimeout(() => {
+    window.setTimeout(() => {
       this.clearDialogBubble();
-    }, 3000);
+    }, 5000);
   }
 
   private clearDialogBubble() {
     if (this.playerDialogBubble) {
-      clearTimeout(this.timeoutID);
       this.playerDialogBubble.destroy();
     }
     // this.playerDialogBubble.removeAll(true);

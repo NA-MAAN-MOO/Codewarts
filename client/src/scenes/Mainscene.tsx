@@ -299,6 +299,19 @@ export default class MainScene extends Phaser.Scene {
       /* If player solve a problem, turn the solved effect on */
       // this.player.problemSolvedEffect();
     });
+
+    phaserGame.socket?.on('getEmoji', (payload) => {
+      console.log(`${payload.emoji}`);
+      if (payload.socketId === phaserGame.socketId) {
+        this.player.updateDialogBubble(payload.emoji);
+      } else {
+        this.otherPlayers.forEach((other) => {
+          if (other.socketId === payload.socketId)
+            return other.updateDialogBubble(payload.emoji);
+        });
+      }
+      // this.player?.updateDialogBubble(payload.emoji);
+    });
   }
 
   update() {
@@ -514,6 +527,12 @@ export default class MainScene extends Phaser.Scene {
         otherPlayer.playerNameBubble.setPosition(
           payLoad.x,
           payLoad.y - otherPlayer.height / 2 - 10
+        );
+
+        //emoji
+        otherPlayer.playerDialogBubble?.setPosition(
+          payLoad.x - otherPlayer.width,
+          payLoad.y - otherPlayer.height - 80
         );
       }
     });

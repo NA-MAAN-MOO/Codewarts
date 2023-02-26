@@ -267,6 +267,11 @@ io.on('connection', (socket: Socket) => {
     console.log(`${payload.editorName}`);
     socket.broadcast.emit('Big Deal', payload);
   });
+
+  socket.on('sendEmoji', (payload) => {
+    console.log(`${payload.emoji}`);
+    io.emit('getEmoji', payload);
+  });
 });
 
 //8080 서버 연결
