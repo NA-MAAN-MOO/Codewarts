@@ -2,9 +2,7 @@
 /* react & lib */
 import { useRef, useEffect, useState } from 'react';
 import { RootState } from 'stores';
-import * as random from 'lib0/random';
-import { Provider, useSelector } from 'react-redux';
-import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 /* yjs */
 import * as Y from 'yjs';
@@ -24,9 +22,7 @@ import {
   standardKeymap,
 } from '@codemirror/commands';
 import { okaidia } from '@uiw/codemirror-theme-okaidia';
-
-/* GraphQL queries */
-import USERINFOQUERY from '../../graphql/userInfoQuery';
+import { userColor } from './userTagColors';
 
 /* UI */
 import './YjsCodeMirror.css';
@@ -90,20 +86,6 @@ function YjsCodeMirror(props: YjsProp) {
   const { handleProvider, provider } = props;
   /* roomName 스트링 값 수정하지 말 것(※ 수정할 거면 전부 수정해야 함) */
   const roomName = `ROOMNAME${editorName}`;
-
-  const usercolors = [
-    { color: '#30bced', light: '#30bced33' },
-    { color: '#6eeb83', light: '#6eeb8333' },
-    { color: '#ffbc42', light: '#ffbc4233' },
-    { color: '#ecd444', light: '#ecd44433' },
-    { color: '#ee6352', light: '#ee635233' },
-    { color: '#9ac2c9', light: '#9ac2c933' },
-    { color: '#8acb88', light: '#8acb8833' },
-    { color: '#1be7ff', light: '#1be7ff33' },
-  ];
-
-  // select a random color for this user
-  const userColor = usercolors[random.uint32() % usercolors.length];
 
   const [ydoc, setYdoc] = useState();
 
@@ -202,61 +184,9 @@ function YjsCodeMirror(props: YjsProp) {
     return () => view?.destroy();
   }, [editorThemeMode, provider, undoManager]);
 
-  /* leetcode 유저 정보 가져오기 */
-  const fetchLeetUserData = async () => {
-    if (leetUserNameRef.current === null) return;
-
-    //@ts-ignore
-    let leetUserName = leetUserNameRef.current.value;
-    console.log(leetUserName);
-
-    const userQueryVariable = {
-      //@ts-ignore
-      username: leetUserName,
-    };
-
-    try {
-      const response = await axios.post(
-        'https://cors-anywhere.herokuapp.com/https://leetcode.com/graphql',
-        {
-          query: USERINFOQUERY,
-          variables: userQueryVariable,
-        }
-      );
-
-      let userData = response.data;
-      console.log(userData.data);
-      setLeetUserData(userData.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  /* 백준 유저 정보 가져오기 */
-  const fetchBojUserData = async () => {
-    if (bojUserNameRef.current === null) return;
-
-    //@ts-ignore
-    let bojUserName = bojUserNameRef.current.value;
-    console.log(bojUserName);
-
-    try {
-      const response = await axios.get(
-        `https://solved.ac/api/v3/search/user?query=${bojUserName}`
-      );
-
-      let userData = response.data;
-      console.log(userData);
-      setBojUserData(userData);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   return (
     <EditorWrapper>
       <ToastContainer />
-
       <AlgoInfoWrap>
         <Box
           sx={{
