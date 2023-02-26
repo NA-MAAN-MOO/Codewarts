@@ -207,9 +207,6 @@ export default () => {
 
       const mySession = session;
 
-      // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
-      // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
-      await mySession.connect(token, { user: userName });
       if (!OV) return;
       // Init a passing undefined as targetElement (we don't want OpenVidu to insert a video
       // element: we will manage it on our own) and with the desired properties
@@ -223,11 +220,6 @@ export default () => {
         insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
         mirror: false, // Whether to mirror your local video or not
       });
-
-      // ---Publish your stream ---
-
-      await mySession.publish(pubNow);
-      handlePublisher(pubNow);
 
       // --- Specify the actions when events take place in the session ---
 
@@ -316,6 +308,15 @@ export default () => {
         }
         handleMyMicMute({ publisher: pubNow, session });
       });
+
+      // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
+      // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
+      await mySession.connect(token, { user: userName });
+
+      // ---Publish your stream ---
+
+      await mySession.publish(pubNow);
+      handlePublisher(pubNow);
     } catch (error) {
       console.log(error);
     }
