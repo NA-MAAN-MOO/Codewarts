@@ -204,8 +204,8 @@ export const toggleMute = async (req: Request, res: Response) => {
 export const getMuteInfo = async (req: Request, res: Response) => {
   try {
     const result = {
-      [MUTE_TYPE.VOL]: VolMuteInfo,
-      [MUTE_TYPE.MIC]: MicMuteInfo,
+      [MUTE_TYPE.VOL]: VolMuteInfo.getAll(),
+      [MUTE_TYPE.MIC]: MicMuteInfo.getAll(),
     };
     res.send(result).end();
   } catch (err: unknown) {

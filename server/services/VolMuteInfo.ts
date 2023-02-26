@@ -25,6 +25,10 @@ class VolMuteInfo {
   get(key: string) {
     return this.data[key];
   }
+
+  getAll() {
+    return this.data;
+  }
 }
 
 export default VolMuteInfo.getInstance();
