@@ -92,9 +92,9 @@ export const getUsersBojInfo = async (req: Request, res: Response) => {
 
   await regenerateData(datum);
 
-  /* Sort by maxStreak */
+  /* Sort by tier */
   if (response.length) {
-    await response.sort((a, b) => b.maxStreak - a.maxStreak);
+    await response.sort((a, b) => b.tier - a.tier);
   }
 
   /* Send response */
@@ -103,7 +103,7 @@ export const getUsersBojInfo = async (req: Request, res: Response) => {
   } else {
     res.status(200).send(response);
   }
-  console.log(response);
+  // console.log(response);
   /* Empty data */
   response = [];
 };

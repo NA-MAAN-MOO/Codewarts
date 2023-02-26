@@ -45,11 +45,15 @@ function Whiteboard() {
         <Box sx={{ display: 'flex' }}>
           <RankingHeader />
 
-          <RankingList bojInfos={bojInfos} getBojInfos={getBojInfos} />
+          <RankingList
+            getBojInfos={getBojInfos}
+            bojInfos={bojInfos}
+            setbojInfos={setbojInfos}
+          />
           <MainField />
         </Box>
       </Background>
-      <CloseButton />
+      <CloseButton handleBack={handleBack} />
     </>
   );
 }
