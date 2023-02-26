@@ -24,8 +24,8 @@ interface ResponseType {
   id: string;
   bojId: string;
   tier: number;
-  rating: number;
   maxStreak: number;
+  solved: number;
 }
 
 let response: ResponseType[] = [];
@@ -48,7 +48,6 @@ const regenerateData = async (datum: DatumType[]) => {
     const eachData: false | AxiosResponse<any, any> = await getEachUserBojInfo(
       data.userBojId
     );
-    // console.log(eachData.data);
 
     if (!!eachData) {
       response.push({
@@ -56,8 +55,8 @@ const regenerateData = async (datum: DatumType[]) => {
         id: data.userId,
         bojId: data.userBojId,
         tier: eachData.data.tier,
-        rating: eachData.data.rating,
         maxStreak: eachData.data.maxStreak,
+        solved: eachData.data.solvedCount,
       });
     }
   }
@@ -93,13 +92,18 @@ export const getUsersBojInfo = async (req: Request, res: Response) => {
 
   await regenerateData(datum);
 
+  /* Sort by maxStreak */
+  if (response.length) {
+    await response.sort((a, b) => b.maxStreak - a.maxStreak);
+  }
+
   /* Send response */
   if (response.length === 0) {
     res.status(404).send('No valid Boj Users Id');
   } else {
     res.status(200).send(response);
   }
-
+  console.log(response);
   /* Empty data */
   response = [];
 };
