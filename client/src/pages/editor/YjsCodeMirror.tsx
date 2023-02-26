@@ -31,10 +31,14 @@ import {
   MiddleWrapper,
   EditorWrapper,
   AlgoInfoWrap,
-  theme,
+  buttonTheme,
+  Main,
+  AppBar,
+  DrawerHeader,
+  leftDrawerWidth,
 } from './editorStyle';
 import 'styles/fonts.css'; /* FONT */
-import { ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 
@@ -50,18 +54,25 @@ import CompilerField from 'components/editor/CompilerField';
 import AlgoHeaderTab from 'components/editor/AlgoHeaderTab';
 import AlgoInfoAccordion from 'components/editor/AlgoInfoAccordion';
 import EvaluateGauge from 'components/editor/EvaluateGauge';
+import ProbTitle from 'components/editor/ProbTitle';
 
 /* network */
 import { getPhaserSocket } from 'network/phaserSocket';
 import { YjsProp } from 'types';
 
+import Drawer from '@mui/material/Drawer';
+import CssBaseline from '@mui/material/CssBaseline';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+
 function YjsCodeMirror(props: YjsProp) {
   /* ref */
   const editor = useRef(null);
   const inputStdin = useRef(null);
-  const leetUserNameRef = useRef(null);
   const leetProbDataRef = useRef(null);
-  const bojUserNameRef = useRef(null);
   const bojProbDataRef = useRef(null);
   let mySocket = getPhaserSocket();
 
@@ -73,15 +84,24 @@ function YjsCodeMirror(props: YjsProp) {
   let [cpuTime, setCpuTime] = useState();
   let [memory, setMemory] = useState();
   let [editorThemeMode, setEditorTheme] = useState(okaidia);
-  let [leetUserData, setLeetUserData] = useState();
   let [leetProbData, setLeetProbData] = useState();
-  let [bojUserData, setBojUserData] = useState();
   let [bojProbData, setBojProbData] = useState();
   let [bojProbFullData, setBojProbFullData] = useState();
   let [markingPercent, setMarkingPercent] = useState(0);
   const [algoSelect, setAlgoSelect] = useState(0); // 백준(0), 리트코드(1)
   const [undoManager, setUndoManager] = useState();
   const [ytext, setYtext] = useState();
+
+  const [leftOpen, setLeftOpen] = useState(false);
+
+  const theme = useTheme();
+
+  const handleRightDrawerOpen = () => {
+    setLeftOpen(true);
+  };
+  const handleLeftDrawerClose = () => {
+    setLeftOpen(false);
+  };
 
   const { handleProvider, provider } = props;
   /* roomName 스트링 값 수정하지 말 것(※ 수정할 거면 전부 수정해야 함) */
@@ -143,7 +163,6 @@ function YjsCodeMirror(props: YjsProp) {
         // minHeight: '500px',
         borderRadius: '.5em', // '.cm-gutters'와 같이 조절할 것
       },
-      '.cm-editor': {},
       '.cm-content, .cm-gutter': { minHeight: '30%' },
       '.cm-content': {
         fontFamily: 'Cascadia Code, Pretendard-Regular',
@@ -187,97 +206,142 @@ function YjsCodeMirror(props: YjsProp) {
   return (
     <EditorWrapper>
       <ToastContainer />
-      <AlgoInfoWrap>
-        <Box
-          sx={{
-            bgcolor: '#272822',
-            display: 'flex',
-            borderRadius: 1.4,
-            boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)',
-          }}
+      <Box sx={{ display: 'flex' }}>
+        <CssBaseline />
+        <AppBar
+          position="fixed"
+          open={leftOpen}
+          style={{ backgroundColor: 'transparent' }}
         >
-          <AlgoHeaderTab
-            algoSelect={algoSelect}
-            setAlgoSelect={setAlgoSelect}
-            bojProbData={bojProbData}
-            setBojProbData={setBojProbData}
-            leetProbData={leetProbData}
-            setLeetProbData={setLeetProbData}
-            bojProbDataRef={bojProbDataRef}
-            leetProbDataRef={leetProbDataRef}
-            setBojProbFullData={setBojProbFullData}
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleRightDrawerOpen}
+              edge="start"
+              sx={{ mr: 2, ...(leftOpen && { display: 'none' }) }}
+            >
+              <MenuIcon />
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          sx={{
+            width: leftDrawerWidth,
+            flexShrink: 0,
+            '& .MuiDrawer-paper': {
+              width: leftDrawerWidth,
+              boxSizing: 'border-box',
+            },
+          }}
+          variant="persistent"
+          anchor="left"
+          open={leftOpen}
+        >
+          <DrawerHeader>
+            <ProbTitle
+              algoSelect={algoSelect}
+              bojProbData={bojProbData}
+              leetProbData={leetProbData}
+            />
+            <IconButton onClick={handleLeftDrawerClose}>
+              {theme.direction === 'ltr' ? (
+                <ChevronLeftIcon />
+              ) : (
+                <ChevronRightIcon />
+              )}
+            </IconButton>
+          </DrawerHeader>
+          <AlgoInfoWrap>
+            <Box
+              sx={{
+                bgcolor: '#272822',
+                display: 'block',
+                borderRadius: 1.4,
+                boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)',
+              }}
+            >
+              <AlgoHeaderTab
+                algoSelect={algoSelect}
+                setAlgoSelect={setAlgoSelect}
+                bojProbData={bojProbData}
+                setBojProbData={setBojProbData}
+                leetProbData={leetProbData}
+                setLeetProbData={setLeetProbData}
+                bojProbDataRef={bojProbDataRef}
+                leetProbDataRef={leetProbDataRef}
+                setBojProbFullData={setBojProbFullData}
+              />
+              <AlgoInfoAccordion
+                inputStdin={inputStdin}
+                bojProbData={bojProbData}
+                leetProbData={leetProbData}
+                algoSelect={algoSelect}
+                bojProbFullData={bojProbFullData}
+              />
+            </Box>
+          </AlgoInfoWrap>
+        </Drawer>
+        <Main open={leftOpen}>
+          <MiddleWrapper>
+            <ThemeProvider theme={buttonTheme}>
+              <EditorThemeSwitch
+                editorThemeMode={editorThemeMode}
+                setEditorTheme={setEditorTheme}
+              />
+              <RunButton
+                ytext={ytext}
+                setCompileOutput={setCompileOutput}
+                setMemory={setMemory}
+                setCpuTime={setCpuTime}
+                inputStdin={inputStdin.current}
+              />
+              <SubmitButton
+                algoSelect={algoSelect}
+                bojProbData={bojProbData}
+                leetProbData={leetProbData}
+              />
+              <EvaluateButton
+                ytext={ytext}
+                bojProbData={bojProbData}
+                markingPercent={markingPercent}
+                setMarkingPercent={setMarkingPercent}
+                mySocket={mySocket}
+              />
+              <EvaluateGauge
+                value={markingPercent}
+                min={0}
+                max={100}
+                label={`정답 게이지: ${markingPercent}%`}
+              />
+            </ThemeProvider>
+          </MiddleWrapper>
+          <div
+            className="codemirror-editor"
+            ref={editor}
+            style={{
+              minHeight: '50%',
+              filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25)',
+              marginBottom: '10px',
+            }}
           />
-        </Box>
-      </AlgoInfoWrap>
-
-      <AlgoInfoAccordion
-        inputStdin={inputStdin}
-        bojProbData={bojProbData}
-        leetProbData={leetProbData}
-        algoSelect={algoSelect}
-        bojProbFullData={bojProbFullData}
-      />
-
-      <MiddleWrapper>
-        <ThemeProvider theme={theme}>
-          <EditorThemeSwitch
-            editorThemeMode={editorThemeMode}
-            setEditorTheme={setEditorTheme}
-          />
-          <RunButton
-            ytext={ytext}
-            setCompileOutput={setCompileOutput}
-            setMemory={setMemory}
-            setCpuTime={setCpuTime}
-            inputStdin={inputStdin.current}
-          />
-          <SubmitButton
-            algoSelect={algoSelect}
-            bojProbData={bojProbData}
-            leetProbData={leetProbData}
-          />
-          <EvaluateButton
-            ytext={ytext}
-            bojProbData={bojProbData}
-            markingPercent={markingPercent}
-            setMarkingPercent={setMarkingPercent}
-            mySocket={mySocket}
-          />
-          <EvaluateGauge
-            value={markingPercent}
-            min={0}
-            max={100}
-            label={`정답 게이지: ${markingPercent}%`}
-          />
-        </ThemeProvider>
-      </MiddleWrapper>
-
-      <div
-        className="codemirror-editor"
-        ref={editor}
-        style={{
-          minHeight: '50%',
-          filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25)',
-          marginBottom: '10px',
-        }}
-      />
-
-      <Divider />
-
-      <Box
-        sx={{
-          flexGrow: 1,
-          marginTop: '10px',
-          marginBottom: '20px',
-          filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
-        }}
-      >
-        <CompilerField
-          inputStdin={inputStdin}
-          cpuTime={cpuTime}
-          memory={memory}
-          compileOutput={compileOutput}
-        />
+          <Divider />
+          <Box
+            sx={{
+              flexGrow: 1,
+              marginTop: '10px',
+              marginBottom: '20px',
+              filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
+            }}
+          >
+            <CompilerField
+              inputStdin={inputStdin}
+              cpuTime={cpuTime}
+              memory={memory}
+              compileOutput={compileOutput}
+            />
+          </Box>
+        </Main>
       </Box>
     </EditorWrapper>
   );

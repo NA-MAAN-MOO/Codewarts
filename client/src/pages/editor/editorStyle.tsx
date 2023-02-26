@@ -1,5 +1,5 @@
 import styledc from 'styled-components';
-import { styled, alpha, createTheme } from '@mui/material/styles';
+import { styled, alpha, createTheme, useTheme } from '@mui/material/styles';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Switch from '@mui/material/Switch';
@@ -10,9 +10,10 @@ import MuiAccordionSummary, {
 } from '@mui/material/AccordionSummary';
 import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 
 /* MUI button color theme setting */
-const theme = createTheme({
+const buttonTheme = createTheme({
   palette: {
     primary: {
       // main: '#eeba30', // 그리핀도르 찐노랑
@@ -49,8 +50,7 @@ filter: drop-shadow(0px 4px 4px rgba(255, 255, 255, 0.5));
 `;
 
 const AlgoInfoWrap = styledc.div`
-margin-top: 20px;
-width: 100%;
+// width: 100%;
 `;
 
 const HeaderTab = styledc.div`
@@ -108,11 +108,12 @@ const StyledTab = styled((props: StyledTabProps) => (
 
 const ProbSummary = styledc.div`
 // color: 'papayawhip';
+text-shadow: 1px 1px 2px grey,
 color: #fff;
 font-size: 20px;
+font-weight: bold;
 width: 300px;
-// border: 1px solid yellow;
-text-align: center;
+border: 1px solid yellow;
 // line-height: 56px;
 
 `;
@@ -305,6 +306,59 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
   },
 }));
 
+/* Drawer setting */
+const leftDrawerWidth = 530;
+
+const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
+  open?: boolean;
+}>(({ theme, open }) => ({
+  flexGrow: 1,
+  padding: theme.spacing(3),
+  transition: theme.transitions.create('margin', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  marginLeft: `-${leftDrawerWidth}px`,
+  ...(open && {
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginLeft: 0,
+  }),
+}));
+
+interface AppBarProps extends MuiAppBarProps {
+  open?: boolean;
+}
+
+const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== 'open',
+})<AppBarProps>(({ theme, open }) => ({
+  transition: theme.transitions.create(['margin', 'width'], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(open && {
+    width: `calc(100% - ${leftDrawerWidth}px)`,
+    marginLeft: `${leftDrawerWidth}px`,
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  }),
+}));
+
+const DrawerHeader = styled('div')(({ theme }) => ({
+  display: 'flex',
+  // alignItems: 'center',
+  padding: theme.spacing(0, 2),
+  // necessary for content to be below app bar
+  ...theme.mixins.toolbar,
+  justifyContent: 'space-between',
+  // border: '1px solid green',
+}));
+
 export {
   HeaderTab,
   AlgoInput,
@@ -322,5 +376,9 @@ export {
   MaterialUISwitch,
   AccordionSummary,
   Accordion,
-  theme,
+  buttonTheme,
+  Main,
+  AppBar,
+  DrawerHeader,
+  leftDrawerWidth,
 };
