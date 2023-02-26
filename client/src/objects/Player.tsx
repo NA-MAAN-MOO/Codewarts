@@ -34,21 +34,23 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
     if (scene.scene.key === 'Lobby') {
       this.scale *= 2.3;
+    } else {
+      this.scale *= 1.3;
     }
 
     /* Add player sensor & collision body */
     const Body = this.scene.matter.body;
     const Bodies = this.scene.matter.bodies;
-    let playerCollider = Bodies.circle(this.x, this.y, 20, {
+    this.playerCollider = Bodies.circle(this.x, this.y, 20, {
       isSensor: false,
       label: 'playerCollider',
     });
-    let playerSensor = Bodies.circle(this.x, this.y, 30, {
+    this.playerSensor = Bodies.circle(this.x, this.y, 30, {
       isSensor: true,
       label: 'playerSensor',
     });
     const compoundBody = Body.create({
-      parts: [playerCollider, playerSensor],
+      parts: [this.playerCollider, this.playerSensor],
       frictionAir: 0.35,
     });
     // this.CreateCollisions(playerSensor);
@@ -57,7 +59,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
     /* Add player name bubble */
     this.playerNameBubble = this.scene.add
-      .text(this.x, this.y - this.height - 10, this.playerName, {
+      .text(this.x, this.y - this.height * 0.8, this.playerName, {
         fontFamily: 'Firenze',
       })
       .setStyle({
@@ -121,7 +123,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     if (this.scene.scene.key === 'Lobby') {
       this.playerNameBubble.setPosition(this.x, this.y - this.height - 20);
     } else {
-      this.playerNameBubble.setPosition(this.x, this.y - this.height / 2 - 10);
+      this.playerNameBubble.setPosition(this.x, this.y - this.height * 0.8);
     }
 
     if (this.successEffect) {

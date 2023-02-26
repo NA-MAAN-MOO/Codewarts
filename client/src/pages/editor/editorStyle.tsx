@@ -1,6 +1,5 @@
 import styledc from 'styled-components';
 import { styled, alpha, createTheme } from '@mui/material/styles';
-
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Switch from '@mui/material/Switch';
@@ -37,9 +36,10 @@ const EditorWrapper = styledc.div`
   width: 95%;
   margin: 0 auto;
   font-family: 'Cascadia Code', 'Pretendard-Regular';
-`;
+  `;
 
 const EditorInfo = styledc.div`
+  font-family: 'Cascadia Code', 'Pretendard-Regular';
   // color: rgba(255, 255, 255, 0.7);
 font-size: 35px; 
 font-weight: 600; 
@@ -53,7 +53,7 @@ margin-top: 20px;
 width: 100%;
 `;
 
-const Header = styledc.div`
+const HeaderTab = styledc.div`
 display: flex;
 justify-content: space-between;
 // border: 1px solid blue;
@@ -306,7 +306,7 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
 }));
 
 export {
-  Header,
+  HeaderTab,
   AlgoInput,
   AlgoInputWrap,
   AlgoTextField,

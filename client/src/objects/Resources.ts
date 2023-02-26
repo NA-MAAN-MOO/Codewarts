@@ -165,7 +165,12 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
     this.scene.matterCollision.addOnCollideEnd({
       objectA: [sensor],
       callback: (other: any) => {
-        if (this.buttonEditor) {
+        if (
+          this.buttonEditor &&
+          other.bodyB.isSensor &&
+          other.bodyB.gameObject instanceof Player &&
+          !(other.bodyB.gameObject instanceof OtherPlayer)
+        ) {
           //@ts-ignore
           this.scene.player.touching = this.scene.player.touching.filter(
             (button: any) => button !== this

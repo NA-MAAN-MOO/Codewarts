@@ -77,6 +77,7 @@ io.on('connection', (socket: Socket) => {
     state: 'resume',
     x: 0, // 좌표는 phaser에서 초기화되기 때문에 의미없는 0 값을 넣어뒀다.
     y: 0, // 왜 phaser에서 초기화 되는가? -> phaser의 맵 사이즈에 따라 좌표가 결정되기 때문에. ( 어차피 고정된 값이기 때문에 해당 좌표를 직접 찍어봐서 여기서 입력해도 문제는 없을것 같다. )
+    playerCollider: false,
   };
 
   // Send back the payload to the client and set its initial position
@@ -107,6 +108,7 @@ io.on('connection', (socket: Socket) => {
         x: playerInfo.x,
         y: playerInfo.y,
         userName: playerInfo.userName,
+        playerCollider: playerInfo.playerCollider,
       };
       // 기존의 유저들에게 '나'의 데이터를 보낸다.
       player.socket.emit('newPlayer', payLoad);
@@ -151,6 +153,7 @@ io.on('connection', (socket: Socket) => {
           x: player.x,
           y: player.y,
           userName: player.userName,
+          playerCollider: player.playerCollider,
         };
         // socket.emit은 "나"에게 통신하는 것
         socket.emit('currentPlayers', payLoad);
@@ -233,8 +236,6 @@ io.on('connection', (socket: Socket) => {
     tables.forEach((table: TableType) => {
       // FIXME: 조건식 table[2] === playerInfo.userName 에서 변경
       if (table[3] === playerInfo.socketId) {
-        // socket.broadcast.emit('removeEditor', table);
-        // socket.emit('removeEditor', table);
         io.emit('removeEditor', table);
       }
     });
@@ -243,6 +244,28 @@ io.on('connection', (socket: Socket) => {
       return table[3] !== playerInfo.socketId;
     });
     console.log(tables);
+  });
+
+  socket.on('changePlayerCollider', (playerCollider: boolean) => {
+    // 내 충돌
+    console.log('changePlayerCollider', playerCollider);
+    playerInfo.playerCollider = playerCollider;
+    const payLoad = {
+      socketId: playerInfo.socketId,
+      state: playerInfo.state,
+      charKey: playerInfo.charKey,
+      x: playerInfo.x,
+      y: playerInfo.y,
+      userName: playerInfo.userName,
+      playerCollider: playerInfo.playerCollider,
+    };
+    socket.broadcast.emit('changePlayerCollider', payLoad);
+  });
+
+  // Listen for the "Big Deal" event on the client side
+  socket.on('Big Deal', (payload) => {
+    console.log(`${payload.editorName}`);
+    socket.broadcast.emit('Big Deal', payload);
   });
 });
 
@@ -260,5 +283,5 @@ voiceServer.listen(3002, () => {
 });
 /* DB 로직 서버 포트 : 3003 */
 dbServer.listen(3003, () => {
-  console.log(`server running on port 3003`);
+  console.log(`DB server running on port 3003`);
 });
