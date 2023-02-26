@@ -35,7 +35,7 @@ const StyledImg = styled.img`
 const CuttedWrapper = styled.div<CuttedWrapperProps>`
   border: ${({ theme, isSpecial, muiTheme }) =>
     isSpecial
-      ? `3px inset ${theme.mainRed}`
+      ? `3px inset ${theme.lightRed}`
       : `3px inset ${muiTheme.palette.info.main}`};
   width: 50px;
   border-radius: 100%;
