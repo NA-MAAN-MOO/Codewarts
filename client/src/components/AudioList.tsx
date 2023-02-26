@@ -7,7 +7,6 @@ const AudioList = ({ subscribers }: { subscribers: Subscriber[] }) => {
   const { playerId } = useSelector((state: RootState) => {
     return state.user;
   });
-
   return (
     <>
       {subscribers.map((sub, i) => {

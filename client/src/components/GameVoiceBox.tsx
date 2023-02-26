@@ -12,7 +12,7 @@ import VolumeIcon from 'components/VolumeIcon';
 import { toggleMyMicMute, toggleMyVolMute } from 'stores/chatSlice';
 import AudioList from 'components/AudioList';
 
-const VoiceBox = ({
+const GameVoiceBox = ({
   session,
   subscribers,
   publisher,
@@ -71,4 +71,4 @@ const VoiceBox = ({
   );
 };
 
-export default VoiceBox;
+export default GameVoiceBox;

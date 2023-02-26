@@ -8,7 +8,7 @@ import {
 } from 'openvidu-browser';
 import { LoadingOutlined } from '@ant-design/icons';
 import CurrentPlayer from 'components/CurrentPlayer';
-import VoiceBox from 'components/VoiceBox';
+import GameVoiceBox from 'components/GameVoiceBox';
 import {
   styled as muiStyled,
   ThemeProvider,

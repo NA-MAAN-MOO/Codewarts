@@ -19,7 +19,7 @@ const VoiceItem = ({
   session,
   subscribers,
   publisher,
-  name,
+  name, //보이스 목록 아이템이 나타내는 유저 닉네임
   isMe = false, //내 보이스 목록 아이템인지
   isSuperior = false, //내가 에디터 주인인지
 }: GameVoiceType & {
@@ -53,6 +53,7 @@ const VoiceItem = ({
   //내 방에 들어온 다른 사람 볼륨 음소거 처리
   const handleGuestVolume = () => {
     if (!session) return console.log('세션없음');
+    console.log(session.connection);
     session.signal({
       type: MUTE_TYPE.SET_VOL,
       to: [session.connection],

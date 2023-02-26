@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import VoiceBox from 'components/VoiceBox';
+import GameVoiceBox from 'components/GameVoiceBox';
 import { LoadingOutlined } from '@ant-design/icons';
 import { GameVoiceType } from 'types';
 import FloatingIcon from 'components/FloatingIcon';
@@ -27,7 +27,7 @@ const GameVoice = (props: GameVoiceType) => {
         <CurrentPlayer handleDrawer={handleDrawer} {...props} />
       </Drawer>
       {!!session ? (
-        <VoiceBox {...props} />
+        <GameVoiceBox {...props} />
       ) : (
         <FloatingBox>
           <LoadingOutlined />

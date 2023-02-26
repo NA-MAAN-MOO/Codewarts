@@ -312,6 +312,7 @@ export default () => {
 
       await mySession.publish(pubNow);
       handlePublisher(pubNow);
+      console.log('레지스터 완료');
     } catch (error) {
       console.log(error);
     }
