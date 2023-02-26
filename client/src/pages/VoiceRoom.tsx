@@ -47,15 +47,15 @@ const VoiceRoom = () => {
   }, [editorName]);
 
   useEffect(() => {
-    if (socket && status === GAME) {
+    if (status !== GAME) {
+      return;
+    }
+    if (socket) {
       console.log('화이트보드 지워버려');
       socket.disconnect();
       setSocket(undefined);
     }
-  }, [status]);
-
-  useEffect(() => {
-    if (provider && status === GAME) {
+    if (provider) {
       console.log('웹소켓 지워버려');
       provider.disconnect();
       setProvider(undefined);
