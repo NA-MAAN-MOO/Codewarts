@@ -7,12 +7,19 @@ import { RootState } from 'stores';
 
 /* toast */
 import { notifySuccess, notifyFail } from './toast';
+//@ts-ignore
+import missSoundFile from '../../assets/sound_effect/miss_sound.mp3';
+import SoundPlayer from 'hooks/useSoundPlayer';
 
 //@ts-ignore
 function EvaluateButton(props) {
-  const { userName, roomId } = useSelector((state: RootState) => state.editor);
-  const { ytext, bojProbData, markingPercent, setMarkingPercent } = props;
+  const { userName, editorName } = useSelector(
+    (state: RootState) => state.editor
+  );
+  const { ytext, bojProbData, markingPercent, setMarkingPercent, mySocket } =
+    props;
   let [진행완료, set진행완료] = useState(false);
+  const newMissSoundToggle = SoundPlayer(missSoundFile);
 
   /* fetching '.in' file */
   async function fetchInputFileText(url: string) {
@@ -33,7 +40,7 @@ function EvaluateButton(props) {
       return;
     }
 
-    // 현재는 '19940 피자오븐' 문제만 가채점 가능!
+    // 현재는 '19940 피자오븐', '19939 박 터뜨리기' 문제만 가채점 가능!
     if (bojProbData?.problemId !== 19940 && bojProbData?.problemId !== 19939) {
       alert('채점 가능한 문제 선택해주세요:  19940번, 19939번');
       return;
@@ -93,11 +100,12 @@ function EvaluateButton(props) {
       return;
     }
     if (markingPercent === '100') {
-      notifySuccess(roomId, bojProbData.problemId);
+      notifySuccess(editorName, bojProbData.problemId);
       set진행완료(false);
     } else {
-      notifyFail(roomId, bojProbData.problemId);
+      notifyFail(editorName, bojProbData.problemId);
       set진행완료(false);
+      newMissSoundToggle();
     }
   }, [markingPercent, 진행완료]);
 
@@ -115,6 +123,18 @@ function EvaluateButton(props) {
           가채점
         </Button>
       </Tooltip>
+      <button
+        onClick={() => {
+          // 문제 맞춘거 소켓 이벤트 발동!!
+          mySocket?.emit('Big Deal', {
+            editorName: editorName,
+            problemId: bojProbData?.problemId || null,
+            broadcast: true,
+          });
+        }}
+      >
+        {editorName}님이 문제 맞췄다고 알려라
+      </button>
     </>
   );
 }

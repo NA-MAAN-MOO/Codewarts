@@ -30,6 +30,7 @@
     "body-parser": "^1.20.1",
     "codemirror": "^6.0.1",
     "dotenv": "^16.0.3",
+    "lodash": "^4.17.21",
     "magic.css": "^1.4.8",
     "openvidu-browser": "^2.25.0",
     "peerjs": "^1.4.7",
@@ -76,6 +77,7 @@
     ]
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.191",
     "@types/styled-components": "^5.1.26"
   }
 }

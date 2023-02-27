@@ -8,7 +8,7 @@ import Resource from '../objects/Resources';
 import { io, Socket } from 'socket.io-client';
 import store from 'stores';
 import { openEditor, openGame, openWhiteboard } from 'stores/modeSlice';
-import { setRoomId, setUserName } from 'stores/editorSlice';
+import { setEditorName, setUserName } from 'stores/editorSlice';
 // import { addUser, removeUser } from 'stores/chatSlice';
 import { GAME_STATUS } from 'utils/Constants';
 import phaserGame from 'codeuk';
@@ -18,7 +18,9 @@ import { soundToggles } from '../App';
 import SoundPlayer from 'hooks/useSoundPlayer';
 //@ts-ignore
 import friendSoundFile from '../assets/sound_effect/friend_sound.mp3';
+import hitSoundFile from '../assets/sound_effect/hit_sound.mp3';
 import Button from 'objects/Button';
+import { Game, showSuccessToast } from 'pages/Game';
 
 export default class MainScene extends Phaser.Scene {
   // class 속성 명시는 constructor 이전에 명시하면 되는듯
@@ -59,6 +61,7 @@ export default class MainScene extends Phaser.Scene {
     /* Transition */
     this.cameras.main.fadeFrom(1200, 0, 0, 0);
     const newFriendSoundToggle = SoundPlayer(friendSoundFile);
+    const newHitSoundToggle = SoundPlayer(hitSoundFile);
 
     this.openMyEditor = false;
     this.editorOwner = '';
@@ -289,8 +292,26 @@ export default class MainScene extends Phaser.Scene {
     }).getBtn();
     this.whiteboardButton.setVisible(false);
 
-    /* If player solve a problem, turn the solved effect on */
-    // this.player.problemSolvedEffect();
+    // Listen for the "Big Deal" event on the client side
+    phaserGame.socket?.on('Big Deal', (payload) => {
+      showSuccessToast(payload.editorName, payload.problemId);
+      newHitSoundToggle();
+      /* If player solve a problem, turn the solved effect on */
+      // this.player.problemSolvedEffect();
+    });
+
+    phaserGame.socket?.on('getEmoji', (payload) => {
+      console.log(`${payload.emoji}`);
+      if (payload.socketId === phaserGame.socketId) {
+        this.player.updateDialogBubble(payload.emoji);
+      } else {
+        this.otherPlayers.forEach((other) => {
+          if (other.socketId === payload.socketId)
+            return other.updateDialogBubble(payload.emoji);
+        });
+      }
+      // this.player?.updateDialogBubble(payload.emoji);
+    });
   }
 
   update() {
@@ -308,6 +329,7 @@ export default class MainScene extends Phaser.Scene {
       if (Phaser.Input.Keyboard.JustDown(this.player?.inputKeys.open)) {
         console.log('화이트보드에서 E 누름');
         store.dispatch(openWhiteboard());
+        this.player?.updateDialogBubble('🤣');
       }
     } else {
       this.whiteboardButton.setVisible(false);
@@ -507,6 +529,12 @@ export default class MainScene extends Phaser.Scene {
           payLoad.x,
           payLoad.y - otherPlayer.height / 2 - 10
         );
+
+        //emoji
+        otherPlayer.playerDialogBubble?.setPosition(
+          payLoad.x - otherPlayer.width,
+          payLoad.y - otherPlayer.height - 80
+        );
       }
     });
   }
@@ -533,14 +561,14 @@ export default class MainScene extends Phaser.Scene {
       this.editorOwner = phaserGame.userName;
 
       phaserGame.socket.emit('addEditor', payLoad);
-      store.dispatch(setRoomId(phaserGame.userName));
+      store.dispatch(setEditorName(phaserGame.userName));
       store.dispatch(setUserName(phaserGame.userName));
       // 에디터 창 열기
       store.dispatch(openEditor());
       /*----다른 사람 에디터에 들어가면----*/
     } else {
       this.editorOwner = targetTable.tableInfo.get(idx).username;
-      store.dispatch(setRoomId(this.editorOwner));
+      store.dispatch(setEditorName(this.editorOwner));
       store.dispatch(setUserName(phaserGame.userName));
       // 에디터 창 열기
       store.dispatch(openEditor());

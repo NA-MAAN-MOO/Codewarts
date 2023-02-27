@@ -17,6 +17,8 @@ import { PlayerType, TableType, CharInfoType } from './types/Game';
 import CharInfo from './services/CharInfo';
 
 import cookieParser from 'cookie-parser';
+import VolMuteInfo from './services/VolMuteInfo';
+import MicMuteInfo from './services/MicMuteInfo';
 
 const port = process.env.PORT || 8080;
 const mongoPassword = process.env.MONGO_PW;
@@ -91,6 +93,8 @@ io.on('connection', (socket: Socket) => {
       playerInfo.charKey = charKey;
       playerInfo.userName = userName;
       CharInfo.set(userName, charKey);
+      VolMuteInfo.set(userName, false);
+      MicMuteInfo.set(userName, false);
     }
   );
 
@@ -258,6 +262,17 @@ io.on('connection', (socket: Socket) => {
     };
     socket.broadcast.emit('changePlayerCollider', payLoad);
   });
+
+  // Listen for the "Big Deal" event on the client side
+  socket.on('Big Deal', (payload) => {
+    console.log(`${payload.editorName}`);
+    socket.broadcast.emit('Big Deal', payload);
+  });
+
+  socket.on('sendEmoji', (payload) => {
+    console.log(`${payload.emoji}`);
+    io.emit('getEmoji', payload);
+  });
 });
 
 //8080 서버 연결
@@ -274,5 +289,5 @@ voiceServer.listen(3002, () => {
 });
 /* DB 로직 서버 포트 : 3003 */
 dbServer.listen(3003, () => {
-  console.log(`server running on port 3003`);
+  console.log(`DB server running on port 3003`);
 });

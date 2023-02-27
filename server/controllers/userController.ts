@@ -119,7 +119,9 @@ export const getChar = async (req: Request, res: Response) => {
     const username = req.params.username;
 
     if (!CharInfo.get(username)) {
-      return res.status(500).end();
+      //CharInfo에 username이 없음 => 오픈비두 서버에는 있는 username이지만, 현재 서버에는 없는 유저임.
+      //에러 처리하지 않고, 그냥 빈칸 처리
+      return res.send('');
     }
     res.send(CharInfo.get(username));
   } catch (e) {

@@ -26,10 +26,11 @@ function App() {
   //   }
   //   loadFlag = true;
   // }, []);
-
+  console.log('App 호출 시점');
   return (
     <HoverDiv>
-      {/* <TestVoiceButtons /> */}
+      <TestVoiceButtons />
+      {/* {playerId === '개발자' && <TestVoiceButtons />} */}
       {status === START ? (
         <Start></Start>
       ) : //불필요한 로비 삭제

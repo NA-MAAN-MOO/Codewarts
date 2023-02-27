@@ -9,9 +9,23 @@ import { styledTheme } from 'styles/theme';
 import useVoice from 'hooks/useVoice';
 import { VoiceProp } from 'types';
 import FloatingButton from 'components/FloatingButton';
+import {
+  notifySuccess,
+  notifyFail,
+  ToastContainer,
+} from '../components/editor/toast'; /* toast for event alarm */
+import { getPhaserSocket } from 'network/phaserSocket';
+import phaserGame from 'codeuk';
+
+const showSuccessToast = (editorName: string, problemId: number) => {
+  notifySuccess(editorName, problemId);
+};
+
+const emojies = ['🤣', '🤪', '😡', '🤯', '💪', '🖐', '😭', '💩', '😆'];
 
 const Game = (props: VoiceProp) => {
   const dispatch = useDispatch();
+  const mySocket = getPhaserSocket();
 
   const handleMainClick = () => {
     handleScene(GAME_STATUS.START);
@@ -19,7 +33,20 @@ const Game = (props: VoiceProp) => {
 
   return (
     <BackgroundDiv>
-      <Voice {...props} />
+      <ToastContainer />
+      <div id="profile">
+        <Voice {...props} />
+        <button
+          onClick={() => {
+            mySocket?.emit('sendEmoji', {
+              socketId: phaserGame.socketId,
+              emoji: '🤣',
+            });
+          }}
+        >
+          smile
+        </button>
+      </div>
       <BtnDiv>
         {/* <Button
           type="button"
@@ -38,7 +65,7 @@ const Game = (props: VoiceProp) => {
   );
 };
 
-export default Game;
+export { Game, showSuccessToast };
 
 const BackgroundDiv = styled.div`
   width: 100%;

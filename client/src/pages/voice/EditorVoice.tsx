@@ -8,7 +8,7 @@ import {
 } from 'openvidu-browser';
 import { LoadingOutlined } from '@ant-design/icons';
 import CurrentPlayer from 'components/CurrentPlayer';
-import EditorVoiceBox from 'components/EditorVoiceBox';
+import GameVoiceBox from 'components/GameVoiceBox';
 import {
   styled as muiStyled,
   ThemeProvider,
@@ -19,6 +19,7 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import Divider from '@mui/material/Divider';
+import AudioList from 'components/AudioList';
 
 type GameVoiceType = {
   session: Session | undefined;
@@ -39,21 +40,20 @@ const DrawerHeader = muiStyled('div')(({ theme }) => ({
 }));
 
 const EditorVoice = (props: GameVoiceType) => {
-  const { session, joinSession, handleDrawerClose } = props;
+  const { session, joinSession, handleDrawerClose, subscribers } = props;
   const theme = useTheme();
 
-  console.log(session);
   return (
     <>
       <DrawerHeader>
         <IconButton onClick={handleDrawerClose}>
           <ChevronRightIcon />
         </IconButton>
-        <EditorVoiceBox {...props} />
+        <AudioList subscribers={subscribers} />
       </DrawerHeader>
       <Divider />
       {!!session ? (
-        <CurrentPlayer />
+        <CurrentPlayer {...props} />
       ) : (
         <div
           style={{

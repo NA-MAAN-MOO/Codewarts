@@ -13,12 +13,12 @@ const mongoPassword = process.env.MONGO_PW;
 export const createRoom = async (req: Request, res: Response) => {
   const { userName = '', redisClient } = req.body;
   const hashField = 'code-mirror';
-  const roomId = v4(); // roomID 최초 생성
+  const editorName = v4(); // editorName 최초 생성
 
   await redisClient
     /* room 정보 해쉬로 저장 */
     .hSet(
-      `${roomId}:info`,
+      `${editorName}:info`,
       hashField,
       JSON.stringify({
         created: moment(),
@@ -29,7 +29,7 @@ export const createRoom = async (req: Request, res: Response) => {
       console.error(1, err);
     });
 
-  res.status(201).send({ roomId }); // return success & the room ID
+  res.status(201).send({ editorName }); // return success & the room ID
 };
 
 /* get response for compiled code */
