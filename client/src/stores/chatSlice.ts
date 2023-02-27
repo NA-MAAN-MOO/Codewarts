@@ -62,6 +62,16 @@ export const chatSlice = createSlice({
     toggleMyMicMute: (state) => {
       state.myMicMute = !state.myMicMute;
     },
+    initialMyMute: (state, action) => {
+      const me = action.payload;
+      console.log(me);
+      if (state.volMuteInfo[me]) {
+        state.myVolMute = true;
+      }
+      if (state.micMuteInfo[me]) {
+        state.myMicMute = true;
+      }
+    },
     // setSession: (state, action) => {
     //   const serializedSession = JSON.stringify(action.payload);
     //   state.sessionNow = serializedSession;
@@ -98,6 +108,7 @@ export const {
   toggleMicMute,
   toggleMyVolMute,
   toggleMyMicMute,
+  initialMyMute,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

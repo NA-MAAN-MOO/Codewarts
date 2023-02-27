@@ -39,15 +39,15 @@ const VoiceItem = ({
   const isMicMute = isMe ? myMicMute : micMuteInfo[name];
 
   //내 볼륨 음소거 처리
-  const handleMyVolume = () => {
+  const handleMyVolume = async () => {
     if (!session) return;
-    handleMyVolumeMute({ subscribers, session });
+    await handleMyVolumeMute({ subscribers, session });
   };
 
   //내 마이크 음소거 처리
-  const handleMyMic = () => {
+  const handleMyMic = async () => {
     if (!session || !publisher) return;
-    handleMyMicMute({ publisher, session });
+    await handleMyMicMute({ publisher, session });
   };
 
   //내 방에 들어온 다른 사람 볼륨 음소거 처리
