@@ -5,11 +5,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import RenderTier from './RenderTier';
 import { useSelector } from 'react-redux';
 import { RootState } from 'stores';
 import RankingTableContent from './RankingTableContent';
-import store from 'stores';
 
 const colNames = [
   '순위',
@@ -41,7 +39,7 @@ export default function RankingTable(props: any) {
             {colNames.map((colName: string) => (
               <TableCell
                 align="center"
-                sx={{ color: 'white', fontWeight: '700' }}
+                sx={{ color: 'white', fontWeight: '700', fontSize: '0.9em' }}
               >
                 {colName}
               </TableCell>

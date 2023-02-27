@@ -1,9 +1,11 @@
 import Drawer from '@mui/material/Drawer';
+import CloseButton from './CloseButton';
 
 const drawerWidth = 60;
 
 /* Left side main field of whiteboard */
-export default function MainField() {
+export default function MainField(props: any) {
+  const { handleClose } = props;
   return (
     <>
       <Drawer
@@ -19,6 +21,7 @@ export default function MainField() {
         variant="permanent"
         anchor="right"
       >
+        <CloseButton handleClose={handleClose} />
         {/* <Toolbar /> */}
         {/* <Divider /> */}
       </Drawer>

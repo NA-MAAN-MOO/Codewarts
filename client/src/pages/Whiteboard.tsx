@@ -34,7 +34,7 @@ function Whiteboard() {
     }
   };
 
-  const handleBack = async () => {
+  const handleClose = async () => {
     await setbojInfos([]);
     store.dispatch(openGame());
   };
@@ -50,9 +50,9 @@ function Whiteboard() {
             bojInfos={bojInfos}
             setbojInfos={setbojInfos}
           />
-          <MainField />
+          <MainField handleClose={handleClose} />
+          {/* <CloseButton handleBack={handleBack} /> */}
         </Box>
-        <CloseButton handleBack={handleBack} />
       </Background>
     </>
   );
