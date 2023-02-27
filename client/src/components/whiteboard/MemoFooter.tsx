@@ -105,30 +105,6 @@ export default function MemoFooter() {
             background: `${stringToColor()}`,
           }}
         />
-        <Avatar
-          {...stringAvatar('ef')}
-          sx={{
-            fontSize: '1em',
-            fontWeight: '700',
-            background: `${stringToColor()}`,
-          }}
-        />
-        <Avatar
-          {...stringAvatar('ef')}
-          sx={{
-            fontSize: '1em',
-            fontWeight: '700',
-            background: `${stringToColor()}`,
-          }}
-        />
-        <Avatar
-          {...stringAvatar('ef')}
-          sx={{
-            fontSize: '1em',
-            fontWeight: '700',
-            background: `${stringToColor()}`,
-          }}
-        />
       </AvatarGroup>
       <Checkbox
         checked={checked}
@@ -144,11 +120,12 @@ export default function MemoFooter() {
 }
 
 const FooterWrapper = styled.div`
-  width: 100%;
+  width: 90%;
   height: 20%;
   position: absolute;
   bottom: 0;
   display: flex;
   margin-left: 10px;
+  justify-content: space-between;
   // border: 1px solid red;
 `;
