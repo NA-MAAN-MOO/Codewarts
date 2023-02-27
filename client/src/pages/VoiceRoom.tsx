@@ -43,6 +43,7 @@ const VoiceRoom = () => {
   }, [status, editorName]);
 
   useEffect(() => {
+    if (!editorName) return;
     setRoomKey(stringToAscii(editorName));
   }, [editorName]);
 

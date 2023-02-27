@@ -210,29 +210,6 @@ export default () => {
 
       const mySession = session;
 
-      if (!OV) return;
-      // Init a passing undefined as targetElement (we don't want OpenVidu to insert a video
-      // element: we will manage it on our own) and with the desired properties
-      let pubNow = await OV.initPublisherAsync(undefined, {
-        audioSource: undefined, // The source of audio. If undefined default microphone
-        videoSource: false, // The source of video. If undefined default webcam
-        publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
-        publishVideo: false, // Whether you want to start publishing with your video enabled or not
-        resolution: '640x480', // The resolution of your video
-        frameRate: 30, // The frame rate of your video
-        insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
-        mirror: false, // Whether to mirror your local video or not
-      });
-
-      // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
-      // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
-      await mySession.connect(token, { user: userName });
-
-      // ---Publish your stream ---
-
-      await mySession.publish(pubNow);
-      handlePublisher(pubNow);
-
       // --- Specify the actions when events take place in the session ---
 
       // On every new Stream received...
@@ -320,6 +297,29 @@ export default () => {
         }
         handleMyMicMute({ publisher: pubNow, session });
       });
+
+      // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
+      // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
+      await mySession.connect(token, { user: userName });
+
+      if (!OV) return;
+      // Init a passing undefined as targetElement (we don't want OpenVidu to insert a video
+      // element: we will manage it on our own) and with the desired properties
+      let pubNow = await OV.initPublisherAsync(undefined, {
+        audioSource: undefined, // The source of audio. If undefined default microphone
+        videoSource: false, // The source of video. If undefined default webcam
+        publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+        publishVideo: false, // Whether you want to start publishing with your video enabled or not
+        resolution: '640x480', // The resolution of your video
+        frameRate: 30, // The frame rate of your video
+        insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
+        mirror: false, // Whether to mirror your local video or not
+      });
+
+      // ---Publish your stream ---
+
+      await mySession.publish(pubNow);
+      handlePublisher(pubNow);
     } catch (error) {
       console.log(error);
     }
