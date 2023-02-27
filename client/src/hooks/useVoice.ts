@@ -221,6 +221,15 @@ export default () => {
         mirror: false, // Whether to mirror your local video or not
       });
 
+      // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
+      // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
+      await mySession.connect(token, { user: userName });
+
+      // ---Publish your stream ---
+
+      await mySession.publish(pubNow);
+      handlePublisher(pubNow);
+
       // --- Specify the actions when events take place in the session ---
 
       // On every new Stream received...
@@ -308,15 +317,6 @@ export default () => {
         }
         handleMyMicMute({ publisher: pubNow, session });
       });
-
-      // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
-      // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
-      await mySession.connect(token, { user: userName });
-
-      // ---Publish your stream ---
-
-      await mySession.publish(pubNow);
-      handlePublisher(pubNow);
     } catch (error) {
       console.log(error);
     }
@@ -388,6 +388,7 @@ export default () => {
   }) => {
     if (!session) return;
     //false일 때 뮤트 처리됨
+    console.log('볼륨뮤트');
     subscribers.map((sm) => {
       sm.subscribeToAudio(myVolMute);
     });
@@ -408,13 +409,14 @@ export default () => {
   }) => {
     if (!session || !publisher) return;
     //false일 때 뮤트 처리됨
+    console.log('마이크뮤트');
+    console.log(publisher);
     publisher.publishAudio(myMicMute);
     dispatch(toggleMyMicMute());
     session?.signal({
       type: MUTE_TYPE.MIC,
       data: playerId,
     });
-    console.log('옴');
   };
 
   return {

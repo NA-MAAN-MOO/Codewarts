@@ -13,7 +13,7 @@ const AudioList = ({ subscribers }: { subscribers: Subscriber[] }) => {
         const { user } = JSON.parse(sub.stream.connection.data);
         return (
           user !== playerId && (
-            <div key={user} style={{ display: 'hidden' }}>
+            <div key={`audioList_${user}`} style={{ display: 'hidden' }}>
               <Audio streamManager={sub} />
             </div>
           )
