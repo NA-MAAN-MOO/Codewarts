@@ -1,11 +1,17 @@
 import { Schema, model, Document, Model } from 'mongoose';
 
+interface ParticipantType {
+  userId: string;
+  tier: number;
+}
+
 export interface IMemoInfo {
   date: string;
   authorId: string;
   content: string;
   x: number;
   y: number;
+  participant: ParticipantType[];
 }
 
 const memo = new Schema<IMemoInfo>({
@@ -14,6 +20,8 @@ const memo = new Schema<IMemoInfo>({
   content: { type: String, required: true },
   x: { type: Number, required: true },
   y: { type: Number, required: true },
+  //TODO: type error 고치기
+  participant: { type: Array, required: false },
 });
 
 const Memo = model<IMemoDocument>('memo', memo);
