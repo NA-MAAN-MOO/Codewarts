@@ -9,6 +9,9 @@ import MainField from 'components/whiteboard/MainField';
 import RankingList from 'components/whiteboard/RankingList';
 import CloseButton from 'components/whiteboard/CloseButton';
 
+const APPLICATION_DB_URL =
+  process.env.REACT_APP_DB_URL || 'http://localhost:3003';
+
 interface DetailInfo {
   bojId: string;
   id: string;
@@ -26,7 +29,7 @@ function Whiteboard() {
   //TODO: export해서 phaser main scene에서 불리게? 또는 Lobby? redis에 저장까지
   const getBojInfos = async () => {
     try {
-      const response = await axios.get(`http://localhost:3003/boj-infos`);
+      const response = await axios.get(`${APPLICATION_DB_URL}/boj-infos`);
       await setbojInfos(response.data);
       //   console.log(bojInfos);
     } catch (e) {

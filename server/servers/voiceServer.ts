@@ -6,7 +6,9 @@ import voiceRouter from '../routes/voiceRouter';
 
 const app = express();
 
-app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
+const SERVER_URL = process.env.SERVER_URL || 'http://localhost:3000';
+
+app.use(cors({ credentials: true, origin: `${SERVER_URL}` }));
 app.use(json());
 
 const server = http.createServer(app);
