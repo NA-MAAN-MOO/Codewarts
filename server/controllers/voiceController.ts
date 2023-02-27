@@ -18,7 +18,7 @@ const authCode = Buffer.from(`OPENVIDUAPP:${OPENVIDU_SECRET}`).toString(
 
 //만들어진 커넥션 리스트
 //{ '세션이름:유저이름' : 만들어진 Connection 객체 } 꼴
-let connectionList: ConnectionList = {};
+// let connectionList: ConnectionList = {};
 
 export const createSession = async (req: Request, res: Response) => {
   try {
