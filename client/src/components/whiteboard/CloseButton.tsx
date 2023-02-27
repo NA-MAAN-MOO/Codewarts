@@ -12,6 +12,7 @@ export default function CloseButton(props: any) {
         size="large"
         onClick={handleClose}
         color="secondary"
+        sx={{ float: 'right', marginRight: '20px', marginTop: '10px' }}
       >
         <Close />
       </IconButton>
@@ -22,6 +23,4 @@ export default function CloseButton(props: any) {
 const CloseBtnWrap = styled.div`
   width : 100px,
   height: 100px,
-  display :flex,
-  position: absolute
 `;

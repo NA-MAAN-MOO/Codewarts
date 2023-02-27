@@ -1,4 +1,5 @@
 import Drawer from '@mui/material/Drawer';
+import { Divider } from '@mui/material';
 import CloseButton from './CloseButton';
 
 const drawerWidth = 60;
@@ -22,8 +23,8 @@ export default function MainField(props: any) {
         anchor="right"
       >
         <CloseButton handleClose={handleClose} />
-        {/* <Toolbar /> */}
         {/* <Divider /> */}
+        {/* <Toolbar /> */}
       </Drawer>
     </>
   );
