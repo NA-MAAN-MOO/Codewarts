@@ -49,7 +49,7 @@ const Voice = ({ roomKey, session, handleSession, ...rest }: VoiceProp) => {
   };
 
   const addSubscriber = (newScriber: Subscriber) => {
-    setSubscribers([...subscribers, newScriber]);
+    setSubscribers((subs) => [...subs, newScriber]);
   };
 
   const handlePublisher = (newPub: Publisher) => {
