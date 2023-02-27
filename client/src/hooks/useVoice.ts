@@ -281,21 +281,21 @@ export default () => {
       });
 
       //유저가 볼륨 음소거를 했다는 시그널을 받았을 때
-      mySession.on(`signal:${MUTE_TYPE.VOL}`, (event) => {
+      mySession.on(`signal:${MUTE_TYPE.VOL}`, async (event) => {
         const user = event.data;
         if (!user) {
           return;
         }
-        toggleMute({ type: MUTE_TYPE.VOL, userName: user });
+        await toggleMute({ type: MUTE_TYPE.VOL, userName: user });
       });
 
       //유저가 마이크 음소거를 했다는 시그널을 받았을 때
-      mySession.on(`signal:${MUTE_TYPE.MIC}`, (event) => {
+      mySession.on(`signal:${MUTE_TYPE.MIC}`, async (event) => {
         const user = event.data;
         if (!user) {
           return;
         }
-        toggleMute({ type: MUTE_TYPE.MIC, userName: user });
+        await toggleMute({ type: MUTE_TYPE.MIC, userName: user });
       });
 
       //방장이 내게 볼륨 음소거를 시켰을 때
@@ -357,7 +357,7 @@ export default () => {
   //   }
   // };
 
-  const toggleMute = ({
+  const toggleMute = async ({
     type,
     userName,
   }: {
@@ -365,7 +365,7 @@ export default () => {
     userName: string;
   }) => {
     try {
-      axios.post(`${APPLICATION_SERVER_URL}/toggle-mute/${type}`, {
+      await axios.post(`${APPLICATION_SERVER_URL}/toggle-mute/${type}`, {
         userName: userName,
       });
       if (type === MUTE_TYPE.VOL) {
@@ -410,7 +410,6 @@ export default () => {
     if (!session || !publisher) return;
     //false일 때 뮤트 처리됨
     console.log('마이크뮤트');
-    console.log(publisher);
     publisher.publishAudio(myMicMute);
     dispatch(toggleMyMicMute());
     session?.signal({
