@@ -3,6 +3,7 @@ export const GAME_STATUS = {
   LOBBY: 'LOBBY',
   GAME: 'GAME',
   EDITOR: 'EDITOR',
+  WHITEBOARD: 'WHITEBOARD',
 };
 
 export const MUTE_TYPE = {

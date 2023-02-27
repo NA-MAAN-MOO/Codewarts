@@ -201,7 +201,6 @@ io.on('connection', (socket: Socket) => {
   socket.on('addEditor', (payLoad) => {
     console.log('addEditor');
     // 누군가 editor에 들어가면 해당 table ID값과 자리(인덱스)값을 업데이트 한다.
-    //FIXME:
     tables.push([
       payLoad.id,
       payLoad.idx,
@@ -213,7 +212,6 @@ io.on('connection', (socket: Socket) => {
       id: payLoad.id,
       idx: payLoad.idx,
       userName: playerInfo.userName,
-      //FIXME:
       socketId: payLoad.socketId,
     };
     socket.broadcast.emit('updateEditor', payLoad2);
@@ -227,7 +225,6 @@ io.on('connection', (socket: Socket) => {
         id: table[0],
         idx: table[1],
         userName: table[2],
-        //FIXME:
         // socketId: playerInfo.socketId,
         socketId: table[3],
       };
