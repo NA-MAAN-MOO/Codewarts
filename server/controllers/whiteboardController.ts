@@ -1,12 +1,8 @@
-/* Use env variable */
-import dotenv from 'dotenv';
-dotenv.config();
-
 import { Request, Response } from 'express';
 
-const { MongoClient } = require('mongodb');
 import { ObjectId } from 'mongoose';
-const mongoPassword = process.env.MONGO_PW;
+import User from '../models/User';
+import Memo from '../models/Memo';
 
 import axios, { AxiosResponse } from 'axios';
 
@@ -42,7 +38,7 @@ const getEachUserBojInfo = async (bojId: string) => {
 };
 
 /* Recreate response based on info through solved.ac api */
-const regenerateData = async (datum: DatumType[]) => {
+const regenerateData = async (datum: any) => {
   for await (const data of datum) {
     // console.log(data);
     const eachData: false | AxiosResponse<any, any> = await getEachUserBojInfo(
@@ -64,31 +60,7 @@ const regenerateData = async (datum: DatumType[]) => {
 
 /* Get all user's number of solved problems through boj ids in DB */
 export const getUsersBojInfo = async (req: Request, res: Response) => {
-  const uri = `mongodb+srv://juncheol:${mongoPassword}@cluster0.v0izvl3.mongodb.net/?retryWrites=true&w=majority`;
-  const client = new MongoClient(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
-
-  /* Connect to DB */
-  const dbconnect = async () => {
-    try {
-      await client.connect();
-      console.log('Connected to DB to get boj infos from all users');
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  await dbconnect();
-
-  const db = client.db('codewart');
-  const collection = db.collection('users');
-
-  /* Get all users' datum in the DB */
-  const datum = await collection
-    .find({}, { _id: false, userBojId: true, userNickname: true, userId: true })
-    .toArray();
+  const datum = await User.find({});
 
   await regenerateData(datum);
 
@@ -103,7 +75,51 @@ export const getUsersBojInfo = async (req: Request, res: Response) => {
   } else {
     res.status(200).send(response);
   }
-  // console.log(response);
+
   /* Empty data */
   response = [];
+};
+
+/* Save memo to DB */
+export const fetchMemo = async (req: Request, res: Response) => {
+  const memo = new Memo({
+    date: req.body.date,
+    authorId: req.body.authorId,
+    content: req.body.content,
+    x: req.body.x,
+    y: req.body.y,
+  });
+
+  memo
+    .save()
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((e) => {
+      console.error(e);
+      res.status(400).json({ message: '메모 저장 실패' });
+    });
+};
+
+/* Get all memos in DB */
+export const getMemo = async (req: Request, res: Response) => {
+  try {
+    const datum = await Memo.find({});
+    res.status(200).json(datum);
+  } catch (e) {
+    console.error(e);
+    res.status(400).json({ message: '메모 불러오기 실패' });
+  }
+};
+
+/* Change memo content */
+export const changeMemo = async (req: Request, res: Response) => {
+  await Memo.updateOne({ _id: req.params.id }, { content: req.body.content })
+    .then((result) => {
+      res.status(200).json(result);
+    })
+    .catch((e) => {
+      console.error(e);
+      res.status(400).json({ message: '메모 수정 실패' });
+    });
 };

@@ -27,11 +27,11 @@ function Whiteboard() {
   let [bojInfos, setbojInfos] = useState<DetailInfo[]>(initialState);
 
   //TODO: export해서 phaser main scene에서 불리게? 또는 Lobby? redis에 저장까지
+  // or 로딩 상태 만들어서 로딩중 ...
   const getBojInfos = async () => {
     try {
       const response = await axios.get(`${APPLICATION_DB_URL}/boj-infos`);
       await setbojInfos(response.data);
-      //   console.log(bojInfos);
     } catch (e) {
       console.error(e);
     }
