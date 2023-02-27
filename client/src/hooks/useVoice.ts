@@ -210,9 +210,6 @@ export default () => {
 
       const mySession = session;
 
-      // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
-      // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
-      await mySession.connect(token, { user: userName });
       if (!OV) return;
       // Init a passing undefined as targetElement (we don't want OpenVidu to insert a video
       // element: we will manage it on our own) and with the desired properties
@@ -226,6 +223,10 @@ export default () => {
         insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
         mirror: false, // Whether to mirror your local video or not
       });
+
+      // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
+      // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
+      await mySession.connect(token, { user: userName });
 
       // ---Publish your stream ---
 
@@ -390,6 +391,7 @@ export default () => {
   }) => {
     if (!session) return;
     //false일 때 뮤트 처리됨
+    console.log('볼륨뮤트');
     subscribers.map((sm) => {
       sm.subscribeToAudio(myVolMute);
     });
@@ -410,13 +412,14 @@ export default () => {
   }) => {
     if (!session || !publisher) return;
     //false일 때 뮤트 처리됨
+    console.log('마이크뮤트');
+    console.log(publisher);
     publisher.publishAudio(myMicMute);
     dispatch(toggleMyMicMute());
     session?.signal({
       type: MUTE_TYPE.MIC,
       data: playerId,
     });
-    console.log('옴');
   };
 
   return {
