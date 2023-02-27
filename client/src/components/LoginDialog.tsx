@@ -4,8 +4,6 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import ToggleButton from '@mui/material/ToggleButton';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import Avatar from '@mui/material/Avatar';
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper';
 import 'swiper/css';
@@ -19,7 +17,8 @@ import {
   setPlayerId,
   setPlayerLeetId,
   setPlayerTexture,
-} from '../stores/userSlice';
+} from 'stores/userSlice';
+import { initialMyMute } from 'stores/chatSlice';
 import { useDispatch } from 'react-redux';
 import { handleScene } from 'lib/phaserLib';
 import { GAME_STATUS } from 'utils/Constants';
@@ -117,6 +116,7 @@ const LoginDialog = () => {
             playerId: payload.userNickname,
             playerTexture: avatars[avatarIndex].name,
           });
+          dispatch(initialMyMute(payload.userNickname));
         }
       } catch (e) {
         handleClick();
