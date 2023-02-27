@@ -26,7 +26,7 @@ const GameVoice = (props: GameVoiceType) => {
       <Drawer anchor="right" isOpen={drawerOpen} handleDrawer={handleDrawer}>
         <CurrentPlayer handleDrawer={handleDrawer} {...props} />
       </Drawer>
-      {!!session ? (
+      {!session ? (
         <GameVoiceBox {...props} />
       ) : (
         <FloatingBox>
