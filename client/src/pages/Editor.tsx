@@ -35,6 +35,7 @@ const Main = muiStyled('main', {
 }>(({ theme, open }) => ({
   flexGrow: 1,
   padding: theme.spacing(3),
+  border: '2px solid orange',
   transition: theme.transitions.create('margin', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -108,7 +109,7 @@ const Editor = (props: VoiceProp & YjsProp) => {
     dispatch(toggleWhiteboard());
   };
 
-  console.log('Edirot 컴포넌트 호출 시점');
+  // console.log('Edirot 컴포넌트 호출 시점');
 
   return (
     <>
@@ -116,7 +117,7 @@ const Editor = (props: VoiceProp & YjsProp) => {
       <EditorDiv>
         <ThemeProvider theme={darkTheme}>
           <Box
-            sx={{ display: 'flex' }}
+            sx={{ display: 'flex', border: '3px solid green' }}
             className="animate__animated animate__zoomInUp "
           >
             <AppBar position="fixed" open={open} color="transparent">
@@ -201,9 +202,10 @@ const EditorDiv = styled.div`
   // background-color: rgba(256, 256, 256, 0.7); // 흰색 투명
   // background-size: cover;
   // background-attachment: fixed;
-  position: absolute;
+  position: fixed; // 이거 고치면 오른쪽 drawer 스크롤 생김
   top: 0;
   left: 0;
+  // border: 1px solid yellow;
 `;
 
 const BtnDiv = styled.div`

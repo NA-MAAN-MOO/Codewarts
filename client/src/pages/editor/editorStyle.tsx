@@ -34,9 +34,11 @@ const buttonTheme = createTheme({
 });
 
 const EditorWrapper = styledc.div`
-  width: 95%;
+  width: 100%;
   margin: 0 auto;
+  padding: 0 0 0 0;
   font-family: 'Cascadia Code', 'Pretendard-Regular';
+  border: 1px solid red;
   `;
 
 const EditorInfo = styledc.div`
@@ -113,7 +115,7 @@ color: #fff;
 font-size: 20px;
 font-weight: bold;
 width: 300px;
-border: 1px solid yellow;
+// border: 1px solid yellow;
 // line-height: 56px;
 
 `;
@@ -307,7 +309,7 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
 }));
 
 /* Drawer setting */
-const leftDrawerWidth = 530;
+const leftDrawerWidth = 520;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   open?: boolean;
