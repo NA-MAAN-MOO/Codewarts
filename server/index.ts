@@ -31,12 +31,12 @@ app.use(cookieParser());
 
 /*********배포 시 설정들********* */
 //빌드하고 나서 주석 해제
-// app.use(express.static(__dirname + '../client/build'));
+// app.use(express.static(__dirname + '/../../client/build'));
 // app.get('/', function (req, res) {
-//   res.sendFile(__dirname + '../client/build/index.html');
+//   res.sendFile(__dirname + '/../../client/build/index.html');
 // });
-//  console.log(__dirname + '../client/build')
-
+console.log('파일 위치: ' + __dirname + '/../../client/build');
+console.log('몽고디비 비번: ' + mongoPassword);
 //db connect
 const db = `mongodb+srv://juncheol:${mongoPassword}@cluster0.v0izvl3.mongodb.net/?retryWrites=true&w=majority`;
 mongoose
