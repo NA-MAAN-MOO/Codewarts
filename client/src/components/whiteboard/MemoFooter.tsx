@@ -1,12 +1,14 @@
-import { useState, MouseEvent } from 'react';
+import { useState, MouseEvent, ChangeEvent } from 'react';
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
+import Checkbox from '@mui/material/Checkbox';
 import styled from 'styled-components';
 
 export default function MemoFooter() {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const [checked, setChecked] = useState<boolean>(true);
 
   const handlePopoverOpen = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -17,6 +19,10 @@ export default function MemoFooter() {
   };
 
   const open = Boolean(anchorEl);
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setChecked(event.target.checked);
+  };
 
   function stringToColor() {
     let color = '#';
@@ -34,7 +40,7 @@ export default function MemoFooter() {
   }
 
   return (
-    <AvatarWrapper>
+    <FooterWrapper>
       <AvatarGroup
         max={6}
         sx={{
@@ -124,16 +130,25 @@ export default function MemoFooter() {
           }}
         />
       </AvatarGroup>
-    </AvatarWrapper>
+      <Checkbox
+        checked={checked}
+        onChange={handleChange}
+        sx={{
+          color: 'white',
+          '&.Mui-checked': { color: 'darkred' },
+          margin: '0 0 10px 10px',
+        }}
+      />
+    </FooterWrapper>
   );
 }
 
-const AvatarWrapper = styled.div`
+const FooterWrapper = styled.div`
   width: 100%;
   height: 20%;
   position: absolute;
   bottom: 0;
   display: flex;
   margin-left: 10px;
-  //   border: 1px solid red;
+  // border: 1px solid red;
 `;
