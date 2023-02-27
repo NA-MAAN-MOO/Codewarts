@@ -3,7 +3,7 @@ import phaserGame from 'codeuk';
 import { io, Socket } from 'socket.io-client';
 
 const APPLICATION_SERVER_URL =
-  `${process.env.REACT_APP_SERVER_URL}/db` || 'http://localhost:8080';
+  process.env.REACT_APP_SERVER_URL || 'http://localhost:8080';
 
 const initSocket = (data: any, scene: Lobby) => {
   phaserGame.socket = io(`${APPLICATION_SERVER_URL}`);

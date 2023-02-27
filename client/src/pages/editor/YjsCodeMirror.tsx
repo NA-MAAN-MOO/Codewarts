@@ -60,7 +60,7 @@ import { getPhaserSocket } from 'network/phaserSocket';
 import { YjsProp } from 'types';
 
 const APPLICATION_YJS_URL =
-  `${process.env.REACT_APP_YJS_URL}` || 'ws://localhost:1234/';
+  process.env.REACT_APP_YJS_URL || 'ws://localhost:1234/';
 
 function YjsCodeMirror(props: YjsProp) {
   /* ref */

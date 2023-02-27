@@ -10,7 +10,7 @@ import RankingList from 'components/whiteboard/RankingList';
 import CloseButton from 'components/whiteboard/CloseButton';
 
 const APPLICATION_DB_URL =
-  `${process.env.REACT_APP_SERVER_URL}/db` || 'http://localhost:3003';
+  process.env.REACT_APP_DB_URL || 'http://localhost:3003';
 
 interface DetailInfo {
   bojId: string;

@@ -3,7 +3,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Button from '@mui/material/Button';
 
 const APPLICATION_EDITOR_URL =
-  `${process.env.REACT_APP_SERVER_URL}/editor` || 'http://localhost:3001';
+  process.env.REACT_APP_EDITOR_URL || 'http://localhost:3001';
 
 //@ts-ignore
 function RunButton(props) {

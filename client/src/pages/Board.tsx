@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 import './styles/board.css';
 
 const APPLICATION_BOARD_URL =
-  `${process.env.REACT_APP_SERVER_URL}/` || 'http://localhost:3004';
+  process.env.REACT_APP_SERVER_URL || 'http://localhost:3004';
 
 const Board = (props: any) => {
   const { handleSocket } = props;

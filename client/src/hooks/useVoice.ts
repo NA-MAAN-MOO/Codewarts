@@ -22,10 +22,10 @@ import _ from 'lodash';
 import { MUTE_TYPE } from 'utils/Constants';
 
 const APPLICATION_DB_URL =
-  `${process.env.REACT_APP_SERVER_URL}/db` || 'http://localhost:3003';
+  process.env.REACT_APP_DB_URL || 'http://localhost:3003';
 
 const APPLICATION_VOICE_URL =
-  `${process.env.REACT_APP_SERVER_URL}/voice` || 'http://localhost:3002';
+  process.env.REACT_APP_VOICE_URL || 'http://localhost:3002';
 
 export default () => {
   const dispatch = useDispatch();

@@ -32,7 +32,7 @@ import 'animate.css';
 import { openGame } from 'stores/modeSlice';
 
 const APPLICATION_DB_URL =
-  `${process.env.REACT_APP_SERVER_URL}/db` || 'http://localhost:3003';
+  process.env.REACT_APP_DB_URL || 'http://localhost:3003';
 
 interface Characters {
   [key: string]: string;

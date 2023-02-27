@@ -4,7 +4,7 @@ import { setUserName, setEditorName } from 'stores/editorSlice';
 import { useDispatch } from 'react-redux';
 
 const APPLICATION_EDITOR_URL =
-  `${process.env.REACT_APP_SERVER_URL}/editor` || 'http://localhost:3001';
+  process.env.REACT_APP_EDITOR_URL || 'http://localhost:3001';
 
 function UserForm() {
   /* state 디스트럭쳐링 */

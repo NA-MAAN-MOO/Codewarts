@@ -6,7 +6,7 @@ import { Session } from 'openvidu-browser';
 import axios from 'axios';
 
 const APPLICATION_VOICE_URL =
-  `${process.env.REACT_APP_SERVER_URL}/voice` || 'http://localhost:3002';
+  process.env.REACT_APP_VOICE_URL || 'http://localhost:3002';
 
 export interface ChatState {
   users: CharInfoType[];

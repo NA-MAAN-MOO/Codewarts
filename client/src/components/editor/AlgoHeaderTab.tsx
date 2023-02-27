@@ -13,7 +13,7 @@ import RenderSvg from 'components/Svg';
 import Chip from '@mui/material/Chip';
 
 const APPLICATION_EDITOR_URL =
-  `${process.env.REACT_APP_SERVER_URL}/editor` || 'http://localhost:3001';
+  process.env.REACT_APP_EDITOR_URL || 'http://localhost:3001';
 
 //@ts-ignore
 function AlgoHeaderTab(props) {

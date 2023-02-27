@@ -12,7 +12,7 @@ import MySnackbar from './MySnackbar';
 import { ThemeProvider } from '@mui/system';
 
 const APPLICATION_DB_URL =
-  `${process.env.REACT_APP_SERVER_URL}/db` || 'http://localhost:3003';
+  process.env.REACT_APP_DB_URL || 'http://localhost:3003';
 
 export default function FormDialog() {
   const [openSignUpForm, setOpenSignUpForm] = React.useState(false);
