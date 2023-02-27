@@ -1,7 +1,9 @@
 import Drawer from '@mui/material/Drawer';
-import { Divider } from '@mui/material';
 import CloseButton from './CloseButton';
 import Memo from './Memo';
+import AppBar from '@mui/material/AppBar';
+import AddButton from './AddButton';
+import Typography from '@mui/material/Typography';
 
 const drawerWidth = 60;
 
@@ -17,17 +19,34 @@ export default function MainField(props: any) {
           '& .MuiDrawer-paper': {
             width: `${drawerWidth}%`,
             boxSizing: 'border-box',
-            // bgcolor: 'transparent',
+            background: 'transparent',
           },
         }}
         variant="permanent"
         anchor="right"
       >
-        <CloseButton handleClose={handleClose} />
+        <AppBar
+          position="fixed"
+          sx={{
+            width: `60%`,
+            ml: `40%`,
+            backgroundColor: 'transparent',
+            boxShadow: 'none',
+            marginTop: '10px',
+            // border: '1px solid red',
+          }}
+        >
+          <div>
+            <CloseButton handleClose={handleClose} />
+          </div>
+
+          {/* </Typography> */}
+        </AppBar>
         <Memo />
 
         {/* <Divider /> */}
         {/* <Toolbar /> */}
+        <AddButton />
       </Drawer>
     </>
   );

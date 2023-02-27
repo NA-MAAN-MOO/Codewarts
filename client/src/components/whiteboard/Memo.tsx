@@ -1,32 +1,49 @@
 import DragHandleIcon from '@mui/icons-material/DragHandle';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { CardContent, debounce, Typography } from '@mui/material';
-import { useMemo, useRef, useEffect } from 'react';
+import { debounce } from '@mui/material';
+import CardContent from '@mui/material/CardContent';
+import { useMemo, useRef, useEffect, useState } from 'react';
 import Draggable from 'react-draggable';
 import Card from '@mui/material/Card';
 import styled from 'styled-components';
-import TextareaAutosize from '@mui/material/TextareaAutosize';
+import IconButton from '@mui/material/IconButton';
+import MemoFooter from './MemoFooter';
 
-export default function Memo() {
-  const memoContainer = useRef(null);
+export default function Memo(props: any) {
+  const { content, editMemo, deleteMemo } = props;
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+
+  const trackPosition = (data: any) => {
+    setPosition({ x: data.x, y: data.y });
+  };
 
   return (
-    <Draggable handle="#draggable-dialog-title">
+    <Draggable
+      defaultPosition={{ x: 80, y: 80 }}
+      handle="#draggable-dialog-title"
+      onDrag={(e, data) => trackPosition(data)}
+    >
       <Card sx={{ width: '240px', minHeight: '240px', background: '#ffe552' }}>
         <CardContent>
           <DraggableRange id="draggable-dialog-title">
             <DragHandleIcon htmlColor="#ffffff" />
-            <DeleteForeverIcon
-              htmlColor="#ffffff"
-              viewBox="0 0 25 25 "
-              sx={{ float: 'right' }}
-              //   onClick={}
-            />
+            <IconButton
+              aria-label="delete"
+              size="small"
+              //   onClick={deleteMemo}
+              color="secondary"
+              sx={{ float: 'right', marginTop: '-5px' }}
+            >
+              <DeleteForeverIcon htmlColor="#ffffff" viewBox="0 0 25 25 " />
+            </IconButton>
           </DraggableRange>
           <MemoContent
-          //   onChange={}
+            // placeholder=""
+            defaultValue={content}
+            //   onChange={editMemo}
           />
         </CardContent>
+        <MemoFooter />
       </Card>
     </Draggable>
   );
