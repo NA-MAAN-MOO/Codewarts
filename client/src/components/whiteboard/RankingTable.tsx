@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -7,6 +6,10 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import RenderTier from './RenderTier';
+import { useSelector } from 'react-redux';
+import { RootState } from 'stores';
+import RankingTableContent from './RankingTableContent';
+import store from 'stores';
 
 const colNames = [
   '순위',
@@ -27,34 +30,27 @@ interface InfoType {
 
 export default function RankingTable(props: any) {
   const { bojInfos } = props;
+  const myNickname = useSelector((state: RootState) => state.user.playerId);
+  console.log(myNickname);
 
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: '40%' }} aria-label="simple table">
         <TableHead>
-          <TableRow>
+          <TableRow sx={{ background: 'darkred' }}>
             {colNames.map((colName: string) => (
-              <TableCell align="center">{colName}</TableCell>
+              <TableCell
+                align="center"
+                sx={{ color: 'white', fontWeight: '700' }}
+              >
+                {colName}
+              </TableCell>
             ))}
           </TableRow>
         </TableHead>
         <TableBody>
           {bojInfos.map((info: InfoType, index: number) => (
-            <TableRow
-              key={index}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row" align="center">
-                {index + 1}
-              </TableCell>
-              <TableCell align="center">{info.nickname}</TableCell>
-              <TableCell align="center">{info.bojId}</TableCell>
-              <TableCell align="center">
-                <RenderTier svgName={info.tier} />
-              </TableCell>
-              <TableCell align="center">{info.maxStreak}일</TableCell>
-              <TableCell align="center">{info.solved}개</TableCell>
-            </TableRow>
+            <RankingTableContent index={index} info={info} />
           ))}
         </TableBody>
       </Table>

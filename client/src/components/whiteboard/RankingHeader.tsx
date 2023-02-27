@@ -13,18 +13,29 @@ export default function RankingHeader() {
         sx={{
           width: `40%`,
           mr: `60%`,
+          backgroundColor: 'transparent',
+          boxShadow: 'none',
+          marginTop: '20px',
         }}
       >
         {/* TODO: 가운데 정렬 */}
-        <Toolbar sx={{ justifyContent: 'left', marginLeft: '20px' }}>
+        <Toolbar
+          sx={{
+            justifyContent: 'left',
+            marginLeft: '20px',
+          }}
+        >
           <Typography
-            variant="h5"
             noWrap
             component="div"
             align="center"
-            sx={{ textAlign: 'center' }}
+            sx={{
+              textAlign: 'center',
+              fontFamily: 'Pretendard-Bold',
+              fontSize: '2em',
+            }}
           >
-            코드와트 랭킹 🔥
+            코드와트 코딩 랭킹 🔥
           </Typography>
         </Toolbar>
       </AppBar>
