@@ -1,8 +1,23 @@
+import { useState, MouseEvent } from 'react';
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
+import Popover from '@mui/material/Popover';
+import Typography from '@mui/material/Typography';
 import styled from 'styled-components';
 
 export default function MemoFooter() {
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+
+  const handlePopoverOpen = (event: MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+
   function stringToColor() {
     let color = '#';
 
@@ -37,7 +52,29 @@ export default function MemoFooter() {
               background: `${stringToColor()}`,
             },
           }}
+          onMouseEnter={handlePopoverOpen}
+          onMouseLeave={handlePopoverClose}
         />
+        <Popover
+          id="mouse-over-popover"
+          sx={{
+            pointerEvents: 'none',
+          }}
+          open={open}
+          anchorEl={anchorEl}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+          transformOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          onClose={handlePopoverClose}
+          disableRestoreFocus
+        >
+          <Typography sx={{ p: 1 }}>TODO: 변수 추가하기</Typography>
+        </Popover>
         <Avatar
           {...stringAvatar('ef')}
           sx={{
