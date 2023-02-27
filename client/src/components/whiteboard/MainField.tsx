@@ -1,6 +1,6 @@
 import Drawer from '@mui/material/Drawer';
 import CloseButton from './CloseButton';
-import Memo from './Memo';
+import MemoDump from './MemoDump';
 import AppBar from '@mui/material/AppBar';
 import AddButton from './AddButton';
 import Typography from '@mui/material/Typography';
@@ -42,7 +42,7 @@ export default function MainField(props: any) {
 
           {/* </Typography> */}
         </AppBar>
-        <Memo />
+        <MemoDump />
 
         {/* <Divider /> */}
         {/* <Toolbar /> */}
