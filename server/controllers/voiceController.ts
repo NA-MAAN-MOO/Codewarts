@@ -79,12 +79,12 @@ export const getConnections = async (req: Request, res: Response) => {
     );
     res.send(data.content);
   } catch (err: unknown) {
-    console.log(err);
     if (err instanceof AxiosError && err.response?.status === 404) {
       // 아직 세션 만들어지지 않은 상태임
       res.send(false);
       return;
     }
+    console.log(err);
     res.status(500).send(err);
   }
 };
@@ -207,6 +207,7 @@ export const getMuteInfo = async (req: Request, res: Response) => {
       [MUTE_TYPE.VOL]: VolMuteInfo.getAll(),
       [MUTE_TYPE.MIC]: MicMuteInfo.getAll(),
     };
+    console.log(result);
     res.send(result).end();
   } catch (err: unknown) {
     console.log(err);

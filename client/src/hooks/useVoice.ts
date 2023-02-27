@@ -285,7 +285,7 @@ export default () => {
         if (!user || user !== userName) {
           return;
         }
-        handleMyVolumeMute({ subscribers, session });
+        await handleMyVolumeMute({ subscribers, session });
       });
 
       //방장이 내게 마이크 음소거를 시켰을 때
@@ -295,7 +295,7 @@ export default () => {
         if (!user || !pubNow || user !== userName) {
           return;
         }
-        handleMyMicMute({ publisher: pubNow, session });
+        await handleMyMicMute({ publisher: pubNow, session });
       });
 
       // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
@@ -368,9 +368,6 @@ export default () => {
     userName: string;
   }) => {
     try {
-      await axios.post(`${APPLICATION_VOICE_URL}/toggle-mute/${type}`, {
-        userName: userName,
-      });
       if (type === MUTE_TYPE.VOL) {
         dispatch(toggleVolMute(userName));
       } else if (type === MUTE_TYPE.MIC) {
@@ -382,7 +379,7 @@ export default () => {
   };
 
   //내 볼륨 뮤트
-  const handleMyVolumeMute = ({
+  const handleMyVolumeMute = async ({
     subscribers,
     session,
   }: {
@@ -396,6 +393,9 @@ export default () => {
       sm.subscribeToAudio(myVolMute);
     });
     dispatch(toggleMyVolMute());
+    await axios.post(`${APPLICATION_VOICE_URL}/toggle-mute/${MUTE_TYPE.VOL}`, {
+      userName: playerId,
+    });
     session?.signal({
       type: MUTE_TYPE.VOL,
       data: playerId,
@@ -403,7 +403,7 @@ export default () => {
   };
 
   //내 마이크 뮤트
-  const handleMyMicMute = ({
+  const handleMyMicMute = async ({
     publisher,
     session,
   }: {
@@ -415,6 +415,9 @@ export default () => {
     console.log('마이크뮤트');
     publisher.publishAudio(myMicMute);
     dispatch(toggleMyMicMute());
+    await axios.post(`${APPLICATION_VOICE_URL}/toggle-mute/${MUTE_TYPE.MIC}`, {
+      userName: playerId,
+    });
     session?.signal({
       type: MUTE_TYPE.MIC,
       data: playerId,
