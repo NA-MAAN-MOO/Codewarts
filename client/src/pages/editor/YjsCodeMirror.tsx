@@ -159,11 +159,23 @@ function YjsCodeMirror(props: YjsProp) {
     if (!provider || !undoManager) return;
     let basicThemeSet = EditorView.theme({
       '&': {
-        height: '400px',
-        // minHeight: '500px',
         borderRadius: '.5em', // '.cm-gutters'와 같이 조절할 것
+        height: '800px',
+        // maxHeight: '400px',
+        // minHeight: '400px',
+        // height: '100%',
       },
-      '.cm-content, .cm-gutter': { minHeight: '30%' },
+      '.cm-editor': {
+        // maxHeight: '50%',
+        // height: '100%',
+      },
+      '.cm-scroller': {
+        overflow: 'auto',
+      },
+      '.cm-content, .cm-gutter': {
+        // height: 'auto',
+        // minHeight: `${400 * 50}%`,
+      },
       '.cm-content': {
         fontFamily: 'Cascadia Code, Pretendard-Regular',
         fontSize: 'large',
@@ -208,11 +220,7 @@ function YjsCodeMirror(props: YjsProp) {
       <ToastContainer />
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <AppBar
-          position="fixed"
-          open={leftOpen}
-          style={{ backgroundColor: 'transparent' }}
-        >
+        <AppBar position="fixed" open={leftOpen} color="transparent">
           <Toolbar>
             <IconButton
               color="inherit"
@@ -320,9 +328,9 @@ function YjsCodeMirror(props: YjsProp) {
             className="codemirror-editor"
             ref={editor}
             style={{
-              minHeight: '50%',
               filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25)',
               marginBottom: '10px',
+              // height: '50%',
             }}
           />
           <Divider />

@@ -35,15 +35,17 @@ const buttonTheme = createTheme({
 
 const EditorWrapper = styledc.div`
   width: 100%;
+  height: 100%;
   margin: 0 auto;
-  padding: 0 0 0 0;
+  // padding: 0 0 0 0;
   font-family: 'Cascadia Code', 'Pretendard-Regular';
   border: 1px solid red;
+  overflow: auto;
   `;
 
 const EditorInfo = styledc.div`
-  font-family: 'Cascadia Code', 'Pretendard-Regular';
-  // color: rgba(255, 255, 255, 0.7);
+font-family: 'Cascadia Code', 'Pretendard-Regular';
+// color: rgba(255, 255, 255, 0.7);
 font-size: 35px; 
 font-weight: 600; 
 // margin-top: 3%;
@@ -52,7 +54,9 @@ filter: drop-shadow(0px 4px 4px rgba(255, 255, 255, 0.5));
 `;
 
 const AlgoInfoWrap = styledc.div`
-// width: 100%;
+overflow: auto;
+// border: 5px solid red;
+
 `;
 
 const HeaderTab = styledc.div`
@@ -216,7 +220,6 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const MiddleWrapper = styledc.div`
-  margin-left: 20px;
   martgin-top: 10px;
   font-size: 20px;
   text-align: right;
@@ -315,7 +318,9 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   open?: boolean;
 }>(({ theme, open }) => ({
   flexGrow: 1,
-  padding: theme.spacing(3),
+  // padding: theme.spacing(2),
+  border: '1px solid purple', // for debugging
+  height: '100%',
   transition: theme.transitions.create('margin', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
