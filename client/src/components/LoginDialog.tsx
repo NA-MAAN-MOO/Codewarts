@@ -143,7 +143,11 @@ const LoginDialog = () => {
       />
       <img
         src={logo_new}
-        style={{ width: styledTheme.logoWidth, height: styledTheme.logoHeight }}
+        style={{
+          width: styledTheme.logoWidth,
+          height: styledTheme.logoHeight,
+          userSelect: 'none',
+        }}
       />
       {/* <RoomName>
         <Avatar
