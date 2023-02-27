@@ -158,7 +158,7 @@ export default function FormDialog() {
               margin="dense"
               id="name"
               label="비밀번호"
-              type="text"
+              type="password"
               fullWidth
               variant="standard"
               onInput={(e) => {
