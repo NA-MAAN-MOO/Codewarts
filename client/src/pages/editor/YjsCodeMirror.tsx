@@ -55,6 +55,7 @@ import AlgoHeaderTab from 'components/editor/AlgoHeaderTab';
 import AlgoInfoAccordion from 'components/editor/AlgoInfoAccordion';
 import EvaluateGauge from 'components/editor/EvaluateGauge';
 import ProbTitle from 'components/editor/ProbTitle';
+import SearchModal from './ProbSearchModal';
 
 /* network */
 import { getPhaserSocket } from 'network/phaserSocket';
@@ -269,6 +270,7 @@ function YjsCodeMirror(props: YjsProp) {
                 boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)',
               }}
             >
+              <SearchModal />
               <AlgoHeaderTab
                 algoSelect={algoSelect}
                 setAlgoSelect={setAlgoSelect}
