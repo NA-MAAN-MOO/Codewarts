@@ -2,8 +2,11 @@ import Lobby from 'scenes/Lobby';
 import phaserGame from 'codeuk';
 import { io, Socket } from 'socket.io-client';
 
+const APPLICATION_SERVER_URL =
+  `${process.env.REACT_APP_SERVER_URL}/db` || 'http://localhost:8080';
+
 const initSocket = (data: any, scene: Lobby) => {
-  phaserGame.socket = io('http://localhost:8080');
+  phaserGame.socket = io(`${APPLICATION_SERVER_URL}`);
   phaserGame.socket.on('start', (payLoad: { socketId: string }) => {
     // Server에서 보내주는 고유 값을 받는다.
     phaserGame.socketId = payLoad.socketId;
