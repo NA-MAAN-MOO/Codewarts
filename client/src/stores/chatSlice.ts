@@ -5,8 +5,8 @@ import { CharInfoType, MuteInfoType } from 'types';
 import { Session } from 'openvidu-browser';
 import axios from 'axios';
 
-const APPLICATION_SERVER_URL =
-  process.env.REACT_APP_VOICE_URL || 'http://localhost:3002';
+const APPLICATION_VOICE_URL =
+  `${process.env.REACT_APP_SERVER_URL}/voice` || 'http://localhost:3002';
 
 export interface ChatState {
   users: CharInfoType[];
@@ -20,7 +20,7 @@ export interface ChatState {
 export const fetchMuteInfo = createAsyncThunk(
   'char/fetchMuteInfo',
   async () => {
-    const { data } = await axios.get(`${APPLICATION_SERVER_URL}/get-mute-info`);
+    const { data } = await axios.get(`${APPLICATION_VOICE_URL}/get-mute-info`);
     return data;
   }
 );

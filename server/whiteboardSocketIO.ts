@@ -6,6 +6,7 @@ const server2 = http2.createServer(app);
 
 const socket = require('socket.io');
 const io = socket(server2, {
+  path: '/board/',
   cors: {
     origin: '*',
   },

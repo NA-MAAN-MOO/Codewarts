@@ -2,6 +2,9 @@ import axios from 'axios';
 import Tooltip from '@mui/material/Tooltip';
 import Button from '@mui/material/Button';
 
+const APPLICATION_EDITOR_URL =
+  `${process.env.REACT_APP_SERVER_URL}/editor` || 'http://localhost:3001';
+
 //@ts-ignore
 function RunButton(props) {
   const { ytext, setCompileOutput, setMemory, setCpuTime, inputStdin } = props;
@@ -13,11 +16,14 @@ function RunButton(props) {
     console.log(inputStdin.value);
 
     try {
-      const { data } = await axios.post(`http://localhost:3001/code_to_run`, {
-        codeToRun: ytext.toString(),
-        //@ts-ignore
-        stdin: inputStdin.value,
-      });
+      const { data } = await axios.post(
+        `${APPLICATION_EDITOR_URL}/code_to_run`,
+        {
+          codeToRun: ytext.toString(),
+          //@ts-ignore
+          stdin: inputStdin.value,
+        }
+      );
 
       console.log(data); // 전체 reponse body (output, statusCode, memory, cpuTime)
       setCompileOutput(data.output.replace(/\n/g, '<br>'));

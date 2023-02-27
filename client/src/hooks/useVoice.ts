@@ -21,8 +21,11 @@ import { Connection } from 'types';
 import _ from 'lodash';
 import { MUTE_TYPE } from 'utils/Constants';
 
-const APPLICATION_SERVER_URL =
-  process.env.REACT_APP_VOICE_URL || 'http://localhost:3002';
+const APPLICATION_DB_URL =
+  `${process.env.REACT_APP_SERVER_URL}/db` || 'http://localhost:3003';
+
+const APPLICATION_VOICE_URL =
+  `${process.env.REACT_APP_SERVER_URL}/voice` || 'http://localhost:3002';
 
 export default () => {
   const dispatch = useDispatch();
@@ -34,7 +37,7 @@ export default () => {
   const getConnections = async (sessionId: string) => {
     try {
       const { data }: { data: Connection[] | false } = await axios.get(
-        `${APPLICATION_SERVER_URL}/get-connections`,
+        `${APPLICATION_VOICE_URL}/get-connections`,
         {
           params: { sessionId: sessionId },
         }
@@ -47,7 +50,7 @@ export default () => {
   };
   const getSessions = async () => {
     const { data } = await axios.get(
-      `${APPLICATION_SERVER_URL}/get-sessions`,
+      `${APPLICATION_VOICE_URL}/get-sessions`,
       {}
     );
     return data;
@@ -64,7 +67,7 @@ export default () => {
       filteredUser.map(async (user, index) => {
         const name = JSON.parse(user.clientData).user;
         const { data: char } = await axios.get(
-          `http://localhost:3003/user/get-char/${name}`
+          `${APPLICATION_DB_URL}/user/get-char/${name}`
         );
         if (!char) {
           return null;
@@ -101,7 +104,7 @@ export default () => {
   const createSession = async (sessionId: string) => {
     try {
       const data = await axios.post(
-        APPLICATION_SERVER_URL + '/create-session',
+        APPLICATION_VOICE_URL + '/create-session',
         {
           customSessionId: sessionId,
         },
@@ -151,7 +154,7 @@ export default () => {
     userName: string;
   }) => {
     const response = await axios.post(
-      APPLICATION_SERVER_URL +
+      APPLICATION_VOICE_URL +
         '/create-connection/' +
         sessionId +
         '/connections',
@@ -364,7 +367,7 @@ export default () => {
     userName: string;
   }) => {
     try {
-      axios.post(`${APPLICATION_SERVER_URL}/toggle-mute/${type}`, {
+      axios.post(`${APPLICATION_VOICE_URL}/toggle-mute/${type}`, {
         userName: userName,
       });
       if (type === MUTE_TYPE.VOL) {

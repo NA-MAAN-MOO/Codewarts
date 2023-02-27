@@ -11,6 +11,9 @@ import { styledTheme } from 'styles/theme';
 import MySnackbar from './MySnackbar';
 import { ThemeProvider } from '@mui/system';
 
+const APPLICATION_DB_URL =
+  `${process.env.REACT_APP_SERVER_URL}/db` || 'http://localhost:3003';
+
 export default function FormDialog() {
   const [openSignUpForm, setOpenSignUpForm] = React.useState(false);
 
@@ -34,7 +37,7 @@ export default function FormDialog() {
         userLeetId: userForm.userLeetId,
       };
       const signUpResponse = await axios.post(
-        'http://localhost:3003/user/signup',
+        `${APPLICATION_DB_URL}/user/signup`,
         body
       );
       console.log(signUpResponse.data);

@@ -31,6 +31,9 @@ import MySnackbar from './MySnackbar';
 import 'animate.css';
 import { openGame } from 'stores/modeSlice';
 
+const APPLICATION_DB_URL =
+  `${process.env.REACT_APP_SERVER_URL}/db` || 'http://localhost:3003';
+
 interface Characters {
   [key: string]: string;
 }
@@ -95,7 +98,7 @@ const LoginDialog = () => {
       const body = { userId: userId, userPw: userPw };
       try {
         const response = await axios.post(
-          'http://localhost:3003/user/login',
+          `${APPLICATION_DB_URL}/user/login`,
           body
         );
         if (response.data.status === 200) {
