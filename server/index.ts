@@ -35,8 +35,7 @@ app.use(cookieParser());
 // app.get('/', function (req, res) {
 //   res.sendFile(__dirname + '/../../client/build/index.html');
 // });
-console.log('파일 위치: ' + __dirname + '/../../client/build');
-console.log('몽고디비 비번: ' + mongoPassword);
+
 //db connect
 const db = `mongodb+srv://juncheol:${mongoPassword}@cluster0.v0izvl3.mongodb.net/?retryWrites=true&w=majority`;
 mongoose
