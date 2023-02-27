@@ -59,6 +59,9 @@ import EvaluateGauge from 'components/editor/EvaluateGauge';
 import { getPhaserSocket } from 'network/phaserSocket';
 import { YjsProp } from 'types';
 
+const APPLICATION_YJS_URL =
+  process.env.REACT_APP_YJS_URL || 'ws://localhost:1234/';
+
 function YjsCodeMirror(props: YjsProp) {
   /* ref */
   const editor = useRef(null);
@@ -115,7 +118,7 @@ function YjsCodeMirror(props: YjsProp) {
     if (!ydoc) return;
     handleProvider(
       new WebsocketProvider(
-        `ws://localhost:1234/`, // serverUrl
+        `${APPLICATION_YJS_URL}`, // serverUrl
         roomName,
         ydoc
         // { params: { auth: editorName } } // Specify a query-string that will be url-encoded and attached to the `serverUrl`

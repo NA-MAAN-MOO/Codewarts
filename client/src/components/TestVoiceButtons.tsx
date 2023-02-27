@@ -5,8 +5,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from 'stores';
 import axios from 'axios';
 
-const APPLICATION_SERVER_URL =
-  process.env.REACT_APP_VOICE_URL || 'http://localhost:3002';
+const APPLICATION_VOICE_URL =
+  `${process.env.REACT_APP_SERVER_URL}/voice` || 'http://localhost:3002';
 
 const TestVoiceButtons = () => {
   const { getSessions, getConnections } = useVoice();
@@ -33,7 +33,7 @@ const TestVoiceButtons = () => {
     e.preventDefault();
     try {
       const result = await axios.delete(
-        `${APPLICATION_SERVER_URL}/delete-session/${sessionId}`
+        `${APPLICATION_VOICE_URL}/delete-session/${sessionId}`
       );
       if (result.status === 200) {
         console.log('세션 종료 완료');

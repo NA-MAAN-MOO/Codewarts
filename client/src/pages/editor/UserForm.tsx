@@ -3,6 +3,9 @@ import axios from 'axios';
 import { setUserName, setEditorName } from 'stores/editorSlice';
 import { useDispatch } from 'react-redux';
 
+const APPLICATION_EDITOR_URL =
+  process.env.REACT_APP_EDITOR_URL || 'http://localhost:3001';
+
 function UserForm() {
   /* state 디스트럭쳐링 */
   const dispatch = useDispatch();
@@ -28,7 +31,7 @@ function UserForm() {
 
     try {
       /* "방 만들기" 서버에게 요청 */
-      const { data } = await axios.post(`http://localhost:3001/new_room`, {
+      const { data } = await axios.post(`${APPLICATION_EDITOR_URL}/new_room`, {
         userName: nameInputValue,
       });
 

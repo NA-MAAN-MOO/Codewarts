@@ -2,6 +2,9 @@ import React, { useRef, useEffect } from 'react';
 import io from 'socket.io-client';
 import './styles/board.css';
 
+const APPLICATION_BOARD_URL =
+  process.env.REACT_APP_SERVER_URL || 'http://localhost:3004';
+
 const Board = (props: any) => {
   const { handleSocket } = props;
   const canvasRef = useRef(null);
@@ -162,7 +165,9 @@ const Board = (props: any) => {
       );
     };
 
-    socketRef.current = io('localhost:3004');
+    socketRef.current = io(`${APPLICATION_BOARD_URL}`, {
+      path: '/board/',
+    });
     handleSocket(socketRef.current);
     socketRef.current.emit('joinRoom', props.roomKey);
     socketRef.current.on('drawing', onDrawingEvent);
