@@ -36,7 +36,6 @@ function App() {
       status === GAME || status === EDITOR ? (
         <VoiceRoom />
       ) : status === WHITEBOARD ? (
-        // FIXME: whiteboard component 추가
         <Whiteboard />
       ) : (
         <></>

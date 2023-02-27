@@ -9,7 +9,6 @@ import phaserGame from 'codeuk';
 import { handleScene } from 'lib/phaserLib';
 import { GAME_STATUS } from 'utils/Constants';
 import { styledTheme } from 'styles/theme';
-//FIXME: socket 파일 분리
 import { initSocket } from 'network/phaserSocket';
 
 export default class Lobby extends Phaser.Scene {
@@ -31,21 +30,6 @@ export default class Lobby extends Phaser.Scene {
 
   init(data: any) {
     /* Open socket */
-    // phaserGame.socket = io('http://localhost:8080');
-    // phaserGame.socket.on('start', (payLoad: { socketId: string }) => {
-    //   // Server에서 보내주는 고유 값을 받는다.
-    //   phaserGame.socketId = payLoad.socketId;
-    //   phaserGame.charKey = data.playerTexture;
-    //   phaserGame.userName = data.playerId;
-
-    //   phaserGame.socket?.emit('savePlayer', {
-    //     charKey: phaserGame.charKey,
-    //     userName: phaserGame.userName,
-    //   });
-
-    //   this.network = true;
-    // });
-    //FIXME: socket 파일 분리
     initSocket(data, this);
 
     this.playerId = data.playerId;
