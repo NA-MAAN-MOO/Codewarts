@@ -207,7 +207,6 @@ export const getMuteInfo = async (req: Request, res: Response) => {
       [MUTE_TYPE.VOL]: VolMuteInfo.getAll(),
       [MUTE_TYPE.MIC]: MicMuteInfo.getAll(),
     };
-    console.log(result);
     res.send(result).end();
   } catch (err: unknown) {
     console.log(err);
