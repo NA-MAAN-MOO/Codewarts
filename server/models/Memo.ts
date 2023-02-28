@@ -2,6 +2,7 @@ import { Schema, model, Document, Model } from 'mongoose';
 
 interface ParticipantType {
   userId: string;
+  userNickname: string;
   tier: number;
 }
 
@@ -11,7 +12,7 @@ export interface IMemoInfo {
   content: string;
   x: number;
   y: number;
-  participant: ParticipantType[];
+  participants: ParticipantType[];
 }
 
 const memo = new Schema<IMemoInfo>({
@@ -21,7 +22,7 @@ const memo = new Schema<IMemoInfo>({
   x: { type: Number, required: true },
   y: { type: Number, required: true },
   //TODO: type error 고치기
-  participant: { type: Array, required: false },
+  participants: { type: Array, required: false },
 });
 
 const Memo = model<IMemoDocument>('memo', memo);
