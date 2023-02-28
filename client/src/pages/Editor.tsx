@@ -25,8 +25,9 @@ import Board from './Board';
 import { toggleWhiteboard } from 'stores/whiteboardSlice';
 import { Socket } from 'socket.io-client';
 import FloatingButton from 'components/FloatingButton';
+import MenuIcon from '@mui/icons-material/Menu';
 
-const drawerWidth = 245;
+const rightDrawerWidth = 240;
 
 const Main = muiStyled('main', {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -35,11 +36,12 @@ const Main = muiStyled('main', {
 }>(({ theme, open }) => ({
   flexGrow: 1,
   padding: theme.spacing(3),
+  border: '2px solid orange', // for debugging
   transition: theme.transitions.create('margin', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  marginRight: -drawerWidth,
+  marginRight: -rightDrawerWidth,
   ...(open && {
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeOut,
@@ -62,12 +64,12 @@ const AppBar = muiStyled(MuiAppBar, {
   }),
   display: 'flex',
   ...(open && {
-    width: `calc(100% - ${drawerWidth}px)`,
+    width: `calc(100% - ${rightDrawerWidth}px)`,
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
-    marginRight: drawerWidth,
+    marginRight: rightDrawerWidth,
   }),
 }));
 
@@ -86,9 +88,18 @@ const Editor = (props: VoiceProp & YjsProp) => {
   });
   const theme = useTheme();
   const [open, setOpen] = useState(true);
+  // YjsCodeMirror에 넘겨줘야할 인자
+  const [leftOpen, setLeftOpen] = useState(false);
   const dispatch = useDispatch();
   // const [socket, setSocket] = useState<Socket>();
   const { handleSocket, handleProvider, provider } = props;
+
+  const handleRightDrawerOpen = () => {
+    setLeftOpen(true);
+  };
+  const handleLeftDrawerClose = () => {
+    setLeftOpen(false);
+  };
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -108,21 +119,41 @@ const Editor = (props: VoiceProp & YjsProp) => {
     dispatch(toggleWhiteboard());
   };
 
-  console.log('Edirot 컴포넌트 호출 시점');
-
   return (
     <>
       <BackgroundDiv />
       <EditorDiv>
         <ThemeProvider theme={darkTheme}>
           <Box
-            sx={{ display: 'flex' }}
+            sx={{
+              display: 'flex',
+              border: '3px solid green', // for debugging
+              width: '100%',
+              height: '100%',
+            }}
             className="animate__animated animate__zoomInUp "
           >
-            <AppBar position="fixed" open={open} color="transparent">
+            <AppBar
+              position="fixed"
+              open={open}
+              color="transparent"
+              sx={{ border: '1px solid lightgreen' }}
+            >
               <Toolbar
-                sx={{ display: 'flex', justifyContent: 'space-between' }}
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                }}
               >
+                <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  onClick={handleRightDrawerOpen}
+                  edge="start"
+                  sx={{ mr: 2, ...(leftOpen && { display: 'none' }) }}
+                >
+                  <MenuIcon />
+                </IconButton>
                 <Header />
                 <BtnDiv>
                   <CloseIcon
@@ -144,16 +175,20 @@ const Editor = (props: VoiceProp & YjsProp) => {
             <Main open={open}>
               <DrawerHeader />
               <YjsCodeMirror
+                leftOpen={leftOpen}
+                setLeftOpen={setLeftOpen}
+                handleRightDrawerOpen={handleRightDrawerOpen}
+                handleLeftDrawerClose={handleLeftDrawerClose}
                 handleProvider={handleProvider}
                 provider={provider}
               />
             </Main>
             <Drawer
               sx={{
-                width: drawerWidth,
+                width: rightDrawerWidth,
                 flexShrink: 0,
                 '& .MuiDrawer-paper': {
-                  width: drawerWidth,
+                  width: rightDrawerWidth,
                   backgroundColor: darkTheme.palette.primary.main,
                 },
               }}
@@ -201,9 +236,10 @@ const EditorDiv = styled.div`
   // background-color: rgba(256, 256, 256, 0.7); // 흰색 투명
   // background-size: cover;
   // background-attachment: fixed;
-  position: absolute;
+  position: fixed; // 이거 fixed로 고치면 스크롤 없어짐
   top: 0;
   left: 0;
+  // border: 1px solid yellow;
 `;
 
 const BtnDiv = styled.div`

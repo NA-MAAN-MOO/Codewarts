@@ -2,9 +2,7 @@
 /* react & lib */
 import { useRef, useEffect, useState } from 'react';
 import { RootState } from 'stores';
-import * as random from 'lib0/random';
-import { Provider, useSelector } from 'react-redux';
-import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 /* yjs */
 import * as Y from 'yjs';
@@ -24,9 +22,7 @@ import {
   standardKeymap,
 } from '@codemirror/commands';
 import { okaidia } from '@uiw/codemirror-theme-okaidia';
-
-/* GraphQL queries */
-import USERINFOQUERY from '../../graphql/userInfoQuery';
+import { userColor } from './userTagColors';
 
 /* UI */
 import './YjsCodeMirror.css';
@@ -35,10 +31,14 @@ import {
   MiddleWrapper,
   EditorWrapper,
   AlgoInfoWrap,
-  theme,
+  buttonTheme,
+  Main,
+  AppBar,
+  DrawerHeader,
+  leftDrawerWidth,
 } from './editorStyle';
 import 'styles/fonts.css'; /* FONT */
-import { ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 
@@ -54,11 +54,20 @@ import CompilerField from 'components/editor/CompilerField';
 import AlgoHeaderTab from 'components/editor/AlgoHeaderTab';
 import AlgoInfoAccordion from 'components/editor/AlgoInfoAccordion';
 import EvaluateGauge from 'components/editor/EvaluateGauge';
+import ProbTitle from 'components/editor/ProbTitle';
+import SearchModal from './ProbSearchModal';
 
 /* network */
 import { getPhaserSocket } from 'network/phaserSocket';
 import { YjsProp } from 'types';
 
+import Drawer from '@mui/material/Drawer';
+import CssBaseline from '@mui/material/CssBaseline';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 const APPLICATION_YJS_URL =
   process.env.REACT_APP_YJS_URL || 'ws://localhost:1234/';
 
@@ -66,9 +75,7 @@ function YjsCodeMirror(props: YjsProp) {
   /* ref */
   const editor = useRef(null);
   const inputStdin = useRef(null);
-  const leetUserNameRef = useRef(null);
   const leetProbDataRef = useRef(null);
-  const bojUserNameRef = useRef(null);
   const bojProbDataRef = useRef(null);
   let mySocket = getPhaserSocket();
 
@@ -80,33 +87,36 @@ function YjsCodeMirror(props: YjsProp) {
   let [cpuTime, setCpuTime] = useState();
   let [memory, setMemory] = useState();
   let [editorThemeMode, setEditorTheme] = useState(okaidia);
-  let [leetUserData, setLeetUserData] = useState();
   let [leetProbData, setLeetProbData] = useState();
-  let [bojUserData, setBojUserData] = useState();
   let [bojProbData, setBojProbData] = useState();
+  let [bojProblemId, setBojProblemId] = useState();
   let [bojProbFullData, setBojProbFullData] = useState();
   let [markingPercent, setMarkingPercent] = useState(0);
   const [algoSelect, setAlgoSelect] = useState(0); // 백준(0), 리트코드(1)
   const [undoManager, setUndoManager] = useState();
   const [ytext, setYtext] = useState();
 
-  const { handleProvider, provider } = props;
+  // const [leftOpen, setLeftOpen] = useState(false);
+
+  const theme = useTheme();
+
+  // const handleRightDrawerOpen = () => {
+  //   setLeftOpen(true);
+  // };
+  // const handleLeftDrawerClose = () => {
+  //   setLeftOpen(false);
+  // };
+
+  const {
+    handleProvider,
+    provider,
+    leftOpen,
+    setLeftOpen,
+    handleRightDrawerOpen,
+    handleLeftDrawerClose,
+  } = props;
   /* roomName 스트링 값 수정하지 말 것(※ 수정할 거면 전부 수정해야 함) */
   const roomName = `ROOMNAME${editorName}`;
-
-  const usercolors = [
-    { color: '#30bced', light: '#30bced33' },
-    { color: '#6eeb83', light: '#6eeb8333' },
-    { color: '#ffbc42', light: '#ffbc4233' },
-    { color: '#ecd444', light: '#ecd44433' },
-    { color: '#ee6352', light: '#ee635233' },
-    { color: '#9ac2c9', light: '#9ac2c933' },
-    { color: '#8acb88', light: '#8acb8833' },
-    { color: '#1be7ff', light: '#1be7ff33' },
-  ];
-
-  // select a random color for this user
-  const userColor = usercolors[random.uint32() % usercolors.length];
 
   const [ydoc, setYdoc] = useState();
 
@@ -160,12 +170,23 @@ function YjsCodeMirror(props: YjsProp) {
     if (!provider || !undoManager) return;
     let basicThemeSet = EditorView.theme({
       '&': {
-        height: '400px',
-        // minHeight: '500px',
         borderRadius: '.5em', // '.cm-gutters'와 같이 조절할 것
+        height: '800px',
+        // maxHeight: '400px',
+        // minHeight: '400px',
+        // height: '100%',
       },
-      '.cm-editor': {},
-      '.cm-content, .cm-gutter': { minHeight: '30%' },
+      '.cm-editor': {
+        // maxHeight: '50%',
+        // height: '100%',
+      },
+      '.cm-scroller': {
+        overflow: 'auto',
+      },
+      '.cm-content, .cm-gutter': {
+        // height: 'auto',
+        // minHeight: `${400 * 50}%`,
+      },
       '.cm-content': {
         fontFamily: 'Cascadia Code, Pretendard-Regular',
         fontSize: 'large',
@@ -205,152 +226,151 @@ function YjsCodeMirror(props: YjsProp) {
     return () => view?.destroy();
   }, [editorThemeMode, provider, undoManager]);
 
-  /* leetcode 유저 정보 가져오기 */
-  const fetchLeetUserData = async () => {
-    if (leetUserNameRef.current === null) return;
-
-    //@ts-ignore
-    let leetUserName = leetUserNameRef.current.value;
-    console.log(leetUserName);
-
-    const userQueryVariable = {
-      //@ts-ignore
-      username: leetUserName,
-    };
-
-    try {
-      const response = await axios.post(
-        'https://cors-anywhere.herokuapp.com/https://leetcode.com/graphql',
-        {
-          query: USERINFOQUERY,
-          variables: userQueryVariable,
-        }
-      );
-
-      let userData = response.data;
-      console.log(userData.data);
-      setLeetUserData(userData.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  /* 백준 유저 정보 가져오기 */
-  const fetchBojUserData = async () => {
-    if (bojUserNameRef.current === null) return;
-
-    //@ts-ignore
-    let bojUserName = bojUserNameRef.current.value;
-    console.log(bojUserName);
-
-    try {
-      const response = await axios.get(
-        `https://solved.ac/api/v3/search/user?query=${bojUserName}`
-      );
-
-      let userData = response.data;
-      console.log(userData);
-      setBojUserData(userData);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   return (
     <EditorWrapper>
       <ToastContainer />
-
-      <AlgoInfoWrap>
-        <Box
-          sx={{
-            bgcolor: '#272822',
-            display: 'flex',
-            borderRadius: 1.4,
-            boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)',
-          }}
+      <Box sx={{ display: 'flex' }}>
+        <CssBaseline />
+        {/* <AppBar position="fixed" open={leftOpen} color="transparent">
+          <Toolbar> */}
+        {/* <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          onClick={handleRightDrawerOpen}
+          edge="start"
+          sx={{ mr: 2, ...(leftOpen && { display: 'none' }) }}
         >
-          <AlgoHeaderTab
-            algoSelect={algoSelect}
-            setAlgoSelect={setAlgoSelect}
-            bojProbData={bojProbData}
-            setBojProbData={setBojProbData}
-            leetProbData={leetProbData}
-            setLeetProbData={setLeetProbData}
-            bojProbDataRef={bojProbDataRef}
-            leetProbDataRef={leetProbDataRef}
-            setBojProbFullData={setBojProbFullData}
+          <MenuIcon />
+        </IconButton> */}
+        {/* </Toolbar>
+        </AppBar> */}
+        <Drawer
+          sx={{
+            width: leftDrawerWidth,
+            flexShrink: 0,
+            '& .MuiDrawer-paper': {
+              width: leftDrawerWidth,
+              boxSizing: 'border-box',
+            },
+          }}
+          variant="persistent"
+          anchor="left"
+          open={leftOpen}
+        >
+          <DrawerHeader>
+            <ProbTitle
+              algoSelect={algoSelect}
+              bojProbData={bojProbData}
+              bojProblemId={bojProblemId}
+              leetProbData={leetProbData}
+              bojProbFullData={bojProbFullData}
+            />
+            <IconButton onClick={handleLeftDrawerClose}>
+              {theme.direction === 'ltr' ? (
+                <ChevronLeftIcon />
+              ) : (
+                <ChevronRightIcon />
+              )}
+            </IconButton>
+          </DrawerHeader>
+          <AlgoInfoWrap>
+            <Box
+              sx={{
+                bgcolor: '#272822',
+                display: 'block',
+                borderRadius: 1.4,
+                boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)',
+              }}
+            >
+              <SearchModal
+                setBojProbFullData={setBojProbFullData}
+                setBojProblemId={setBojProblemId}
+                setAlgoSelect={setAlgoSelect}
+              />
+              <AlgoHeaderTab
+                algoSelect={algoSelect}
+                setAlgoSelect={setAlgoSelect}
+                bojProbData={bojProbData}
+                setBojProbData={setBojProbData}
+                leetProbData={leetProbData}
+                setLeetProbData={setLeetProbData}
+                bojProbDataRef={bojProbDataRef}
+                leetProbDataRef={leetProbDataRef}
+                setBojProbFullData={setBojProbFullData}
+                setBojProblemId={setBojProblemId}
+                bojProblemId={bojProblemId}
+              />
+              <AlgoInfoAccordion
+                inputStdin={inputStdin}
+                bojProbData={bojProbData}
+                leetProbData={leetProbData}
+                algoSelect={algoSelect}
+                bojProbFullData={bojProbFullData}
+                bojProblemId={bojProblemId}
+              />
+            </Box>
+          </AlgoInfoWrap>
+        </Drawer>
+        <Main open={leftOpen}>
+          <MiddleWrapper>
+            <ThemeProvider theme={buttonTheme}>
+              <EditorThemeSwitch
+                editorThemeMode={editorThemeMode}
+                setEditorTheme={setEditorTheme}
+              />
+              <RunButton
+                ytext={ytext}
+                setCompileOutput={setCompileOutput}
+                setMemory={setMemory}
+                setCpuTime={setCpuTime}
+                inputStdin={inputStdin.current}
+              />
+              <SubmitButton
+                algoSelect={algoSelect}
+                bojProbData={bojProbData}
+                leetProbData={leetProbData}
+              />
+              <EvaluateButton
+                ytext={ytext}
+                bojProbData={bojProbData}
+                markingPercent={markingPercent}
+                setMarkingPercent={setMarkingPercent}
+                mySocket={mySocket}
+              />
+              <EvaluateGauge
+                value={markingPercent}
+                min={0}
+                max={100}
+                label={`정답 게이지: ${markingPercent}%`}
+              />
+            </ThemeProvider>
+          </MiddleWrapper>
+          <div
+            className="codemirror-editor"
+            ref={editor}
+            style={{
+              filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25)',
+              marginBottom: '10px',
+              // height: '50%',
+            }}
           />
-        </Box>
-      </AlgoInfoWrap>
-
-      <AlgoInfoAccordion
-        inputStdin={inputStdin}
-        bojProbData={bojProbData}
-        leetProbData={leetProbData}
-        algoSelect={algoSelect}
-        bojProbFullData={bojProbFullData}
-      />
-
-      <MiddleWrapper>
-        <ThemeProvider theme={theme}>
-          <EditorThemeSwitch
-            editorThemeMode={editorThemeMode}
-            setEditorTheme={setEditorTheme}
-          />
-          <RunButton
-            ytext={ytext}
-            setCompileOutput={setCompileOutput}
-            setMemory={setMemory}
-            setCpuTime={setCpuTime}
-            inputStdin={inputStdin.current}
-          />
-          <SubmitButton
-            algoSelect={algoSelect}
-            bojProbData={bojProbData}
-            leetProbData={leetProbData}
-          />
-          <EvaluateButton
-            ytext={ytext}
-            bojProbData={bojProbData}
-            markingPercent={markingPercent}
-            setMarkingPercent={setMarkingPercent}
-            mySocket={mySocket}
-          />
-          <EvaluateGauge
-            value={markingPercent}
-            min={0}
-            max={100}
-            label={`정답 게이지: ${markingPercent}%`}
-          />
-        </ThemeProvider>
-      </MiddleWrapper>
-
-      <div
-        className="codemirror-editor"
-        ref={editor}
-        style={{
-          minHeight: '50%',
-          filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25)',
-          marginBottom: '10px',
-        }}
-      />
-
-      <Divider />
-
-      <Box
-        sx={{
-          flexGrow: 1,
-          marginTop: '10px',
-          marginBottom: '20px',
-          filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
-        }}
-      >
-        <CompilerField
-          inputStdin={inputStdin}
-          cpuTime={cpuTime}
-          memory={memory}
-          compileOutput={compileOutput}
-        />
+          <Divider />
+          <Box
+            sx={{
+              flexGrow: 1,
+              marginTop: '10px',
+              marginBottom: '20px',
+              filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))',
+            }}
+          >
+            <CompilerField
+              inputStdin={inputStdin}
+              cpuTime={cpuTime}
+              memory={memory}
+              compileOutput={compileOutput}
+            />
+          </Box>
+        </Main>
       </Box>
     </EditorWrapper>
   );

@@ -5,12 +5,10 @@ import {
   HeaderTab,
   StyledTabs,
   StyledTab,
-  ProbSummary,
   AlgoInputWrap,
   AlgoTextField,
 } from '../../../src/pages/editor/editorStyle';
-import RenderSvg from 'components/Svg';
-import Chip from '@mui/material/Chip';
+import { useEffect } from 'react';
 
 const APPLICATION_EDITOR_URL =
   process.env.REACT_APP_EDITOR_URL || 'http://localhost:3001';
@@ -20,13 +18,13 @@ function AlgoHeaderTab(props) {
   const {
     algoSelect,
     setAlgoSelect,
-    bojProbData,
     setBojProbData,
-    leetProbData,
     setLeetProbData,
     bojProbDataRef,
     leetProbDataRef,
     setBojProbFullData,
+    bojProblemId,
+    setBojProblemId,
   } = props;
 
   //@ts-ignore
@@ -56,6 +54,7 @@ function AlgoHeaderTab(props) {
     if (bojProbDataRef.current === null) return;
 
     let probId = bojProbDataRef.current.value;
+    setBojProblemId(probId);
     console.log(probId);
 
     try {
@@ -109,6 +108,10 @@ function AlgoHeaderTab(props) {
     }
   };
 
+  useEffect(() => {
+    return setBojProbFullData(null);
+  }, []);
+
   return (
     <HeaderTab>
       <StyledTabs
@@ -119,36 +122,6 @@ function AlgoHeaderTab(props) {
         <StyledTab label="Baekjoon" />
         <StyledTab label="LeetCode" />
       </StyledTabs>
-
-      {algoSelect === 0 && bojProbData?.level ? (
-        <ProbSummary>
-          <div>
-            <RenderSvg svgName={bojProbData.level} />
-            <span>
-              {bojProbData?.problemId}번 {bojProbData?.titleKo}
-            </span>
-          </div>
-        </ProbSummary>
-      ) : leetProbData?.question.questionId ? (
-        <ProbSummary>
-          <div>
-            <span>
-              <Chip
-                label={leetProbData?.question.difficulty}
-                color={
-                  leetProbData?.question.difficulty === 'Easy'
-                    ? 'success'
-                    : leetProbData?.question.difficulty === 'Medium'
-                    ? 'warning'
-                    : 'error'
-                }
-              />{' '}
-              {leetProbData?.question.questionId}번{' '}
-              {leetProbData?.question.title}
-            </span>
-          </div>
-        </ProbSummary>
-      ) : null}
 
       <AlgoInputWrap>
         <div>

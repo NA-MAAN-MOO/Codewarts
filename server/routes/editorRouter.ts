@@ -3,6 +3,7 @@ import {
   createRoom,
   compileCode,
   getBojProbData,
+  getProbData,
   origin,
 } from '../controllers/editorController';
 
@@ -18,5 +19,8 @@ router.post('/code_to_run', compileCode);
 
 /* 백준 문제 몽고DB 요청에 보내는 응답 */
 router.get('/bojdata', getBojProbData);
+
+/* 백준 문제 몽고DB 요청에 보내는 응답 */
+router.post('/probdata', getProbData);
 
 export default router;
