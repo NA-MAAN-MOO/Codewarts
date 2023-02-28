@@ -222,7 +222,12 @@ function YjsCodeMirror(props: YjsProp) {
       <ToastContainer />
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <AppBar position="fixed" open={leftOpen} color="transparent">
+        <AppBar
+          position="fixed"
+          open={leftOpen}
+          color="transparent"
+          className="AppBar"
+        >
           <Toolbar>
             <IconButton
               color="inherit"

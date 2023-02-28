@@ -142,6 +142,7 @@ const Editor = (props: VoiceProp & YjsProp) => {
                     onClick={handleExit}
                   />
                   <IconButton
+                    className="1313131313"
                     color="secondary"
                     aria-label="open drawer"
                     edge="end"

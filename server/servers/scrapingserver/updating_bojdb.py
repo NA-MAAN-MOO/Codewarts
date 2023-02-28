@@ -12,8 +12,8 @@ collection = db.probs
 # 백준 서버에 요청
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
-s = 3001    # 시작문제넘버
-e = 3700    # 종료문제넘버
+s = 22247    # 시작문제넘버
+e = 22500    # 종료문제넘버
 
 miss = []
 
@@ -40,7 +40,7 @@ for num in range(s, e+1):
 
     # print the result of the update operation
     print(num, ":", result.modified_count)
-    time.sleep(0.3)
+    # time.sleep(1)
 
 
 print(miss)
