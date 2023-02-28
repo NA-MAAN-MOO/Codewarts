@@ -68,6 +68,8 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+const APPLICATION_YJS_URL =
+  process.env.REACT_APP_YJS_URL || 'ws://localhost:1234/';
 
 function YjsCodeMirror(props: YjsProp) {
   /* ref */
@@ -126,7 +128,7 @@ function YjsCodeMirror(props: YjsProp) {
     if (!ydoc) return;
     handleProvider(
       new WebsocketProvider(
-        `ws://localhost:1234/`, // serverUrl
+        `${APPLICATION_YJS_URL}`, // serverUrl
         roomName,
         ydoc
         // { params: { auth: editorName } } // Specify a query-string that will be url-encoded and attached to the `serverUrl`

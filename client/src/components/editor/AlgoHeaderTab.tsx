@@ -1,5 +1,4 @@
 import axios from 'axios';
-
 /* GraphQL queries */
 import PROBLEMQUERY from '../../graphql/problemQuery';
 import {
@@ -9,6 +8,10 @@ import {
   AlgoInputWrap,
   AlgoTextField,
 } from '../../../src/pages/editor/editorStyle';
+import { useEffect } from 'react';
+
+const APPLICATION_EDITOR_URL =
+  process.env.REACT_APP_EDITOR_URL || 'http://localhost:3001';
 
 //@ts-ignore
 function AlgoHeaderTab(props) {
@@ -35,7 +38,7 @@ function AlgoHeaderTab(props) {
 
     try {
       const response = await axios.get(
-        `http://localhost:3001/bojdata?probId=${probId}`
+        `${APPLICATION_EDITOR_URL}/bojdata?probId=${probId}`
       );
 
       let probFullData = response.data[0];
@@ -104,6 +107,10 @@ function AlgoHeaderTab(props) {
       }
     }
   };
+
+  useEffect(() => {
+    return setBojProbFullData(null);
+  }, []);
 
   return (
     <HeaderTab>

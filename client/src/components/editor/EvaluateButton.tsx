@@ -4,7 +4,6 @@ import Tooltip from '@mui/material/Tooltip';
 import Button from '@mui/material/Button';
 import { useSelector } from 'react-redux';
 import { RootState } from 'stores';
-
 /* toast */
 import { notifySuccess, notifyFail } from './toast';
 //@ts-ignore
@@ -12,6 +11,9 @@ import missSoundFile from '../../assets/sound_effect/miss_sound.mp3';
 //@ts-ignore
 import hitSoundFile from '../../assets/sound_effect/hit_sound.mp3';
 import SoundPlayer from 'hooks/useSoundPlayer';
+
+const APPLICATION_EDITOR_URL =
+  process.env.REACT_APP_EDITOR_URL || 'http://localhost:3001';
 
 //@ts-ignore
 function EvaluateButton(props) {
@@ -79,11 +81,14 @@ function EvaluateButton(props) {
           break;
         }
 
-        const { data } = await axios.post(`http://localhost:3001/code_to_run`, {
-          codeToRun: ytext.toString(),
-          //@ts-ignore
-          stdin: fetchInput,
-        });
+        const { data } = await axios.post(
+          `${APPLICATION_EDITOR_URL}/code_to_run`,
+          {
+            codeToRun: ytext.toString(),
+            //@ts-ignore
+            stdin: fetchInput,
+          }
+        );
 
         const fetchOutput = await fetchInputFileText(
           `assets/olympiad/${bojProbData?.problemId}/${i}.out`

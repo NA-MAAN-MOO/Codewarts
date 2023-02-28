@@ -1,10 +1,17 @@
-import requests
-from bs4 import BeautifulSoup
-import json
+import os
+import time
 from pymongo import MongoClient
+import json
+from bs4 import BeautifulSoup
+import requests
+from dotenv import load_dotenv
+# load .env
+load_dotenv()
+
+mongoPassword = os.environ.get('mongoPassword')
 
 client = MongoClient(
-    'mongodb+srv://juncheol:0000@cluster0.v0izvl3.mongodb.net/?retryWrites=true&w=majority')
+    f'mongodb+srv://juncheol:{mongoPassword}@cluster0.v0izvl3.mongodb.net/?retryWrites=true&w=majority')
 db = client.codewart
 collection = db.probs
 

@@ -1,18 +1,26 @@
-import requests
-from bs4 import BeautifulSoup
-import json
-from pymongo import MongoClient
+import os
 import time
+from pymongo import MongoClient
+import json
+from bs4 import BeautifulSoup
+import requests
+from dotenv import load_dotenv
+# load .env
+load_dotenv()
+
+
+mongoPassword = os.environ.get('mongoPassword')
+
 
 client = MongoClient(
-    'mongodb+srv://juncheol:0000@cluster0.v0izvl3.mongodb.net/?retryWrites=true&w=majority')
+    f'mongodb+srv://juncheol:{mongoPassword}@cluster0.v0izvl3.mongodb.net/?retryWrites=true&w=majority')
 db = client.codewart
 collection = db.probs
 
 # 백준 서버에 요청
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
-s = 16785    # 시작문제넘버
+s = 17682    # 시작문제넘버
 e = 19999    # 종료문제넘버
 
 miss = []
