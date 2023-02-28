@@ -4,6 +4,7 @@ import { AddBox } from '@mui/icons-material';
 import styled from 'styled-components';
 
 export default function AddButton(props: any) {
+  //TODO: 메모 추가하면 프레임 하나 생기고, 리덕스에 저장해두었다가, onChange시 DB에 저장
   const { addMemo } = props;
 
   return (

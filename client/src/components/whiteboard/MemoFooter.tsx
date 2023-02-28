@@ -6,10 +6,12 @@ import Typography from '@mui/material/Typography';
 import Checkbox from '@mui/material/Checkbox';
 import styled from 'styled-components';
 
-export default function MemoFooter() {
+export default function MemoFooter(props: any) {
+  const { id, participants } = props;
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [checked, setChecked] = useState<boolean>(true);
 
+  /* Popover functions */
   const handlePopoverOpen = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -20,11 +22,14 @@ export default function MemoFooter() {
 
   const open = Boolean(anchorEl);
 
+  /* Checkbox function */
+  // TODO: 한 번 체크하면 다시 체크 해제 못하게 하기? 아니면 체크 상태에 따라 participant에 넣어줘야 함
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
   };
 
-  function stringToColor() {
+  /* Avatar function */
+  function generateColor() {
     let color = '#';
 
     let randomColor = Math.floor(Math.random() * 16777215).toString(16);
@@ -47,64 +52,44 @@ export default function MemoFooter() {
           '&': { border: 'none' },
         }}
       >
-        <Avatar
-          {...stringAvatar('TODO: map 돌려서 사람 추가')}
-          sx={{
-            fontSize: '1em',
-            fontWeight: '700',
-            // background: `${stringToColor()}`,
-            '&': {
-              border: 'none',
-              background: `${stringToColor()}`,
-            },
-          }}
-          onMouseEnter={handlePopoverOpen}
-          onMouseLeave={handlePopoverClose}
-        />
-        <Popover
-          id="mouse-over-popover"
-          sx={{
-            pointerEvents: 'none',
-          }}
-          open={open}
-          anchorEl={anchorEl}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'left',
-          }}
-          transformOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left',
-          }}
-          onClose={handlePopoverClose}
-          disableRestoreFocus
-        >
-          <Typography sx={{ p: 1 }}>TODO: 변수 추가하기</Typography>
-        </Popover>
-        <Avatar
-          {...stringAvatar('ef')}
-          sx={{
-            fontSize: '1em',
-            fontWeight: '700',
-            background: `${stringToColor()}`,
-          }}
-        />
-        <Avatar
-          {...stringAvatar('ef')}
-          sx={{
-            fontSize: '1em',
-            fontWeight: '700',
-            background: `${stringToColor()}`,
-          }}
-        />
-        <Avatar
-          {...stringAvatar('ef')}
-          sx={{
-            fontSize: '1em',
-            fontWeight: '700',
-            background: `${stringToColor()}`,
-          }}
-        />
+        {participants.map((participant: any) => (
+          <>
+            <Avatar
+              {...stringAvatar(`${participant.nickname}`)}
+              sx={{
+                fontSize: '1em',
+                fontWeight: '700',
+                // background: `${stringToColor()}`,
+                '&': {
+                  border: 'none',
+                  background: `${generateColor()}`,
+                },
+              }}
+              onMouseEnter={handlePopoverOpen}
+              onMouseLeave={handlePopoverClose}
+            />
+            <Popover
+              id="mouse-over-popover"
+              sx={{
+                pointerEvents: 'none',
+              }}
+              open={open}
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              transformOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+              onClose={handlePopoverClose}
+              disableRestoreFocus
+            >
+              <Typography sx={{ p: 1 }}>{participant.nickname}</Typography>
+            </Popover>
+          </>
+        ))}
       </AvatarGroup>
       <Checkbox
         checked={checked}

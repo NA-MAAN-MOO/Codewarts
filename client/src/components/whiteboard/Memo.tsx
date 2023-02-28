@@ -1,27 +1,57 @@
+import { useMemo, useRef, useEffect, useState, useCallback } from 'react';
+import { debounce } from 'lodash';
+import Draggable from 'react-draggable';
 import DragHandleIcon from '@mui/icons-material/DragHandle';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { debounce } from '@mui/material';
 import CardContent from '@mui/material/CardContent';
-import { useMemo, useRef, useEffect, useState } from 'react';
-import Draggable from 'react-draggable';
+import IconButton from '@mui/material/IconButton';
 import Card from '@mui/material/Card';
 import styled from 'styled-components';
-import IconButton from '@mui/material/IconButton';
 import MemoFooter from './MemoFooter';
 
 export default function Memo(props: any) {
-  const { content, editMemo, deleteMemo } = props;
+  const { item, editMemo, deleteMemo, setMemoSize } = props;
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
-  const trackPosition = (data: any) => {
-    setPosition({ x: data.x, y: data.y });
-  };
+  /* Track position of draggable memo */
+  const onChangePosition = useCallback(
+    (data: any) => setPosition({ x: data.x, y: data.y }),
+    [item.id, setPosition]
+  );
+
+  /* When the content of memo changes, 
+     it will be saved to DB automatically 
+     every five seconds*/
+  const onChangeContent = useMemo(
+    () =>
+      debounce((e) => {
+        console.log('실질적으로 edit하는 함수 추가.. 바뀐 내용은 아래');
+        editMemo();
+        console.log(e.target.value);
+      }, 500),
+    []
+  );
+
+  /* observer? */
+  const onChangeSize = useMemo(
+    () =>
+      debounce((entry) => {
+        const { width, height } = entry[0].contentRect;
+        setMemoSize(item.id, width, height);
+      }, 100),
+    [item.id, setMemoSize]
+  );
+
+  const onClickDelete = useCallback(
+    () => deleteMemo(item.id),
+    [item.id, deleteMemo]
+  );
 
   return (
     <Draggable
       defaultPosition={{ x: 80, y: 80 }}
       handle="#draggable-dialog-title"
-      onDrag={(e, data) => trackPosition(data)}
+      onDrag={(e, data) => onChangePosition(data)}
     >
       <Card sx={{ width: '240px', minHeight: '240px', background: '#ffe552' }}>
         <CardContent>
@@ -30,20 +60,16 @@ export default function Memo(props: any) {
             <IconButton
               aria-label="delete"
               size="small"
-              //   onClick={deleteMemo}
+              onClick={onClickDelete}
               color="secondary"
               sx={{ float: 'right', marginTop: '-5px' }}
             >
               <DeleteForeverIcon htmlColor="#ffffff" viewBox="0 0 25 25 " />
             </IconButton>
           </DraggableRange>
-          <MemoContent
-            // placeholder=""
-            defaultValue={content}
-            //   onChange={editMemo}
-          />
+          <MemoContent defaultValue={item.content} onChange={onChangeContent} />
         </CardContent>
-        <MemoFooter />
+        <MemoFooter id={item.id} participants={item.participants} />
       </Card>
     </Draggable>
   );
