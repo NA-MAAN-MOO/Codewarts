@@ -6,12 +6,6 @@ import { GameVoiceType } from 'types';
 import { MUTE_TYPE } from 'utils/Constants';
 import MicIcon from 'components/MicIcon';
 import VolumeIcon from 'components/VolumeIcon';
-import {
-  toggleMyMicMute,
-  toggleMyVolMute,
-  toggleVolMute,
-  toggleMicMute,
-} from 'stores/chatSlice';
 import useVoice from 'hooks/useVoice';
 import { styledTheme } from 'styles/theme';
 
