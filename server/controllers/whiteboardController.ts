@@ -81,11 +81,11 @@ export const getUsersBojInfo = async (req: Request, res: Response) => {
 };
 
 /* Save memo to DB */
-export const fetchMemo = async (req: Request, res: Response) => {
+export const addMemo = async (req: Request, res: Response) => {
   const memo = new Memo({
-    date: req.body.date,
     authorId: req.body.authorId,
-    content: req.body.content,
+    authorNickname: req.body.authorNickname,
+    content: '',
     x: req.body.x,
     y: req.body.y,
   });
@@ -97,7 +97,7 @@ export const fetchMemo = async (req: Request, res: Response) => {
     })
     .catch((e) => {
       console.error(e);
-      res.status(400).json({ message: '메모 저장 실패' });
+      res.status(400).json({ message: '메모 추가 실패' });
     });
 };
 
@@ -112,9 +112,12 @@ export const getMemo = async (req: Request, res: Response) => {
   }
 };
 
-/* Change memo content */
-export const changeMemo = async (req: Request, res: Response) => {
-  await Memo.updateOne({ _id: req.params.id }, { content: req.body.content })
+/* Change memo content or position */
+export const updateMemo = async (req: Request, res: Response) => {
+  await Memo.updateOne(
+    { _id: req.body.id },
+    { content: req.body.content, x: req.body.x, y: req.body.y }
+  )
     .then((result) => {
       res.status(200).json(result);
     })
@@ -122,4 +125,23 @@ export const changeMemo = async (req: Request, res: Response) => {
       console.error(e);
       res.status(400).json({ message: '메모 수정 실패' });
     });
+};
+
+export const participateInMemo = async (req: Request, res: Response) => {
+  await Memo.updateOne(
+    { _id: req.body.id },
+    { participants: [...req.body.participants] }
+  )
+    .then((result) => {
+      res.status(200).json(result);
+    })
+    .catch((e) => {
+      console.error(e);
+      res.status(400).json({ message: '참여 실패' });
+    });
+};
+
+/* Delete a memo */
+export const deleteMemo = async (req: Request, res: Response) => {
+  await Memo.remove({ _id: req.body.id });
 };
