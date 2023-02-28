@@ -531,7 +531,7 @@ export default class MainScene extends Phaser.Scene {
 
         //emoji
         otherPlayer.playerDialogBubble?.setPosition(
-          payLoad.x - otherPlayer.width,
+          payLoad.x - otherPlayer.width / 1.5,
           payLoad.y - otherPlayer.height - 80
         );
       }

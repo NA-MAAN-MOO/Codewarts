@@ -37,16 +37,6 @@ const Game = (props: VoiceProp) => {
       <ToastContainer />
       <div id="profile">
         <Voice {...props} />
-        <button
-          onClick={() => {
-            mySocket?.emit('sendEmoji', {
-              socketId: phaserGame.socketId,
-              emoji: '🤣',
-            });
-          }}
-        >
-          smile
-        </button>
       </div>
       <BtnDiv>
         {/* <Button
