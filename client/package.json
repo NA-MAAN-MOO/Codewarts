@@ -40,6 +40,7 @@
     "phaser": "^3.55.2",
     "phaser-matter-collision-plugin": "^1.0.0",
     "react": "^18.2.0",
+    "react-color": "^2.19.3",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.1",
     "react-redux": "^8.0.5",
@@ -81,6 +82,7 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.191",
+    "@types/react-color": "^3.0.6",
     "@types/styled-components": "^5.1.26"
   }
 }
