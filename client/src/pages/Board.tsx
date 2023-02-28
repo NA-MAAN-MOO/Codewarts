@@ -251,7 +251,6 @@ const Board = (props: any) => {
           sx={{ fontSize: 40 }}
         />
         <DeleteForeverIcon
-          // onClick={removeCanvas}
           className="palleteBtn removeBtn"
           sx={{ fontSize: 40 }}
         />
@@ -276,7 +275,7 @@ const PalleteWrapper = styled.div`
 const CircleWrapper = styled.div<{ toggle: boolean; palleteWidth: number }>`
   display: flex;
   height: 100%;
-  width: ${(props) => (props.toggle ? '0%' : `${props.palleteWidth}px`)};
+  width: ${(props) => (props.toggle ? `${props.palleteWidth}px` : '0%')};
   overflow: hidden;
   transition: all 1s;
 `;
