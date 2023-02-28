@@ -4,16 +4,34 @@ import Chip from '@mui/material/Chip';
 
 //@ts-ignore
 function ProbTitle(props) {
-  const { algoSelect, bojProbData, leetProbData, bojProblemId } = props;
+  const {
+    algoSelect,
+    bojProbData,
+    leetProbData,
+    bojProblemId,
+    bojProbFullData,
+  } = props;
+
+  // console.log('probtitle 호출~', bojProbFullData);
 
   return (
     <>
-      {algoSelect === 0 && bojProbData?.titleKo ? (
+      {algoSelect === 0 &&
+      (bojProbData?.titleKo || bojProbFullData?.solvedAC?.titleKo) ? (
         <ProbSummary>
           <div>
-            <RenderSvg svgName={bojProbData.level} />
+            <RenderSvg
+              svgName={
+                bojProbFullData.solvedAC.level
+                  ? bojProbFullData.solvedAC.level
+                  : bojProbData.level
+              }
+            />
             <span>
-              {bojProblemId}번 {bojProbData?.titleKo}
+              {bojProblemId}번{' '}
+              {bojProbFullData?.solvedAC?.titleKo
+                ? bojProbFullData?.solvedAC?.titleKo
+                : bojProbData?.titleKo}
             </span>
           </div>
         </ProbSummary>

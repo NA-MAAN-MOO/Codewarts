@@ -12,8 +12,8 @@ collection = db.probs
 # 백준 서버에 요청
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
-s = 5496    # 시작문제넘버
-e = 6000    # 종료문제넘버
+s = 15884    # 시작문제넘버
+e = 19999    # 종료문제넘버
 
 miss = []
 
@@ -25,6 +25,7 @@ for num in range(s, e+1):
         miss.append(num)
         if (data2.status_code == 429):
             print(num, ":", "too many requests")
+            break
         else:
             print(num, ":", "something is wrong")
         continue

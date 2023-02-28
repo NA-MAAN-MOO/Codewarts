@@ -254,6 +254,7 @@ function YjsCodeMirror(props: YjsProp) {
               bojProbData={bojProbData}
               bojProblemId={bojProblemId}
               leetProbData={leetProbData}
+              bojProbFullData={bojProbFullData}
             />
             <IconButton onClick={handleLeftDrawerClose}>
               {theme.direction === 'ltr' ? (
@@ -275,6 +276,7 @@ function YjsCodeMirror(props: YjsProp) {
               <SearchModal
                 setBojProbFullData={setBojProbFullData}
                 setBojProblemId={setBojProblemId}
+                setAlgoSelect={setAlgoSelect}
               />
               <AlgoHeaderTab
                 algoSelect={algoSelect}

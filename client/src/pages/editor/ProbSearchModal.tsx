@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
@@ -9,6 +9,7 @@ import Pagination from '@mui/material/Pagination';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+import RenderSvg from 'components/Svg';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -25,7 +26,7 @@ const style = {
 };
 
 export default function SearchModal(props: any) {
-  const { setBojProbFullData, setBojProblemId } = props;
+  const { setBojProbFullData, setBojProblemId, setAlgoSelect } = props;
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -49,7 +50,6 @@ export default function SearchModal(props: any) {
       setPagedProbData(response.data.payload.pagedDocs);
       setTotalPages(response.data.payload.totalPages);
       console.log(pagedProbData);
-      // console.log(response.data.totalPages);
     } catch (error) {
       console.error(error);
     }
@@ -60,9 +60,13 @@ export default function SearchModal(props: any) {
     fetchFilteredData(filter, page);
   };
 
+  useEffect(() => {
+    return setBojProbFullData(null);
+  }, []);
+
   return (
     <div>
-      <Button onClick={handleOpen} color="error">
+      <Button onClick={handleOpen} color="error" variant="outlined">
         문제검색
       </Button>
       <Modal
@@ -110,22 +114,32 @@ export default function SearchModal(props: any) {
                   py: 0,
                   minHeight: 32,
                   color: 'rgba(255,255,255,.8)',
-                  // border: '1px solid purple',
                 }}
                 onClick={() => {
                   //@ts-ignore
-                  console.log(pagedProbData[key], value?.probId);
+                  // console.log(pagedProbData[key], value?.probId);
                   //@ts-ignore
                   setBojProblemId(value?.probId);
                   //@ts-ignore
                   setBojProbFullData(pagedProbData[key]);
+                  setAlgoSelect(0);
                   // todo; 여기서 algoSelect 값을 0 혹은 1로 세팅도 해줄 것!
                 }}
               >
-                <ListItemIcon sx={{ color: 'inherit' }}>🏆</ListItemIcon>
+                <ListItemIcon sx={{ color: 'inherit' }}>
+                  {
+                    //@ts-ignore
+                    value.solvedAC.level ? (
+                      //@ts-ignore
+                      <RenderSvg svgName={value?.solvedAC?.level} />
+                    ) : (
+                      '🏆'
+                    )
+                  }
+                </ListItemIcon>
                 <ListItemText
                   //@ts-ignore
-                  primary={`${value?.probId}번`}
+                  primary={`${value?.probId}번 ${value?.solvedAC?.titleKo}`}
                   primaryTypographyProps={{
                     fontSize: 18,
                     fontWeight: 'medium',
@@ -134,14 +148,16 @@ export default function SearchModal(props: any) {
               </ListItemButton>
             ))}
           </div>
-          {pagedProbData ? (
-            <Pagination
-              count={totalPages}
-              onChange={(event, page) => handlePageChange(page)}
-            />
-          ) : (
-            <div></div>
-          )}
+          <div style={{ border: '1px solid green' }}>
+            {pagedProbData ? (
+              <Pagination
+                count={totalPages}
+                onChange={(event, page) => handlePageChange(page)}
+              />
+            ) : (
+              <div></div>
+            )}
+          </div>
         </Box>
       </Modal>
     </div>

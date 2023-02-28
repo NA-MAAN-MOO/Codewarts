@@ -11,7 +11,6 @@ export default function LimitTags(props: any) {
       id="multiple-limit-tags"
       options={algoFilter}
       getOptionLabel={(option) => option.tag}
-      //   defaultValue={[algoFilter[0], algoFilter[2]]}
       renderInput={(params) => (
         <TextField
           {...params}
