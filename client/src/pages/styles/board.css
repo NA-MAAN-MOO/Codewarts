@@ -32,4 +32,10 @@
   color: aliceblue;
   bottom: 0;
   margin-bottom: 7px;
+  cursor: pointer;
+}
+
+.palleteBtn:hover {
+  scale: 1.2;
+  transition: all 0.2s;
 }
