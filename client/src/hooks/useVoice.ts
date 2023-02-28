@@ -174,7 +174,6 @@ export default () => {
     handlePublisher: Function;
     OV: OpenVidu | undefined;
     userName: string;
-    subscribers: Subscriber[];
   }) => {
     const {
       session,
@@ -184,7 +183,6 @@ export default () => {
       OV,
       userName,
       handlePublisher,
-      subscribers,
     } = props;
     try {
       if (!session || !sessionId) return;
@@ -282,6 +280,11 @@ export default () => {
       mySession.on(`signal:${MUTE_TYPE.SET_VOL}`, async (event) => {
         //로직
         const user = event.data;
+        const targetSession = event.target as Session;
+        const subscribers = targetSession.streamManagers.filter((sm) => {
+          //Subscriber는 streaManager의 remote가 true, Publisher는 remote가 false임
+          return sm.remote;
+        }) as Subscriber[];
         if (!user || user !== userName) {
           return;
         }
@@ -291,7 +294,15 @@ export default () => {
       //방장이 내게 마이크 음소거를 시켰을 때
       mySession.on(`signal:${MUTE_TYPE.SET_MIC}`, async (event) => {
         //로직
+        console.log('내 마이크 뮤트 처리함');
+        console.log('이벤트', event);
         const user = event.data;
+        // const targetSession = event.target as Session;
+        // const publishers = targetSession.streamManagers.filter((sm) => {
+        //   //Subscriber는 streaManager의 remote가 true, Publisher는 remote가 false임
+        //   return !sm.remote;
+        // }) as Publisher[];
+        // console.log('제공자들', publishers);
         if (!user || !pubNow || user !== userName) {
           return;
         }
