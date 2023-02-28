@@ -44,7 +44,7 @@ for num in range(s, e+1):
 
     # print the result of the update operation
     print(num, ":", result.modified_count)
-    # time.sleep(0.5)
+    # time.sleep(1)
 
 
 print(miss)
