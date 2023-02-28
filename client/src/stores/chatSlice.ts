@@ -5,7 +5,7 @@ import { CharInfoType, MuteInfoType } from 'types';
 import { Session } from 'openvidu-browser';
 import axios from 'axios';
 
-const APPLICATION_SERVER_URL =
+const APPLICATION_VOICE_URL =
   process.env.REACT_APP_VOICE_URL || 'http://localhost:3002';
 
 export interface ChatState {
@@ -20,7 +20,7 @@ export interface ChatState {
 export const fetchMuteInfo = createAsyncThunk(
   'char/fetchMuteInfo',
   async () => {
-    const { data } = await axios.get(`${APPLICATION_SERVER_URL}/get-mute-info`);
+    const { data } = await axios.get(`${APPLICATION_VOICE_URL}/get-mute-info`);
     return data;
   }
 );
@@ -62,6 +62,16 @@ export const chatSlice = createSlice({
     toggleMyMicMute: (state) => {
       state.myMicMute = !state.myMicMute;
     },
+    initialMyMute: (state, action) => {
+      const me = action.payload;
+      console.log(me);
+      if (state.volMuteInfo[me]) {
+        state.myVolMute = true;
+      }
+      if (state.micMuteInfo[me]) {
+        state.myMicMute = true;
+      }
+    },
     // setSession: (state, action) => {
     //   const serializedSession = JSON.stringify(action.payload);
     //   state.sessionNow = serializedSession;
@@ -98,6 +108,7 @@ export const {
   toggleMicMute,
   toggleMyVolMute,
   toggleMyMicMute,
+  initialMyMute,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

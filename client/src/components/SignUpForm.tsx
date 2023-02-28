@@ -11,6 +11,9 @@ import { styledTheme } from 'styles/theme';
 import MySnackbar from './MySnackbar';
 import { ThemeProvider } from '@mui/system';
 
+const APPLICATION_DB_URL =
+  process.env.REACT_APP_DB_URL || 'http://localhost:3003';
+
 export default function FormDialog() {
   const [openSignUpForm, setOpenSignUpForm] = React.useState(false);
 
@@ -34,7 +37,7 @@ export default function FormDialog() {
         userLeetId: userForm.userLeetId,
       };
       const signUpResponse = await axios.post(
-        'http://localhost:3003/user/signup',
+        `${APPLICATION_DB_URL}/user/signup`,
         body
       );
       console.log(signUpResponse.data);
@@ -155,7 +158,7 @@ export default function FormDialog() {
               margin="dense"
               id="name"
               label="비밀번호"
-              type="text"
+              type="password"
               fullWidth
               variant="standard"
               onInput={(e) => {

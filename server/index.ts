@@ -31,9 +31,9 @@ app.use(cookieParser());
 
 /*********배포 시 설정들********* */
 //빌드하고 나서 주석 해제
-// app.use(express.static('../client/build'));
+// app.use(express.static(__dirname + '/../../client/build'));
 // app.get('/', function (req, res) {
-//   res.sendFile('../client/build/index.html');
+//   res.sendFile(__dirname + '/../../client/build/index.html');
 // });
 
 //db connect
@@ -127,15 +127,15 @@ io.on('connection', (socket: Socket) => {
     // tables에 '내' 에디터가 있는지 검사하고, 있다면 삭제
     // FIXME: removeEditor를 클라이언트에 쏴주면 클라에서 나오게?
     // 그러면 '내가 누구 꺼 보는지'를 알아야겠다.
-    console.log('removeEditor');
+
     tables.forEach((table) => {
-      if (table[2] === playerInfo.userName) {
-        socket.broadcast.emit('removeEditor', table);
-        socket.emit('removeEditor', table);
+      if (table[3] === socket.id) {
+        console.log('removeEditor');
+        io.emit('removeEditor', table);
       }
     });
     tables = tables.filter((table) => {
-      table[2] !== playerInfo.userName;
+      return table[3] !== socket.id;
     });
     console.log(tables);
     // '내'가 나가면 다른 유저들에게 '내' 정보를 지우기 위한 통신을 한다.
@@ -201,7 +201,6 @@ io.on('connection', (socket: Socket) => {
   socket.on('addEditor', (payLoad) => {
     console.log('addEditor');
     // 누군가 editor에 들어가면 해당 table ID값과 자리(인덱스)값을 업데이트 한다.
-    //FIXME:
     tables.push([
       payLoad.id,
       payLoad.idx,
@@ -213,7 +212,6 @@ io.on('connection', (socket: Socket) => {
       id: payLoad.id,
       idx: payLoad.idx,
       userName: playerInfo.userName,
-      //FIXME:
       socketId: payLoad.socketId,
     };
     socket.broadcast.emit('updateEditor', payLoad2);
@@ -227,7 +225,6 @@ io.on('connection', (socket: Socket) => {
         id: table[0],
         idx: table[1],
         userName: table[2],
-        //FIXME:
         // socketId: playerInfo.socketId,
         socketId: table[3],
       };

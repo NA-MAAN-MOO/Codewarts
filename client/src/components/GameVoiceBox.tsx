@@ -24,13 +24,13 @@ const GameVoiceBox = ({
   const { handleMyVolumeMute, handleMyMicMute } = useVoice();
 
   //볼륨 음소거 처리
-  const handleVolume = () => {
-    handleMyVolumeMute({ session, subscribers });
+  const handleVolume = async () => {
+    await handleMyVolumeMute({ session, subscribers });
   };
 
   //마이크 음소거 처리
-  const handleMic = () => {
-    handleMyMicMute({ publisher, session });
+  const handleMic = async () => {
+    await handleMyMicMute({ publisher, session });
   };
 
   const VolumeSet = () => (

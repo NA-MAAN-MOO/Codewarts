@@ -25,6 +25,9 @@ export const modeSlice = createSlice({
     openLobby: (state) => {
       state.status = GAME_STATUS.LOBBY;
     },
+    openWhiteboard: (state) => {
+      state.status = GAME_STATUS.WHITEBOARD;
+    },
     // incrementByAmount: (state, action: PayloadAction<number>) => {
     //   state.value += action.payload
     // },
@@ -32,6 +35,7 @@ export const modeSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { openStart, openGame, openEditor, openLobby } = modeSlice.actions;
+export const { openStart, openGame, openEditor, openLobby, openWhiteboard } =
+  modeSlice.actions;
 
 export default modeSlice.reducer;

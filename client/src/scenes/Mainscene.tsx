@@ -7,7 +7,7 @@ import Table from 'objects/Table';
 import Resource from '../objects/Resources';
 import { io, Socket } from 'socket.io-client';
 import store from 'stores';
-import { openEditor, openGame } from 'stores/modeSlice';
+import { openEditor, openGame, openWhiteboard } from 'stores/modeSlice';
 import { setEditorName, setUserName } from 'stores/editorSlice';
 // import { addUser, removeUser } from 'stores/chatSlice';
 import { GAME_STATUS } from 'utils/Constants';
@@ -325,8 +325,9 @@ export default class MainScene extends Phaser.Scene {
       Phaser.Geom.Intersects.RectangleToRectangle(boundWhiteboard, boundPlayer)
     ) {
       this.whiteboardButton.setVisible(true);
-      if (this.player.inputKeys.open.isDown) {
+      if (Phaser.Input.Keyboard.JustDown(this.player?.inputKeys.open)) {
         console.log('화이트보드에서 E 누름');
+        store.dispatch(openWhiteboard());
         this.player?.updateDialogBubble('🤣');
       }
     } else {

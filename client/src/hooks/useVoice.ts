@@ -21,7 +21,10 @@ import { Connection } from 'types';
 import _ from 'lodash';
 import { MUTE_TYPE } from 'utils/Constants';
 
-const APPLICATION_SERVER_URL =
+const APPLICATION_DB_URL =
+  process.env.REACT_APP_DB_URL || 'http://localhost:3003';
+
+const APPLICATION_VOICE_URL =
   process.env.REACT_APP_VOICE_URL || 'http://localhost:3002';
 
 export default () => {
@@ -34,7 +37,7 @@ export default () => {
   const getConnections = async (sessionId: string) => {
     try {
       const { data }: { data: Connection[] | false } = await axios.get(
-        `${APPLICATION_SERVER_URL}/get-connections`,
+        `${APPLICATION_VOICE_URL}/get-connections`,
         {
           params: { sessionId: sessionId },
         }
@@ -47,7 +50,7 @@ export default () => {
   };
   const getSessions = async () => {
     const { data } = await axios.get(
-      `${APPLICATION_SERVER_URL}/get-sessions`,
+      `${APPLICATION_VOICE_URL}/get-sessions`,
       {}
     );
     return data;
@@ -64,7 +67,7 @@ export default () => {
       filteredUser.map(async (user, index) => {
         const name = JSON.parse(user.clientData).user;
         const { data: char } = await axios.get(
-          `http://localhost:3003/user/get-char/${name}`
+          `${APPLICATION_DB_URL}/user/get-char/${name}`
         );
         if (!char) {
           return null;
@@ -101,7 +104,7 @@ export default () => {
   const createSession = async (sessionId: string) => {
     try {
       const data = await axios.post(
-        APPLICATION_SERVER_URL + '/create-session',
+        APPLICATION_VOICE_URL + '/create-session',
         {
           customSessionId: sessionId,
         },
@@ -151,7 +154,7 @@ export default () => {
     userName: string;
   }) => {
     const response = await axios.post(
-      APPLICATION_SERVER_URL +
+      APPLICATION_VOICE_URL +
         '/create-connection/' +
         sessionId +
         '/connections',
@@ -171,7 +174,6 @@ export default () => {
     handlePublisher: Function;
     OV: OpenVidu | undefined;
     userName: string;
-    subscribers: Subscriber[];
   }) => {
     const {
       session,
@@ -181,7 +183,6 @@ export default () => {
       OV,
       userName,
       handlePublisher,
-      subscribers,
     } = props;
     try {
       if (!session || !sessionId) return;
@@ -206,28 +207,6 @@ export default () => {
       }
 
       const mySession = session;
-
-      // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
-      // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
-      await mySession.connect(token, { user: userName });
-      if (!OV) return;
-      // Init a passing undefined as targetElement (we don't want OpenVidu to insert a video
-      // element: we will manage it on our own) and with the desired properties
-      let pubNow = await OV.initPublisherAsync(undefined, {
-        audioSource: undefined, // The source of audio. If undefined default microphone
-        videoSource: false, // The source of video. If undefined default webcam
-        publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
-        publishVideo: false, // Whether you want to start publishing with your video enabled or not
-        resolution: '640x480', // The resolution of your video
-        frameRate: 30, // The frame rate of your video
-        insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
-        mirror: false, // Whether to mirror your local video or not
-      });
-
-      // ---Publish your stream ---
-
-      await mySession.publish(pubNow);
-      handlePublisher(pubNow);
 
       // --- Specify the actions when events take place in the session ---
 
@@ -280,42 +259,78 @@ export default () => {
       });
 
       //유저가 볼륨 음소거를 했다는 시그널을 받았을 때
-      mySession.on(`signal:${MUTE_TYPE.VOL}`, (event) => {
+      mySession.on(`signal:${MUTE_TYPE.VOL}`, async (event) => {
         const user = event.data;
         if (!user) {
           return;
         }
-        toggleMute({ type: MUTE_TYPE.VOL, userName: user });
+        await toggleMute({ type: MUTE_TYPE.VOL, userName: user });
       });
 
       //유저가 마이크 음소거를 했다는 시그널을 받았을 때
-      mySession.on(`signal:${MUTE_TYPE.MIC}`, (event) => {
+      mySession.on(`signal:${MUTE_TYPE.MIC}`, async (event) => {
         const user = event.data;
         if (!user) {
           return;
         }
-        toggleMute({ type: MUTE_TYPE.MIC, userName: user });
+        await toggleMute({ type: MUTE_TYPE.MIC, userName: user });
       });
 
       //방장이 내게 볼륨 음소거를 시켰을 때
       mySession.on(`signal:${MUTE_TYPE.SET_VOL}`, async (event) => {
         //로직
         const user = event.data;
+        const targetSession = event.target as Session;
+        const subscribers = targetSession.streamManagers.filter((sm) => {
+          //Subscriber는 streaManager의 remote가 true, Publisher는 remote가 false임
+          return sm.remote;
+        }) as Subscriber[];
         if (!user || user !== userName) {
           return;
         }
-        handleMyVolumeMute({ subscribers, session });
+        await handleMyVolumeMute({ subscribers, session });
       });
 
       //방장이 내게 마이크 음소거를 시켰을 때
       mySession.on(`signal:${MUTE_TYPE.SET_MIC}`, async (event) => {
         //로직
+        console.log('내 마이크 뮤트 처리함');
+        console.log('이벤트', event);
         const user = event.data;
+        // const targetSession = event.target as Session;
+        // const publishers = targetSession.streamManagers.filter((sm) => {
+        //   //Subscriber는 streaManager의 remote가 true, Publisher는 remote가 false임
+        //   return !sm.remote;
+        // }) as Publisher[];
+        // console.log('제공자들', publishers);
         if (!user || !pubNow || user !== userName) {
           return;
         }
-        handleMyMicMute({ publisher: pubNow, session });
+        await handleMyMicMute({ publisher: pubNow, session });
       });
+
+      // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
+      // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
+      await mySession.connect(token, { user: userName });
+
+      if (!OV) return;
+      // Init a passing undefined as targetElement (we don't want OpenVidu to insert a video
+      // element: we will manage it on our own) and with the desired properties
+      let pubNow = await OV.initPublisherAsync(undefined, {
+        audioSource: undefined, // The source of audio. If undefined default microphone
+        videoSource: false, // The source of video. If undefined default webcam
+        publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+        publishVideo: false, // Whether you want to start publishing with your video enabled or not
+        resolution: '640x480', // The resolution of your video
+        frameRate: 30, // The frame rate of your video
+        insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
+        mirror: false, // Whether to mirror your local video or not
+      });
+
+      // ---Publish your stream ---
+
+      await mySession.publish(pubNow);
+      handlePublisher(pubNow);
     } catch (error) {
       console.log(error);
     }
@@ -356,7 +371,7 @@ export default () => {
   //   }
   // };
 
-  const toggleMute = ({
+  const toggleMute = async ({
     type,
     userName,
   }: {
@@ -364,9 +379,6 @@ export default () => {
     userName: string;
   }) => {
     try {
-      axios.post(`${APPLICATION_SERVER_URL}/toggle-mute/${type}`, {
-        userName: userName,
-      });
       if (type === MUTE_TYPE.VOL) {
         dispatch(toggleVolMute(userName));
       } else if (type === MUTE_TYPE.MIC) {
@@ -378,7 +390,7 @@ export default () => {
   };
 
   //내 볼륨 뮤트
-  const handleMyVolumeMute = ({
+  const handleMyVolumeMute = async ({
     subscribers,
     session,
   }: {
@@ -387,10 +399,14 @@ export default () => {
   }) => {
     if (!session) return;
     //false일 때 뮤트 처리됨
+    console.log('볼륨뮤트');
     subscribers.map((sm) => {
       sm.subscribeToAudio(myVolMute);
     });
     dispatch(toggleMyVolMute());
+    await axios.post(`${APPLICATION_VOICE_URL}/toggle-mute/${MUTE_TYPE.VOL}`, {
+      userName: playerId,
+    });
     session?.signal({
       type: MUTE_TYPE.VOL,
       data: playerId,
@@ -398,7 +414,7 @@ export default () => {
   };
 
   //내 마이크 뮤트
-  const handleMyMicMute = ({
+  const handleMyMicMute = async ({
     publisher,
     session,
   }: {
@@ -407,13 +423,16 @@ export default () => {
   }) => {
     if (!session || !publisher) return;
     //false일 때 뮤트 처리됨
+    console.log('마이크뮤트');
     publisher.publishAudio(myMicMute);
     dispatch(toggleMyMicMute());
+    await axios.post(`${APPLICATION_VOICE_URL}/toggle-mute/${MUTE_TYPE.MIC}`, {
+      userName: playerId,
+    });
     session?.signal({
       type: MUTE_TYPE.MIC,
       data: playerId,
     });
-    console.log('옴');
   };
 
   return {
