@@ -23,7 +23,11 @@ for num in range(s, e+1):
 
     if (data2.status_code != 200):
         miss.append(num)
-        print(num, ":", "something is wrong")
+        if (data2.status_code == 429):
+            print(num, ":", "too many requests")
+            break
+        else:
+            print(num, ":", "something is wrong")
         continue
 
     # Convert byte string to regular string
