@@ -11,11 +11,15 @@ import phaserGame from 'codeuk';
 const emojies = ['🤣', '🎉', '😡', '🤯', '🖐', '😭', '💩', '💯', '👍', '👎'];
 
 export default function SimplePopper() {
-  const mySocket = getPhaserSocket();
+  const mySocket = getPhaserSocket(); //!!
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [placement, setPlacement] = React.useState<PopperPlacementType>();
   const [open, setOpen] = React.useState(false);
-  const [selectedEmoji, setSelectedEmoji] = React.useState('');
+  let selectedEmoji = '';
+
+  function resetSelectedEmoji() {
+    selectedEmoji = '';
+  }
 
   const handleClick =
     (newPlacement: PopperPlacementType) =>
@@ -25,13 +29,13 @@ export default function SimplePopper() {
       setPlacement(newPlacement);
     };
 
-  const clickEmoji = (emoji: String) => {
-    setSelectedEmoji(emoji);
+  const clickEmoji = (emoji: string) => {
+    selectedEmoji = emoji;
     mySocket?.emit('sendEmoji', {
       socketId: phaserGame.socketId,
       emoji: selectedEmoji,
     });
-    setSelectedEmoji('');
+    resetSelectedEmoji();
   };
 
   return (

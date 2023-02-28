@@ -17,6 +17,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
   successEffect!: Phaser.GameObjects.Sprite;
   fire!: Phaser.GameObjects.Sprite;
   playerDialogBubble: Phaser.GameObjects.Container;
+  private timeoutID?: number;
 
   constructor(data: PlayerType) {
     let { scene, x, y, texture, id, name, frame } = data;
@@ -131,7 +132,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     }
     if (this.playerDialogBubble) {
       this.playerDialogBubble.setPosition(
-        this.x - this.width,
+        this.x - this.width / 1.5,
         this.y - this.height - 80
       );
     }
@@ -200,7 +201,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     this.clearDialogBubble();
 
     this.playerDialogBubble = this.scene.add
-      .text(this.x - this.width, this.y - this.height - 80, content)
+      .text(this.x - this.width / 2, this.y - this.height - 80, content)
       .setStyle({ fontSize: '60px', color: 'white' })
       .setDepth(50)
       .setPadding(5, 15, 5, 5);
@@ -254,15 +255,14 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     // console.log(this.playerDialogBubble);
 
     // // After 6 seconds, clear the dialog bubble
-    window.setTimeout(() => {
+    this.timeoutID = window.setTimeout(() => {
       this.clearDialogBubble();
-    }, 5000);
+    }, 3000);
   }
-
   private clearDialogBubble() {
+    clearTimeout(this.timeoutID);
     if (this.playerDialogBubble) {
       this.playerDialogBubble.destroy();
     }
-    // this.playerDialogBubble.removeAll(true);
   }
 }

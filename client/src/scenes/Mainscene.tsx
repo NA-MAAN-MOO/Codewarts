@@ -301,7 +301,6 @@ export default class MainScene extends Phaser.Scene {
     });
 
     phaserGame.socket?.on('getEmoji', (payload) => {
-      console.log(`${payload.emoji}`);
       if (payload.socketId === phaserGame.socketId) {
         this.player.updateDialogBubble(payload.emoji);
       } else {

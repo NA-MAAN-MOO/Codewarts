@@ -8,7 +8,7 @@ import { Theme } from '@mui/material/styles';
 import { truncate } from 'fs';
 import { Button } from '@mui/material';
 
-export default function SimpleZoom({clickEmoji, emojies }) {
+export default function SimpleZoom({ clickEmoji, emojies }) {
   const checked = true;
   const handleChange = () => {};
 
@@ -16,7 +16,11 @@ export default function SimpleZoom({clickEmoji, emojies }) {
     <Box sx={{ height: 36.7 }}>
       <Box sx={{ display: 'flex' }}>
         <Zoom in={checked}>
-          <Button onClick={clickEmoji(emojies[0])} variant="outlined" color="secondary">
+          <Button
+            onClick={() => clickEmoji(emojies[0])}
+            variant="outlined"
+            color="secondary"
+          >
             {emojies[0]}
           </Button>
         </Zoom>
@@ -24,7 +28,11 @@ export default function SimpleZoom({clickEmoji, emojies }) {
           in={checked}
           style={{ transitionDelay: checked ? '100ms' : '0ms' }}
         >
-          <Button onClick={clickEmoji(emojies[1])} variant="outlined" color="secondary">
+          <Button
+            onClick={() => clickEmoji(emojies[1])}
+            variant="outlined"
+            color="secondary"
+          >
             {emojies[1]}
           </Button>
         </Zoom>
@@ -32,7 +40,11 @@ export default function SimpleZoom({clickEmoji, emojies }) {
           in={checked}
           style={{ transitionDelay: checked ? '200ms' : '0ms' }}
         >
-          <Button onClick={clickEmoji(emojies[2])} variant="outlined" color="secondary">
+          <Button
+            onClick={() => clickEmoji(emojies[2])}
+            variant="outlined"
+            color="secondary"
+          >
             {emojies[2]}
           </Button>
         </Zoom>
@@ -40,7 +52,11 @@ export default function SimpleZoom({clickEmoji, emojies }) {
           in={checked}
           style={{ transitionDelay: checked ? '300ms' : '0ms' }}
         >
-          <Button onClick={clickEmoji(emojies[3])} variant="outlined" color="secondary">
+          <Button
+            onClick={() => clickEmoji(emojies[3])}
+            variant="outlined"
+            color="secondary"
+          >
             {emojies[3]}
           </Button>
         </Zoom>
@@ -48,7 +64,11 @@ export default function SimpleZoom({clickEmoji, emojies }) {
           in={checked}
           style={{ transitionDelay: checked ? '400ms' : '0ms' }}
         >
-          <Button onClick={clickEmoji(emojies[4])} variant="outlined" color="secondary">
+          <Button
+            onClick={() => clickEmoji(emojies[4])}
+            variant="outlined"
+            color="secondary"
+          >
             {emojies[4]}
           </Button>
         </Zoom>
@@ -56,7 +76,11 @@ export default function SimpleZoom({clickEmoji, emojies }) {
           in={checked}
           style={{ transitionDelay: checked ? '500ms' : '0ms' }}
         >
-          <Button onClick={clickEmoji(emojies[5])} variant="outlined" color="secondary">
+          <Button
+            onClick={() => clickEmoji(emojies[5])}
+            variant="outlined"
+            color="secondary"
+          >
             {emojies[5]}
           </Button>
         </Zoom>
@@ -64,7 +88,11 @@ export default function SimpleZoom({clickEmoji, emojies }) {
           in={checked}
           style={{ transitionDelay: checked ? '600ms' : '0ms' }}
         >
-          <Button onClick={clickEmoji(emojies[6])} variant="outlined" color="secondary">
+          <Button
+            onClick={() => clickEmoji(emojies[6])}
+            variant="outlined"
+            color="secondary"
+          >
             {emojies[6]}
           </Button>
         </Zoom>
@@ -72,7 +100,11 @@ export default function SimpleZoom({clickEmoji, emojies }) {
           in={checked}
           style={{ transitionDelay: checked ? '700ms' : '0ms' }}
         >
-          <Button onClick={clickEmoji(emojies[7])} variant="outlined" color="secondary">
+          <Button
+            onClick={() => clickEmoji(emojies[7])}
+            variant="outlined"
+            color="secondary"
+          >
             {emojies[7]}
           </Button>
         </Zoom>
@@ -80,7 +112,11 @@ export default function SimpleZoom({clickEmoji, emojies }) {
           in={checked}
           style={{ transitionDelay: checked ? '800ms' : '0ms' }}
         >
-          <Button onClick={clickEmoji(emojies[8])} variant="outlined" color="secondary">
+          <Button
+            onClick={() => clickEmoji(emojies[8])}
+            variant="outlined"
+            color="secondary"
+          >
             {emojies[8]}
           </Button>
         </Zoom>
@@ -88,7 +124,11 @@ export default function SimpleZoom({clickEmoji, emojies }) {
           in={checked}
           style={{ transitionDelay: checked ? '900ms' : '0ms' }}
         >
-          <Button onClick={clickEmoji(emojies[9])} variant="outlined" color="secondary">
+          <Button
+            onClick={() => clickEmoji(emojies[9])}
+            variant="outlined"
+            color="secondary"
+          >
             {emojies[9]}
           </Button>
         </Zoom>
