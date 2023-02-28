@@ -87,6 +87,7 @@ function YjsCodeMirror(props: YjsProp) {
   let [editorThemeMode, setEditorTheme] = useState(okaidia);
   let [leetProbData, setLeetProbData] = useState();
   let [bojProbData, setBojProbData] = useState();
+  let [bojProblemId, setBojProblemId] = useState();
   let [bojProbFullData, setBojProbFullData] = useState();
   let [markingPercent, setMarkingPercent] = useState(0);
   const [algoSelect, setAlgoSelect] = useState(0); // 백준(0), 리트코드(1)
@@ -251,6 +252,7 @@ function YjsCodeMirror(props: YjsProp) {
             <ProbTitle
               algoSelect={algoSelect}
               bojProbData={bojProbData}
+              bojProblemId={bojProblemId}
               leetProbData={leetProbData}
             />
             <IconButton onClick={handleLeftDrawerClose}>
@@ -270,7 +272,10 @@ function YjsCodeMirror(props: YjsProp) {
                 boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)',
               }}
             >
-              <SearchModal />
+              <SearchModal
+                setBojProbFullData={setBojProbFullData}
+                setBojProblemId={setBojProblemId}
+              />
               <AlgoHeaderTab
                 algoSelect={algoSelect}
                 setAlgoSelect={setAlgoSelect}
@@ -281,6 +286,8 @@ function YjsCodeMirror(props: YjsProp) {
                 bojProbDataRef={bojProbDataRef}
                 leetProbDataRef={leetProbDataRef}
                 setBojProbFullData={setBojProbFullData}
+                setBojProblemId={setBojProblemId}
+                bojProblemId={bojProblemId}
               />
               <AlgoInfoAccordion
                 inputStdin={inputStdin}
@@ -288,6 +295,7 @@ function YjsCodeMirror(props: YjsProp) {
                 leetProbData={leetProbData}
                 algoSelect={algoSelect}
                 bojProbFullData={bojProbFullData}
+                bojProblemId={bojProblemId}
               />
             </Box>
           </AlgoInfoWrap>

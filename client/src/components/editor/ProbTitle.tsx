@@ -4,7 +4,7 @@ import Chip from '@mui/material/Chip';
 
 //@ts-ignore
 function ProbTitle(props) {
-  const { algoSelect, bojProbData, leetProbData } = props;
+  const { algoSelect, bojProbData, leetProbData, bojProblemId } = props;
 
   return (
     <>
@@ -13,7 +13,7 @@ function ProbTitle(props) {
           <div>
             <RenderSvg svgName={bojProbData.level} />
             <span>
-              {bojProbData?.problemId}번 {bojProbData?.titleKo}
+              {bojProblemId}번 {bojProbData?.titleKo}
             </span>
           </div>
         </ProbSummary>

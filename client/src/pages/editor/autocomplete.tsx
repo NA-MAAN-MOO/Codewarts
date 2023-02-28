@@ -2,7 +2,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 
 export default function LimitTags(props: any) {
-  const { filterRef, filter, setFilter } = props;
+  const { setFilter } = props;
 
   return (
     <Autocomplete
@@ -10,7 +10,7 @@ export default function LimitTags(props: any) {
       limitTags={2}
       id="multiple-limit-tags"
       options={algoFilter}
-      getOptionLabel={(option) => option.filter}
+      getOptionLabel={(option) => option.tag}
       //   defaultValue={[algoFilter[0], algoFilter[2]]}
       renderInput={(params) => (
         <TextField
@@ -24,8 +24,6 @@ export default function LimitTags(props: any) {
       filterSelectedOptions={true}
       loadingText="Loading..."
       noOptionsText="no options"
-      //   value={filter}
-      //   ref={filterRef}
       onChange={(event, value) => {
         setFilter(value);
       }}
@@ -34,17 +32,18 @@ export default function LimitTags(props: any) {
 }
 
 const algoFilter = [
-  { filter: '백준' },
-  { filter: '리트코드' },
-  { filter: '브론즈' },
-  { filter: '실버' },
-  { filter: '골드' },
-  { filter: '플래티넘' },
-  { filter: '다이아몬드' },
-  { filter: '난이도 없음' },
-  { filter: 'easy' },
-  { filter: 'medium' },
-  { filter: 'difficult' },
-  { filter: '채점가능' },
-  { filter: '한국정보올림피아드' },
+  { tag: '백준' },
+  { tag: '리트코드' },
+  { tag: '브론즈' },
+  { tag: '실버' },
+  { tag: '골드' },
+  { tag: '플래티넘' },
+  { tag: '다이아몬드' },
+  { tag: '루비' },
+  { tag: '난이도 없음' },
+  { tag: 'easy' },
+  { tag: 'medium' },
+  { tag: 'difficult' },
+  { tag: '채점가능' },
+  { tag: '한국정보올림피아드' },
 ];

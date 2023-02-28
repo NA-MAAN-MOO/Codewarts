@@ -20,6 +20,8 @@ function AlgoHeaderTab(props) {
     bojProbDataRef,
     leetProbDataRef,
     setBojProbFullData,
+    bojProblemId,
+    setBojProblemId,
   } = props;
 
   //@ts-ignore
@@ -49,6 +51,7 @@ function AlgoHeaderTab(props) {
     if (bojProbDataRef.current === null) return;
 
     let probId = bojProbDataRef.current.value;
+    setBojProblemId(probId);
     console.log(probId);
 
     try {
