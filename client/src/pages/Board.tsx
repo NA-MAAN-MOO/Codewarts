@@ -4,7 +4,7 @@ import './styles/board.css';
 import styled from 'styled-components';
 import { CirclePicker } from 'react-color';
 import ColorLensIcon from '@mui/icons-material/ColorLens';
-import { pink } from '@mui/material/colors';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 const APPLICATION_BOARD_URL =
   process.env.REACT_APP_SERVER_URL || 'http://localhost:3004';
@@ -22,10 +22,6 @@ const Board = (props: any) => {
     const test = colorsRef.current;
     const context = canvas.getContext('2d');
 
-    // // Btn
-    // const Btn = document.getElementsByClassName('palleteBtn')[0];
-    // Btn.addEventListener('click', hadleToggle, false);
-
     // Colors
     const colors = document.getElementsByClassName('color');
     console.log(colors, 'the colors');
@@ -36,6 +32,12 @@ const Board = (props: any) => {
       x: 0,
       y: 0,
     };
+
+    const removeCanvas = () => {
+      canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+    };
+    const removeBtn = document.getElementsByClassName('removeBtn')[0];
+    removeBtn.addEventListener('click', removeCanvas, false);
 
     // helper that will update the current color
     const onColorUpdate = (e: any) => {
@@ -225,6 +227,7 @@ const Board = (props: any) => {
         (circleSize + circleSpacing)
     );
   };
+
   useEffect(() => {
     window.addEventListener('resize', updateWidth, false);
   }, []);
@@ -245,6 +248,11 @@ const Board = (props: any) => {
         <ColorLensIcon
           onClick={hadleToggle}
           className="palleteBtn"
+          sx={{ fontSize: 40 }}
+        />
+        <DeleteForeverIcon
+          // onClick={removeCanvas}
+          className="palleteBtn removeBtn"
           sx={{ fontSize: 40 }}
         />
       </PalleteWrapper>
