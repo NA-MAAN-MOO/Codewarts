@@ -94,18 +94,25 @@ function YjsCodeMirror(props: YjsProp) {
   const [undoManager, setUndoManager] = useState();
   const [ytext, setYtext] = useState();
 
-  const [leftOpen, setLeftOpen] = useState(false);
+  // const [leftOpen, setLeftOpen] = useState(false);
 
   const theme = useTheme();
 
-  const handleRightDrawerOpen = () => {
-    setLeftOpen(true);
-  };
-  const handleLeftDrawerClose = () => {
-    setLeftOpen(false);
-  };
+  // const handleRightDrawerOpen = () => {
+  //   setLeftOpen(true);
+  // };
+  // const handleLeftDrawerClose = () => {
+  //   setLeftOpen(false);
+  // };
 
-  const { handleProvider, provider } = props;
+  const {
+    handleProvider,
+    provider,
+    leftOpen,
+    setLeftOpen,
+    handleRightDrawerOpen,
+    handleLeftDrawerClose,
+  } = props;
   /* roomName 스트링 값 수정하지 말 것(※ 수정할 거면 전부 수정해야 함) */
   const roomName = `ROOMNAME${editorName}`;
 
@@ -222,24 +229,19 @@ function YjsCodeMirror(props: YjsProp) {
       <ToastContainer />
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <AppBar
-          position="fixed"
-          open={leftOpen}
-          color="transparent"
-          className="AppBar"
+        {/* <AppBar position="fixed" open={leftOpen} color="transparent">
+          <Toolbar> */}
+        {/* <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          onClick={handleRightDrawerOpen}
+          edge="start"
+          sx={{ mr: 2, ...(leftOpen && { display: 'none' }) }}
         >
-          <Toolbar>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleRightDrawerOpen}
-              edge="start"
-              sx={{ mr: 2, ...(leftOpen && { display: 'none' }) }}
-            >
-              <MenuIcon />
-            </IconButton>
-          </Toolbar>
-        </AppBar>
+          <MenuIcon />
+        </IconButton> */}
+        {/* </Toolbar>
+        </AppBar> */}
         <Drawer
           sx={{
             width: leftDrawerWidth,

@@ -25,6 +25,7 @@ import Board from './Board';
 import { toggleWhiteboard } from 'stores/whiteboardSlice';
 import { Socket } from 'socket.io-client';
 import FloatingButton from 'components/FloatingButton';
+import MenuIcon from '@mui/icons-material/Menu';
 
 const rightDrawerWidth = 240;
 
@@ -87,9 +88,18 @@ const Editor = (props: VoiceProp & YjsProp) => {
   });
   const theme = useTheme();
   const [open, setOpen] = useState(true);
+  // YjsCodeMirror에 넘겨줘야할 인자
+  const [leftOpen, setLeftOpen] = useState(false);
   const dispatch = useDispatch();
   // const [socket, setSocket] = useState<Socket>();
   const { handleSocket, handleProvider, provider } = props;
+
+  const handleRightDrawerOpen = () => {
+    setLeftOpen(true);
+  };
+  const handleLeftDrawerClose = () => {
+    setLeftOpen(false);
+  };
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -135,6 +145,15 @@ const Editor = (props: VoiceProp & YjsProp) => {
                   justifyContent: 'space-between',
                 }}
               >
+                <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  onClick={handleRightDrawerOpen}
+                  edge="start"
+                  sx={{ mr: 2, ...(leftOpen && { display: 'none' }) }}
+                >
+                  <MenuIcon />
+                </IconButton>
                 <Header />
                 <BtnDiv>
                   <CloseIcon
@@ -142,7 +161,6 @@ const Editor = (props: VoiceProp & YjsProp) => {
                     onClick={handleExit}
                   />
                   <IconButton
-                    className="1313131313"
                     color="secondary"
                     aria-label="open drawer"
                     edge="end"
@@ -157,6 +175,10 @@ const Editor = (props: VoiceProp & YjsProp) => {
             <Main open={open}>
               <DrawerHeader />
               <YjsCodeMirror
+                leftOpen={leftOpen}
+                setLeftOpen={setLeftOpen}
+                handleRightDrawerOpen={handleRightDrawerOpen}
+                handleLeftDrawerClose={handleLeftDrawerClose}
                 handleProvider={handleProvider}
                 provider={provider}
               />
