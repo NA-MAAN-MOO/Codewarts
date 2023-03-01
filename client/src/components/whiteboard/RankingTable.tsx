@@ -12,7 +12,7 @@ import RankingTableContent from './RankingTableContent';
 const colNames = [
   '순위',
   '닉네임',
-  '백준아이디',
+  // '백준아이디',
   '티어',
   '최장스트릭',
   '맞힌문제',
@@ -20,7 +20,7 @@ const colNames = [
 
 interface InfoType {
   nickname: string;
-  bojId: string;
+  // bojId: string;
   tier: number;
   maxStreak: number;
   solved: number;
@@ -39,7 +39,7 @@ export default function RankingTable(props: any) {
             {colNames.map((colName: string) => (
               <TableCell
                 align="center"
-                sx={{ color: 'white', fontWeight: '700', fontSize: '0.9em' }}
+                sx={{ color: 'white', fontWeight: '700', fontSize: '1em' }}
               >
                 {colName}
               </TableCell>

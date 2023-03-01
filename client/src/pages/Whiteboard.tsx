@@ -31,17 +31,16 @@ function Whiteboard() {
   const getBojInfos = async () => {
     try {
       const response = await axios.get(`${APPLICATION_DB_URL}/boj-infos`);
-      await setbojInfos(response.data);
+      setbojInfos(response.data);
     } catch (e) {
       console.error(e);
     }
   };
 
-  const handleClose = async () => {
-    await setbojInfos([]);
+  const handleClose = () => {
+    setbojInfos([]);
     store.dispatch(openGame());
   };
-
   return (
     <>
       <Background>
@@ -54,7 +53,6 @@ function Whiteboard() {
             setbojInfos={setbojInfos}
           />
           <MainField handleClose={handleClose} />
-          {/* <CloseButton handleBack={handleBack} /> */}
         </Box>
       </Background>
     </>

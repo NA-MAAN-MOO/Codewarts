@@ -10,6 +10,7 @@ export default function RankingTableContent(props: any) {
   const bgColor = '#ffe8e8';
   const fontColor = '#ba3232';
   const fontWeight = 700;
+  const fontSize = '1em';
 
   return (
     <TableRow
@@ -18,6 +19,7 @@ export default function RankingTableContent(props: any) {
         '&:last-child td, &:last-child th': { border: 0 },
         background: myNickname === info.nickname ? bgColor : 'none',
         fontWeight: myNickname === info.nickname ? fontWeight : 'normal',
+        fontSize: fontSize,
       }}
     >
       <TableCell
@@ -27,6 +29,7 @@ export default function RankingTableContent(props: any) {
         sx={{
           color: myNickname === info.nickname ? fontColor : 'black',
           fontWeight: myNickname === info.nickname ? fontWeight : 'normal',
+          fontSize: fontSize,
         }}
       >
         {index + 1}
@@ -36,11 +39,12 @@ export default function RankingTableContent(props: any) {
         sx={{
           color: myNickname === info.nickname ? fontColor : 'black',
           fontWeight: myNickname === info.nickname ? fontWeight : 'normal',
+          fontSize: fontSize,
         }}
       >
         {info.nickname}
       </TableCell>
-      <TableCell
+      {/* <TableCell
         align="center"
         sx={{
           color: myNickname === info.nickname ? fontColor : 'black',
@@ -48,12 +52,13 @@ export default function RankingTableContent(props: any) {
         }}
       >
         {info.bojId}
-      </TableCell>
+      </TableCell> */}
       <TableCell
         align="center"
         sx={{
           color: myNickname === info.nickname ? fontColor : 'black',
           fontWeight: myNickname === info.nickname ? fontWeight : 'normal',
+          fontSize: fontSize,
         }}
       >
         <RenderTier svgName={info.tier} />
@@ -63,6 +68,7 @@ export default function RankingTableContent(props: any) {
         sx={{
           color: myNickname === info.nickname ? fontColor : 'black',
           fontWeight: myNickname === info.nickname ? fontWeight : 'normal',
+          fontSize: fontSize,
         }}
       >
         {info.maxStreak}일
@@ -72,6 +78,7 @@ export default function RankingTableContent(props: any) {
         sx={{
           color: myNickname === info.nickname ? fontColor : 'black',
           fontWeight: myNickname === info.nickname ? fontWeight : 'normal',
+          fontSize: fontSize,
         }}
       >
         {info.solved}개
