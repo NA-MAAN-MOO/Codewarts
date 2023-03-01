@@ -203,7 +203,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     this.playerDialogBubble = this.scene.add
       .text(this.x - this.width / 1.5, this.y - this.height - 80, content)
       .setStyle({ fontSize: '60px', color: 'white' })
-      .setDepth(50)
+      .setDepth(150)
       .setPadding(5, 15, 5, 5);
 
     // // After 6 seconds, clear the dialog bubble
