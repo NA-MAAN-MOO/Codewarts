@@ -42,10 +42,10 @@ function RenderTier(props: any) {
 
   return (
     <>
-      <RenderSvgDiv>
-        <SvgComponent width="13px" />
-        &nbsp;<span>{Tier[`${svgName}`]}</span>
-      </RenderSvgDiv>
+      {/* <RenderSvgDiv> */}
+      <SvgComponent width="13px" />
+      {/* &nbsp;<span>{Tier[`${svgName}`]}</span> */}
+      {/* </RenderSvgDiv> */}
     </>
   );
 }
@@ -53,8 +53,8 @@ function RenderTier(props: any) {
 export default RenderTier;
 
 const RenderSvgDiv = styled.span`
-  // width: 12px;
-  display: flex;
+  width: 12px;
+  // display: flex;
   // justify-content: center;
   // margin-top: 10px;
   // flex-direction: column;
