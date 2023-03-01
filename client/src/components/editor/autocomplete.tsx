@@ -32,7 +32,7 @@ export default function LimitTags(props: any) {
 
 const algoFilter = [
   { tag: '백준' },
-  { tag: '리트코드' },
+  // { tag: '리트코드' },
   { tag: '브론즈' },
   { tag: '실버' },
   { tag: '골드' },

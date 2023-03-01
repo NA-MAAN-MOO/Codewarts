@@ -167,7 +167,7 @@ export const getProbData = async (req: Request, res: Response) => {
       message: 'problems found',
       payload: { pagedDocs: result.docs, totalPages: result.totalPages },
     };
-    console.log(resultData.payload);
+    // console.log(resultData.payload);
     // console.log(result.pagingCounter);
     // result.docs is an array of paginated documents
     // result.totalPages is the total number of pages

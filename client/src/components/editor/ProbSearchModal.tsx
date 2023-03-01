@@ -93,14 +93,14 @@ export default function SearchModal(props: any) {
                 py: 0,
                 minHeight: 32,
                 color: 'rgba(255,255,255,.8)',
-                border: '1px solid tomato',
+                // border: '1px solid tomato',
                 display: 'inline-block',
               }}
             >
               <ListItemIcon
                 sx={{
                   color: 'inherit',
-                  border: '1px solid green',
+                  // border: '1px solid green',
                   height: '100%',
                 }}
               >
@@ -157,7 +157,13 @@ export default function SearchModal(props: any) {
               </ListItemButton>
             ))}
           </div>
-          <div style={{ border: '1px solid green' }}>
+          <div
+            style={
+              {
+                // border: '1px solid green'
+              }
+            }
+          >
             {pagedProbData ? (
               <Pagination
                 count={totalPages}
