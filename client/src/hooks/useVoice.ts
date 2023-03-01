@@ -114,7 +114,7 @@ export default () => {
           headers: { 'Content-Type': 'application/json' },
         }
       );
-      return 1;
+      return data;
     } catch (err) {
       console.log('createSession error');
       console.log(err);
@@ -122,7 +122,7 @@ export default () => {
     }
   };
 
-  const disconnectSession = async (session: Session | undefined) => {
+  const disconnectSession = (session: Session | undefined) => {
     if (!session) {
       return;
     }
@@ -130,14 +130,6 @@ export default () => {
       console.log('세션 disconnect');
       session.disconnect();
 
-      // await axios.delete(
-      //   `${APPLICATION_SERVER_URL}/delete-connection/${session.sessionId}`,
-      //   {
-      //     data: {
-      //       userName: playerId,
-      //     },
-      //   }
-      // );
       console.log('커넥션 제거 완료');
     } catch (e) {
       console.log(e);

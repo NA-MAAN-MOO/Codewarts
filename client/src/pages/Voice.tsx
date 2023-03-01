@@ -7,7 +7,6 @@ import { VoiceProp } from 'types';
 import GameVoice from 'pages/voice/GameVoice';
 import { GAME_STATUS } from 'utils/Constants';
 import EditorVoice from 'pages/voice/EditorVoice';
-import { stringToAscii } from 'lib/voiceLib';
 
 //Voice 방 컴포넌트
 const Voice = ({ roomKey, session, handleSession, ...rest }: VoiceProp) => {
@@ -20,12 +19,10 @@ const Voice = ({ roomKey, session, handleSession, ...rest }: VoiceProp) => {
     registerSession,
     initSession,
     getUsers,
-    // resetServerConnList,
   } = useVoice();
 
-  const onBeforeUnload = async (e: BeforeUnloadEvent) => {
+  const onBeforeUnload = (e: BeforeUnloadEvent) => {
     leaveSession();
-    // await resetServerConnList();
   };
   const { playerId, status } = useSelector((state: RootState) => {
     return { ...state.user, ...state.mode };
@@ -99,7 +96,7 @@ const Voice = ({ roomKey, session, handleSession, ...rest }: VoiceProp) => {
       });
       await getUsers(roomKey);
     })();
-  }, [session]);
+  }, [session, OV]);
 
   return (
     <>
