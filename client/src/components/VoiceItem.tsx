@@ -8,19 +8,23 @@ import MicIcon from 'components/MicIcon';
 import VolumeIcon from 'components/VolumeIcon';
 import useVoice from 'hooks/useVoice';
 import { styledTheme } from 'styles/theme';
+import FloatingBox from 'components/FloatingBox';
+import SimplePopper from 'components/SimplePopper';
 
 const VoiceItem = ({
   session,
   subscribers,
   publisher,
-  name, //보이스 목록 아이템이 나타내는 유저 닉네임
+  name = '', //보이스 목록 아이템이 나타내는 유저 닉네임
   isMe = false, //내 보이스 목록 아이템인지
   isSuperior = false, //내가 에디터 주인인지
+  useFloatBox = false, //플로트 박스 안에 있는 버전인지(사이즈가 커짐)
 }: GameVoiceType & {
-  name: string;
-  char: string;
+  name?: string;
+  char?: string;
   isMe?: boolean;
   isSuperior?: boolean;
+  useFloatBox?: boolean;
 }) => {
   const dispatch = useDispatch();
   const { handleMyMicMute, handleMyVolumeMute } = useVoice();
@@ -35,43 +39,58 @@ const VoiceItem = ({
   //내 볼륨 음소거 처리
   const handleMyVolume = async () => {
     if (!session) return;
-    await handleMyVolumeMute({ subscribers, session });
+    await handleMyVolumeMute({ subscribers, session, muteTo: !myVolMute });
   };
 
   //내 마이크 음소거 처리
   const handleMyMic = async () => {
     if (!session || !publisher) return;
-    await handleMyMicMute({ publisher, session });
+    await handleMyMicMute({ publisher, session, muteTo: !myMicMute });
   };
 
   //내 방에 들어온 다른 사람 볼륨 음소거 처리
   const handleGuestVolume = () => {
     if (!session) return console.log('세션없음');
+    const otherMuteNow = volMuteInfo[name];
+    const sendingData = JSON.stringify({
+      user: name,
+      muteTo: !otherMuteNow,
+    });
     session.signal({
       type: MUTE_TYPE.SET_VOL,
-      data: name,
+      data: sendingData,
     });
   };
 
   //내 방에 들어온 다른 사람 마이크 음소거 처리
   const handleGuestMic = () => {
     if (!session) return console.log('세션없음');
+    const otherMuteNow = micMuteInfo[name];
+    console.log(otherMuteNow);
+    const sendingData = JSON.stringify({
+      user: name,
+      muteTo: !otherMuteNow,
+    });
     session.signal({
       type: MUTE_TYPE.SET_MIC,
-      data: name,
+      data: sendingData,
     });
   };
 
+  const WrapperDiv = useFloatBox ? FloatingBox : SmallWrapper;
+
   return (
     <>
-      <div style={{ display: 'flex', gap: '5px' }}>
+      <WrapperDiv>
         <VolumeIcon
           color={isMe || isSuperior ? 'white' : 'gray'}
           handleVolume={
             isMe ? handleMyVolume : isSuperior ? handleGuestVolume : undefined
           }
           isMute={isVolMute}
-          size={styledTheme.smallIconSize}
+          size={
+            useFloatBox ? styledTheme.normalIconSize : styledTheme.smallIconSize
+          }
         />
         <MicIcon
           color={isMe || isSuperior ? 'white' : 'gray'}
@@ -79,11 +98,19 @@ const VoiceItem = ({
             isMe ? handleMyMic : isSuperior ? handleGuestMic : undefined
           }
           isMute={isMicMute}
-          size={styledTheme.smallIconSize}
+          size={
+            useFloatBox ? styledTheme.normalIconSize : styledTheme.smallIconSize
+          }
         />
-      </div>
+        {useFloatBox && <SimplePopper />}
+      </WrapperDiv>
     </>
   );
 };
 
 export default VoiceItem;
+
+const SmallWrapper = styled.div`
+  display: flex;
+  gap: 5px;
+`;

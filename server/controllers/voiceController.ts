@@ -47,7 +47,7 @@ export const createConnection = async (req: Request, res: Response) => {
     }
 
     //이미 해당 유저의 커넥션 있는지 확인
-    const conKey = `${sessionId}:${userName}`;
+    // const conKey = `${sessionId}:${userName}`;
     // if (!!connectionList[conKey]) {
     //   //이미 커넥션 있으면
     //   return res.send(null);
