@@ -25,6 +25,7 @@ import Board from './Board';
 import { toggleWhiteboard } from 'stores/whiteboardSlice';
 import FloatingButton from 'components/FloatingButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import QuizIcon from '@mui/icons-material/Quiz';
 
 const rightDrawerWidth = 240;
 
@@ -160,7 +161,7 @@ const Editor = (props: VoiceProp & YjsProp) => {
                   edge="start"
                   sx={{ mr: 2, ...(leftOpen && { display: 'none' }) }}
                 >
-                  <MenuIcon />
+                  <QuizIcon />
                 </IconButton>
                 <Header />
                 <BtnDiv>

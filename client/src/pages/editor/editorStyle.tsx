@@ -55,14 +55,12 @@ filter: drop-shadow(0px 4px 4px rgba(255, 255, 255, 0.5));
 
 const AlgoInfoWrap = styledc.div`
 overflow: auto;
-// border: 5px solid red;
 
 `;
 
 const HeaderTab = styledc.div`
 display: flex;
 justify-content: space-between;
-// border: 1px solid blue;
 width: 100%;
 color: papayawhip;
 `;
@@ -114,13 +112,18 @@ const StyledTab = styled((props: StyledTabProps) => (
 
 const ProbSummary = styledc.div`
 // color: 'papayawhip';
-text-shadow: 1px 1px 2px grey,
+text-shadow: 1px 1px 2px grey;
 color: #fff;
 font-size: 20px;
 font-weight: bold;
-width: 300px;
-// border: 1px solid yellow;
+width: 100%;
 // line-height: 56px;
+display: flex;
+flex-direction : row;
+align-items:center;
+// word-break:break-all;
+overflow: visible;
+min-height: 100%;
 
 `;
 
@@ -135,7 +138,6 @@ const AlgoInput = styledc.input`
 
 const AlgoInputWrap = styledc.div`
   // margin-top: 10px;
-  // border: 1px solid red;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -156,7 +158,6 @@ const AlgoTextField = styled((props: TextFieldProps) => (
   },
   '& input': {
     fontFamily: 'Cascadia Code, Pretendard-Regular',
-    // border: '1px solid red',
     // color: 'papayawhip',
   },
   '& .MuiInputBase-sizeSmall': {
@@ -180,7 +181,6 @@ const AlgoTextField = styled((props: TextFieldProps) => (
     textShadow: '2px 2px 2px gray',
   },
   '& .MuiFilledInput-root': {
-    border: '1px solid papayawhip',
     overflow: 'hidden',
     borderRadius: 4,
     backgroundColor: theme.palette.mode === 'light' ? 'papayawhip' : '#2b2b2b',
@@ -361,9 +361,10 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   // alignItems: 'center',
   padding: theme.spacing(0, 2),
   // necessary for content to be below app bar
-  ...theme.mixins.toolbar,
+  // ...theme.mixins.toolbar,
   justifyContent: 'space-between',
-  // border: '1px solid green',
+  alignItems: 'center',
+  // minHeight: '100%',
 }));
 
 export {

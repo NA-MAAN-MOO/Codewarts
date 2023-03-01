@@ -13,6 +13,7 @@ const CharRoundLogo = ({
 }: {
   charName: string;
   isSpecial: boolean;
+  name: string;
 }) => {
   const muiTheme = useTheme();
   const charUrl = characters[charName];
