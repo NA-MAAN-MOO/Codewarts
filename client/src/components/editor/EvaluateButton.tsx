@@ -20,8 +20,16 @@ function EvaluateButton(props) {
   const { userName, editorName } = useSelector(
     (state: RootState) => state.editor
   );
-  const { ytext, bojProblemId, markingPercent, setMarkingPercent, mySocket } =
-    props;
+
+  const {
+    ytext,
+    bojProblemId,
+    markingPercent,
+    setMarkingPercent,
+    mySocket,
+    bojProbFullData,
+  } = props;
+
   let [진행완료, set진행완료] = useState(false);
   const newMissSoundToggle = SoundPlayer(missSoundFile);
   const newHitSoundToggle = SoundPlayer(hitSoundFile);
@@ -127,9 +135,11 @@ function EvaluateButton(props) {
   }
 
   const evaluateSample = async () => {
+    console.log(bojProbFullData?.samples?.[1].input.toString());
     const inputData = {
       code: ytext.toString(),
-      stdin: '1\n', // todo: 실제 input value로 바꾸기
+      // stdin: '1\n', // todo: 실제 input value로 바꾸기
+      stdin: bojProbFullData?.samples?.[1].input.toString() || '',
     };
 
     callCloudFunction(inputData)
@@ -176,7 +186,7 @@ function EvaluateButton(props) {
       {/* <button onClick={broadcastSuccess}>
         테스트버튼: "{editorName}"님이 문제 맞췄다고 알리기
       </button> */}
-      <Button
+      {/* <Button
         color="primary"
         style={{
           fontFamily: 'Cascadia Code, Pretendard-Regular',
@@ -185,7 +195,7 @@ function EvaluateButton(props) {
         onClick={evaluateSample}
       >
         예제채점
-      </Button>{' '}
+      </Button>{' '} */}
     </>
   );
 }
