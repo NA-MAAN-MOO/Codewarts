@@ -21,6 +21,9 @@ const probdata = new Schema<IProbInfo>({
   source: {
     type: String,
   },
+  solvedAC: {
+    type: Object,
+  },
 });
 
 probdata.plugin(mongoosePaginate);

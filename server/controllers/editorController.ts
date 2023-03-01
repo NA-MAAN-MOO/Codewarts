@@ -108,20 +108,49 @@ export const getProbData = async (req: Request, res: Response) => {
   //@ts-ignore
   probQuery.forEach((value, index) => {
     console.log(value.tag, index);
-    let key = '';
     if (['백준', '리트코드'].includes(value.tag)) {
-      key = 'platform';
+      //@ts-ignore
+      probFilter['platform'] = value.tag;
     } else if (
-      ['브론즈', '실버', '다이아몬드', '플래티넘', '골드', '루비'].includes(
-        value.tag
-      )
+      [
+        '브론즈',
+        '실버',
+        '다이아몬드',
+        '플래티넘',
+        '골드',
+        '루비',
+        '난이도 없음',
+      ].includes(value.tag)
     ) {
-      key = 'level';
+      let condition = null;
+      switch (value.tag) {
+        case '브론즈':
+          condition = { $gt: 0, $lt: 6 };
+          break;
+        case '실버':
+          condition = { $gt: 5, $lt: 11 };
+          break;
+        case '골드':
+          condition = { $gt: 10, $lt: 16 };
+          break;
+        case '플래티넘':
+          condition = { $gt: 15, $lt: 21 };
+          break;
+        case '다이아몬드':
+          condition = { $gt: 20, $lt: 26 };
+          break;
+        case '루비':
+          condition = { $gt: 25, $lt: 32 };
+          break;
+        default:
+          condition = 0;
+      }
+      //@ts-ignore
+      probFilter['solvedAC.level'] = condition;
     } else if (['한국정보올림피아드'].includes(value.tag)) {
-      key = 'source';
+      //@ts-ignore
+      probFilter['source'] = value.tag;
     }
-    //@ts-ignore
-    probFilter[key] = value.tag;
   });
 
   console.log(probFilter);

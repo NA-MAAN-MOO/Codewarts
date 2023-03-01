@@ -39,26 +39,44 @@ export default function SimplePopper() {
   };
 
   return (
-    <Box sx={{ width: 60 }}>
-      <Popper open={open} anchorEl={anchorEl} placement={placement} transition>
+    <div>
+      <Popper
+        sx={{ paddingLeft: '15px' }}
+        open={open}
+        anchorEl={anchorEl}
+        placement={placement}
+        transition
+      >
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={350}>
-            <Paper sx={{ backgroundColor: 'transparent' }}>
+            <Paper
+              sx={{
+                backgroundColor: 'transparent',
+                border: 'none',
+                boxShadow: 'none',
+              }}
+            >
               <SimpleZoom clickEmoji={clickEmoji} emojies={emojies} />
             </Paper>
           </Fade>
         )}
       </Popper>
-      <Grid container justifyContent="center">
-        <Grid item container xs={6} alignItems="flex-end" direction="column">
-          <Grid item>
-            <Button onClick={handleClick('right-end')}>
-              <InsertEmoticonIcon fontSize="large" />
-            </Button>
-          </Grid>
-        </Grid>
-      </Grid>
-    </Box>
+
+      <Button
+        style={{
+          width: 'fit-content',
+          padding: 0,
+          margin: 0,
+          minWidth: 0,
+        }}
+        onClick={handleClick('right')}
+      >
+        <InsertEmoticonIcon
+          style={{ padding: 0, margin: 0, color: 'white' }}
+          fontSize="large"
+        />
+      </Button>
+    </div>
   );
 
   //   return (
