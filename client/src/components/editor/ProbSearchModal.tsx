@@ -66,8 +66,17 @@ export default function SearchModal(props: any) {
 
   return (
     <div>
-      <Button onClick={handleOpen} color="error" variant="outlined">
-        문제검색
+      <Button
+        onClick={handleOpen}
+        color="error"
+        variant="outlined"
+        sx={{
+          wordBreak: 'keep-all',
+          padding: '1px',
+          margin: '5px',
+        }}
+      >
+        필터 검색
       </Button>
       <Modal
         open={open}

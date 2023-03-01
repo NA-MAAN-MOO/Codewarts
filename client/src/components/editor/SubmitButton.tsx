@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 
 //@ts-ignore
 function SubmitButton(props) {
-  const { algoSelect, bojProbData, leetProbData } = props;
+  const { bojProblemId } = props;
 
   return (
     <>
@@ -11,9 +11,9 @@ function SubmitButton(props) {
         <Button
           color="primary"
           href={
-            algoSelect === 0 && bojProbData?.problemId
-              ? `https://acmicpc.net/problem/${bojProbData?.problemId}`
-              : `https://leetcode.com/problems/${leetProbData?.question.titleSlug}`
+            bojProblemId
+              ? `https://acmicpc.net/submit/${bojProblemId}`
+              : `https://acmicpc.net`
           }
           target="_blank"
           rel="noreferrer"

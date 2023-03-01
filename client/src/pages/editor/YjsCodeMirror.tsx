@@ -9,7 +9,6 @@ import * as Y from 'yjs';
 // @ts-ignore
 import { yCollab } from 'y-codemirror.next';
 import { WebsocketProvider } from 'y-websocket';
-import * as awarenessProtocol from 'y-protocols/awareness.js';
 
 /* codemirror */
 import { basicSetup } from 'codemirror';
@@ -33,7 +32,6 @@ import {
   AlgoInfoWrap,
   buttonTheme,
   Main,
-  AppBar,
   DrawerHeader,
   leftDrawerWidth,
 } from './editorStyle';
@@ -55,7 +53,7 @@ import AlgoHeaderTab from 'components/editor/AlgoHeaderTab';
 import AlgoInfoAccordion from 'components/editor/AlgoInfoAccordion';
 import EvaluateGauge from 'components/editor/EvaluateGauge';
 import ProbTitle from 'components/editor/ProbTitle';
-import SearchModal from './ProbSearchModal';
+import SearchModal from '../../components/editor/ProbSearchModal';
 
 /* network */
 import { getPhaserSocket } from 'network/phaserSocket';
@@ -63,9 +61,7 @@ import { YjsProp } from 'types';
 
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
-import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 const APPLICATION_YJS_URL =
@@ -75,7 +71,6 @@ function YjsCodeMirror(props: YjsProp) {
   /* ref */
   const editor = useRef(null);
   const inputStdin = useRef(null);
-  const leetProbDataRef = useRef(null);
   const bojProbDataRef = useRef(null);
   let mySocket = getPhaserSocket();
 
@@ -87,7 +82,6 @@ function YjsCodeMirror(props: YjsProp) {
   let [cpuTime, setCpuTime] = useState();
   let [memory, setMemory] = useState();
   let [editorThemeMode, setEditorTheme] = useState(okaidia);
-  let [leetProbData, setLeetProbData] = useState();
   let [bojProbData, setBojProbData] = useState();
   let [bojProblemId, setBojProblemId] = useState();
   let [bojProbFullData, setBojProbFullData] = useState();
@@ -95,17 +89,7 @@ function YjsCodeMirror(props: YjsProp) {
   const [algoSelect, setAlgoSelect] = useState(0); // 백준(0), 리트코드(1)
   const [undoManager, setUndoManager] = useState();
   const [ytext, setYtext] = useState();
-
-  // const [leftOpen, setLeftOpen] = useState(false);
-
   const theme = useTheme();
-
-  // const handleRightDrawerOpen = () => {
-  //   setLeftOpen(true);
-  // };
-  // const handleLeftDrawerClose = () => {
-  //   setLeftOpen(false);
-  // };
 
   const {
     handleProvider,
@@ -115,6 +99,7 @@ function YjsCodeMirror(props: YjsProp) {
     handleRightDrawerOpen,
     handleLeftDrawerClose,
   } = props;
+
   /* roomName 스트링 값 수정하지 말 것(※ 수정할 거면 전부 수정해야 함) */
   const roomName = `ROOMNAME${editorName}`;
 
@@ -231,19 +216,6 @@ function YjsCodeMirror(props: YjsProp) {
       <ToastContainer />
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        {/* <AppBar position="fixed" open={leftOpen} color="transparent">
-          <Toolbar> */}
-        {/* <IconButton
-          color="inherit"
-          aria-label="open drawer"
-          onClick={handleRightDrawerOpen}
-          edge="start"
-          sx={{ mr: 2, ...(leftOpen && { display: 'none' }) }}
-        >
-          <MenuIcon />
-        </IconButton> */}
-        {/* </Toolbar>
-        </AppBar> */}
         <Drawer
           sx={{
             width: leftDrawerWidth,
@@ -259,10 +231,7 @@ function YjsCodeMirror(props: YjsProp) {
         >
           <DrawerHeader>
             <ProbTitle
-              algoSelect={algoSelect}
-              bojProbData={bojProbData}
               bojProblemId={bojProblemId}
-              leetProbData={leetProbData}
               bojProbFullData={bojProbFullData}
             />
             <IconButton onClick={handleLeftDrawerClose}>
@@ -282,29 +251,20 @@ function YjsCodeMirror(props: YjsProp) {
                 boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)',
               }}
             >
-              <SearchModal
-                setBojProbFullData={setBojProbFullData}
-                setBojProblemId={setBojProblemId}
-                setAlgoSelect={setAlgoSelect}
-              />
-              <AlgoHeaderTab
-                algoSelect={algoSelect}
-                setAlgoSelect={setAlgoSelect}
-                bojProbData={bojProbData}
-                setBojProbData={setBojProbData}
-                leetProbData={leetProbData}
-                setLeetProbData={setLeetProbData}
-                bojProbDataRef={bojProbDataRef}
-                leetProbDataRef={leetProbDataRef}
-                setBojProbFullData={setBojProbFullData}
-                setBojProblemId={setBojProblemId}
-                bojProblemId={bojProblemId}
-              />
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <AlgoHeaderTab
+                  bojProbDataRef={bojProbDataRef}
+                  setBojProbFullData={setBojProbFullData}
+                  setBojProblemId={setBojProblemId}
+                />
+                <SearchModal
+                  setBojProbFullData={setBojProbFullData}
+                  setBojProblemId={setBojProblemId}
+                  setAlgoSelect={setAlgoSelect}
+                />
+              </div>
               <AlgoInfoAccordion
                 inputStdin={inputStdin}
-                bojProbData={bojProbData}
-                leetProbData={leetProbData}
-                algoSelect={algoSelect}
                 bojProbFullData={bojProbFullData}
                 bojProblemId={bojProblemId}
               />
@@ -325,14 +285,10 @@ function YjsCodeMirror(props: YjsProp) {
                 setCpuTime={setCpuTime}
                 inputStdin={inputStdin.current}
               />
-              <SubmitButton
-                algoSelect={algoSelect}
-                bojProbData={bojProbData}
-                leetProbData={leetProbData}
-              />
+              <SubmitButton bojProblemId={bojProblemId} />
               <EvaluateButton
                 ytext={ytext}
-                bojProbData={bojProbData}
+                bojProblemId={bojProblemId}
                 markingPercent={markingPercent}
                 setMarkingPercent={setMarkingPercent}
                 mySocket={mySocket}
