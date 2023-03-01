@@ -33,7 +33,9 @@ function AlgoInfoAccordion(props) {
             <AccordionDetails>
               <div
                 dangerouslySetInnerHTML={{
-                  __html: bojProbFullData?.prob_desc.replace(/\n/g, '<br>'),
+                  __html: bojProbFullData?.prob_desc
+                    .replace('\n', '')
+                    .replace(/\n/g, '<br>'),
                 }}
               />
             </AccordionDetails>
