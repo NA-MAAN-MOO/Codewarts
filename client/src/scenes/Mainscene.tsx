@@ -20,7 +20,7 @@ import SoundPlayer from 'hooks/useSoundPlayer';
 import friendSoundFile from '../assets/sound_effect/friend_sound.mp3';
 import hitSoundFile from '../assets/sound_effect/hit_sound.mp3';
 import Button from 'objects/Button';
-import { Game, showSuccessToast } from 'pages/Game';
+import { showSuccessToast } from 'pages/Game';
 
 export default class MainScene extends Phaser.Scene {
   // class 속성 명시는 constructor 이전에 명시하면 되는듯
@@ -301,7 +301,6 @@ export default class MainScene extends Phaser.Scene {
     });
 
     phaserGame.socket?.on('getEmoji', (payload) => {
-      console.log(`${payload.emoji}`);
       if (payload.socketId === phaserGame.socketId) {
         this.player.updateDialogBubble(payload.emoji);
       } else {
@@ -532,7 +531,7 @@ export default class MainScene extends Phaser.Scene {
 
         //emoji
         otherPlayer.playerDialogBubble?.setPosition(
-          payLoad.x - otherPlayer.width,
+          payLoad.x - otherPlayer.width / 1.5,
           payLoad.y - otherPlayer.height - 80
         );
       }

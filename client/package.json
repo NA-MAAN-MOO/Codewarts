@@ -9,10 +9,10 @@
     "@codemirror/lang-python": "^6.1.1",
     "@codemirror/state": "^6.2.0",
     "@codemirror/view": "^6.7.3",
-    "@emotion/react": "^11.10.5",
-    "@emotion/styled": "^11.10.5",
-    "@mui/icons-material": "^5.11.0",
-    "@mui/material": "^5.11.8",
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@mui/icons-material": "^5.11.9",
+    "@mui/material": "^5.11.10",
     "@reduxjs/toolkit": "^1.9.2",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -40,6 +40,7 @@
     "phaser": "^3.55.2",
     "phaser-matter-collision-plugin": "^1.0.0",
     "react": "^18.2.0",
+    "react-color": "^2.19.3",
     "react-dom": "^18.2.0",
     "react-draggable": "^4.4.5",
     "react-hook-form": "^7.43.1",
@@ -82,6 +83,7 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.191",
+    "@types/react-color": "^3.0.6",
     "@types/styled-components": "^5.1.26"
   }
 }

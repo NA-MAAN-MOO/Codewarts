@@ -127,15 +127,15 @@ io.on('connection', (socket: Socket) => {
     // tables에 '내' 에디터가 있는지 검사하고, 있다면 삭제
     // FIXME: removeEditor를 클라이언트에 쏴주면 클라에서 나오게?
     // 그러면 '내가 누구 꺼 보는지'를 알아야겠다.
-    console.log('removeEditor');
+
     tables.forEach((table) => {
-      if (table[2] === playerInfo.userName) {
-        socket.broadcast.emit('removeEditor', table);
-        socket.emit('removeEditor', table);
+      if (table[3] === socket.id) {
+        console.log('removeEditor');
+        io.emit('removeEditor', table);
       }
     });
     tables = tables.filter((table) => {
-      table[2] !== playerInfo.userName;
+      return table[3] !== socket.id;
     });
     console.log(tables);
     // '내'가 나가면 다른 유저들에게 '내' 정보를 지우기 위한 통신을 한다.

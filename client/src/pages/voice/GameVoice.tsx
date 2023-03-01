@@ -7,6 +7,7 @@ import Drawer from 'components/Drawer';
 import PeopleIcon from '@mui/icons-material/People';
 import CurrentPlayer from 'components/CurrentPlayer';
 import FloatingBox from 'components/FloatingBox';
+import SimplePopper from 'components/SimplePopper';
 
 const GameVoice = (props: GameVoiceType) => {
   const { session, joinSession } = props;
@@ -32,6 +33,7 @@ const GameVoice = (props: GameVoiceType) => {
         <FloatingBox>
           <LoadingOutlined />
           오디오 연결 중...
+          <SimplePopper />
         </FloatingBox>
       )}
     </>

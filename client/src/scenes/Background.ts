@@ -13,6 +13,10 @@ export default class Background extends Phaser.Scene {
   // private cloud!: Phaser.Physics.Matter.
   // private cloudKey!: string;
   private backdropKey!: string;
+  backdropImage!: Phaser.GameObjects.Sprite;
+  imageScale!: number;
+  sceneHeight!: number;
+  sceneWidth!: number;
 
   constructor() {
     super('background');
@@ -117,8 +121,8 @@ export default class Background extends Phaser.Scene {
   }
 
   create(data: { backgroundMode: BackgroundMode }) {
-    const sceneHeight = this.cameras.main.height;
-    const sceneWidth = this.cameras.main.width;
+    this.sceneHeight = this.cameras.main.height;
+    this.sceneWidth = this.cameras.main.width;
 
     /* Set texture of images based on the background mode */
     if (data.backgroundMode === BackgroundMode.DAY) {
@@ -142,14 +146,30 @@ export default class Background extends Phaser.Scene {
       frameRate: 15,
       repeat: -1,
     });
-    const backdropImage = this.add
-      .sprite(sceneWidth / 2, sceneHeight / 2, this.backdropKey)
+    const resize = () => {
+      this.sceneHeight = this.cameras.main.height;
+      this.sceneWidth = this.cameras.main.width;
+      this.backdropImage.destroy();
+      this.backdropImage = this.add
+        .sprite(this.sceneWidth / 2, this.sceneHeight / 2, this.backdropKey)
+        .play(`${this.backdropKey}`);
+      this.imageScale = Math.max(
+        this.sceneWidth / this.backdropImage.width,
+        this.sceneHeight / this.backdropImage.height
+      );
+      this.backdropImage.setScale(this.imageScale).setScrollFactor(0);
+    };
+
+    this.backdropImage = this.add
+      .sprite(this.sceneWidth / 2, this.sceneHeight / 2, this.backdropKey)
       .play(`${this.backdropKey}`);
-    const scale = Math.max(
-      sceneWidth / backdropImage.width,
-      sceneHeight / backdropImage.height
+    this.imageScale = Math.max(
+      this.sceneWidth / this.backdropImage.width,
+      this.sceneHeight / this.backdropImage.height
     );
-    backdropImage.setScale(scale).setScrollFactor(0);
+    this.backdropImage.setScale(this.imageScale).setScrollFactor(0);
+
+    this.scale.on('resize', resize, this);
   }
 
   private launchBackground(backgroundMode: BackgroundMode) {

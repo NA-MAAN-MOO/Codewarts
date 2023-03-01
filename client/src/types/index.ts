@@ -23,6 +23,10 @@ export type VoiceProp = {
 export type YjsProp = {
   handleProvider?: (pro: WebsocketProvider) => void;
   provider?: WebsocketProvider;
+  setLeftOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  leftOpen?: boolean;
+  handleRightDrawerOpen?: () => void;
+  handleLeftDrawerClose?: () => void;
 };
 
 export type GameType = Game & {
@@ -60,6 +64,11 @@ export type ServerPlayerType = {
   state: string;
   userName: string;
   playerCollider: boolean;
+};
+
+export type SimpleZoomProps = {
+  clickEmoji: (emoji: string) => void;
+  emojies: string[];
 };
 
 export type MotionType = {
