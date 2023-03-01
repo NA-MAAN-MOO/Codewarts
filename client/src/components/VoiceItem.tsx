@@ -9,6 +9,7 @@ import VolumeIcon from 'components/VolumeIcon';
 import useVoice from 'hooks/useVoice';
 import { styledTheme } from 'styles/theme';
 import FloatingBox from 'components/FloatingBox';
+import SimplePopper from 'components/SimplePopper';
 
 const VoiceItem = ({
   session,
@@ -101,6 +102,7 @@ const VoiceItem = ({
             useFloatBox ? styledTheme.normalIconSize : styledTheme.smallIconSize
           }
         />
+        {useFloatBox && <SimplePopper />}
       </WrapperDiv>
     </>
   );

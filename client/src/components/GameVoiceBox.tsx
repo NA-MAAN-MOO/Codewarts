@@ -3,7 +3,6 @@ import { GameVoiceType } from 'types';
 import AudioList from 'components/AudioList';
 import VoiceItem from 'components/VoiceItem';
 import useVoice from 'hooks/useVoice';
-import SimplePopper from './SimplePopper';
 
 const GameVoiceBox = (props: GameVoiceType & { useFloatBox?: boolean }) => {
   const { subscribers } = props;
