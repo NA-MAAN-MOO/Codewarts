@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 # load .env
 load_dotenv()
 
-mongoPassword = os.environ.get('mongoPassword')
+mongoPassword = os.environ.get('MONGO_PW')
 
 client = MongoClient(
     f'mongodb+srv://juncheol:{mongoPassword}@cluster0.v0izvl3.mongodb.net/?retryWrites=true&w=majority')
