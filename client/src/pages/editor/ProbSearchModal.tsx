@@ -129,7 +129,7 @@ export default function SearchModal(props: any) {
                 <ListItemIcon sx={{ color: 'inherit' }}>
                   {
                     //@ts-ignore
-                    value.solvedAC.level ? (
+                    value.solvedAC.level >= 0 ? (
                       //@ts-ignore
                       <RenderSvg svgName={value?.solvedAC?.level} />
                     ) : (

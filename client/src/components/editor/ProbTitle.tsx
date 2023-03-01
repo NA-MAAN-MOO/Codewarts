@@ -12,8 +12,6 @@ function ProbTitle(props) {
     bojProbFullData,
   } = props;
 
-  // console.log('probtitle 호출~', bojProbFullData);
-
   return (
     <>
       {algoSelect === 0 &&
@@ -22,7 +20,7 @@ function ProbTitle(props) {
           <div>
             <RenderSvg
               svgName={
-                bojProbFullData.solvedAC.level
+                bojProbFullData.solvedAC.level >= 0
                   ? bojProbFullData.solvedAC.level
                   : bojProbData.level
               }

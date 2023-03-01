@@ -9,32 +9,31 @@ export default function SimpleZoom(props: SimpleZoomProps) {
   const { clickEmoji, emojies } = props;
 
   return (
-    <Box sx={{ height: 53.7 }}>
-      <Box sx={{ display: 'flex' }}>
-        {emojies.map((item, index) => {
-          return (
-            <Zoom
-              in={checked}
-              style={{
-                transitionDelay: checked ? `${100 * (index + 1)}ms` : '0ms',
+    <Box sx={{ display: 'flex' }}>
+      {emojies.map((item, index) => {
+        return (
+          <Zoom
+            in={checked}
+            style={{
+              transitionDelay: checked ? `${100 * (index + 1)}ms` : '0ms',
+            }}
+          >
+            <Button
+              onClick={() => clickEmoji(item)}
+              variant="contained"
+              color="error"
+              sx={{
+                fontSize: '28px',
+                backgroundColor: 'white',
+                minWidth: '40px',
+                borderRadius: '30%',
               }}
             >
-              <Button
-                onClick={() => clickEmoji(item)}
-                variant="contained"
-                color="error"
-                sx={{
-                  fontSize: '28px',
-                  backgroundColor: 'white',
-                  minWidth: '50px',
-                }}
-              >
-                {item}
-              </Button>
-            </Zoom>
-          );
-        })}
-      </Box>
+              {item}
+            </Button>
+          </Zoom>
+        );
+      })}
     </Box>
   );
 }
