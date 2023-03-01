@@ -6,10 +6,9 @@ from bs4 import BeautifulSoup
 import requests
 from dotenv import load_dotenv
 # load .env
-load_dotenv()
 
 
-mongoPassword = os.environ.get('mongoPassword')
+mongoPassword = os.environ.get('MONGO_PW')
 
 
 client = MongoClient(
@@ -20,7 +19,7 @@ collection = db.probs
 # 백준 서버에 요청
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
-s = 17682    # 시작문제넘버
+s = 19482    # 시작문제넘버
 e = 19999    # 종료문제넘버
 
 miss = []

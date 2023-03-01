@@ -17,6 +17,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
   successEffect!: Phaser.GameObjects.Sprite;
   fire!: Phaser.GameObjects.Sprite;
   playerDialogBubble: Phaser.GameObjects.Container;
+  private timeoutID?: number;
 
   constructor(data: PlayerType) {
     let { scene, x, y, texture, id, name, frame } = data;
@@ -131,7 +132,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     }
     if (this.playerDialogBubble) {
       this.playerDialogBubble.setPosition(
-        this.x - this.width,
+        this.x - this.width / 1.5,
         this.y - this.height - 80
       );
     }
@@ -200,69 +201,20 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     this.clearDialogBubble();
 
     this.playerDialogBubble = this.scene.add
-      .text(this.x - this.width, this.y - this.height - 80, content)
+      .text(this.x - this.width / 1.5, this.y - this.height - 80, content)
       .setStyle({ fontSize: '60px', color: 'white' })
-      .setDepth(50)
+      .setDepth(150)
       .setPadding(5, 15, 5, 5);
 
-    // preprocessing for dialog bubble text (maximum 70 characters)
-    // const dialogBubbleText =
-    //   content.length <= 70 ? content : content.substring(0, 70).concat('...');
-
-    // const innerText = this.scene.add
-    //   .text(0, 0, dialogBubbleText, {
-    //     wordWrap: { width: 165, useAdvancedWrap: true },
-    //   })
-    //   .setFontFamily('Arial')
-    //   .setFontSize(12)
-    //   .setColor('#000000')
-    //   .setOrigin(0.5);
-
-    // // set dialogBox slightly larger than the text in it
-    // const innerTextHeight = innerText.height;
-    // const innerTextWidth = innerText.width;
-
-    // innerText.setY(-innerTextHeight / 2 - this.playerName.height / 2);
-    // const dialogBoxWidth = innerTextWidth + 100;
-    // const dialogBoxHeight = innerTextHeight + 300;
-    // const dialogBoxX = this.x;
-    // const dialogBoxY = this.y;
-
-    // this.playerDialogBubble.add(
-    //   this.scene.add
-    //     .graphics()
-    //     .fillStyle(0xffffff, 1)
-    //     .fillRoundedRect(
-    //       dialogBoxX,
-    //       dialogBoxY,
-    //       dialogBoxWidth,
-    //       dialogBoxHeight,
-    //       3
-    //     )
-    //     .lineStyle(1, 0x000000, 1)
-    //     .strokeRoundedRect(
-    //       dialogBoxX,
-    //       dialogBoxY,
-    //       dialogBoxWidth,
-    //       dialogBoxHeight,
-    //       3
-    //     )
-    // );
-    // this.playerDialogBubble.add(innerText);
-    // // this.playerDialogBubble.setPosition(this.x, this.y - 20);
-    // console.log(this.x, this.y, dialogBoxX, dialogBoxY);
-    // console.log(this.playerDialogBubble);
-
     // // After 6 seconds, clear the dialog bubble
-    window.setTimeout(() => {
+    this.timeoutID = window.setTimeout(() => {
       this.clearDialogBubble();
-    }, 5000);
+    }, 3000);
   }
-
   private clearDialogBubble() {
+    clearTimeout(this.timeoutID);
     if (this.playerDialogBubble) {
       this.playerDialogBubble.destroy();
     }
-    // this.playerDialogBubble.removeAll(true);
   }
 }
