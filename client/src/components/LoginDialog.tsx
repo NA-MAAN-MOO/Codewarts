@@ -19,6 +19,7 @@ import {
   setPlayerId,
   setPlayerLeetId,
   setPlayerTexture,
+  setUserLoginId,
 } from '../stores/userSlice';
 import { useDispatch } from 'react-redux';
 import { handleScene } from 'lib/phaserLib';
@@ -116,6 +117,7 @@ const LoginDialog = () => {
           dispatch(setPlayerBojId(payload.userBojId));
           dispatch(setPlayerLeetId(payload.userLeetId));
           dispatch(setPlayerTexture(avatars[avatarIndex].name));
+          dispatch(setUserLoginId(userId));
           handleScene(GAME_STATUS.LOBBY, {
             playerId: payload.userNickname,
             playerTexture: avatars[avatarIndex].name,
