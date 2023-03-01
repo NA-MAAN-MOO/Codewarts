@@ -257,9 +257,10 @@ export default () => {
         if (!event.data) return;
         const { user, muteTo } = JSON.parse(event.data);
         if (!user) {
+          //유저가 없으면
           return;
         }
-        await ChangeMute({ type: MUTE_TYPE.VOL, user, muteTo });
+        changeMute({ type: MUTE_TYPE.VOL, user, muteTo });
       });
 
       //유저가 마이크 음소거를 했다는 시그널을 받았을 때
@@ -267,45 +268,52 @@ export default () => {
         if (!event.data) return;
         const { user, muteTo } = JSON.parse(event.data);
         if (!user) {
+          //유저가 없으면
           return;
         }
-        await ChangeMute({ type: MUTE_TYPE.MIC, user, muteTo });
+        changeMute({ type: MUTE_TYPE.MIC, user, muteTo });
       });
 
       //방장이 내게 볼륨 음소거를 시켰을 때
       mySession.on(`signal:${MUTE_TYPE.SET_VOL}`, async (event) => {
-        //로직
-        const user = event.data;
+        if (!event.data) return;
+        const { user, muteTo } = JSON.parse(event.data);
+        if (!user || user !== userName) {
+          return;
+        }
+
         const targetSession = event.target as Session;
-        console.log('내 볼륨 뮤트', myVolMute);
         const subscribers = targetSession.streamManagers.filter((sm) => {
           //Subscriber는 streaManager의 remote가 true, Publisher는 remote가 false임
           return sm.remote;
         }) as Subscriber[];
-        if (!user || user !== userName) {
-          return;
-        }
-        await handleMyVolumeMute({ subscribers, session, muteTo: !myVolMute });
+
+        await handleMyVolumeMute({
+          subscribers,
+          session,
+          muteTo,
+        });
       });
 
       //방장이 내게 마이크 음소거를 시켰을 때
       mySession.on(`signal:${MUTE_TYPE.SET_MIC}`, async (event) => {
         //로직
-        console.log('내 마이크 뮤트', myMicMute);
-        const user = event.data;
+        if (!event.data) return;
+        const { user, muteTo } = JSON.parse(event.data);
+        if (!user || !pubNow || user !== userName) {
+          return;
+        }
         // const targetSession = event.target as Session;
         // const publishers = targetSession.streamManagers.filter((sm) => {
         //   //Subscriber는 streaManager의 remote가 true, Publisher는 remote가 false임
         //   return !sm.remote;
         // }) as Publisher[];
         // console.log('제공자들', publishers);
-        if (!user || !pubNow || user !== userName) {
-          return;
-        }
+
         await handleMyMicMute({
           publisher: pubNow,
           session,
-          muteTo: !myMicMute,
+          muteTo,
         });
       });
 
@@ -370,7 +378,7 @@ export default () => {
   //   }
   // };
 
-  const ChangeMute = async ({
+  const changeMute = ({
     type,
     user,
     muteTo,
@@ -402,9 +410,8 @@ export default () => {
   }) => {
     if (!session) return;
     //false일 때 뮤트 처리됨
-    console.log('볼륨뮤트');
     subscribers.map((sm) => {
-      sm.subscribeToAudio(myVolMute);
+      sm.subscribeToAudio(!muteTo);
     });
     dispatch(toggleMyVolMute());
     await axios.post(`${APPLICATION_VOICE_URL}/toggle-mute/${MUTE_TYPE.VOL}`, {
@@ -436,10 +443,8 @@ export default () => {
       return;
     }
     //false일 때 뮤트 처리됨
-    console.log('퍼블리셔', publisher);
-    console.log('마이크뮤트', myMicMute);
     try {
-      publisher.publishAudio(myMicMute);
+      publisher.publishAudio(!muteTo);
       dispatch(toggleMyMicMute());
       await axios.post(
         `${APPLICATION_VOICE_URL}/toggle-mute/${MUTE_TYPE.MIC}`,

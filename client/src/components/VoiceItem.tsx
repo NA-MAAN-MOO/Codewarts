@@ -50,18 +50,29 @@ const VoiceItem = ({
   //내 방에 들어온 다른 사람 볼륨 음소거 처리
   const handleGuestVolume = () => {
     if (!session) return console.log('세션없음');
+    const otherMuteNow = volMuteInfo[name];
+    const sendingData = JSON.stringify({
+      user: name,
+      muteTo: !otherMuteNow,
+    });
     session.signal({
       type: MUTE_TYPE.SET_VOL,
-      data: name,
+      data: sendingData,
     });
   };
 
   //내 방에 들어온 다른 사람 마이크 음소거 처리
   const handleGuestMic = () => {
     if (!session) return console.log('세션없음');
+    const otherMuteNow = micMuteInfo[name];
+    console.log(otherMuteNow);
+    const sendingData = JSON.stringify({
+      user: name,
+      muteTo: !otherMuteNow,
+    });
     session.signal({
       type: MUTE_TYPE.SET_MIC,
-      data: name,
+      data: sendingData,
     });
   };
 
