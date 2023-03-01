@@ -12,6 +12,9 @@ import ListItemText from '@mui/material/ListItemText';
 import RenderSvg from 'components/Svg';
 import { styledTheme } from 'styles/theme';
 
+const APPLICATION_EDITOR_URL =
+  process.env.REACT_APP_EDITOR_URL || 'http://localhost:3001';
+
 const style = {
   position: 'absolute' as 'absolute',
   top: '50%',
@@ -43,7 +46,7 @@ export default function SearchModal(props: any) {
     console.log(page, '페이지 자료 가져와줘');
 
     try {
-      const response = await axios.post(`http://localhost:3001/probdata`, {
+      const response = await axios.post(`${APPLICATION_EDITOR_URL}/probdata`, {
         data: filter,
         page: page,
       });
