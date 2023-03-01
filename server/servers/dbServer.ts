@@ -14,6 +14,6 @@ app.use(json());
 app.use(cors());
 
 app.use('/user', userRouter);
-app.use('/boj-infos', whiteboardRouter);
+app.use('/', whiteboardRouter);
 
 export default app;

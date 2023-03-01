@@ -5,15 +5,17 @@ import svgs from 'assets/solvedac_badges/index';
 function RenderSvg({ svgName }) {
   const SvgComponent = svgs[`Svg${svgName}`];
   return (
-    <RenderSvgDiv>
-      <SvgComponent />
-    </RenderSvgDiv>
+    <RenderSvgSpan>
+      <span>
+        <SvgComponent />
+      </span>
+    </RenderSvgSpan>
   );
 }
 
 export default RenderSvg;
 
-const RenderSvgDiv = styled.span`
+const RenderSvgSpan = styled.span`
   width: 30px;
   display: inline-block;
   justify-content: center;

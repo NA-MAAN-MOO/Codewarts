@@ -25,6 +25,7 @@ export const userSlice = createSlice({
     playerNickname: 'Unknown',
     playerBojId: 'Unknown',
     playerLeetId: 'Unknown',
+    userLoginId: '',
   },
   reducers: {
     toggleBackgroundMode: (state) => {
@@ -52,6 +53,10 @@ export const userSlice = createSlice({
     setPlayerTexture: (state, action: PayloadAction<string>) => {
       state.playerTexture = action.payload;
     },
+    // Login Id
+    setUserLoginId: (state, action: PayloadAction<string>) => {
+      state.userLoginId = action.payload;
+    },
     // setVideoConnected: (state, action: PayloadAction<boolean>) => {
     //   state.videoConnected = action.payload;
     // },  여기서 groupcall 연결하면 좋겠다
@@ -77,6 +82,7 @@ export const {
   setPlayerNickname,
   setPlayerLeetId,
   setPlayerBojId,
+  setUserLoginId,
 } = userSlice.actions;
 
 export default userSlice.reducer;

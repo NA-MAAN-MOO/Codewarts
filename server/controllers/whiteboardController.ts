@@ -1,19 +1,10 @@
 import { Request, Response } from 'express';
 
-import { ObjectId } from 'mongoose';
+import { Types } from 'mongoose';
 import User from '../models/User';
 import Memo from '../models/Memo';
 
 import axios, { AxiosResponse } from 'axios';
-
-interface DatumType {
-  _id: ObjectId;
-  userId: string;
-  userPw: string;
-  userNickname: string;
-  userBojId: string;
-  userLeetId: string;
-}
 
 interface ResponseType {
   nickname: string;
@@ -80,25 +71,44 @@ export const getUsersBojInfo = async (req: Request, res: Response) => {
   response = [];
 };
 
+// export const getUsersBojInfo = async (req: Request, res: Response) => {
+//   const datum = await User.find({});
+
+//   // await regenerateData(datum);
+
+//   /* Sort by tier */
+//   // if (response.length) {
+//   //   await response.sort((a, b) => b.tier - a.tier);
+//   // }
+
+//   /* Send response */
+//   if (datum.length === 0) {
+//     res.status(404).send('No valid Boj Users Id');
+//   } else {
+//     res.status(200).send(datum);
+//   }
+
+//   /* Empty data */
+//   // response = [];
+// };
+
 /* Save memo to DB */
-export const fetchMemo = async (req: Request, res: Response) => {
+export const addMemo = async (req: Request, res: Response) => {
   const memo = new Memo({
-    date: req.body.date,
     authorId: req.body.authorId,
-    content: req.body.content,
-    x: req.body.x,
-    y: req.body.y,
+    authorNickname: req.body.authorNickname,
+    content: '',
+    x: 80,
+    y: 40,
   });
 
-  memo
-    .save()
-    .then((result) => {
-      res.json(result);
-    })
-    .catch((e) => {
-      console.error(e);
-      res.status(400).json({ message: '메모 저장 실패' });
-    });
+  try {
+    const result = await memo.save();
+    res.json(result);
+  } catch (e) {
+    console.error(e);
+    res.status(400).json({ message: '메모 추가 실패' });
+  }
 };
 
 /* Get all memos in DB */
@@ -113,13 +123,60 @@ export const getMemo = async (req: Request, res: Response) => {
 };
 
 /* Change memo content */
-export const changeMemo = async (req: Request, res: Response) => {
-  await Memo.updateOne({ _id: req.params.id }, { content: req.body.content })
-    .then((result) => {
-      res.status(200).json(result);
-    })
-    .catch((e) => {
-      console.error(e);
-      res.status(400).json({ message: '메모 수정 실패' });
-    });
+export const updateMemo = async (req: Request, res: Response) => {
+  try {
+    const objectId = req.body._id;
+    let result = await Memo.updateOne(
+      { _id: objectId },
+      { content: req.body.content }
+    );
+    res.status(200).json(result);
+  } catch (e) {
+    console.error(e);
+    res.status(400).json({ message: '메모 수정 실패' });
+  }
+};
+
+/* Change memo position */
+export const changeMemoPos = async (req: Request, res: Response) => {
+  try {
+    // const objectId = new Types.ObjectId(req.body._id);
+    const objectId = req.body._id;
+    const result = await Memo.updateOne(
+      { _id: objectId },
+      { x: req.body.x, y: req.body.y }
+    );
+    res.status(200).json(result);
+  } catch (e) {
+    console.error(e);
+    res.status(400).json({ message: '메모 위치 수정 실패' });
+  }
+};
+
+export const participateInMemo = async (req: Request, res: Response) => {
+  try {
+    const objectId = req.body._id;
+    const result = await Memo.updateOne(
+      { _id: objectId },
+      { participants: [...req.body.participants] }
+    );
+    res.status(200).json(result);
+  } catch (e) {
+    console.error(e);
+    res.status(400).json({ message: '참여 실패' });
+  }
+};
+
+/* Delete a memo */
+export const deleteMemo = async (req: Request, res: Response) => {
+  try {
+    const objectId = req.body._id;
+
+    const result = await Memo.deleteOne({ _id: objectId });
+    res.status(200).json(result);
+  } catch (e) {
+    console.error(e);
+    res.status(400).json({ message: '삭제 실패' });
+  }
+  // await Memo.remove({ _id: objectId });
 };

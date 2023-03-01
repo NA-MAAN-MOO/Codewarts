@@ -16,12 +16,13 @@ import {
 } from '../components/editor/toast'; /* toast for event alarm */
 import { getPhaserSocket } from 'network/phaserSocket';
 import phaserGame from 'codeuk';
+import SimplePopper from 'components/SimplePopper';
 
 const showSuccessToast = (editorName: string, problemId: number) => {
   notifySuccess(editorName, problemId);
 };
 
-const emojies = ['🤣', '🤪', '😡', '🤯', '💪', '🖐', '😭', '💩', '😆'];
+// const emojies = ['🤣', '🤪',"🎉", '😡', '🤯', '💪', '🖐', '😭', '💩', '😆',"💯",];
 
 const Game = (props: VoiceProp) => {
   const dispatch = useDispatch();
@@ -36,16 +37,6 @@ const Game = (props: VoiceProp) => {
       <ToastContainer />
       <div id="profile">
         <Voice {...props} />
-        <button
-          onClick={() => {
-            mySocket?.emit('sendEmoji', {
-              socketId: phaserGame.socketId,
-              emoji: '🤣',
-            });
-          }}
-        >
-          smile
-        </button>
       </div>
       <BtnDiv>
         {/* <Button
