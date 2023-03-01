@@ -13,7 +13,7 @@ export default function SimpleZoom({ clickEmoji, emojies }) {
   const handleChange = () => {};
 
   return (
-    <Box sx={{ height: 40.7 }}>
+    <Box sx={{ height: 53.7 }}>
       <Box sx={{ display: 'flex' }}>
         {emojies.map((item, index) => {
           return (

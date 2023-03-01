@@ -52,7 +52,7 @@ export default function SimplePopper() {
       <Grid container justifyContent="center">
         <Grid item container xs={6} alignItems="flex-end" direction="column">
           <Grid item>
-            <Button onClick={handleClick('right')}>
+            <Button onClick={handleClick('right-end')}>
               <InsertEmoticonIcon fontSize="large" />
             </Button>
           </Grid>
