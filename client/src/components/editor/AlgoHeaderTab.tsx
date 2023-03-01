@@ -32,7 +32,7 @@ function AlgoHeaderTab(props) {
     setAlgoSelect(newValue);
   };
 
-  /* 서버로 몽고DB에 저장된 백준 문제 정보 요청 */
+  /* 서버로 몽고DB에 저장된 백준 문제 전체 정보 요청 */
   async function fetchBojProbFullData(probId: string) {
     if (bojProbDataRef.current === null) return;
 
@@ -50,7 +50,7 @@ function AlgoHeaderTab(props) {
   }
 
   /* 백준 문제 정보 가져오기 */
-  const fetchBojProbInfo = async () => {
+  const fetchBojProbSummary = async () => {
     if (bojProbDataRef.current === null) return;
 
     let probId = bojProbDataRef.current.value;
@@ -101,7 +101,7 @@ function AlgoHeaderTab(props) {
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       if (algoSelect === 0) {
-        fetchBojProbInfo();
+        fetchBojProbSummary();
       } else {
         fetchLeetProbInfo();
       }

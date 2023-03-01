@@ -327,8 +327,8 @@ function YjsCodeMirror(props: YjsProp) {
               />
               <SubmitButton
                 algoSelect={algoSelect}
-                bojProbData={bojProbData}
                 leetProbData={leetProbData}
+                bojProblemId={bojProblemId}
               />
               <EvaluateButton
                 ytext={ytext}

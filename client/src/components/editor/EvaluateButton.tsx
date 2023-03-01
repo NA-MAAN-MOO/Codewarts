@@ -110,6 +110,37 @@ function EvaluateButton(props) {
     }
   };
 
+  async function callCloudFunction(data: any) {
+    const url = `https://asia-northeast3-codeuk-379309.cloudfunctions.net/compiler`;
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    };
+    console.log(options);
+
+    const response = await fetch(url, options);
+    const result = await response.json();
+    return result;
+  }
+
+  const evaluateSample = async () => {
+    const inputData = {
+      stdin: '',
+      code: ytext.toString(),
+    };
+
+    callCloudFunction(inputData)
+      .then((result) => {
+        console.log('Result:', result);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  };
+
   useEffect(() => {
     if (!bojProbData?.problemId) return;
     if (진행완료 === false) {
@@ -145,6 +176,16 @@ function EvaluateButton(props) {
       {/* <button onClick={broadcastSuccess}>
         테스트버튼: "{editorName}"님이 문제 맞췄다고 알리기
       </button> */}
+      <Button
+        color="primary"
+        style={{
+          fontFamily: 'Cascadia Code, Pretendard-Regular',
+          fontSize: '17px',
+        }}
+        onClick={evaluateSample}
+      >
+        예제채점
+      </Button>{' '}
     </>
   );
 }

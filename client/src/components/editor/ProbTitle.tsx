@@ -20,7 +20,7 @@ function ProbTitle(props) {
           <div>
             <RenderSvg
               svgName={
-                bojProbFullData.solvedAC.level >= 0
+                bojProbFullData?.solvedAC?.level >= 0
                   ? bojProbFullData.solvedAC.level
                   : bojProbData.level
               }
