@@ -27,7 +27,7 @@ const CurrentPlayer = ({
       // onClick={handleDrawer}
       onKeyDown={handleDrawer}
     >
-      <Title>현재 접속중인 사람</Title>
+      <Title>참여 중인 유저</Title>
       <Divider />
       {status === GAME_STATUS.GAME ? (
         <List>

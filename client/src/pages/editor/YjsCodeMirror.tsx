@@ -82,7 +82,6 @@ function YjsCodeMirror(props: YjsProp) {
   let [cpuTime, setCpuTime] = useState();
   let [memory, setMemory] = useState();
   let [editorThemeMode, setEditorTheme] = useState(okaidia);
-  let [bojProbData, setBojProbData] = useState();
   let [bojProblemId, setBojProblemId] = useState();
   let [bojProbFullData, setBojProbFullData] = useState();
   let [markingPercent, setMarkingPercent] = useState(0);
@@ -91,14 +90,7 @@ function YjsCodeMirror(props: YjsProp) {
   const [ytext, setYtext] = useState();
   const theme = useTheme();
 
-  const {
-    handleProvider,
-    provider,
-    leftOpen,
-    setLeftOpen,
-    handleRightDrawerOpen,
-    handleLeftDrawerClose,
-  } = props;
+  const { handleProvider, provider, leftOpen, handleLeftDrawerClose } = props;
 
   /* roomName 스트링 값 수정하지 말 것(※ 수정할 거면 전부 수정해야 함) */
   const roomName = `ROOMNAME${editorName}`;
@@ -292,6 +284,7 @@ function YjsCodeMirror(props: YjsProp) {
                 markingPercent={markingPercent}
                 setMarkingPercent={setMarkingPercent}
                 mySocket={mySocket}
+                bojProbFullData={bojProbFullData}
               />
               <EvaluateGauge
                 value={markingPercent}
