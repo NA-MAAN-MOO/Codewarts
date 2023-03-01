@@ -9,6 +9,7 @@ import axios, { AxiosResponse } from 'axios';
 
 const { MongoClient } = require('mongodb');
 const mongoPassword = process.env.MONGO_PW;
+import { Prob } from '../models/Prob';
 
 export const createRoom = async (req: Request, res: Response) => {
   const { userName = '', redisClient } = req.body;
@@ -94,6 +95,69 @@ export const getBojProbData = async (req: Request, res: Response) => {
   } else {
     res.status(200).send(data);
   }
+};
+
+/* get response for fetching boj problem data */
+export const getProbData = async (req: Request, res: Response) => {
+  const probQuery = req?.body.data;
+  const page = req?.body.page;
+  // console.log(req?.body);
+
+  let probFilter = {};
+
+  //@ts-ignore
+  probQuery.forEach((value, index) => {
+    console.log(value.tag, index);
+    let key = '';
+    if (['백준', '리트코드'].includes(value.tag)) {
+      key = 'platform';
+    } else if (
+      ['브론즈', '실버', '다이아몬드', '플래티넘', '골드', '루비'].includes(
+        value.tag
+      )
+    ) {
+      key = 'level';
+    } else if (['한국정보올림피아드'].includes(value.tag)) {
+      key = 'source';
+    }
+    //@ts-ignore
+    probFilter[key] = value.tag;
+  });
+
+  console.log(probFilter);
+
+  const options = {
+    page: page,
+    limit: 10,
+    sort: { probId: 'asc' },
+  };
+
+  //@ts-ignore
+  Prob.paginate(probFilter, options, function (err, result) {
+    // console.log(result.docs);
+    // console.log(result.totalPages);
+    const resultData = {
+      message: 'problems found',
+      payload: { pagedDocs: result.docs, totalPages: result.totalPages },
+    };
+    console.log(resultData.payload);
+    // console.log(result.pagingCounter);
+    // result.docs is an array of paginated documents
+    // result.totalPages is the total number of pages
+    // result.currentPage is the current page number
+    // result.hasNextPage is a boolean indicating if there are more pages
+    // result.hasPrevPage is a boolean indicating if there are previous pages
+    // result.nextPage is the number of the next page
+    // result.prevPage is the number of the previous page
+    // result.pagingCounter is the number of the current page within the total number of pages
+
+    if (!resultData.payload.pagedDocs.length) {
+      resultData.message = 'problem not found';
+      res.status(404).send(resultData);
+    } else {
+      res.status(200).send(resultData);
+    }
+  });
 };
 
 export const origin = (req: Request, res: Response) => {

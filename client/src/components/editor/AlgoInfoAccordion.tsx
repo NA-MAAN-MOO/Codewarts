@@ -10,8 +10,15 @@ import InputIcon from '@mui/icons-material/Input';
 
 //@ts-ignore
 function AlgoInfoAccordion(props) {
-  const { inputStdin, bojProbData, leetProbData, algoSelect, bojProbFullData } =
-    props;
+  const {
+    inputStdin,
+    bojProbData,
+    leetProbData,
+    algoSelect,
+    bojProbFullData,
+    bojProblemId,
+    setBojProblemId,
+  } = props;
 
   /* 문제 예제 인풋을 실행 인풋 창으로 복사 */
   const copyToInput = (key: number) => {
@@ -21,7 +28,7 @@ function AlgoInfoAccordion(props) {
 
   return (
     <>
-      {bojProbData?.problemId || leetProbData?.question.titleSlug ? (
+      {bojProblemId || leetProbData?.question.titleSlug ? (
         <>
           <Accordion>
             <AccordionSummary

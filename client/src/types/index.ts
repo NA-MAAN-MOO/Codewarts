@@ -23,6 +23,10 @@ export type VoiceProp = {
 export type YjsProp = {
   handleProvider?: (pro: WebsocketProvider) => void;
   provider?: WebsocketProvider;
+  setLeftOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  leftOpen?: boolean;
+  handleRightDrawerOpen?: () => void;
+  handleLeftDrawerClose?: () => void;
 };
 
 export type GameType = Game & {
