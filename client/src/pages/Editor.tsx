@@ -37,7 +37,6 @@ const Main = muiStyled('main', {
 }>(({ theme, open }) => ({
   flexGrow: 1,
   padding: theme.spacing(3),
-  border: '2px solid orange', // for debugging
   transition: theme.transitions.create('margin', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -135,18 +134,12 @@ const Editor = (props: VoiceProp & YjsProp) => {
           <Box
             sx={{
               display: 'flex',
-              border: '3px solid green', // for debugging
               width: '100%',
               height: '100%',
             }}
             className="animate__animated animate__zoomInUp "
           >
-            <AppBar
-              position="fixed"
-              open={open}
-              color="transparent"
-              sx={{ border: '1px solid lightgreen' }}
-            >
+            <AppBar position="fixed" open={open} color="transparent">
               <Toolbar
                 sx={{
                   display: 'flex',

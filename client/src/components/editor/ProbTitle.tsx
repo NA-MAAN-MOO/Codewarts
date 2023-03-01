@@ -17,20 +17,27 @@ function ProbTitle(props) {
       {algoSelect === 0 &&
       (bojProbData?.titleKo || bojProbFullData?.solvedAC?.titleKo) ? (
         <ProbSummary>
-          <div>
-            <RenderSvg
-              svgName={
-                bojProbFullData.solvedAC.level >= 0
-                  ? bojProbFullData.solvedAC.level
-                  : bojProbData.level
-              }
-            />
-            <span>
-              {bojProblemId}번{' '}
-              {bojProbFullData?.solvedAC?.titleKo
-                ? bojProbFullData?.solvedAC?.titleKo
-                : bojProbData?.titleKo}
-            </span>
+          <RenderSvg
+            svgName={
+              bojProbFullData.solvedAC.level >= 0
+                ? bojProbFullData.solvedAC.level
+                : bojProbData.level
+            }
+          />
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              width: '100%',
+              wordBreak: 'keep-all',
+              flexWrap: 'wrap',
+              minHeight: '100%',
+            }}
+          >
+            {bojProblemId}번{' '}
+            {bojProbFullData?.solvedAC?.titleKo
+              ? bojProbFullData?.solvedAC?.titleKo
+              : bojProbData?.titleKo}
           </div>
         </ProbSummary>
       ) : leetProbData?.question.title ? (
