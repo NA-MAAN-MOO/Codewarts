@@ -1,3 +1,4 @@
+import React from 'react';
 import { useMemo, useRef, useEffect, useState, useCallback } from 'react';
 import { debounce } from 'lodash';
 import Draggable from 'react-draggable';
@@ -9,14 +10,44 @@ import Card from '@mui/material/Card';
 import styled from 'styled-components';
 import MemoFooter from './MemoFooter';
 
-export default function Memo(props: any) {
-  const { item, editMemo, deleteMemo, setMemoSize } = props;
+const memoColors = [
+  '#ffe552',
+  '#7fff7a',
+  '#ffbfec',
+  '#ffbfc8',
+  '#ffbb6e',
+  '#abe9ff',
+  '#e9c4ff',
+];
+
+function Memo(props: any) {
+  const {
+    memo,
+    getMemos,
+    updateMemo,
+    deleteMemo,
+    changeMemoPos,
+    currentUserNickname,
+  } = props;
+
   const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [color, setColor] = useState('');
+  const [zIndex, setZIndex] = useState(0);
+
+  const isMine = currentUserNickname === memo.authorNickname;
+
+  useEffect(() => {
+    let randNum = Math.floor(Math.random() * memoColors.length);
+    setColor(memoColors[randNum]);
+  }, []);
 
   /* Track position of draggable memo */
   const onChangePosition = useCallback(
-    (data: any) => setPosition({ x: data.x, y: data.y }),
-    [item.id, setPosition]
+    (data: any) =>
+      debounce(() => {
+        setPosition({ x: data.x, y: data.y });
+      }),
+    [memo._id, setPosition]
   );
 
   /* When the content of memo changes, 
@@ -25,61 +56,85 @@ export default function Memo(props: any) {
   const onChangeContent = useMemo(
     () =>
       debounce((e) => {
-        console.log('실질적으로 edit하는 함수 추가.. 바뀐 내용은 아래');
-        editMemo();
-        console.log(e.target.value);
+        // FIXME: 나만 바꿀 수 있게
+        updateMemo(memo._id, e.target.value);
       }, 500),
     []
   );
 
   /* observer? */
-  const onChangeSize = useMemo(
-    () =>
-      debounce((entry) => {
-        const { width, height } = entry[0].contentRect;
-        setMemoSize(item.id, width, height);
-      }, 100),
-    [item.id, setMemoSize]
-  );
+  //   const onChangeSize = useMemo(
+  //     () =>
+  //       debounce((entry) => {
+  //         const { width, height } = entry[0].contentRect;
+  //         setMemoSize(item.id, width, height);
+  //       }, 100),
+  //     [item.id, setMemoSize]
+  //   );
 
-  const onClickDelete = useCallback(
-    () => deleteMemo(item.id),
-    [item.id, deleteMemo]
-  );
+  const onClickDelete = () => {
+    // console.log('온클릭딜리트');
+    deleteMemo(memo._id);
+  };
+
+  const bringToFront = () => {
+    setZIndex(10);
+  };
 
   return (
     <Draggable
-      defaultPosition={{ x: 80, y: 80 }}
-      handle="#draggable-dialog-title"
-      onDrag={(e, data) => onChangePosition(data)}
+      defaultPosition={{ x: memo.x, y: memo.y }}
+      bounds=""
+      onDrag={(e, data) => {
+        // e.stopPropagation();
+        onChangePosition(data);
+        changeMemoPos(memo._id, data.x, data.y);
+      }}
+      onMouseDown={bringToFront}
     >
-      <Card sx={{ width: '240px', minHeight: '240px', background: '#ffe552' }}>
+      <Card
+        sx={{
+          width: '240px',
+          minHeight: '240px',
+          background: color,
+          display: 'inline',
+          position: 'relative',
+          zIndex: zIndex,
+        }}
+      >
         <CardContent>
-          <DraggableRange id="draggable-dialog-title">
-            <DragHandleIcon htmlColor="#ffffff" />
+          {isMine && (
             <IconButton
               aria-label="delete"
               size="small"
-              onClick={onClickDelete}
               color="secondary"
               sx={{ float: 'right', marginTop: '-5px' }}
+              onClick={onClickDelete}
             >
               <DeleteForeverIcon htmlColor="#ffffff" viewBox="0 0 25 25 " />
             </IconButton>
-          </DraggableRange>
-          <MemoContent defaultValue={item.content} onChange={onChangeContent} />
+          )}
+          {isMine ? (
+            <MemoContent
+              defaultValue={memo.content}
+              onChange={onChangeContent}
+            />
+          ) : (
+            <MemoContent defaultValue={memo.content} disabled />
+          )}
         </CardContent>
-        <MemoFooter id={item.id} participants={item.participants} />
+        <MemoFooter
+          _id={memo._id}
+          participants={memo.participants}
+          getMemos={getMemos}
+          currentUserNickname={currentUserNickname}
+        />
       </Card>
     </Draggable>
   );
 }
 
-const DraggableRange = styled.div`
-  width: 100%;
-  height: 25px;
-  //   border: 1px solid red;
-`;
+export default React.memo(Memo);
 
 const MemoContent = styled.textarea`
   width: 100%;
@@ -94,3 +149,7 @@ const MemoContent = styled.textarea`
   padding: 10px;
   font-family: 'Noto Sans KR';
 `;
+
+// const MemoWrapper = styled.div`
+//   display: inline;
+// `;
