@@ -1,12 +1,5 @@
 import { Schema, model, Document, Model, Types } from 'mongoose';
 
-interface ParticipantType {
-  memoId: Types.ObjectId;
-  userId: string;
-  userNickname: string;
-  tier: number;
-}
-
 export interface IMemoInfo {
   date: Date;
   authorId: string;
@@ -14,14 +7,14 @@ export interface IMemoInfo {
   content: string;
   x: number;
   y: number;
-  participants: ParticipantType[];
+  participants: string[];
 }
 
 const memo = new Schema<IMemoInfo>({
   date: { type: Date, default: Date.now, required: false },
   authorId: { type: String, required: true },
   authorNickname: { type: String, required: true },
-  content: { type: String, required: true },
+  content: { type: String },
   x: { type: Number, required: true },
   y: { type: Number, required: true },
   participants: [Object],
