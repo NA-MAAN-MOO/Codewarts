@@ -129,7 +129,7 @@ function EvaluateButton(props) {
   const evaluateSample = async () => {
     const inputData = {
       code: ytext.toString(),
-      stdin: '1', // todo: 실제 input value로 바꾸기
+      stdin: '1\n', // todo: 실제 input value로 바꾸기
     };
 
     callCloudFunction(inputData)
