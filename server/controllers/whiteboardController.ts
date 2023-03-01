@@ -50,47 +50,37 @@ const regenerateData = async (datum: any) => {
 };
 
 /* Get all user's number of solved problems through boj ids in DB */
-export const getUsersBojInfo = async (req: Request, res: Response) => {
-  const datum = await User.find({});
-
-  await regenerateData(datum);
-
-  /* Sort by tier */
-  if (response.length) {
-    await response.sort((a, b) => b.tier - a.tier);
-  }
-
-  /* Send response */
-  if (response.length === 0) {
-    res.status(404).send('No valid Boj Users Id');
-  } else {
-    res.status(200).send(response);
-  }
-
-  /* Empty data */
-  response = [];
-};
-
 // export const getUsersBojInfo = async (req: Request, res: Response) => {
 //   const datum = await User.find({});
 
-//   // await regenerateData(datum);
+//   await regenerateData(datum);
 
 //   /* Sort by tier */
-//   // if (response.length) {
-//   //   await response.sort((a, b) => b.tier - a.tier);
-//   // }
+//   if (response.length) {
+//     await response.sort((a, b) => b.tier - a.tier);
+//   }
 
 //   /* Send response */
-//   if (datum.length === 0) {
+//   if (response.length === 0) {
 //     res.status(404).send('No valid Boj Users Id');
 //   } else {
-//     res.status(200).send(datum);
+//     res.status(200).send(response);
 //   }
 
 //   /* Empty data */
-//   // response = [];
+//   response = [];
 // };
+
+export const getAllUsers = async (req: Request, res: Response) => {
+  try {
+    const datum = await User.find({});
+    res.status(200).send(datum);
+    console.log(datum);
+  } catch (e) {
+    console.error(e);
+    res.status(404).send('No valid Boj Users Id');
+  }
+};
 
 /* Save memo to DB */
 export const addMemo = async (req: Request, res: Response) => {

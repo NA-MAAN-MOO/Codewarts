@@ -109,6 +109,7 @@ function Memo(props: any) {
         changeMemoPos(memo._id, data.x, data.y);
       }}
       onMouseDown={bringToFront}
+      onStart={bringToFront}
       onStop={(e, data) => {
         setIsDragging(false);
         fixZIndex();
@@ -116,7 +117,7 @@ function Memo(props: any) {
     >
       <Card
         sx={{
-          width: '240px',
+          width: '280px',
           minHeight: '240px',
           background: color,
           display: 'inline',
@@ -127,7 +128,7 @@ function Memo(props: any) {
         <CardContent sx={{ fontSize: '0.9em', color: 'gray' }}>
           <div id="draggable-div" style={{ height: '30px' }}>
             <span>
-              {memo.date} &nbsp;by {memo.authorNickname}
+              [{memo.date}] &nbsp; {memo.authorNickname}
             </span>
             {isMine && (
               <IconButton

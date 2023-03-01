@@ -16,16 +16,16 @@ export default function RankingList(props: any) {
     setTabValue(newValue);
   };
 
-  useEffect(() => {
-    if (showInfoFlag) {
-      getBojInfos();
-      setFlag(false);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (showInfoFlag) {
+  //     getBojInfos();
+  //     setFlag(false);
+  //   }
+  // }, []);
 
   const bojInfoCopy = [...bojInfos];
 
-  const bojInfoSortedByTier = [...bojInfos];
+  const bojInfoSortedByTier = [...bojInfoCopy.sort((a, b) => b.tier - a.tier)];
   const bojInfoSortedByStreak = [
     ...bojInfoCopy.sort((a, b) => b.maxStreak - a.maxStreak),
   ];
