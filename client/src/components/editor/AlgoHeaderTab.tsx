@@ -1,10 +1,6 @@
 import axios from 'axios';
-/* GraphQL queries */
-import PROBLEMQUERY from '../../graphql/problemQuery';
 import {
   HeaderTab,
-  StyledTabs,
-  StyledTab,
   AlgoInputWrap,
   AlgoTextField,
 } from '../../../src/pages/editor/editorStyle';
@@ -15,12 +11,7 @@ const APPLICATION_EDITOR_URL =
 
 //@ts-ignore
 function AlgoHeaderTab(props) {
-  const {
-    bojProbDataRef,
-    setBojProbData,
-    setBojProbFullData,
-    setBojProblemId,
-  } = props;
+  const { bojProbDataRef, setBojProbFullData, setBojProblemId } = props;
 
   /* 서버로 몽고DB에 저장된 백준 문제 전체 정보 요청 */
   async function fetchBojProbFullData(probId: string) {

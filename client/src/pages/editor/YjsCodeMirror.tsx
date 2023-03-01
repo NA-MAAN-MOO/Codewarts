@@ -258,7 +258,6 @@ function YjsCodeMirror(props: YjsProp) {
               />
               <AlgoHeaderTab
                 bojProbDataRef={bojProbDataRef}
-                setBojProbData={setBojProbData}
                 setBojProbFullData={setBojProbFullData}
                 setBojProblemId={setBojProblemId}
               />
@@ -287,7 +286,7 @@ function YjsCodeMirror(props: YjsProp) {
               <SubmitButton bojProblemId={bojProblemId} />
               <EvaluateButton
                 ytext={ytext}
-                bojProbData={bojProbData}
+                bojProblemId={bojProblemId}
                 markingPercent={markingPercent}
                 setMarkingPercent={setMarkingPercent}
                 mySocket={mySocket}
