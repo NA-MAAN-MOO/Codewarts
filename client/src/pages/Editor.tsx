@@ -23,7 +23,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import PeopleIcon from '@mui/icons-material/People';
 import Board from './Board';
 import { toggleWhiteboard } from 'stores/whiteboardSlice';
-import { Socket } from 'socket.io-client';
 import FloatingButton from 'components/FloatingButton';
 import MenuIcon from '@mui/icons-material/Menu';
 
