@@ -1,5 +1,5 @@
 import {
-  getUsersBojInfo,
+  getAllUsers,
   addMemo,
   updateMemo,
   getMemo,
@@ -11,7 +11,7 @@ import express from 'express';
 
 const router = express.Router();
 
-router.get('/boj-infos', getUsersBojInfo);
+router.get('/user-infos', getAllUsers);
 
 router.post('/add-memo', addMemo);
 router.post('/delete-memo', deleteMemo);

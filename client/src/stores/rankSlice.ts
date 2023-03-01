@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, createReducer } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 import { RootState } from 'stores';
@@ -9,9 +9,11 @@ const APPLICATION_DB_URL =
 
 const getEachUserBojInfo = async (bojId: string) => {
   try {
-    return await axios.get(
+    const data = await axios.get(
       `https://solved.ac/api/v3/user/show?handle=${bojId}`
     );
+    // console.log(data.data);
+    return data.data;
   } catch (e) {
     return false;
   }
@@ -19,7 +21,7 @@ const getEachUserBojInfo = async (bojId: string) => {
 
 const regenerateData = async (datum: any) => {
   let result = [];
-  for (const data of datum) {
+  for await (const data of datum) {
     const eachData: any = await getEachUserBojInfo(data.userBojId);
 
     if (!!eachData) {
@@ -27,13 +29,24 @@ const regenerateData = async (datum: any) => {
         nickname: data.userNickname,
         id: data.userId,
         bojId: data.userBojId,
-        tier: eachData.data.tier,
-        maxStreak: eachData.data.maxStreak,
-        solved: eachData.data.solvedCount,
+        tier: eachData.tier,
+        maxStreak: eachData.maxStreak,
+        solved: eachData.solvedCount,
       });
     }
   }
+  return result;
 };
+
+export const getbojInfos = createAsyncThunk('rank/getbojInfos', async () => {
+  try {
+    const response = await axios.get(APPLICATION_DB_URL + '/user-infos');
+    const bojInfos = await regenerateData(response.data); //.data 붙이고 await 붙이는 거 중요함 ...
+    return bojInfos;
+  } catch (e) {
+    // console.error(e);
+  }
+});
 
 export interface BojInfoState {
   nickname: string;
@@ -44,40 +57,23 @@ export interface BojInfoState {
   solved: number;
 }
 
-const initialState: BojInfoState[] = [];
-// FIXME: Memos 만들기
+interface infosState {
+  infos: BojInfoState[] | undefined;
+}
 
-export const memoSlice = createSlice({
-  name: 'memo',
+const initialState: infosState = {
+  infos: [],
+};
+
+export const rankSlice = createSlice({
+  name: 'rank',
   initialState,
-  reducers: {
-    // getbojInfos: (state) => {
-    //   try {
-    //     const response = await axios.get(APPLICATION_DB_URL + '/boj-infos');
-    //     const bojInfo = regenerateData(response.data);
-    //     state.push(bojInfo);
-    //   } catch (e) {
-    //     console.error(e);
-    //   }
-    // },
-    editMemo: (state, action: PayloadAction<string>) => {},
-    participateIn: (state, action: PayloadAction<string>) => {},
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getbojInfos.fulfilled, (state, action) => {
+      state.infos = action.payload;
+    });
   },
 });
 
-export const zIndexSlice = createSlice({
-  name: 'zIndex',
-  initialState: 0,
-  reducers: {
-    setMaxZIndex: (state) => {
-      state++;
-    },
-  },
-});
-
-// Action creators are generated for each case reducer function
-// export const { removeMemo, editMemo, participateIn } = memoSlice.actions;
-
-export const { setMaxZIndex } = zIndexSlice.actions;
-
-export default memoSlice.reducer;
+export default rankSlice.reducer;

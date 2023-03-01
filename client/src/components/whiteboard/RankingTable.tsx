@@ -29,11 +29,13 @@ interface InfoType {
 export default function RankingTable(props: any) {
   const { bojInfos } = props;
   const myNickname = useSelector((state: RootState) => state.user.playerId);
-  console.log(myNickname);
 
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: '40%' }} aria-label="simple table">
+      <Table
+        sx={{ minWidth: '40%', height: 'max-content' }}
+        aria-label="simple table"
+      >
         <TableHead>
           <TableRow sx={{ background: 'darkred' }}>
             {colNames.map((colName: string) => (

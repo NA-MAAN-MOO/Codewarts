@@ -16,7 +16,6 @@ function MemoDump(props: any) {
   } = props;
 
   const [maxZIndex, setmaxZIndex] = useState(0);
-  console.log(maxZIndex);
 
   return (
     <>
