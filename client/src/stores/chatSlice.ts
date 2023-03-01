@@ -62,6 +62,14 @@ export const chatSlice = createSlice({
     toggleMyMicMute: (state) => {
       state.myMicMute = !state.myMicMute;
     },
+    setVolMute: (state, action) => {
+      const { user, muteTo } = action.payload;
+      state.volMuteInfo[user] = muteTo;
+    },
+    setMicMute: (state, action) => {
+      const { user, muteTo } = action.payload;
+      state.micMuteInfo[user] = muteTo;
+    },
     initialMyMute: (state, action) => {
       const me = action.payload;
       console.log(me);
@@ -72,26 +80,6 @@ export const chatSlice = createSlice({
         state.myMicMute = true;
       }
     },
-    // setSession: (state, action) => {
-    //   const serializedSession = JSON.stringify(action.payload);
-    //   state.sessionNow = serializedSession;
-    // },
-    // getSession: (state) => {
-    //   if (!state.sessionNow) return undefined;
-    //   const parsedSession = JSON.parse(state.sessionNow);
-    //   return parsedSession;
-    // },
-    // removeSession: (state) => {
-    //   state.sessionIdNow = '';
-    // },
-    // addUser: (state, action) => {
-    //   state.users = [...state.users, action.payload];
-    // },
-    // removeUser: (state, action) => {
-    //   const targetName = action.payload;
-    //   if (!targetName) return;
-    //   state.users = state.users.filter((item) => item !== targetName);
-    // },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchMuteInfo.fulfilled, (state, action) => {
@@ -109,6 +97,8 @@ export const {
   toggleMyVolMute,
   toggleMyMicMute,
   initialMyMute,
+  setVolMute,
+  setMicMute,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

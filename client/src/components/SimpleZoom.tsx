@@ -17,6 +17,7 @@ export default function SimpleZoom(props: SimpleZoomProps) {
             style={{
               transitionDelay: checked ? `${100 * (index + 1)}ms` : '0ms',
             }}
+            key={item}
           >
             <Button
               onClick={() => clickEmoji(item)}
