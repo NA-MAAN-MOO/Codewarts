@@ -132,7 +132,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     }
     if (this.playerDialogBubble) {
       this.playerDialogBubble.setPosition(
-        this.x - this.width / 1.5,
+        this.x - this.width,
         this.y - this.height - 80
       );
     }

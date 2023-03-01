@@ -1,16 +1,12 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import Switch from '@mui/material/Switch';
-import Paper from '@mui/material/Paper';
 import Zoom from '@mui/material/Zoom';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import { Theme } from '@mui/material/styles';
-import { truncate } from 'fs';
 import { Button } from '@mui/material';
+import { SimpleZoomProps } from 'types';
 
-export default function SimpleZoom({ clickEmoji, emojies }) {
+export default function SimpleZoom(props: SimpleZoomProps) {
   const checked = true;
-  const handleChange = () => {};
+  const { clickEmoji, emojies } = props;
 
   return (
     <Box sx={{ height: 53.7 }}>
