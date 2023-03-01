@@ -94,10 +94,10 @@ function AlgoHeaderTab(props) {
   return (
     <HeaderTab>
       <AlgoInputWrap>
-        <div>
+        <div style={{ marginLeft: '5px' }}>
           <AlgoTextField
             id="reddit-input"
-            label="백준 문제 번호"
+            label="번호로 바로가기"
             variant="filled"
             size="small"
             inputRef={bojProbDataRef}

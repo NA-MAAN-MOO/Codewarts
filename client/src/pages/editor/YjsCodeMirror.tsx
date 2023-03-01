@@ -53,7 +53,7 @@ import AlgoHeaderTab from 'components/editor/AlgoHeaderTab';
 import AlgoInfoAccordion from 'components/editor/AlgoInfoAccordion';
 import EvaluateGauge from 'components/editor/EvaluateGauge';
 import ProbTitle from 'components/editor/ProbTitle';
-import SearchModal from './ProbSearchModal';
+import SearchModal from '../../components/editor/ProbSearchModal';
 
 /* network */
 import { getPhaserSocket } from 'network/phaserSocket';
@@ -251,16 +251,18 @@ function YjsCodeMirror(props: YjsProp) {
                 boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)',
               }}
             >
-              <SearchModal
-                setBojProbFullData={setBojProbFullData}
-                setBojProblemId={setBojProblemId}
-                setAlgoSelect={setAlgoSelect}
-              />
-              <AlgoHeaderTab
-                bojProbDataRef={bojProbDataRef}
-                setBojProbFullData={setBojProbFullData}
-                setBojProblemId={setBojProblemId}
-              />
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <AlgoHeaderTab
+                  bojProbDataRef={bojProbDataRef}
+                  setBojProbFullData={setBojProbFullData}
+                  setBojProblemId={setBojProblemId}
+                />
+                <SearchModal
+                  setBojProbFullData={setBojProbFullData}
+                  setBojProblemId={setBojProblemId}
+                  setAlgoSelect={setAlgoSelect}
+                />
+              </div>
               <AlgoInfoAccordion
                 inputStdin={inputStdin}
                 bojProbFullData={bojProbFullData}
