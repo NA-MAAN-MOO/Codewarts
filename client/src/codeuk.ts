@@ -52,6 +52,7 @@ const config = {
   plugins: {
     scene: [pluginConfig],
   },
+  pixelArt: true,
 };
 
 let phaserGame: GameType = new Phaser.Game(config);

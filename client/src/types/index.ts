@@ -66,6 +66,11 @@ export type ServerPlayerType = {
   playerCollider: boolean;
 };
 
+export type SimpleZoomProps = {
+  clickEmoji: (emoji: string) => void;
+  emojies: string[];
+};
+
 export type MotionType = {
   socketId: string;
   x: number;

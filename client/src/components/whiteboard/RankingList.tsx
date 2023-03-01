@@ -16,16 +16,16 @@ export default function RankingList(props: any) {
     setTabValue(newValue);
   };
 
-  useEffect(() => {
-    if (showInfoFlag) {
-      getBojInfos();
-      setFlag(false);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (showInfoFlag) {
+  //     getBojInfos();
+  //     setFlag(false);
+  //   }
+  // }, []);
 
   const bojInfoCopy = [...bojInfos];
 
-  const bojInfoSortedByTier = [...bojInfos];
+  const bojInfoSortedByTier = [...bojInfoCopy.sort((a, b) => b.tier - a.tier)];
   const bojInfoSortedByStreak = [
     ...bojInfoCopy.sort((a, b) => b.maxStreak - a.maxStreak),
   ];
@@ -47,7 +47,7 @@ export default function RankingList(props: any) {
     >
       <Toolbar variant="dense" sx={{ marginTop: '-10px' }} />
       {/* 탭이 가운데에 있는 게 좋으면 centered 키워드 붙이기 */}
-      <AntTabs value={tabValue} onChange={handleChange}>
+      <AntTabs value={tabValue} onChange={handleChange} centered>
         <AntTab label="티어" />
         <AntTab label="최장스트릭" />
         <AntTab label="맞힌문제" />
@@ -86,7 +86,7 @@ const AntTab = styled((props: StyledTabProps) => (
   marginRight: theme.spacing(1),
   color: 'rgba(0, 0, 0, 0.85)',
   fontFamily: ['-apple-system'].join(','),
-  fontSize: '1em',
+  fontSize: '1.1em',
   '&:hover': {
     color: '#ab0508',
     opacity: 1,

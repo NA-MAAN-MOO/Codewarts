@@ -3,6 +3,7 @@ import modeReducer from './modeSlice';
 import editorReducer from './editorSlice';
 import userReducer from './userSlice';
 import chatReducer, { fetchMuteInfo } from 'stores/chatSlice';
+import rankReducer, { getbojInfos } from 'stores/rankSlice';
 import boardReducer from './whiteboardSlice';
 
 export const store = configureStore({
@@ -12,10 +13,12 @@ export const store = configureStore({
     user: userReducer,
     chat: chatReducer,
     board: boardReducer,
+    rank: rankReducer,
   },
 });
 
 store.dispatch(fetchMuteInfo());
+store.dispatch(getbojInfos());
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;

@@ -83,6 +83,8 @@ const DrawerHeader = muiStyled('div')(({ theme }) => ({
 }));
 
 const Editor = (props: VoiceProp & YjsProp) => {
+  const [onWhiteBoard, setOnWhiteBoard] = useState('화이트보드 켜기');
+
   const { editorName, isChecked } = useSelector((state: RootState) => {
     return { ...state.editor, ...state.chat, isChecked: state.board.isChecked };
   });
@@ -116,6 +118,11 @@ const Editor = (props: VoiceProp & YjsProp) => {
     // if (socket) socket.disconnect();
   };
   const handleBoard = () => {
+    if (onWhiteBoard === '화이트보드 켜기') {
+      setOnWhiteBoard('화이트보드 끄기');
+    } else {
+      setOnWhiteBoard('화이트보드 켜기');
+    }
     dispatch(toggleWhiteboard());
   };
 
@@ -211,7 +218,7 @@ const Editor = (props: VoiceProp & YjsProp) => {
           size="small"
           onClick={handleBoard}
         >
-          화이트보드 켜기 / 끄기
+          {onWhiteBoard}
         </FloatingButton>
       </FixedBtnDiv>
     </>

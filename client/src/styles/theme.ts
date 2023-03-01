@@ -47,6 +47,7 @@ export const styledTheme = {
   lighterBlue: '#F0F8FF',
   mainFont: 'Firenze',
   smallIconSize: '23px',
+  normalIconSize: '32px',
 };
 
 export default muiTheme;
