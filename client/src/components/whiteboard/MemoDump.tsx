@@ -15,6 +15,9 @@ function MemoDump(props: any) {
     currentUserNickname,
   } = props;
 
+  const [maxZIndex, setmaxZIndex] = useState(0);
+  console.log(maxZIndex);
+
   return (
     <>
       {memos.length !== 0 ? (
@@ -26,10 +29,12 @@ function MemoDump(props: any) {
             updateMemo={updateMemo}
             changeMemoPos={changeMemoPos}
             currentUserNickname={currentUserNickname}
+            maxZIndex={maxZIndex}
+            setmaxZIndex={setmaxZIndex}
           />
         ))
       ) : (
-        <div></div>
+        <></>
       )}
     </>
   );

@@ -9,6 +9,8 @@ import IconButton from '@mui/material/IconButton';
 import Card from '@mui/material/Card';
 import styled from 'styled-components';
 import MemoFooter from './MemoFooter';
+import { useSelector } from 'react-redux';
+import { RootState } from 'stores';
 
 const memoColors = [
   '#ffe552',
@@ -28,11 +30,14 @@ function Memo(props: any) {
     deleteMemo,
     changeMemoPos,
     currentUserNickname,
+    maxZIndex,
+    setmaxZIndex,
   } = props;
 
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [color, setColor] = useState('');
-  const [zIndex, setZIndex] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [ownZIndex, setOwnZIndex] = useState(maxZIndex);
 
   const isMine = currentUserNickname === memo.authorNickname;
 
@@ -78,19 +83,36 @@ function Memo(props: any) {
   };
 
   const bringToFront = () => {
-    setZIndex(10);
+    console.log('찍힘');
+    // let tempZIndex = maxZindex + 1;
+    setIsDragging(true);
+    setmaxZIndex(maxZIndex + 1);
+  };
+
+  const fixZIndex = () => {
+    setOwnZIndex(maxZIndex);
   };
 
   return (
     <Draggable
+      handle="#draggable-div"
       defaultPosition={{ x: memo.x, y: memo.y }}
-      bounds=""
+      bounds={{
+        left: -window.innerWidth * 0.1,
+        top: 0,
+        right: window.innerWidth * 0.5,
+        bottom: window.innerHeight * 0.9,
+      }}
       onDrag={(e, data) => {
         // e.stopPropagation();
         onChangePosition(data);
         changeMemoPos(memo._id, data.x, data.y);
       }}
       onMouseDown={bringToFront}
+      onStop={(e, data) => {
+        setIsDragging(false);
+        fixZIndex();
+      }}
     >
       <Card
         sx={{
@@ -98,29 +120,34 @@ function Memo(props: any) {
           minHeight: '240px',
           background: color,
           display: 'inline',
-          position: 'relative',
-          zIndex: zIndex,
+          position: 'absolute',
+          zIndex: isDragging ? maxZIndex : ownZIndex,
         }}
       >
-        <CardContent>
-          {isMine && (
-            <IconButton
-              aria-label="delete"
-              size="small"
-              color="secondary"
-              sx={{ float: 'right', marginTop: '-5px' }}
-              onClick={onClickDelete}
-            >
-              <DeleteForeverIcon htmlColor="#ffffff" viewBox="0 0 25 25 " />
-            </IconButton>
-          )}
+        <CardContent sx={{ fontSize: '0.9em', color: 'gray' }}>
+          <div id="draggable-div" style={{ height: '30px' }}>
+            <span>
+              {memo.date} &nbsp;by {memo.authorNickname}
+            </span>
+            {isMine && (
+              <IconButton
+                aria-label="delete"
+                size="small"
+                color="secondary"
+                sx={{ float: 'right', marginTop: '-5px' }}
+                onClick={onClickDelete}
+              >
+                <DeleteForeverIcon htmlColor="#ffffff" viewBox="0 0 25 25 " />
+              </IconButton>
+            )}
+          </div>
           {isMine ? (
             <MemoContent
               defaultValue={memo.content}
               onChange={onChangeContent}
             />
           ) : (
-            <MemoContent defaultValue={memo.content} disabled />
+            <MemoContent defaultValue={memo.content} readOnly />
           )}
         </CardContent>
         <MemoFooter
@@ -138,7 +165,7 @@ export default React.memo(Memo);
 
 const MemoContent = styled.textarea`
   width: 100%;
-  height: 100%;
+  height: 180px;
   box-sizing: border-box;
   border: none;
   outline: none;
@@ -146,8 +173,10 @@ const MemoContent = styled.textarea`
   background: none;
   margin: 0;
   user-select: auto;
-  padding: 10px;
+  padding: 5px;
+  margin-bottom: 20px;
   font-family: 'Noto Sans KR';
+  font-size: 1.1em;
 `;
 
 // const MemoWrapper = styled.div`

@@ -36,7 +36,7 @@ function AvatarWithPopper(props: any) {
   /* Avatar function */
   function stringAvatar(name: string) {
     return {
-      children: `${name[0]}${name[1]}`,
+      children: name.length !== 1 ? `${name[0]}${name[1]}` : `${name[0]}`,
     };
   }
 

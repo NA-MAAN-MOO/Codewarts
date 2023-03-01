@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import { useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
 
-const drawerWidth = 55;
+const drawerWidth = 60;
 
 const APPLICATION_DB_URL =
   process.env.REACT_APP_DB_URL || 'http://localhost:3003';
@@ -68,7 +68,6 @@ function MainField(props: any) {
       console.error(e);
     }
   };
-  console.log('리렌더링');
 
   /* Change and save memo position */
   const changeMemoPos = async (id: any, x: number, y: number) => {
@@ -109,7 +108,8 @@ function MainField(props: any) {
             width: `${drawerWidth}%`,
             boxSizing: 'border-box',
             background: 'transparent',
-            // overflow: 'hidden',
+            overflow: 'hidden',
+            // position: 'relative',
           },
         }}
         variant="permanent"

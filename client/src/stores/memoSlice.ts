@@ -9,6 +9,8 @@ const userNickname = useSelector(
   (state: RootState) => state.user.playerNickname
 );
 
+let allMemos: MemoState[] = [];
+
 interface ParticipantType {
   memoId: any;
   userId: string;
@@ -17,6 +19,7 @@ interface ParticipantType {
 }
 
 export interface MemoState {
+  _id: any;
   date: Date;
   authorId: string;
   authorNickname: string;
@@ -27,6 +30,7 @@ export interface MemoState {
 }
 
 const initialState: MemoState = {
+  _id: '',
   date: now,
   authorId: userId,
   authorNickname: userNickname,
@@ -35,20 +39,35 @@ const initialState: MemoState = {
   y: 80,
   participants: [],
 };
+// FIXME: Memos 만들기
 
 export const memoSlice = createSlice({
   name: 'memo',
   initialState,
   reducers: {
-    addMemo: (state) => {},
-    removeMemo: (state) => {},
-    editMemo: (state) => {},
-    participateIn: (state) => {},
+    // addMemo: (state, action: PayloadAction) => {
+    //   //FIXME: 굉장히 이상..
+    //   allMemos.push({ ...initialState, authorId: action.payload });
+    // },
+    removeMemo: (state, action: PayloadAction<string>) => {},
+    editMemo: (state, action: PayloadAction<string>) => {},
+    participateIn: (state, action: PayloadAction<string>) => {},
+  },
+});
+
+export const zIndexSlice = createSlice({
+  name: 'zIndex',
+  initialState: 0,
+  reducers: {
+    setMaxZIndex: (state) => {
+      state++;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { addMemo, removeMemo, editMemo, participateIn } =
-  memoSlice.actions;
+export const { removeMemo, editMemo, participateIn } = memoSlice.actions;
+
+export const { setMaxZIndex } = zIndexSlice.actions;
 
 export default memoSlice.reducer;

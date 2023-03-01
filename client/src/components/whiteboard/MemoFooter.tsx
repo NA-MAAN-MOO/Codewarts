@@ -1,94 +1,69 @@
-import { useState, MouseEvent, ChangeEvent } from 'react';
-import Avatar from '@mui/material/Avatar';
+import React from 'react';
+import { useState, ChangeEvent, useCallback } from 'react';
+import AvatarWithPopper from './AvatarWithPopper';
 import AvatarGroup from '@mui/material/AvatarGroup';
-import Popover from '@mui/material/Popover';
-import Typography from '@mui/material/Typography';
 import Checkbox from '@mui/material/Checkbox';
 import styled from 'styled-components';
+import axios from 'axios';
 
-export default function MemoFooter(props: any) {
-  const { id, participants } = props;
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const [checked, setChecked] = useState<boolean>(true);
+const APPLICATION_DB_URL =
+  process.env.REACT_APP_DB_URL || 'http://localhost:3003';
 
-  /* Popover functions */
-  const handlePopoverOpen = (event: MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+function MemoFooter(props: any) {
+  const { _id, participants, getMemos, currentUserNickname } = props;
 
-  const handlePopoverClose = () => {
-    setAnchorEl(null);
-  };
-
-  const open = Boolean(anchorEl);
+  const isChecked = participants.includes(currentUserNickname);
+  const [checked, setChecked] = useState<boolean>(isChecked);
 
   /* Checkbox function */
-  // TODO: 한 번 체크하면 다시 체크 해제 못하게 하기? 아니면 체크 상태에 따라 participant에 넣어줘야 함
+  const participateIn = useCallback(() => {
+    participants.push(currentUserNickname);
+    try {
+      axios.post(APPLICATION_DB_URL + `/participate-in-memo`, {
+        _id: _id,
+        participants: participants,
+      });
+      // getMemos();
+    } catch (e) {
+      console.error(e);
+    }
+  }, [participants]);
+
+  const notParticipateIn = useCallback(() => {
+    participants.filter(
+      (participant: string) => participant !== currentUserNickname
+    );
+    try {
+      axios.post(APPLICATION_DB_URL + '/participate-in-memo', {
+        _id: _id,
+        participants: participants,
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  }, [participants]);
+
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
+    // if (event.target.checked) {
+    participateIn();
+    // } else {
+    //   notParticipateIn();
+    // }
   };
-
-  /* Avatar function */
-  function generateColor() {
-    let color = '#';
-
-    let randomColor = Math.floor(Math.random() * 16777215).toString(16);
-    color += randomColor;
-
-    return color;
-  }
-
-  function stringAvatar(name: string) {
-    return {
-      children: `${name[0]}${name[1]}`,
-    };
-  }
 
   return (
     <FooterWrapper>
       <AvatarGroup
         max={6}
         sx={{
-          '&': { border: 'none' },
+          border: 'none',
+          '&.MuiAvatarGroup-root': { border: 'none' },
+          '&.MuiAvatarGroup-avatar': { border: 'none' },
         }}
       >
-        {participants.map((participant: any) => (
-          <>
-            <Avatar
-              {...stringAvatar(`${participant.nickname}`)}
-              sx={{
-                fontSize: '1em',
-                fontWeight: '700',
-                // background: `${stringToColor()}`,
-                '&': {
-                  border: 'none',
-                  background: `${generateColor()}`,
-                },
-              }}
-              onMouseEnter={handlePopoverOpen}
-              onMouseLeave={handlePopoverClose}
-            />
-            <Popover
-              id="mouse-over-popover"
-              sx={{
-                pointerEvents: 'none',
-              }}
-              open={open}
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              transformOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              onClose={handlePopoverClose}
-              disableRestoreFocus
-            >
-              <Typography sx={{ p: 1 }}>{participant.nickname}</Typography>
-            </Popover>
-          </>
+        {participants.map((participant: string) => (
+          <AvatarWithPopper participant={participant} />
         ))}
       </AvatarGroup>
       <Checkbox
@@ -96,9 +71,10 @@ export default function MemoFooter(props: any) {
         onChange={handleChange}
         sx={{
           color: 'white',
-          '&.Mui-checked': { color: 'darkred' },
+          '&.Mui-checked': { color: '#00c410' },
           margin: '0 0 10px 10px',
         }}
+        disabled={isChecked ? true : false}
       />
     </FooterWrapper>
   );
@@ -114,3 +90,9 @@ const FooterWrapper = styled.div`
   justify-content: space-between;
   // border: 1px solid red;
 `;
+
+const StyledAvatarGroup = styled(AvatarGroup)`
+  border: none;
+`;
+
+export default React.memo(MemoFooter);

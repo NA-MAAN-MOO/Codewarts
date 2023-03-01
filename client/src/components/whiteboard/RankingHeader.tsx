@@ -18,10 +18,10 @@ export default function RankingHeader() {
           marginTop: '20px',
         }}
       >
-        {/* TODO: 가운데 정렬 */}
         <Toolbar
           sx={{
-            justifyContent: 'left',
+            /* FIXME: 가운데 정렬 */
+            justifyContent: 'center',
             marginLeft: '20px',
           }}
         >
@@ -31,8 +31,9 @@ export default function RankingHeader() {
             align="center"
             sx={{
               textAlign: 'center',
-              fontFamily: 'Pretendard-Bold',
+              fontFamily: 'Firenze',
               fontSize: '2em',
+              fontWeight: '800',
             }}
           >
             코드와트 코딩 랭킹 🔥

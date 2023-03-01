@@ -71,6 +71,27 @@ export const getUsersBojInfo = async (req: Request, res: Response) => {
   response = [];
 };
 
+// export const getUsersBojInfo = async (req: Request, res: Response) => {
+//   const datum = await User.find({});
+
+//   // await regenerateData(datum);
+
+//   /* Sort by tier */
+//   // if (response.length) {
+//   //   await response.sort((a, b) => b.tier - a.tier);
+//   // }
+
+//   /* Send response */
+//   if (datum.length === 0) {
+//     res.status(404).send('No valid Boj Users Id');
+//   } else {
+//     res.status(200).send(datum);
+//   }
+
+//   /* Empty data */
+//   // response = [];
+// };
+
 /* Save memo to DB */
 export const addMemo = async (req: Request, res: Response) => {
   const memo = new Memo({
