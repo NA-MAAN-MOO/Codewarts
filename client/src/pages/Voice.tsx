@@ -85,6 +85,7 @@ const Voice = ({ roomKey, session, handleSession, ...rest }: VoiceProp) => {
         await joinSession();
         return;
       }
+
       await registerSession({
         session,
         sessionId: roomKey,

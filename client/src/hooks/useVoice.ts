@@ -179,7 +179,7 @@ export default () => {
       handlePublisher,
     } = props;
     try {
-      if (!session || !sessionId) return;
+      if (!session || !sessionId || !OV) return;
 
       const content: Connection[] | false = await getConnections(sessionId);
       if (content === false) {
@@ -313,7 +313,6 @@ export default () => {
       // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
       await mySession.connect(token, { user: userName });
 
-      if (!OV) return;
       // Init a passing undefined as targetElement (we don't want OpenVidu to insert a video
       // element: we will manage it on our own) and with the desired properties
       let pubNow = await OV.initPublisherAsync(undefined, {
