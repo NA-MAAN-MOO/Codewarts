@@ -16,6 +16,8 @@ import {
   toggleMyMicMute,
   toggleMyVolMute,
   toggleVolMute,
+  setVolMute,
+  setMicMute,
 } from 'stores/chatSlice';
 import { Connection } from 'types';
 import _ from 'lodash';
@@ -260,20 +262,22 @@ export default () => {
 
       //유저가 볼륨 음소거를 했다는 시그널을 받았을 때
       mySession.on(`signal:${MUTE_TYPE.VOL}`, async (event) => {
-        const user = event.data;
+        if (!event.data) return;
+        const { user, muteTo } = JSON.parse(event.data);
         if (!user) {
           return;
         }
-        await toggleMute({ type: MUTE_TYPE.VOL, userName: user });
+        await ChangeMute({ type: MUTE_TYPE.VOL, user, muteTo });
       });
 
       //유저가 마이크 음소거를 했다는 시그널을 받았을 때
       mySession.on(`signal:${MUTE_TYPE.MIC}`, async (event) => {
-        const user = event.data;
+        if (!event.data) return;
+        const { user, muteTo } = JSON.parse(event.data);
         if (!user) {
           return;
         }
-        await toggleMute({ type: MUTE_TYPE.MIC, userName: user });
+        await ChangeMute({ type: MUTE_TYPE.MIC, user, muteTo });
       });
 
       //방장이 내게 볼륨 음소거를 시켰을 때
@@ -288,7 +292,7 @@ export default () => {
         if (!user || user !== userName) {
           return;
         }
-        await handleMyVolumeMute({ subscribers, session });
+        await handleMyVolumeMute({ subscribers, session, muteTo: !myVolMute });
       });
 
       //방장이 내게 마이크 음소거를 시켰을 때
@@ -306,7 +310,11 @@ export default () => {
         if (!user || !pubNow || user !== userName) {
           return;
         }
-        await handleMyMicMute({ publisher: pubNow, session });
+        await handleMyMicMute({
+          publisher: pubNow,
+          session,
+          muteTo: !myMicMute,
+        });
       });
 
       // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
@@ -371,18 +379,20 @@ export default () => {
   //   }
   // };
 
-  const toggleMute = async ({
+  const ChangeMute = async ({
     type,
-    userName,
+    user,
+    muteTo,
   }: {
     type: string;
-    userName: string;
+    user: string;
+    muteTo: boolean;
   }) => {
     try {
       if (type === MUTE_TYPE.VOL) {
-        dispatch(toggleVolMute(userName));
+        dispatch(setVolMute({ user, muteTo }));
       } else if (type === MUTE_TYPE.MIC) {
-        dispatch(toggleMicMute(userName));
+        dispatch(setMicMute({ user, muteTo }));
       }
     } catch (err) {
       console.log(err);
@@ -393,9 +403,11 @@ export default () => {
   const handleMyVolumeMute = async ({
     subscribers,
     session,
+    muteTo,
   }: {
     subscribers: Subscriber[];
     session?: Session;
+    muteTo: boolean;
   }) => {
     if (!session) return;
     //false일 때 뮤트 처리됨
@@ -406,10 +418,15 @@ export default () => {
     dispatch(toggleMyVolMute());
     await axios.post(`${APPLICATION_VOICE_URL}/toggle-mute/${MUTE_TYPE.VOL}`, {
       userName: playerId,
+      muteTo,
+    });
+    const sendingData = JSON.stringify({
+      user: playerId,
+      muteTo,
     });
     session?.signal({
       type: MUTE_TYPE.VOL,
-      data: playerId,
+      data: sendingData,
     });
   };
 
@@ -417,22 +434,40 @@ export default () => {
   const handleMyMicMute = async ({
     publisher,
     session,
+    muteTo,
   }: {
     publisher?: Publisher;
     session?: Session;
+    muteTo: boolean;
   }) => {
-    if (!session || !publisher) return;
+    if (!session || !publisher) {
+      console.log('필요한 정보 없음');
+      return;
+    }
     //false일 때 뮤트 처리됨
-    console.log('마이크뮤트');
-    publisher.publishAudio(myMicMute);
-    dispatch(toggleMyMicMute());
-    await axios.post(`${APPLICATION_VOICE_URL}/toggle-mute/${MUTE_TYPE.MIC}`, {
-      userName: playerId,
-    });
-    session?.signal({
-      type: MUTE_TYPE.MIC,
-      data: playerId,
-    });
+    console.log('퍼블리셔', publisher);
+    console.log('마이크뮤트', myMicMute);
+    try {
+      publisher.publishAudio(myMicMute);
+      dispatch(toggleMyMicMute());
+      await axios.post(
+        `${APPLICATION_VOICE_URL}/toggle-mute/${MUTE_TYPE.MIC}`,
+        {
+          userName: playerId,
+          muteTo,
+        }
+      );
+      const sendingData = JSON.stringify({
+        user: playerId,
+        muteTo,
+      });
+      session?.signal({
+        type: MUTE_TYPE.MIC,
+        data: sendingData,
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return {
