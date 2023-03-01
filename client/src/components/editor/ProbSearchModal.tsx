@@ -104,6 +104,7 @@ export default function SearchModal(props: any) {
               <ListItemIcon
                 sx={{
                   color: 'inherit',
+                  // border: '1px solid green',
                   height: '100%',
                   display: 'flex',
                   alignItems: 'center',

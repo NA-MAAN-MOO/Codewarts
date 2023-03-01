@@ -39,6 +39,7 @@ const EditorWrapper = styledc.div`
   margin: 0 auto;
   // padding: 0 0 0 0;
   font-family: 'Cascadia Code', 'Pretendard-Regular';
+  // border: 1px solid red;
   overflow: auto;
   `;
 
@@ -318,6 +319,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
 }>(({ theme, open }) => ({
   flexGrow: 1,
   // padding: theme.spacing(2),
+  // border: '1px solid purple', // for debugging
   height: '100%',
   transition: theme.transitions.create('margin', {
     easing: theme.transitions.easing.sharp,
