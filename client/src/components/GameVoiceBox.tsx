@@ -9,6 +9,7 @@ import VolumeIcon from 'components/VolumeIcon';
 import { toggleMyMicMute, toggleMyVolMute } from 'stores/chatSlice';
 import AudioList from 'components/AudioList';
 import useVoice from 'hooks/useVoice';
+import SimplePopper from './SimplePopper';
 
 const GameVoiceBox = ({
   session,
@@ -48,6 +49,7 @@ const GameVoiceBox = ({
       {useFloatBox ? (
         <FloatingBox>
           <VolumeSet />
+          <SimplePopper />
         </FloatingBox>
       ) : (
         <div style={{ display: 'flex', gap: '5px' }}>
