@@ -7,7 +7,6 @@ import {
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Tooltip from '@mui/material/Tooltip';
 import InputIcon from '@mui/icons-material/Input';
-import { useEffect } from 'react';
 
 //@ts-ignore
 function AlgoInfoAccordion(props) {
@@ -19,6 +18,21 @@ function AlgoInfoAccordion(props) {
     inputStdin.current.value = bojProbFullData?.samples?.[key].input;
   };
 
+  const summaryStyle = {
+    fontSize: '1.2em',
+  };
+
+  const detailStyle = {
+    fontSize: '1.05em',
+  };
+
+  const itemStyle = {
+    color: 'papayawhip',
+    fontFamily: 'Cascadia Code, Pretendard-Regular',
+    textAlign: 'left',
+    fontSize: '1.05em',
+  };
+
   return (
     <>
       {bojProbFullData?.prob_desc ? (
@@ -27,10 +41,11 @@ function AlgoInfoAccordion(props) {
             <AccordionSummary
               aria-controls="panel1a-content"
               id="panel1a-header"
+              sx={summaryStyle}
             >
               문제 정보
             </AccordionSummary>
-            <AccordionDetails>
+            <AccordionDetails sx={detailStyle}>
               <div
                 dangerouslySetInnerHTML={{
                   __html: bojProbFullData?.prob_desc
@@ -38,42 +53,25 @@ function AlgoInfoAccordion(props) {
                     .replace(/\n/g, '<br>'),
                 }}
               />
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: bojProbFullData?.prob_input.replace(/\n/g, '<br>'),
+                }}
+              />
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: bojProbFullData?.prob_output.replace(/\n/g, '<br>'),
+                }}
+              />
             </AccordionDetails>
           </Accordion>
-
-          {bojProbFullData?.prob_input ? (
-            <Accordion defaultExpanded={true}>
-              <AccordionSummary
-                aria-controls="panel2a-content"
-                id="panel2a-header"
-              >
-                입력 & 출력
-              </AccordionSummary>
-              <AccordionDetails>
-                입력
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: bojProbFullData?.prob_input.replace(/\n/g, '<br>'),
-                  }}
-                />
-                <br />
-                출력
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: bojProbFullData?.prob_output.replace(/\n/g, '<br>'),
-                  }}
-                />
-              </AccordionDetails>
-            </Accordion>
-          ) : (
-            <div></div>
-          )}
 
           {bojProbFullData?.samples ? (
             <Accordion defaultExpanded={true}>
               <AccordionSummary
                 aria-controls="panel2a-content"
                 id="panel2a-header"
+                sx={summaryStyle}
               >
                 예제
               </AccordionSummary>
@@ -83,13 +81,7 @@ function AlgoInfoAccordion(props) {
                     ([key, value]) => {
                       return (
                         <Grid xs key={key}>
-                          <Item
-                            sx={{
-                              color: 'papayawhip',
-                              fontFamily: 'Cascadia Code, Pretendard-Regular',
-                              textAlign: 'left',
-                            }}
-                          >
+                          <Item sx={itemStyle}>
                             <span className="samples-title">
                               예제{key} INPUT
                             </span>
