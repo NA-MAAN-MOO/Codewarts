@@ -66,11 +66,13 @@ const Voice = ({ roomKey, session, handleSession, ...rest }: VoiceProp) => {
 
   const joinSession = async () => {
     //새 세션을 만든다.
+    console.log('1 조인세션 시작');
     const { OV, session } = initSession();
 
     //roomKey를 바탕으로 sessionId를 가져온다.
     //가져온 sessionId와 만든 세션을 서버에서 생성한다.
 
+    console.log('2 다음 크리에이트세션');
     const result = await createSession(roomKey);
     if (!result) {
       return;
@@ -83,9 +85,11 @@ const Voice = ({ roomKey, session, handleSession, ...rest }: VoiceProp) => {
     (async () => {
       if (!session) {
         await joinSession();
+        console.log('5 조인세션 완료');
         return;
       }
 
+      console.log('6 레지스터세션 전');
       await registerSession({
         session,
         sessionId: roomKey,
