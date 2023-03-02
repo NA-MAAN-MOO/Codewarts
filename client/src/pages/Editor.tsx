@@ -27,7 +27,7 @@ import FloatingButton from 'components/FloatingButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import QuizIcon from '@mui/icons-material/Quiz';
 
-const rightDrawerWidth = '20%';
+const rightDrawerWidth = 350;
 
 const Main = muiStyled('main', {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -64,7 +64,7 @@ const AppBar = muiStyled(MuiAppBar, {
   }),
   display: 'flex',
   ...(open && {
-    width: `calc(100% - ${rightDrawerWidth})`,
+    width: `calc(100% - ${rightDrawerWidth}px)`,
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
@@ -199,7 +199,6 @@ const Editor = (props: VoiceProp & YjsProp) => {
                 '& .MuiDrawer-paper': {
                   width: rightDrawerWidth,
                   backgroundColor: darkTheme.palette.primary.main,
-                  minWidth: '250px',
                 },
               }}
               variant="persistent"
