@@ -114,7 +114,7 @@ const ProbSummary = styledc.div`
 // color: 'papayawhip';
 text-shadow: 1px 1px 2px grey;
 color: #fff;
-font-size: 20px;
+font-size: 25px;
 font-weight: bold;
 width: 100%;
 // line-height: 56px;
@@ -312,20 +312,21 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
 }));
 
 /* Drawer setting */
-const leftDrawerWidth = 520;
+const leftDrawerWidth = '35';
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   open?: boolean;
 }>(({ theme, open }) => ({
+  flexDirection: 'column',
   flexGrow: 1,
   // padding: theme.spacing(2),
-  // border: '1px solid purple', // for debugging
+  border: '1px solid purple', // for debugging
   height: '100%',
   transition: theme.transitions.create('margin', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  marginLeft: `-${leftDrawerWidth}px`,
+  marginLeft: `-${leftDrawerWidth}%`,
   ...(open && {
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeOut,
@@ -347,8 +348,8 @@ const AppBar = styled(MuiAppBar, {
     duration: theme.transitions.duration.leavingScreen,
   }),
   ...(open && {
-    width: `calc(100% - ${leftDrawerWidth}px)`,
-    marginLeft: `${leftDrawerWidth}px`,
+    width: `calc(100% - ${leftDrawerWidth} +'%')`,
+    marginLeft: `${leftDrawerWidth}%`,
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
@@ -358,10 +359,9 @@ const AppBar = styled(MuiAppBar, {
 
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
-  // alignItems: 'center',
   padding: theme.spacing(0, 2),
   // necessary for content to be below app bar
-  // ...theme.mixins.toolbar,
+  ...theme.mixins.toolbar,
   justifyContent: 'space-between',
   alignItems: 'center',
   // minHeight: '100%',

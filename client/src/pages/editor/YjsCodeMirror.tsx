@@ -148,10 +148,10 @@ function YjsCodeMirror(props: YjsProp) {
     let basicThemeSet = EditorView.theme({
       '&': {
         borderRadius: '.5em', // '.cm-gutters'와 같이 조절할 것
-        height: '400px',
+        // height: '400px',
         // maxHeight: '400px',
         // minHeight: '400px',
-        // height: '100%',
+        height: '50vh',
       },
       '.cm-editor': {
         // maxHeight: '50%',
@@ -210,10 +210,11 @@ function YjsCodeMirror(props: YjsProp) {
         <CssBaseline />
         <Drawer
           sx={{
-            width: leftDrawerWidth,
+            width: leftDrawerWidth + '%',
             flexShrink: 0,
+            border: '1px solid green',
             '& .MuiDrawer-paper': {
-              width: leftDrawerWidth,
+              width: leftDrawerWidth - 1.5 + '%',
               boxSizing: 'border-box',
             },
           }}

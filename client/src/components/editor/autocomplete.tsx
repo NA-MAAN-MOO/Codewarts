@@ -12,13 +12,9 @@ export default function LimitTags(props: any) {
       options={algoFilter}
       getOptionLabel={(option) => option.tag}
       renderInput={(params) => (
-        <TextField
-          {...params}
-          // label="문제 검색하기"
-          placeholder="검색 필터 추가"
-        />
+        <TextField {...params} placeholder="검색 필터 추가" />
       )}
-      sx={{ width: '500px' }}
+      sx={{ width: '500px', fontFamily: 'Cascadia Code, Pretendard-Regular' }}
       autoSelect={true}
       filterSelectedOptions={true}
       loadingText="Loading..."
