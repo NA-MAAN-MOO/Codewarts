@@ -219,20 +219,7 @@ export default () => {
       }
 
       const mySession = session;
-      await mySession.connect(token, { user: userName });
 
-      // Init a passing undefined as targetElement (we don't want OpenVidu to insert a video
-      // element: we will manage it on our own) and with the desired properties
-      let pubNow = await OV.initPublisherAsync(undefined, {
-        audioSource: undefined, // The source of audio. If undefined default microphone
-        videoSource: false, // The source of video. If undefined default webcam
-        publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
-        publishVideo: false, // Whether you want to start publishing with your video enabled or not
-        resolution: '640x480', // The resolution of your video
-        frameRate: 30, // The frame rate of your video
-        insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
-        mirror: false, // Whether to mirror your local video or not
-      });
       // --- Specify the actions when events take place in the session ---
 
       console.log('11 레지스터세션 토큰 생성 완료');
@@ -355,7 +342,20 @@ export default () => {
       console.log('12 이벤트 연결 끝');
 
       // ---Publish your stream ---
+      await mySession.connect(token, { user: userName });
 
+      // Init a passing undefined as targetElement (we don't want OpenVidu to insert a video
+      // element: we will manage it on our own) and with the desired properties
+      let pubNow = await OV.initPublisherAsync(undefined, {
+        audioSource: undefined, // The source of audio. If undefined default microphone
+        videoSource: false, // The source of video. If undefined default webcam
+        publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+        publishVideo: false, // Whether you want to start publishing with your video enabled or not
+        resolution: '640x480', // The resolution of your video
+        frameRate: 30, // The frame rate of your video
+        insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
+        mirror: false, // Whether to mirror your local video or not
+      });
       await mySession.publish(pubNow);
       handlePublisher(pubNow);
       console.log('13 레지스터 완료');
