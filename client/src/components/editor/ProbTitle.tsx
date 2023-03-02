@@ -1,4 +1,4 @@
-import { ProbSummary } from '../../pages/editor/editorStyle';
+import { ProbTitleDiv } from '../../pages/editor/editorStyle';
 import RenderSvg from 'components/Svg';
 
 //@ts-ignore
@@ -8,7 +8,7 @@ function ProbTitle(props) {
   return (
     <>
       {bojProbFullData?.solvedAC?.titleKo ? (
-        <ProbSummary>
+        <ProbTitleDiv>
           <RenderSvg
             svgName={
               bojProbFullData?.solvedAC?.level >= 0
@@ -28,10 +28,9 @@ function ProbTitle(props) {
           >
             {bojProblemId}번 {bojProbFullData?.solvedAC?.titleKo}
           </div>
-        </ProbSummary>
-      ) : (
-        <span></span>
-      )}
+        </ProbTitleDiv>
+      ) : // <span></span>
+      null}
     </>
   );
 }

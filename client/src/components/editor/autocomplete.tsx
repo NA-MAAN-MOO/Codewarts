@@ -27,7 +27,7 @@ export default function LimitTags(props: any) {
 }
 
 const algoFilter = [
-  { tag: '백준' },
+  // { tag: '백준' },
   // { tag: '리트코드' },
   { tag: '브론즈' },
   { tag: '실버' },
@@ -39,6 +39,6 @@ const algoFilter = [
   // { tag: 'easy' },
   // { tag: 'medium' },
   // { tag: 'difficult' },
-  { tag: '채점가능' },
+  // { tag: '채점가능' },
   { tag: '한국정보올림피아드' },
 ];

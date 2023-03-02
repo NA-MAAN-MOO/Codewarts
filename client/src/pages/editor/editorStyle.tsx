@@ -53,40 +53,44 @@ filter: drop-shadow(0px 4px 4px rgba(255, 255, 255, 0.5));
 
 const AlgoInfoWrap = styledc.div`
 overflow: auto;
-
+// border: 1px solid yellow;
 `;
 
 const HeaderTab = styledc.div`
-display: flex;
-justify-content: space-between;
+// display: flex;
+// justify-content: space-between;
 width: 100%;
 color: papayawhip;
-border: 1px solid green;
+// border: 1px solid green;
 `;
 
 const AlgoInputWrap = styledc.div`
-  // margin-top: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-left: 5px;
+// margin-top: 10px;
+display: flex;
+justify-content: center;
+align-items: center;
+// margin-left: 5px;
+// border: 1px solid red;
 `;
 
-const ProbSummary = styledc.div`
-// color: 'papayawhip';
+const ProbTitleDiv = styledc.div`
 text-shadow: 1px 1px 2px grey;
 color: #fff;
-font-size: 25px;
-font-weight: bold;
+// font-size: 25px;
+font-size: 1.5em;
+// font-weight: bold;
 width: 100%;
-// line-height: 56px;
 display: flex;
 flex-direction : row;
-align-items:center;
-// word-break:break-all;
+align-items: center;
 overflow: visible;
 min-height: 100%;
-
+display: flex,
+justify-content: space-between,
+// word-break: break-all;
+text-align: center;
+// border: 1px solid lightgreen;
+padding: 16px;
 `;
 
 const AlgoInput = styledc.input`
@@ -267,7 +271,7 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
 }));
 
 /* Drawer setting */
-const leftDrawerWidth = '35';
+const leftDrawerWidth = '40';
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   open?: boolean;
@@ -275,7 +279,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   flexDirection: 'column',
   flexGrow: 1,
   // padding: theme.spacing(2),
-  border: '1px solid purple', // for debugging
+  // border: '1px solid purple', // for debugging
   height: '100%',
   transition: theme.transitions.create('margin', {
     easing: theme.transitions.easing.sharp,
@@ -314,6 +318,7 @@ const AppBar = styled(MuiAppBar, {
 
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
+  // border: '1px solid purple', //for debugging
   padding: theme.spacing(0, 2),
   // necessary for content to be below app bar
   ...theme.mixins.toolbar,
@@ -327,7 +332,7 @@ export {
   AlgoInput,
   AlgoInputWrap,
   AlgoTextField,
-  ProbSummary,
+  ProbTitleDiv,
   ProfileInfo,
   Item,
   MiddleWrapper,

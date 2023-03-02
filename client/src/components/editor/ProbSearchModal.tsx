@@ -10,6 +10,8 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import RenderSvg from 'components/Svg';
+import { buttonTheme } from 'pages/editor/editorStyle';
+import { ThemeProvider } from '@mui/material/styles';
 
 const APPLICATION_EDITOR_URL =
   process.env.REACT_APP_EDITOR_URL || 'http://localhost:3001';
@@ -70,22 +72,27 @@ export default function SearchModal(props: any) {
 
   return (
     <div>
-      <Button
-        onClick={handleOpen}
-        color="secondary"
-        variant="contained"
-        sx={{
-          wordBreak: 'keep-all',
-          wrap: 'no-wrap',
-          padding: 0.5,
-          margin: '5px',
-          width: 100,
-          fontFamily: 'Cascadia Code, Pretendard-Regular',
-          fontWeight: 'bold',
-        }}
-      >
-        필터 검색
-      </Button>
+      <ThemeProvider theme={buttonTheme}>
+        <Button
+          onClick={handleOpen}
+          color="primary"
+          variant="outlined"
+          sx={{
+            wordBreak: 'keep-all',
+            wrap: 'no-wrap',
+            padding: '8px 5px 8px 11px',
+            margin: '10px',
+            width: 100,
+            fontFamily: 'Cascadia Code, Pretendard-Regular',
+            fontWeight: 'bold',
+            fontSize: '1rem',
+            boxShadow: 'inset 0.2em 0.2em #ededed',
+          }}
+        >
+          filter🔍
+        </Button>
+      </ThemeProvider>
+
       <Modal
         open={open}
         onClose={handleClose}
