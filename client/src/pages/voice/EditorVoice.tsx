@@ -24,7 +24,6 @@ type GameVoiceType = {
   session: Session | undefined;
   subscribers: Subscriber[];
   publisher: Publisher | undefined;
-  leaveSession: () => void;
   joinSession: () => void;
   handleDrawerClose?: () => void;
 };
@@ -39,7 +38,8 @@ const DrawerHeader = muiStyled('div')(({ theme }) => ({
 }));
 
 const EditorVoice = (props: GameVoiceType) => {
-  const { session, joinSession, handleDrawerClose, subscribers } = props;
+  const { session, joinSession, handleDrawerClose, subscribers, publisher } =
+    props;
   const theme = useTheme();
 
   return (
@@ -51,7 +51,7 @@ const EditorVoice = (props: GameVoiceType) => {
         <AudioList subscribers={subscribers} />
       </DrawerHeader>
       <Divider />
-      {!!session ? (
+      {!!publisher ? (
         <CurrentPlayer {...props} />
       ) : (
         <div

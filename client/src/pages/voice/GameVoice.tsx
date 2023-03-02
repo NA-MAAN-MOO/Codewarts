@@ -10,7 +10,7 @@ import FloatingBox from 'components/FloatingBox';
 import SimplePopper from 'components/SimplePopper';
 
 const GameVoice = (props: GameVoiceType) => {
-  const { session, joinSession } = props;
+  const { session, publisher } = props;
   const [drawerOpen, setDrawerOpen] = useState(false);
   const handleDrawer = () => {
     setDrawerOpen(!drawerOpen);
@@ -27,7 +27,7 @@ const GameVoice = (props: GameVoiceType) => {
       <Drawer anchor="right" isOpen={drawerOpen} handleDrawer={handleDrawer}>
         <CurrentPlayer handleDrawer={handleDrawer} {...props} />
       </Drawer>
-      {!!session ? (
+      {!!publisher ? (
         <GameVoiceBox {...props} />
       ) : (
         <FloatingBox>
