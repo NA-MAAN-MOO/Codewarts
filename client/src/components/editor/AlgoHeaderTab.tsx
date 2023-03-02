@@ -94,18 +94,16 @@ function AlgoHeaderTab(props) {
   return (
     <HeaderTab>
       <AlgoInputWrap>
-        <div style={{ marginLeft: '5px' }}>
-          <AlgoTextField
-            id="reddit-input"
-            label="번호로 바로가기"
-            variant="filled"
-            size="small"
-            inputRef={bojProbDataRef}
-            autoFocus={true}
-            type="text"
-            onKeyDown={handleKeyDown}
-          />
-        </div>
+        <AlgoTextField
+          id="reddit-input"
+          label="번호로 바로가기"
+          variant="filled"
+          size="small"
+          inputRef={bojProbDataRef}
+          autoFocus={true}
+          type="text"
+          onKeyDown={handleKeyDown}
+        />
       </AlgoInputWrap>
     </HeaderTab>
   );

@@ -1,7 +1,5 @@
 import styledc from 'styled-components';
 import { styled, alpha, createTheme, useTheme } from '@mui/material/styles';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
 import Switch from '@mui/material/Switch';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
@@ -63,52 +61,16 @@ display: flex;
 justify-content: space-between;
 width: 100%;
 color: papayawhip;
+border: 1px solid green;
 `;
 
-interface StyledTabsProps {
-  children?: React.ReactNode;
-  value: number;
-  onChange: (event: React.SyntheticEvent, newValue: number) => void;
-}
-
-const StyledTabs = styled((props: StyledTabsProps) => (
-  <Tabs
-    {...props}
-    TabIndicatorProps={{ children: <span className="MuiTabs-indicatorSpan" /> }}
-  />
-))({
-  '& .MuiTabs-indicator': {
-    display: 'flex',
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
-  },
-  '& .MuiTabs-indicatorSpan': {
-    maxWidth: 80,
-    width: '100%',
-    backgroundColor: '#ffe600',
-  },
-});
-
-interface StyledTabProps {
-  label: string;
-}
-
-const StyledTab = styled((props: StyledTabProps) => (
-  <Tab disableRipple {...props} />
-))(({ theme }) => ({
-  textTransform: 'none',
-  fontFamily: 'Cascadia Code, Pretendard-Regular',
-  fontWeight: theme.typography.fontWeightRegular,
-  fontSize: theme.typography.pxToRem(20),
-  marginRight: theme.spacing(1),
-  color: 'rgba(255, 255, 255, 0.7)',
-  '&.Mui-selected': {
-    color: '#fff',
-  },
-  '&.Mui-focusVisible': {
-    backgroundColor: 'rgba(100, 95, 228, 0.32)', // 원래값
-  },
-}));
+const AlgoInputWrap = styledc.div`
+  // margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 5px;
+`;
 
 const ProbSummary = styledc.div`
 // color: 'papayawhip';
@@ -134,13 +96,6 @@ const AlgoInput = styledc.input`
   background: papayawhip;
   border: none;
   border-radius: 3px;
-`;
-
-const AlgoInputWrap = styledc.div`
-  // margin-top: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 
 /* text field theme setting */
@@ -379,8 +334,6 @@ export {
   EditorWrapper,
   EditorInfo,
   AlgoInfoWrap,
-  StyledTab,
-  StyledTabs,
   MaterialUISwitch,
   AccordionSummary,
   Accordion,
