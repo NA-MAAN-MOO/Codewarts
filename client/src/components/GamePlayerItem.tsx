@@ -20,38 +20,56 @@ const GamePlayerItem = ({ name, char }: { name: string; char: string }) => {
   const SvgComponent = myTier ? svgs[`Svg${myTier}`] : svgs.Svg0;
 
   return (
-    <ListItem key={name} disablePadding sx={{ display: 'flex', gap: '10px' }}>
-      <ListItemButton onClick={(e) => e.preventDefault()} sx={{ gap: '5px' }}>
-        <ListItemIcon>
-          <BadgeLogo
-            charName={char}
-            isSpecial={playerId === name}
-            name={name}
-          />
-        </ListItemIcon>
-
-        <ListItemText
-          primary={name}
-          primaryTypographyProps={{
-            fontFamily: 'Pretendard-Regular',
-            fontSize: '1.2em',
+    <ListItem key={name} disablePadding sx={{ display: 'flex' }}>
+      <ListItemButton
+        onClick={(e) => e.preventDefault()}
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          flexDirection: 'row',
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '1rem',
           }}
-        />
-        <SvgComponent width="35px" />
-        {volMuteInfo?.[name] && (
-          <VolumeIcon
-            color="gray"
-            isMute={true}
-            size={styledTheme.smallIconSize}
+        >
+          <SvgComponent width="35px" />
+
+          <ListItemIcon>
+            <BadgeLogo
+              charName={char}
+              isSpecial={playerId === name}
+              name={name}
+            />
+          </ListItemIcon>
+
+          <ListItemText
+            primary={name}
+            primaryTypographyProps={{
+              fontFamily: 'Pretendard-Regular',
+              fontSize: '1.2em',
+            }}
           />
-        )}
-        {micMuteInfo?.[name] && (
-          <MicIcon
-            color="gray"
-            isMute={true}
-            size={styledTheme.smallIconSize}
-          />
-        )}
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1%' }}>
+          {volMuteInfo?.[name] && (
+            <VolumeIcon
+              color="gray"
+              isMute={true}
+              size={styledTheme.smallIconSize}
+            />
+          )}
+          {micMuteInfo?.[name] && (
+            <MicIcon
+              color="gray"
+              isMute={true}
+              size={styledTheme.smallIconSize}
+            />
+          )}
+        </div>
       </ListItemButton>
     </ListItem>
   );
