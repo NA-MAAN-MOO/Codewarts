@@ -327,6 +327,15 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   // minHeight: '100%',
 }));
 
+const middleButtonStyle = {
+  fontFamily: 'Cascadia Code, Pretendard-Regular',
+  fontSize: '17px',
+  boxShadow: 'inset 0.2em 0.2em #ededed',
+  marginRight: '5px',
+  marginLeft: '5px',
+  marginBottom: '5px',
+};
+
 export {
   HeaderTab,
   AlgoInput,
@@ -347,4 +356,5 @@ export {
   AppBar,
   DrawerHeader,
   leftDrawerWidth,
+  middleButtonStyle,
 };

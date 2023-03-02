@@ -1,5 +1,6 @@
 import Tooltip from '@mui/material/Tooltip';
 import Button from '@mui/material/Button';
+import { middleButtonStyle } from 'pages/editor/editorStyle';
 
 //@ts-ignore
 function SubmitButton(props) {
@@ -10,6 +11,7 @@ function SubmitButton(props) {
       <Tooltip title="제출하러 가기" arrow>
         <Button
           color="primary"
+          variant="outlined"
           href={
             bojProblemId
               ? `https://acmicpc.net/submit/${bojProblemId}`
@@ -17,10 +19,7 @@ function SubmitButton(props) {
           }
           target="_blank"
           rel="noreferrer"
-          style={{
-            fontFamily: 'Cascadia Code, Pretendard-Regular',
-            fontSize: '17px',
-          }}
+          style={middleButtonStyle}
         >
           SUBMIT
         </Button>

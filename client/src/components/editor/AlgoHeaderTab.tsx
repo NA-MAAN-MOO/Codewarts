@@ -95,7 +95,7 @@ function AlgoHeaderTab(props) {
     <HeaderTab>
       <AlgoTextField
         id="reddit-input"
-        label="번호로 바로가기"
+        label="문제 번호로 바로가기"
         variant="filled"
         size="small"
         inputRef={bojProbDataRef}
