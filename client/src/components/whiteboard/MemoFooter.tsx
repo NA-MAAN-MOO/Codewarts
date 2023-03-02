@@ -57,6 +57,7 @@ function MemoFooter(props: any) {
       <AvatarGroup
         max={6}
         sx={{
+          paddingLeft: '10px',
           border: 'none',
           '&.MuiAvatarGroup-root': { border: 'none' },
           '&.MuiAvatarGroup-avatar': { border: 'none' },
@@ -66,10 +67,12 @@ function MemoFooter(props: any) {
           <AvatarWithPopper participant={participant} />
         ))}
       </AvatarGroup>
+
       <Checkbox
         checked={checked}
         onChange={handleChange}
         sx={{
+          // marginRight: '10px',
           color: 'white',
           '&.Mui-checked': { color: '#00c410' },
           margin: '0 0 10px 10px',
@@ -81,12 +84,12 @@ function MemoFooter(props: any) {
 }
 
 const FooterWrapper = styled.div`
-  width: 90%;
+  width: 100%;
   height: 20%;
   position: absolute;
   bottom: 0;
   display: flex;
-  margin-left: 10px;
+  // margin-left: 10px;
   justify-content: space-between;
   // border: 1px solid red;
 `;

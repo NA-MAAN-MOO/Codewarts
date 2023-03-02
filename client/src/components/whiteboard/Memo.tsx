@@ -117,7 +117,7 @@ function Memo(props: any) {
     >
       <Card
         sx={{
-          width: '280px',
+          width: '300px',
           minHeight: '240px',
           background: color,
           display: 'inline',
