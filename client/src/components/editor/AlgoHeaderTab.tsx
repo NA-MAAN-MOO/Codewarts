@@ -82,7 +82,7 @@ function AlgoHeaderTab(props) {
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       let probId = bojProbDataRef.current.value;
-      setBojProblemId(probId);
+      setBojProblemId(parseInt(probId));
       fetchBojProbFullData(probId);
     }
   };
