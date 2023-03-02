@@ -125,15 +125,15 @@ const LoginDialog = () => {
           dispatch(setPlayerTexture(avatars[avatarIndex].name));
           dispatch(setUserLoginId(userId));
 
+          handleScene(GAME_STATUS.LOBBY, {
+            playerId: payload.userNickname,
+            playerTexture: avatars[avatarIndex].name,
+          });
           // 자기 자신 서버 뮤트인포에서 삭제
           await deleteMuteInfo(payload.userNickname);
           // 뮤트인포에 그 정보 업데이트
           await appDispatch(fetchMuteInfo());
 
-          handleScene(GAME_STATUS.LOBBY, {
-            playerId: payload.userNickname,
-            playerTexture: avatars[avatarIndex].name,
-          });
           // dispatch(initialMyMute(payload.userNickname));
         }
       } catch (e) {
