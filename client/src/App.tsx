@@ -26,7 +26,6 @@ function App() {
   //   }
   //   loadFlag = true;
   // }, []);
-  console.log('App 호출 시점');
   return (
     <HoverDiv>
       {/* <TestVoiceButtons /> */}

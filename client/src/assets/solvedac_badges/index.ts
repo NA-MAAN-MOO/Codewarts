@@ -30,7 +30,11 @@ import { ReactComponent as Svg28 } from './28.svg';
 import { ReactComponent as Svg29 } from './29.svg';
 import { ReactComponent as Svg30 } from './30.svg';
 
-const svgs = {
+interface SvgObject {
+  [key: string]: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+}
+
+const svgs: SvgObject = {
   Svg0,
   Svg1,
   Svg2,

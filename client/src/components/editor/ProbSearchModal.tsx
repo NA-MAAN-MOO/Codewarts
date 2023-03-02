@@ -10,6 +10,10 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import RenderSvg from 'components/Svg';
+import { styledTheme } from 'styles/theme';
+
+const APPLICATION_EDITOR_URL =
+  process.env.REACT_APP_EDITOR_URL || 'http://localhost:3001';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -18,10 +22,11 @@ const style = {
   textAlign: 'center',
   transform: 'translate(-50%, -50%)',
   width: 'auto',
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
+  bgcolor: '#161616',
+  border: '2px solid #33313B',
   boxShadow: 24,
   p: 4,
+  borderRadius: '30px',
   // display: 'flex',
 };
 
@@ -41,7 +46,7 @@ export default function SearchModal(props: any) {
     console.log(page, '페이지 자료 가져와줘');
 
     try {
-      const response = await axios.post(`http://localhost:3001/probdata`, {
+      const response = await axios.post(`${APPLICATION_EDITOR_URL}/probdata`, {
         data: filter,
         page: page,
       });
@@ -68,12 +73,16 @@ export default function SearchModal(props: any) {
     <div>
       <Button
         onClick={handleOpen}
-        color="error"
-        variant="outlined"
+        color="secondary"
+        variant="contained"
         sx={{
           wordBreak: 'keep-all',
-          padding: '1px',
+          wrap: 'no-wrap',
+          padding: 0.5,
           margin: '5px',
+          width: 100,
+          fontFamily: 'Cascadia Code, Pretendard-Regular',
+          fontWeight: 'bold',
         }}
       >
         필터 검색
@@ -90,11 +99,9 @@ export default function SearchModal(props: any) {
             <ListItemButton
               key="search-probs"
               sx={{
-                py: 0,
+                padding: 0,
                 minHeight: 32,
                 color: 'rgba(255,255,255,.8)',
-                // border: '1px solid tomato',
-                display: 'inline-block',
               }}
             >
               <ListItemIcon
@@ -102,6 +109,9 @@ export default function SearchModal(props: any) {
                   color: 'inherit',
                   // border: '1px solid green',
                   height: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}
               >
                 <SearchIcon
@@ -157,13 +167,7 @@ export default function SearchModal(props: any) {
               </ListItemButton>
             ))}
           </div>
-          <div
-            style={
-              {
-                // border: '1px solid green'
-              }
-            }
-          >
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
             {pagedProbData ? (
               <Pagination
                 count={totalPages}

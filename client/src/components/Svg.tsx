@@ -6,9 +6,7 @@ function RenderSvg({ svgName }) {
   const SvgComponent = svgs[`Svg${svgName}`];
   return (
     <RenderSvgSpan>
-      <span>
-        <SvgComponent />
-      </span>
+      <SvgComponent />
     </RenderSvgSpan>
   );
 }
@@ -17,8 +15,9 @@ export default RenderSvg;
 
 const RenderSvgSpan = styled.span`
   width: 30px;
-  display: inline-block;
-  justify-content: center;
+  display: flex;
+  // display: inline-block;
+  // justify-content: center;
   margin: 0 10px 0 0;
   // flex-direction: column;
   // gap: 50px;

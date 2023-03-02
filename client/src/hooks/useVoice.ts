@@ -105,6 +105,7 @@ export default () => {
 
   const createSession = async (sessionId: string) => {
     try {
+      console.log('3 크리에이트세션시작');
       const data = await axios.post(
         APPLICATION_VOICE_URL + '/create-session',
         {
@@ -114,6 +115,7 @@ export default () => {
           headers: { 'Content-Type': 'application/json' },
         }
       );
+      console.log('4 크리에이트 끝');
       return data;
     } catch (err) {
       console.log('createSession error');
@@ -147,17 +149,26 @@ export default () => {
     sessionId: string;
     userName: string;
   }) => {
-    const response = await axios.post(
-      APPLICATION_VOICE_URL +
-        '/create-connection/' +
-        sessionId +
-        '/connections',
-      { userName: userName },
-      {
-        headers: { 'Content-Type': 'application/json' },
-      }
-    );
-    return response.data; // The token
+    try {
+      console.log('9 createToken 시작');
+
+      const response = await axios.post(
+        APPLICATION_VOICE_URL +
+          '/create-connection/' +
+          sessionId +
+          '/connections',
+        { userName: userName },
+        {
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
+      console.log('10 createToken 끝');
+
+      return response.data; // The token
+    } catch (e) {
+      console.log('createToken 에러');
+      console.log(e);
+    }
   };
 
   const registerSession = async (props: {
@@ -179,10 +190,14 @@ export default () => {
       handlePublisher,
     } = props;
     try {
+      console.log('7 레지스터세션 시작');
       if (!session || !sessionId || !OV) return;
-
+      console.log('세션아이디0', sessionId);
+      console.log('OV', OV);
+      console.log('유저이름', userName);
       const content: Connection[] | false = await getConnections(sessionId);
       if (content === false) {
+        console.log('세션 존재 안 함');
         // 세션 아직 존재하지 않음
         return;
       }
@@ -191,7 +206,10 @@ export default () => {
         const { user } = JSON.parse(con.clientData);
         return user === userName;
       });
+      console.log('커넥트 존재하는지', isConnectExist);
       if (isConnectExist) return;
+
+      console.log('8 레지스터세션 검증 끝');
 
       // Get a token from the OpenVidu deployment
       const token = await createToken({ sessionId, userName });
@@ -201,8 +219,23 @@ export default () => {
       }
 
       const mySession = session;
+      await mySession.connect(token, { user: userName });
 
+      // Init a passing undefined as targetElement (we don't want OpenVidu to insert a video
+      // element: we will manage it on our own) and with the desired properties
+      let pubNow = await OV.initPublisherAsync(undefined, {
+        audioSource: undefined, // The source of audio. If undefined default microphone
+        videoSource: false, // The source of video. If undefined default webcam
+        publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+        publishVideo: false, // Whether you want to start publishing with your video enabled or not
+        resolution: '640x480', // The resolution of your video
+        frameRate: 30, // The frame rate of your video
+        insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
+        mirror: false, // Whether to mirror your local video or not
+      });
       // --- Specify the actions when events take place in the session ---
+
+      console.log('11 레지스터세션 토큰 생성 완료');
 
       // On every new Stream received...
       mySession.on('streamCreated', (event) => {
@@ -319,25 +352,13 @@ export default () => {
 
       // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
       // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
-      await mySession.connect(token, { user: userName });
-
-      // Init a passing undefined as targetElement (we don't want OpenVidu to insert a video
-      // element: we will manage it on our own) and with the desired properties
-      let pubNow = await OV.initPublisherAsync(undefined, {
-        audioSource: undefined, // The source of audio. If undefined default microphone
-        videoSource: false, // The source of video. If undefined default webcam
-        publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
-        publishVideo: false, // Whether you want to start publishing with your video enabled or not
-        resolution: '640x480', // The resolution of your video
-        frameRate: 30, // The frame rate of your video
-        insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
-        mirror: false, // Whether to mirror your local video or not
-      });
+      console.log('12 이벤트 연결 끝');
 
       // ---Publish your stream ---
 
       await mySession.publish(pubNow);
       handlePublisher(pubNow);
+      console.log('13 레지스터 완료');
     } catch (error) {
       console.log(error);
     }
@@ -411,6 +432,7 @@ export default () => {
     if (!session) return;
     //false일 때 뮤트 처리됨
     subscribers.map((sm) => {
+      console.log('sm', sm);
       sm.subscribeToAudio(!muteTo);
     });
     dispatch(toggleMyVolMute());
