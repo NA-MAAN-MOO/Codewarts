@@ -19,7 +19,8 @@ import {
   setPlayerTexture,
   setUserLoginId,
 } from 'stores/userSlice';
-import { initialMyMute } from 'stores/chatSlice';
+// import { initialMyMute } from 'stores/chatSlice';
+import { fetchMuteInfo } from 'stores/chatSlice';
 import { useDispatch } from 'react-redux';
 import { handleScene } from 'lib/phaserLib';
 import { GAME_STATUS } from 'utils/Constants';
@@ -27,12 +28,16 @@ import { Snackbar, SnackbarOrigin } from '@mui/material';
 import SignUpForm from './SignUpForm';
 import axios from 'axios';
 import MySnackbar from './MySnackbar';
+import { useAppDispatch } from 'stores';
 
 import 'animate.css';
 import { openGame } from 'stores/modeSlice';
+import useVoice from 'hooks/useVoice';
 
 const APPLICATION_DB_URL =
   process.env.REACT_APP_DB_URL || 'http://localhost:3003';
+const APPLICATION_VOICE_URL =
+  process.env.REACT_APP_VOICE_URL || 'http://localhost:3002';
 
 interface Characters {
   [key: string]: string;
@@ -83,6 +88,8 @@ const LoginDialog = () => {
   const [userPwFieldEmpty, setUserPwFieldEmpty] = useState<boolean>(false);
   const [avatarIndex, setAvatarIndex] = useState<number>(0);
   const dispatch = useDispatch();
+  const appDispatch = useAppDispatch();
+  const { deleteMuteInfo } = useVoice();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -117,11 +124,17 @@ const LoginDialog = () => {
           dispatch(setPlayerLeetId(payload.userLeetId));
           dispatch(setPlayerTexture(avatars[avatarIndex].name));
           dispatch(setUserLoginId(userId));
+
+          // 자기 자신 서버 뮤트인포에서 삭제
+          await deleteMuteInfo(payload.userNickname);
+          // 뮤트인포에 그 정보 업데이트
+          await appDispatch(fetchMuteInfo());
+
           handleScene(GAME_STATUS.LOBBY, {
             playerId: payload.userNickname,
             playerTexture: avatars[avatarIndex].name,
           });
-          dispatch(initialMyMute(payload.userNickname));
+          // dispatch(initialMyMute(payload.userNickname));
         }
       } catch (e) {
         handleClick();

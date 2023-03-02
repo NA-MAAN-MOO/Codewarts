@@ -29,6 +29,10 @@ class MicMuteInfo {
   getAll() {
     return this.data;
   }
+
+  remove(key: string) {
+    delete this.data[key];
+  }
 }
 
 export default MicMuteInfo.getInstance();

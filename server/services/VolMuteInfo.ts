@@ -29,6 +29,10 @@ class VolMuteInfo {
   getAll() {
     return this.data;
   }
+
+  remove(key: string) {
+    delete this.data[key];
+  }
 }
 
 export default VolMuteInfo.getInstance();

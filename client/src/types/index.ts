@@ -81,7 +81,6 @@ export type GameVoiceType = {
   session: Session | undefined;
   subscribers: Subscriber[];
   publisher: Publisher | undefined;
-  leaveSession: () => void;
   joinSession: () => void;
 };
 

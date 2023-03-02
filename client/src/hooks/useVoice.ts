@@ -105,7 +105,6 @@ export default () => {
 
   const createSession = async (sessionId: string) => {
     try {
-      console.log('3 크리에이트세션시작');
       const data = await axios.post(
         APPLICATION_VOICE_URL + '/create-session',
         {
@@ -115,7 +114,6 @@ export default () => {
           headers: { 'Content-Type': 'application/json' },
         }
       );
-      console.log('4 크리에이트 끝');
       return data;
     } catch (err) {
       console.log('createSession error');
@@ -150,8 +148,6 @@ export default () => {
     userName: string;
   }) => {
     try {
-      console.log('9 createToken 시작');
-
       const response = await axios.post(
         APPLICATION_VOICE_URL +
           '/create-connection/' +
@@ -162,7 +158,6 @@ export default () => {
           headers: { 'Content-Type': 'application/json' },
         }
       );
-      console.log('10 createToken 끝');
 
       return response.data; // The token
     } catch (e) {
@@ -190,26 +185,19 @@ export default () => {
       handlePublisher,
     } = props;
     try {
-      console.log('7 레지스터세션 시작');
       if (!session || !sessionId || !OV) return;
-      console.log('세션아이디0', sessionId);
-      console.log('OV', OV);
-      console.log('유저이름', userName);
       const content: Connection[] | false = await getConnections(sessionId);
       if (content === false) {
         console.log('세션 존재 안 함');
         // 세션 아직 존재하지 않음
         return;
       }
-      const isConnectExist = content.some((con: Connection) => {
-        if (!con.clientData) return false;
-        const { user } = JSON.parse(con.clientData);
-        return user === userName;
-      });
-      console.log('커넥트 존재하는지', isConnectExist);
-      if (isConnectExist) return;
-
-      console.log('8 레지스터세션 검증 끝');
+      // const isConnectExist = content.some((con: Connection) => {
+      //   if (!con.clientData) return false;
+      //   const { user } = JSON.parse(con.clientData);
+      //   return user === userName;
+      // });
+      // if (isConnectExist) return;
 
       // Get a token from the OpenVidu deployment
       const token = await createToken({ sessionId, userName });
@@ -222,8 +210,6 @@ export default () => {
 
       // --- Specify the actions when events take place in the session ---
 
-      console.log('11 레지스터세션 토큰 생성 완료');
-
       // On every new Stream received...
       mySession.on('streamCreated', (event) => {
         // Subscribe to the Stream to receive it. Second parameter is undefined
@@ -233,6 +219,11 @@ export default () => {
 
         // Update the state with the new subscribers
         addSubscriber(subscriber);
+
+        //새로 들어온 사람 뮤트 정보 초기화
+        const { user } = JSON.parse(event.stream?.connection?.data);
+        dispatch(setVolMute({ user, muteTo: false }));
+        dispatch(setMicMute({ user, muteTo: false }));
       });
 
       // On every Stream destroyed...
@@ -265,7 +256,6 @@ export default () => {
 
       //다른 유저가 세션을 나갔을 때 호출
       mySession.on('connectionDestroyed', async (event: ConnectionEvent) => {
-        console.log('세션나감');
         const session = event.target as Session;
         const sessionId = session.sessionId;
         deleteSubscriber(event.target);
@@ -339,7 +329,6 @@ export default () => {
 
       // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
       // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
-      console.log('12 이벤트 연결 끝');
 
       // ---Publish your stream ---
       await mySession.connect(token, { user: userName });
@@ -356,9 +345,14 @@ export default () => {
         insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
         mirror: false, // Whether to mirror your local video or not
       });
+      console.log('pub', pubNow);
       await mySession.publish(pubNow);
       handlePublisher(pubNow);
-      console.log('13 레지스터 완료');
+      console.log('여기까지옴3');
+
+      // if(myVolMute){
+      //   handleMyVolumeMute()
+      // }
     } catch (error) {
       console.log(error);
     }
@@ -488,6 +482,26 @@ export default () => {
     }
   };
 
+  //유저 뮤트 정보 가져오기
+  const getMuteInfo = async () => {
+    try {
+      return await axios.get(`${APPLICATION_VOICE_URL}/get-mute-info`);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  //유저 서버의 뮤트인포에서 삭제하기
+  const deleteMuteInfo = async (userName: string) => {
+    try {
+      await axios.post(`${APPLICATION_VOICE_URL}/delete-mute`, {
+        userName: userName,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return {
     initSession,
     createSession,
@@ -502,5 +516,7 @@ export default () => {
     // handleDisconnect,
     handleMyVolumeMute,
     handleMyMicMute,
+    getMuteInfo,
+    deleteMuteInfo,
   };
 };
