@@ -34,6 +34,9 @@ export const darkTheme = createTheme({
   },
 });
 
+const fontSizeNormal = '2rem';
+const fontSizeBig = '3rem';
+
 export const styledTheme = {
   logoWidth: '210px',
   logoHeight: '130px',
@@ -48,6 +51,13 @@ export const styledTheme = {
   mainFont: 'Firenze',
   smallIconSize: '23px',
   normalIconSize: '32px',
+  fontSizeNormal: fontSizeNormal,
+  fontSizeBig: fontSizeBig,
+};
+
+export const fontSizeTheme = {
+  normal: fontSizeNormal,
+  big: fontSizeBig,
 };
 
 export default muiTheme;

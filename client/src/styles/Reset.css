@@ -137,3 +137,13 @@ table {
 button {
   cursor: pointer;
 }
+
+html {
+  font-size: 62.5%;
+}
+
+@media all and (min-width: 750px) {
+  html {
+    font-size: 50%;
+  }
+}

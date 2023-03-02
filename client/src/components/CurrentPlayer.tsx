@@ -9,6 +9,7 @@ import GamePlayerItem from 'components/GamePlayerItem';
 import EditorPlayerItem from 'components/EditorPlayerItem';
 import { GAME_STATUS } from 'utils/Constants';
 import { GameVoiceType } from 'types';
+import { fontSizeTheme } from 'styles/theme';
 
 const CurrentPlayer = ({
   handleDrawer,
@@ -22,7 +23,7 @@ const CurrentPlayer = ({
 
   return (
     <Box
-      sx={{ width: 240 }}
+      sx={{ width: '100%' }}
       role="presentation"
       // onClick={handleDrawer}
       onKeyDown={handleDrawer}
@@ -51,9 +52,9 @@ const CurrentPlayer = ({
 export default CurrentPlayer;
 
 const Title = styled.div`
-  padding: 15%;
+  padding: 10%;
   text-align: center;
-  font-size: 1.5rem;
+  font-size: ${({ theme }) => theme.fontSizeBig};
   font-family: ${({ theme }) => theme.mainFont};
   word-break: keep-all;
 `;

@@ -5,8 +5,6 @@ import ListItemText from '@mui/material/ListItemText';
 import BadgeLogo from 'components/BadgeLogo';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'stores';
-import VolumeIcon from 'components/VolumeIcon';
-import MicIcon from 'components/MicIcon';
 import { GameVoiceType } from 'types';
 import VoiceItem from 'components/VoiceItem';
 import styled from 'styled-components';

@@ -38,8 +38,10 @@ const CuttedWrapper = styled.div<CuttedWrapperProps>`
     isSpecial
       ? `3px inset ${theme.lightRed}`
       : `3px inset ${muiTheme.palette.info.main}`};
-  width: 50px;
+  min-width: 50px;
+  min-height: 50px;
+  width: 5rem;
   border-radius: 100%;
-  height: 50px;
+  height: 5rem;
   overflow: hidden;
 `;
