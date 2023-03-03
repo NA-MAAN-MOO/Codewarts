@@ -213,3 +213,23 @@ export const getMuteInfo = async (req: Request, res: Response) => {
     res.status(500).send(err);
   }
 };
+
+//뮤트/언뮤트 정보 지우기
+export const deleteMuteInfo = async (req: Request, res: Response) => {
+  try {
+    const { userName } = req.body;
+
+    //muteInfo에 key 없으면 리턴
+    if (!VolMuteInfo.get(userName) || !MicMuteInfo.get(userName)) {
+      return res.status(200).end();
+    }
+
+    //muteInfo에서 해당 커넥션 제거해 주기
+    VolMuteInfo.remove(userName);
+    MicMuteInfo.remove(userName);
+    res.status(200).end();
+  } catch (err: unknown) {
+    console.log(err);
+    res.status(500).send(err);
+  }
+};

@@ -22,7 +22,7 @@ const CurrentPlayer = ({
 
   return (
     <Box
-      sx={{ width: 240 }}
+      sx={{ width: '100%' }}
       role="presentation"
       // onClick={handleDrawer}
       onKeyDown={handleDrawer}
@@ -51,7 +51,7 @@ const CurrentPlayer = ({
 export default CurrentPlayer;
 
 const Title = styled.div`
-  padding: 15%;
+  padding: 10%;
   text-align: center;
   font-size: 1.5rem;
   font-family: ${({ theme }) => theme.mainFont};

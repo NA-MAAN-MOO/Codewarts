@@ -6,8 +6,9 @@ import type { RootState } from 'stores';
 import axios from 'axios';
 import { stringToAscii } from 'lib/voiceLib';
 
-const APPLICATION_VOICE_URL =
-  `${process.env.REACT_APP_SERVER_URL}/voice` || 'http://localhost:3002';
+const APPLICATION_VOICE_URL = process.env.REACT_APP_SERVER_URL
+  ? `${process.env.REACT_APP_SERVER_URL}/voice`
+  : 'http://localhost:3002';
 
 const TestVoiceButtons = () => {
   const { getSessions, getConnections } = useVoice();

@@ -27,7 +27,7 @@ import FloatingButton from 'components/FloatingButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import QuizIcon from '@mui/icons-material/Quiz';
 
-const rightDrawerWidth = 240;
+const rightDrawerWidth = 350;
 
 const Main = muiStyled('main', {
   shouldForwardProp: (prop) => prop !== 'open',
