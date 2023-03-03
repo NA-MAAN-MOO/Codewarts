@@ -61,14 +61,14 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     /* Add player name bubble */
     this.playerNameBubble = this.scene.add
       .text(this.x, this.y - this.height * 0.8, this.playerName, {
-        fontFamily: 'Firenze',
+        fontFamily: 'Pretendard-regular',
       })
       .setStyle({
         backgroundColor: '#e06609',
         color: 'white',
-        fontSize: '18px',
+        fontSize: '24px',
       })
-      .setPadding(10, 3, 10, 1)
+      .setPadding(10, 3, 10, 3)
       .setDepth(50);
 
     if (scene.scene.key === 'Lobby') {
