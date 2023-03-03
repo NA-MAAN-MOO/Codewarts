@@ -143,9 +143,11 @@ export default () => {
   const createToken = async ({
     sessionId,
     userName,
+    session,
   }: {
     sessionId: string;
     userName: string;
+    session?: Session;
   }) => {
     try {
       const response = await axios.post(
@@ -163,6 +165,9 @@ export default () => {
     } catch (e) {
       console.log('createToken 에러');
       dispatch(setVoiceStatus(VOICE_STATUS.FAIL));
+      if (session) {
+        disconnectSession(session);
+      }
       console.log(e);
     }
   };
@@ -345,7 +350,7 @@ export default () => {
       }
 
       // Get a token from the OpenVidu deployment
-      const token = await createToken({ sessionId, userName });
+      const token = await createToken({ sessionId, userName, session });
       if (!token) {
         //이미 커넥션 생성됨
         return;
@@ -377,6 +382,9 @@ export default () => {
       dispatch(setVoiceStatus(VOICE_STATUS.COMPLETE));
     } catch (error) {
       console.log(error);
+      if (session) {
+        disconnectSession(session);
+      }
       dispatch(setVoiceStatus(VOICE_STATUS.FAIL));
     }
   };

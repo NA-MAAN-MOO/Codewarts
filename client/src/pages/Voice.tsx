@@ -100,7 +100,15 @@ const Voice = ({ roomKey, session, handleSession, ...rest }: VoiceProp) => {
   }, [session, OV]);
 
   const resetSession = async () => {
-    handleSession(undefined);
+    await registerSession({
+      session,
+      sessionId: roomKey,
+      addSubscriber,
+      deleteSubscriber,
+      handlePublisher,
+      OV,
+      userName: playerId,
+    });
   };
 
   return (
