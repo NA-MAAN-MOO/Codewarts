@@ -303,8 +303,7 @@ export default class MainScene extends Phaser.Scene {
       showSuccessToast(payload.editorName, payload.problemId);
       newHitSoundToggle();
       /* If player solve a problem, turn the solved effect on */
-      //TODO: 문제 푼 사람의 socket ID로 특정 플레이어 찾고, 해당 인스턴스의 problemSolvedEffect method 호출하기
-      this.player.problemSolvedEffect();
+      this.showProblemSolvedEffect(payload.editorName);
     });
 
     phaserGame.socket?.on('getEmoji', (payload) => {
@@ -541,6 +540,12 @@ export default class MainScene extends Phaser.Scene {
           payLoad.x - otherPlayer.width / 1.5,
           payLoad.y - otherPlayer.height - 80
         );
+
+        /* Success Effect */
+        otherPlayer.successEffect?.setPosition(
+          payLoad.x,
+          otherPlayer.playerNameBubble.y + 80
+        );
       }
     });
   }
@@ -578,6 +583,18 @@ export default class MainScene extends Phaser.Scene {
       store.dispatch(setUserName(phaserGame.userName));
       // 에디터 창 열기
       store.dispatch(openEditor());
+    }
+  }
+
+  /* Effect on when player solve a problem */
+  showProblemSolvedEffect(nickname: string) {
+    console.log(nickname, phaserGame.userName);
+    if (nickname === phaserGame.userName) {
+      this.player.problemSolvedEffect();
+    } else {
+      this.otherPlayers.forEach((other) => {
+        if (nickname === other.playerName) return other.problemSolvedEffect();
+      });
     }
   }
 }
