@@ -5,10 +5,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from 'stores';
 import { Game } from 'pages/Game';
 import Editor from 'pages/Editor';
-import { GAME_STATUS } from 'utils/Constants';
+import { GAME_STATUS, VOICE_STATUS } from 'utils/Constants';
 import { stringToAscii } from 'lib/voiceLib';
 import { Socket } from 'socket.io-client';
 import { WebsocketProvider } from 'y-websocket';
+import { setVoiceStatus } from 'stores/chatSlice';
 
 const VoiceRoom = () => {
   const [session, setSession] = useState<Session>();
@@ -39,6 +40,7 @@ const VoiceRoom = () => {
     if (!!session) {
       disconnectSession(session);
       setSession(undefined);
+      dispatch(setVoiceStatus(VOICE_STATUS.LOADING));
     }
   }, [status, editorName]);
 

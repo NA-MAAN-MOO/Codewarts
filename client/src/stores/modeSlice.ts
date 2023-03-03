@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { GAME_STATUS } from '../utils/Constants';
 
 export interface ModeState {
-  status: String;
+  status: string;
 }
 
 const initialState: ModeState = {
