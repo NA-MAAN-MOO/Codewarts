@@ -17,10 +17,10 @@ router.post('/new_room', createRoom);
 /* "코드 실행하기" 요청에 보내는 응답 */
 router.post('/code_to_run', compileCode);
 
-/* 백준 문제 몽고DB 요청에 보내는 응답 */
+/* 백준 문제 번호로 몽고DB 쿼리에 대한 응답 */
 router.get('/bojdata', getBojProbData);
 
-/* 백준 문제 몽고DB 요청에 보내는 응답 */
+/* 백준 문제 필터링 몽고DB 요청에 보내는 응답 */
 router.post('/probdata', getProbData);
 
 export default router;
