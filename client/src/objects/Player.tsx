@@ -61,7 +61,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     /* Add player name bubble */
     this.playerNameBubble = this.scene.add
       .text(this.x, this.y - this.height * 0.8, this.playerName, {
-        fontFamily: 'Pretendard-regular',
+        fontFamily: 'NeoDunggeunmoPro-Regular',
       })
       .setStyle({
         backgroundColor: '#e06609',

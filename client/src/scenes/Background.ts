@@ -123,6 +123,7 @@ export default class Background extends Phaser.Scene {
 
     /* Buttons */
     this.load.image('board_button', 'assets/room/board_button.png');
+    this.load.image('participate_button', 'assets/room/participate_button.png');
   }
 
   create(data: { backgroundMode: BackgroundMode }) {
