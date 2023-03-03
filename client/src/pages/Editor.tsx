@@ -26,7 +26,7 @@ import { toggleWhiteboard } from 'stores/whiteboardSlice';
 import FloatingButton from 'components/FloatingButton';
 import QuizIcon from '@mui/icons-material/Quiz';
 
-const rightDrawerWidth = 240;
+const rightDrawerWidth = 350;
 
 const Main = muiStyled('main', {
   shouldForwardProp: (prop) => prop !== 'open',

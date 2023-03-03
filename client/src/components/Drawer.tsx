@@ -14,7 +14,19 @@ type DrawerProp = {
 
 const Drawer = (props: DrawerProp) => {
   const { handleDrawer, isOpen, ...rest } = props;
-  return <MuiDrawer open={isOpen} onClose={handleDrawer} {...rest} />;
+  return (
+    <MuiDrawer
+      sx={{
+        '& .MuiDrawer-paper': {
+          width: '20%',
+          minWidth: 250,
+        },
+      }}
+      open={isOpen}
+      onClose={handleDrawer}
+      {...rest}
+    />
+  );
 };
 
 export default Drawer;
