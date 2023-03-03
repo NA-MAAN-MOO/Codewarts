@@ -16,6 +16,7 @@ const APPLICATION_DB_URL =
 
 export default function FormDialog() {
   const [openSignUpForm, setOpenSignUpForm] = React.useState(false);
+  const [signUpFailMsg, setSignUpFailMsg] = React.useState('');
 
   const handleClickOpen = () => {
     setOpenSignUpForm(true);
@@ -49,10 +50,12 @@ export default function FormDialog() {
       }
     } catch (error: any) {
       if (error?.response?.status === 409) {
-        console.log('이미 존재하는 회원입니다');
-        setSignUpFail(true);
-        setSignUpSuccess(false);
+        setSignUpFailMsg('이미 존재하는 아이디 입니다');
+      } else if (error?.response?.status === 410) {
+        setSignUpFailMsg('이미 존재하는 닉네임 입니다');
       }
+      setSignUpFail(true);
+      setSignUpSuccess(false);
     }
     return false;
 
@@ -116,12 +119,6 @@ export default function FormDialog() {
         onClose={handleSignUpClose}
         onOpen={signUpSuccess}
       />
-      <MySnackbar
-        onClose={handleSignUpClose}
-        text="이미 존재하는 회원입니다."
-        state="warning"
-        onOpen={signUpFail}
-      />
       <Button
         variant="outlined"
         color="primary"
@@ -136,6 +133,12 @@ export default function FormDialog() {
         onClose={handleClose}
         sx={{ fontFamily: styledTheme.mainFont }}
       >
+        <MySnackbar
+          onClose={handleSignUpClose}
+          text={signUpFailMsg}
+          state="warning"
+          onOpen={signUpFail}
+        />
         <form onSubmit={submitSignUpForm} id="signUp">
           <DialogTitle sx={{ fontFamily: styledTheme.mainFont }}>
             회원가입

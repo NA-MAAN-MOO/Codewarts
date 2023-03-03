@@ -38,8 +38,8 @@ export const signUp = async (req: Request, res: Response) => {
       userNickname: user.userNickname,
     });
     if (foundUserByNick) {
-      return res.status(409).json({
-        status: 409,
+      return res.status(410).json({
+        status: 410,
         message: '이미 존재하는 닉네임입니다.',
       });
     }
