@@ -61,14 +61,14 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     /* Add player name bubble */
     this.playerNameBubble = this.scene.add
       .text(this.x, this.y - this.height * 0.8, this.playerName, {
-        fontFamily: 'Firenze',
+        fontFamily: 'NeoDunggeunmoPro-Regular',
       })
       .setStyle({
         backgroundColor: '#e06609',
         color: 'white',
-        fontSize: '18px',
+        fontSize: '24px',
       })
-      .setPadding(10, 3, 10, 1)
+      .setPadding(10, 3, 10, 3)
       .setDepth(50);
 
     if (scene.scene.key === 'Lobby') {
@@ -128,7 +128,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     }
 
     if (this.successEffect) {
-      this.successEffect.setPosition(this.x, this.y - 10);
+      this.successEffect.setPosition(this.x, this.playerNameBubble.y + 80);
     }
     if (this.playerDialogBubble) {
       this.playerDialogBubble.setPosition(
@@ -187,12 +187,13 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     });
 
     this.successEffect = this.scene.add
-      .sprite(this.x, this.y - 10, 'gold', 0)
+      .sprite(this.x, this.y + 20, 'gold', 0)
+      .setScale(1.8)
       .play('gold');
 
     setTimeout(() => {
       this.successEffect.destroy();
-    }, 10000);
+    }, 120000);
   }
 
   //emoji

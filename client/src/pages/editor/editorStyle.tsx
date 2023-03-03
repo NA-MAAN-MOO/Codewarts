@@ -1,7 +1,5 @@
 import styledc from 'styled-components';
 import { styled, alpha, createTheme, useTheme } from '@mui/material/styles';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
 import Switch from '@mui/material/Switch';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
@@ -55,76 +53,46 @@ filter: drop-shadow(0px 4px 4px rgba(255, 255, 255, 0.5));
 
 const AlgoInfoWrap = styledc.div`
 overflow: auto;
-
+// border: 1px solid yellow;
 `;
 
 const HeaderTab = styledc.div`
-display: flex;
-justify-content: space-between;
+// display: flex;
+// justify-content: space-between;
 width: 100%;
 color: papayawhip;
+// border: 1px solid green;
+flex-grow: 1;
 `;
 
-interface StyledTabsProps {
-  children?: React.ReactNode;
-  value: number;
-  onChange: (event: React.SyntheticEvent, newValue: number) => void;
-}
+const AlgoInputWrap = styledc.div`
+// margin-top: 10px;
+display: flex;
+justify-content: center;
+align-items: center;
+// margin-left: 5px;
+// border: 1px solid red;
+width: 100%
+`;
 
-const StyledTabs = styled((props: StyledTabsProps) => (
-  <Tabs
-    {...props}
-    TabIndicatorProps={{ children: <span className="MuiTabs-indicatorSpan" /> }}
-  />
-))({
-  '& .MuiTabs-indicator': {
-    display: 'flex',
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
-  },
-  '& .MuiTabs-indicatorSpan': {
-    maxWidth: 80,
-    width: '100%',
-    backgroundColor: '#ffe600',
-  },
-});
-
-interface StyledTabProps {
-  label: string;
-}
-
-const StyledTab = styled((props: StyledTabProps) => (
-  <Tab disableRipple {...props} />
-))(({ theme }) => ({
-  textTransform: 'none',
-  fontFamily: 'Cascadia Code, Pretendard-Regular',
-  fontWeight: theme.typography.fontWeightRegular,
-  fontSize: theme.typography.pxToRem(20),
-  marginRight: theme.spacing(1),
-  color: 'rgba(255, 255, 255, 0.7)',
-  '&.Mui-selected': {
-    color: '#fff',
-  },
-  '&.Mui-focusVisible': {
-    backgroundColor: 'rgba(100, 95, 228, 0.32)', // 원래값
-  },
-}));
-
-const ProbSummary = styledc.div`
-// color: 'papayawhip';
+const ProbTitleDiv = styledc.div`
 text-shadow: 1px 1px 2px grey;
 color: #fff;
-font-size: 20px;
-font-weight: bold;
+// font-size: 25px;
+font-size: 1.5em;
+// font-weight: bold;
 width: 100%;
-// line-height: 56px;
 display: flex;
 flex-direction : row;
-align-items:center;
-// word-break:break-all;
+align-items: center;
 overflow: visible;
 min-height: 100%;
-
+display: flex,
+justify-content: space-between,
+// word-break: break-all;
+text-align: center;
+// border: 1px solid lightgreen;
+padding: 16px;
 `;
 
 const AlgoInput = styledc.input`
@@ -134,13 +102,6 @@ const AlgoInput = styledc.input`
   background: papayawhip;
   border: none;
   border-radius: 3px;
-`;
-
-const AlgoInputWrap = styledc.div`
-  // margin-top: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 
 /* text field theme setting */
@@ -183,7 +144,8 @@ const AlgoTextField = styled((props: TextFieldProps) => (
   '& .MuiFilledInput-root': {
     overflow: 'hidden',
     borderRadius: 4,
-    backgroundColor: theme.palette.mode === 'light' ? 'papayawhip' : '#2b2b2b',
+    // backgroundColor: theme.palette.mode === 'light' ? 'papayawhip' : '#2b2b2b',
+    backgroundColor: theme.palette.mode === 'light' ? 'papayawhip' : 'grey',
     transition: theme.transitions.create([
       'border-color',
       'background-color',
@@ -199,7 +161,7 @@ const AlgoTextField = styled((props: TextFieldProps) => (
       color: '#fff',
       boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 2px`,
       border: 0,
-      // borderColor: theme.palette.primary.main,
+      borderColor: theme.palette.primary.main,
     },
   },
 }));
@@ -312,11 +274,12 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
 }));
 
 /* Drawer setting */
-const leftDrawerWidth = 520;
+const leftDrawerWidth = '40';
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   open?: boolean;
 }>(({ theme, open }) => ({
+  flexDirection: 'column',
   flexGrow: 1,
   // padding: theme.spacing(2),
   // border: '1px solid purple', // for debugging
@@ -325,7 +288,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  marginLeft: `-${leftDrawerWidth}px`,
+  marginLeft: `-${leftDrawerWidth}%`,
   ...(open && {
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeOut,
@@ -347,8 +310,8 @@ const AppBar = styled(MuiAppBar, {
     duration: theme.transitions.duration.leavingScreen,
   }),
   ...(open && {
-    width: `calc(100% - ${leftDrawerWidth}px)`,
-    marginLeft: `${leftDrawerWidth}px`,
+    width: `calc(100% - ${leftDrawerWidth} +'%')`,
+    marginLeft: `${leftDrawerWidth}%`,
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
@@ -358,29 +321,36 @@ const AppBar = styled(MuiAppBar, {
 
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
-  // alignItems: 'center',
+  // border: '1px solid purple', //for debugging
   padding: theme.spacing(0, 2),
   // necessary for content to be below app bar
-  // ...theme.mixins.toolbar,
+  ...theme.mixins.toolbar,
   justifyContent: 'space-between',
   alignItems: 'center',
   // minHeight: '100%',
 }));
+
+const middleButtonStyle = {
+  fontFamily: 'Cascadia Code, Pretendard-Regular',
+  fontSize: '17px',
+  boxShadow: 'inset 0.2em 0.2em #ededed',
+  marginRight: '5px',
+  marginLeft: '5px',
+  marginBottom: '5px',
+};
 
 export {
   HeaderTab,
   AlgoInput,
   AlgoInputWrap,
   AlgoTextField,
-  ProbSummary,
+  ProbTitleDiv,
   ProfileInfo,
   Item,
   MiddleWrapper,
   EditorWrapper,
   EditorInfo,
   AlgoInfoWrap,
-  StyledTab,
-  StyledTabs,
   MaterialUISwitch,
   AccordionSummary,
   Accordion,
@@ -389,4 +359,5 @@ export {
   AppBar,
   DrawerHeader,
   leftDrawerWidth,
+  middleButtonStyle,
 };

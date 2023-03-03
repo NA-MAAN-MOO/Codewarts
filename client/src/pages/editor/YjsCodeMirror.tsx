@@ -34,6 +34,7 @@ import {
   Main,
   DrawerHeader,
   leftDrawerWidth,
+  AlgoInputWrap,
 } from './editorStyle';
 import 'styles/fonts.css'; /* FONT */
 import { ThemeProvider, useTheme } from '@mui/material/styles';
@@ -64,6 +65,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import IconButton from '@mui/material/IconButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+
 const APPLICATION_YJS_URL =
   process.env.REACT_APP_YJS_URL || 'ws://localhost:1234/';
 
@@ -148,10 +150,10 @@ function YjsCodeMirror(props: YjsProp) {
     let basicThemeSet = EditorView.theme({
       '&': {
         borderRadius: '.5em', // '.cm-gutters'와 같이 조절할 것
-        height: '400px',
+        // height: '400px',
         // maxHeight: '400px',
         // minHeight: '400px',
-        // height: '100%',
+        height: '50vh',
       },
       '.cm-editor': {
         // maxHeight: '50%',
@@ -210,10 +212,11 @@ function YjsCodeMirror(props: YjsProp) {
         <CssBaseline />
         <Drawer
           sx={{
-            width: leftDrawerWidth,
+            width: leftDrawerWidth + '%',
             flexShrink: 0,
+            // border: '1px solid green',
             '& .MuiDrawer-paper': {
-              width: leftDrawerWidth,
+              width: leftDrawerWidth - 1.5 + '%',
               boxSizing: 'border-box',
             },
           }}
@@ -222,10 +225,19 @@ function YjsCodeMirror(props: YjsProp) {
           open={leftOpen}
         >
           <DrawerHeader>
-            <ProbTitle
-              bojProblemId={bojProblemId}
-              bojProbFullData={bojProbFullData}
-            />
+            <AlgoInputWrap>
+              <AlgoHeaderTab
+                bojProbDataRef={bojProbDataRef}
+                setBojProbFullData={setBojProbFullData}
+                setBojProblemId={setBojProblemId}
+              />
+              <SearchModal
+                setBojProbFullData={setBojProbFullData}
+                setBojProblemId={setBojProblemId}
+                setAlgoSelect={setAlgoSelect}
+              />
+            </AlgoInputWrap>
+
             <IconButton onClick={handleLeftDrawerClose}>
               {theme.direction === 'ltr' ? (
                 <ChevronLeftIcon />
@@ -243,18 +255,10 @@ function YjsCodeMirror(props: YjsProp) {
                 boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)',
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <AlgoHeaderTab
-                  bojProbDataRef={bojProbDataRef}
-                  setBojProbFullData={setBojProbFullData}
-                  setBojProblemId={setBojProblemId}
-                />
-                <SearchModal
-                  setBojProbFullData={setBojProbFullData}
-                  setBojProblemId={setBojProblemId}
-                  setAlgoSelect={setAlgoSelect}
-                />
-              </div>
+              <ProbTitle
+                bojProblemId={bojProblemId}
+                bojProbFullData={bojProbFullData}
+              />
               <AlgoInfoAccordion
                 inputStdin={inputStdin}
                 bojProbFullData={bojProbFullData}
@@ -277,7 +281,7 @@ function YjsCodeMirror(props: YjsProp) {
                 setCpuTime={setCpuTime}
                 inputStdin={inputStdin.current}
               />
-              <SubmitButton bojProblemId={bojProblemId} />
+              {/* <SubmitButton bojProblemId={bojProblemId} /> */}
               <EvaluateButton
                 ytext={ytext}
                 bojProblemId={bojProblemId}
@@ -290,7 +294,7 @@ function YjsCodeMirror(props: YjsProp) {
                 value={markingPercent}
                 min={0}
                 max={100}
-                label={`정답 게이지: ${markingPercent}%`}
+                label={`정답률: ${markingPercent}%`}
               />
             </ThemeProvider>
           </MiddleWrapper>
