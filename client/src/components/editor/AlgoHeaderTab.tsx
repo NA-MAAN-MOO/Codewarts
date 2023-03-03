@@ -102,6 +102,7 @@ function AlgoHeaderTab(props) {
         autoFocus={true}
         type="text"
         onKeyDown={handleKeyDown}
+        fullWidth
       />
     </HeaderTab>
   );

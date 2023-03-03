@@ -62,6 +62,7 @@ const HeaderTab = styledc.div`
 width: 100%;
 color: papayawhip;
 // border: 1px solid green;
+flex-grow: 1;
 `;
 
 const AlgoInputWrap = styledc.div`
@@ -71,6 +72,7 @@ justify-content: center;
 align-items: center;
 // margin-left: 5px;
 // border: 1px solid red;
+width: 100%
 `;
 
 const ProbTitleDiv = styledc.div`
@@ -142,7 +144,8 @@ const AlgoTextField = styled((props: TextFieldProps) => (
   '& .MuiFilledInput-root': {
     overflow: 'hidden',
     borderRadius: 4,
-    backgroundColor: theme.palette.mode === 'light' ? 'papayawhip' : '#2b2b2b',
+    // backgroundColor: theme.palette.mode === 'light' ? 'papayawhip' : '#2b2b2b',
+    backgroundColor: theme.palette.mode === 'light' ? 'papayawhip' : 'grey',
     transition: theme.transitions.create([
       'border-color',
       'background-color',
@@ -158,7 +161,7 @@ const AlgoTextField = styled((props: TextFieldProps) => (
       color: '#fff',
       boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 2px`,
       border: 0,
-      // borderColor: theme.palette.primary.main,
+      borderColor: theme.palette.primary.main,
     },
   },
 }));

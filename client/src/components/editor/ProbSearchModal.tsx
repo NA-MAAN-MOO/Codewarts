@@ -80,7 +80,7 @@ export default function SearchModal(props: any) {
           sx={{
             wordBreak: 'keep-all',
             wrap: 'no-wrap',
-            padding: '8px 5px 8px 11px',
+            padding: '10px 5px 10px 11px',
             margin: '10px',
             width: 100,
             fontFamily: 'Cascadia Code, Pretendard-Regular',

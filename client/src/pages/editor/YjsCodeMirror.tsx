@@ -281,7 +281,7 @@ function YjsCodeMirror(props: YjsProp) {
                 setCpuTime={setCpuTime}
                 inputStdin={inputStdin.current}
               />
-              <SubmitButton bojProblemId={bojProblemId} />
+              {/* <SubmitButton bojProblemId={bojProblemId} /> */}
               <EvaluateButton
                 ytext={ytext}
                 bojProblemId={bojProblemId}
