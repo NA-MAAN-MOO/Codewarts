@@ -10,7 +10,8 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import RenderSvg from 'components/Svg';
-import { styledTheme } from 'styles/theme';
+import { buttonTheme } from 'pages/editor/editorStyle';
+import { ThemeProvider } from '@mui/material/styles';
 
 const APPLICATION_EDITOR_URL =
   process.env.REACT_APP_EDITOR_URL || 'http://localhost:3001';
@@ -22,12 +23,12 @@ const style = {
   textAlign: 'center',
   transform: 'translate(-50%, -50%)',
   width: 'auto',
-  bgcolor: '#161616',
-  border: '2px solid #33313B',
+  bgcolor: '#272822',
+  // border: '2px solid #33313B',
   boxShadow: 24,
   p: 4,
-  borderRadius: '30px',
-  // display: 'flex',
+  borderRadius: '10px',
+  color: '#272822',
 };
 
 export default function SearchModal(props: any) {
@@ -65,28 +66,33 @@ export default function SearchModal(props: any) {
     fetchFilteredData(filter, page);
   };
 
-  useEffect(() => {
-    return setBojProbFullData(null);
-  }, []);
+  // useEffect(() => {
+  //   return setBojProbFullData(null);
+  // }, []);
 
   return (
     <div>
-      <Button
-        onClick={handleOpen}
-        color="secondary"
-        variant="contained"
-        sx={{
-          wordBreak: 'keep-all',
-          wrap: 'no-wrap',
-          padding: 0.5,
-          margin: '5px',
-          width: 100,
-          fontFamily: 'Cascadia Code, Pretendard-Regular',
-          fontWeight: 'bold',
-        }}
-      >
-        필터 검색
-      </Button>
+      <ThemeProvider theme={buttonTheme}>
+        <Button
+          onClick={handleOpen}
+          color="primary"
+          variant="outlined"
+          sx={{
+            wordBreak: 'keep-all',
+            wrap: 'no-wrap',
+            padding: '10px 5px 10px 11px',
+            margin: '10px',
+            width: 100,
+            fontFamily: 'Cascadia Code, Pretendard-Regular',
+            fontWeight: 'bold',
+            fontSize: '1rem',
+            boxShadow: 'inset 0.2em 0.2em #ededed',
+          }}
+        >
+          filter🔍
+        </Button>
+      </ThemeProvider>
+
       <Modal
         open={open}
         onClose={handleClose}
@@ -130,7 +136,7 @@ export default function SearchModal(props: any) {
                 //@ts-ignore
                 key={value?.probId}
                 sx={{
-                  py: 0,
+                  py: 0.5,
                   minHeight: 32,
                   color: 'rgba(255,255,255,.8)',
                 }}
@@ -160,8 +166,9 @@ export default function SearchModal(props: any) {
                   //@ts-ignore
                   primary={`${value?.probId}번 ${value?.solvedAC?.titleKo}`}
                   primaryTypographyProps={{
-                    fontSize: 18,
+                    fontSize: 20,
                     fontWeight: 'medium',
+                    fontFamily: 'Cascadia Code, Pretendard-Regular',
                   }}
                 />
               </ListItemButton>

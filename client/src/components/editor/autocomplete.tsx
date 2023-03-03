@@ -12,13 +12,9 @@ export default function LimitTags(props: any) {
       options={algoFilter}
       getOptionLabel={(option) => option.tag}
       renderInput={(params) => (
-        <TextField
-          {...params}
-          // label="문제 검색하기"
-          placeholder="검색 필터 추가"
-        />
+        <TextField {...params} placeholder="검색 필터 추가" />
       )}
-      sx={{ width: '500px' }}
+      sx={{ width: '500px', fontFamily: 'Cascadia Code, Pretendard-Regular' }}
       autoSelect={true}
       filterSelectedOptions={true}
       loadingText="Loading..."
@@ -31,7 +27,7 @@ export default function LimitTags(props: any) {
 }
 
 const algoFilter = [
-  { tag: '백준' },
+  // { tag: '백준' },
   // { tag: '리트코드' },
   { tag: '브론즈' },
   { tag: '실버' },
@@ -43,6 +39,6 @@ const algoFilter = [
   // { tag: 'easy' },
   // { tag: 'medium' },
   // { tag: 'difficult' },
-  { tag: '채점가능' },
+  // { tag: '채점가능' },
   { tag: '한국정보올림피아드' },
 ];
