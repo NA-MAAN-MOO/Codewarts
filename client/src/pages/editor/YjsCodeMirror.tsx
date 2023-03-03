@@ -294,7 +294,7 @@ function YjsCodeMirror(props: YjsProp) {
                 value={markingPercent}
                 min={0}
                 max={100}
-                label={`정답 게이지: ${markingPercent}%`}
+                label={`정답률: ${markingPercent}%`}
               />
             </ThemeProvider>
           </MiddleWrapper>
