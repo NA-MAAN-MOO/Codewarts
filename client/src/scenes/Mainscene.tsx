@@ -45,7 +45,7 @@ export default class MainScene extends Phaser.Scene {
   idxEnter?: Phaser.Input.Keyboard.Key;
   idxUp?: Phaser.Input.Keyboard.Key;
   whiteboard: Resource;
-  whiteboardButton!: Button;
+  whiteboardButton!: Phaser.GameObjects.Image;
 
   constructor() {
     // Scene의 key값은 MainScene
@@ -278,18 +278,24 @@ export default class MainScene extends Phaser.Scene {
     });
 
     /* Whiteboard Interaction Dialog */
-    this.whiteboardButton = new Button({
-      scene: this,
-      x: this.whiteboard.x,
-      y: this.whiteboard.y,
-      text: 'E를 눌러 화이트보드 보기',
-      style: {
-        fontSize: '20px',
-        backgroundColor: 'white',
-        color: 'black',
-        resolution: 20,
-      },
-    }).getBtn();
+    this.whiteboardButton = this.add.image(
+      this.whiteboard.x - 2,
+      this.whiteboard.y + 4,
+      'board_button'
+    );
+    // this.whiteboardButton = new Button({
+    //   scene: this,
+    //   x: this.whiteboard.x,
+    //   y: this.whiteboard.y,
+    //   text: 'E를 눌러 화이트보드 보기',
+    //   style: {
+    //     fontSize: '20px',
+    //     backgroundColor: 'white',
+    //     color: 'black',
+    //     resolution: 20,
+    //   },
+    // }).getBtn();
+    this.whiteboardButton.scale *= 0.65;
     this.whiteboardButton.setVisible(false);
 
     // Listen for the "Big Deal" event on the client side
