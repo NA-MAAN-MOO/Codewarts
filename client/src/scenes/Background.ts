@@ -53,10 +53,12 @@ export default class Background extends Phaser.Scene {
 
     /*** Lobby Scene ***/
     this.load.image('lobby', 'assets/lobby/lobby_scene.png');
+    this.load.image('door', 'assets/lobby/door.png');
+    this.load.image('enter', 'assets/lobby/enter.png');
 
     this.load.atlas(
       'green',
-      'assets/lobby/green.png',
+      'assets/lobby/gray.png',
       'assets/lobby/green.json'
     );
 
@@ -115,9 +117,13 @@ export default class Background extends Phaser.Scene {
 
     this.load.atlas(
       'gold',
-      'assets/effect/gold.png',
+      'assets/effect/confetti.png',
       'assets/effect/gold.json'
     );
+
+    /* Buttons */
+    this.load.image('board_button', 'assets/room/board_button.png');
+    this.load.image('participate_button', 'assets/room/participate_button.png');
   }
 
   create(data: { backgroundMode: BackgroundMode }) {

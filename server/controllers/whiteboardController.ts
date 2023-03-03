@@ -75,7 +75,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
   try {
     const datum = await User.find({});
     res.status(200).send(datum);
-    console.log(datum);
+    // console.log(datum);
   } catch (e) {
     console.error(e);
     res.status(404).send('No valid Boj Users Id');

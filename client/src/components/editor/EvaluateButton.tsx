@@ -159,7 +159,7 @@ function EvaluateButton(props) {
       return;
     }
     if (markingPercent === '100') {
-      notifySuccess(editorName, bojProblemId);
+      // notifySuccess(editorName, bojProblemId);
       newHitSoundToggle();
       broadcastSuccess();
     } else {
