@@ -128,7 +128,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     }
 
     if (this.successEffect) {
-      this.successEffect.setPosition(this.x, this.y - 10);
+      this.successEffect.setPosition(this.x, this.playerNameBubble.y + 80);
     }
     if (this.playerDialogBubble) {
       this.playerDialogBubble.setPosition(
@@ -187,12 +187,13 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     });
 
     this.successEffect = this.scene.add
-      .sprite(this.x, this.y - 10, 'gold', 0)
+      .sprite(this.x, this.y + 20, 'gold', 0)
+      .setScale(1.8)
       .play('gold');
 
     setTimeout(() => {
       this.successEffect.destroy();
-    }, 10000);
+    }, 120000);
   }
 
   //emoji

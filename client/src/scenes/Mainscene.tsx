@@ -303,7 +303,8 @@ export default class MainScene extends Phaser.Scene {
       showSuccessToast(payload.editorName, payload.problemId);
       newHitSoundToggle();
       /* If player solve a problem, turn the solved effect on */
-      // this.player.problemSolvedEffect();
+      //TODO: 문제 푼 사람의 socket ID로 특정 플레이어 찾고, 해당 인스턴스의 problemSolvedEffect method 호출하기
+      this.player.problemSolvedEffect();
     });
 
     phaserGame.socket?.on('getEmoji', (payload) => {

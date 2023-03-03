@@ -117,7 +117,7 @@ export default class Background extends Phaser.Scene {
 
     this.load.atlas(
       'gold',
-      'assets/effect/gold.png',
+      'assets/effect/confetti.png',
       'assets/effect/gold.json'
     );
 
