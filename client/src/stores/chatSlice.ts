@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { GAME_STATUS, MUTE_TYPE } from '../utils/Constants';
 import { CharInfoType, MuteInfoType } from 'types';
-import { Session } from 'openvidu-browser';
 import axios from 'axios';
 
 const APPLICATION_VOICE_URL =
@@ -14,6 +13,7 @@ export interface ChatState {
   micMuteInfo: MuteInfoType;
   myVolMute: boolean;
   myMicMute: boolean;
+  voiceStatus: 'LOADING' | 'COMPLETE' | 'FAIL';
 }
 
 //유저 뮤트 정보 가져와서 initial state에 넣어둠
@@ -31,6 +31,7 @@ const initialState: ChatState = {
   micMuteInfo: {},
   myVolMute: false,
   myMicMute: false,
+  voiceStatus: 'LOADING',
 };
 
 export const chatSlice = createSlice({
@@ -80,6 +81,9 @@ export const chatSlice = createSlice({
         state.myMicMute = true;
       }
     },
+    setVoiceStatus: (state, action) => {
+      state.voiceStatus = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchMuteInfo.fulfilled, (state, action) => {
@@ -99,6 +103,7 @@ export const {
   initialMyMute,
   setVolMute,
   setMicMute,
+  setVoiceStatus,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

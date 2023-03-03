@@ -12,16 +12,16 @@ import { RootState } from 'stores';
 import axios from 'axios';
 import {
   setUsers,
-  toggleMicMute,
   toggleMyMicMute,
   toggleMyVolMute,
-  toggleVolMute,
   setVolMute,
   setMicMute,
+  setVoiceStatus,
 } from 'stores/chatSlice';
 import { Connection } from 'types';
 import _ from 'lodash';
 import { MUTE_TYPE } from 'utils/Constants';
+import { VOICE_STATUS } from 'utils/Constants';
 
 const APPLICATION_DB_URL =
   process.env.REACT_APP_DB_URL || 'http://localhost:3003';
@@ -162,6 +162,7 @@ export default () => {
       return response.data; // The token
     } catch (e) {
       console.log('createToken 에러');
+      dispatch(setVoiceStatus(VOICE_STATUS.FAIL));
       console.log(e);
     }
   };
@@ -186,46 +187,14 @@ export default () => {
     } = props;
     try {
       if (!session || !sessionId || !OV) return;
-      const connectionList: Connection[] | false = await getConnections(
-        sessionId
-      );
-      if (connectionList === false) {
-        console.log('세션 존재 안 함');
-        // 세션 아직 존재하지 않음
-        return;
-      }
 
-      //이미 커넥션이 있을 때. userId와 일치하는 커넥션 있는지 확인
-      const myConList = connectionList.filter((con: Connection) => {
-        if (!con.clientData) return false;
-        const { user } = JSON.parse(con.clientData);
-        return user === userName;
-      });
-
-      //userId와 일치하는 커넥션 있으면 종료하기
-      if (myConList.length > 0) {
-        await Promise.all(
-          myConList.map(async (con: Connection) => {
-            const connectionId = con.id;
-            await axios.delete(
-              `${APPLICATION_VOICE_URL}/delete-connection/${sessionId}/${connectionId}`
-            );
-          })
-        );
-      }
+      /**삭제예정로직 */
       // const isConnectExist = connectionList.some((con: Connection) => {
       //   if (!con.clientData) return false;
       //   const { user } = JSON.parse(con.clientData);
       //   return user === userName;
       // });
       // if (isConnectExist) return;
-
-      // Get a token from the OpenVidu deployment
-      const token = await createToken({ sessionId, userName });
-      if (!token) {
-        //이미 커넥션 생성됨
-        return;
-      }
 
       const mySession = session;
 
@@ -312,7 +281,6 @@ export default () => {
         if (!user || user !== userName) {
           return;
         }
-
         const targetSession = event.target as Session;
         const subscribers = targetSession.streamManagers.filter((sm) => {
           //Subscriber는 streaManager의 remote가 true, Publisher는 remote가 false임
@@ -348,6 +316,41 @@ export default () => {
         });
       });
 
+      //커넥션 확인
+      const connectionList: Connection[] | false = await getConnections(
+        sessionId
+      );
+      if (connectionList === false) {
+        // 세션 아직 존재하지 않음. 만들어 주기
+        await createSession(sessionId);
+      } else {
+        //이미 커넥션이 있을 때. userId와 일치하는 커넥션 있는지 확인
+        const myConList = connectionList.filter((con: Connection) => {
+          if (!con.clientData) return false;
+          const { user } = JSON.parse(con.clientData);
+          return user === userName;
+        });
+
+        //userId와 일치하는 커넥션 있으면 종료하기
+        if (myConList.length > 0) {
+          await Promise.all(
+            myConList.map(async (con: Connection) => {
+              const connectionId = con.id;
+              await axios.delete(
+                `${APPLICATION_VOICE_URL}/delete-connection/${sessionId}/${connectionId}`
+              );
+            })
+          );
+        }
+      }
+
+      // Get a token from the OpenVidu deployment
+      const token = await createToken({ sessionId, userName });
+      if (!token) {
+        //이미 커넥션 생성됨
+        return;
+      }
+
       // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
       // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
       await mySession.connect(token, { user: userName });
@@ -371,11 +374,10 @@ export default () => {
       handlePublisher(pubNow);
       console.log('여기까지옴3');
 
-      // if(myVolMute){
-      //   handleMyVolumeMute()
-      // }
+      dispatch(setVoiceStatus(VOICE_STATUS.COMPLETE));
     } catch (error) {
       console.log(error);
+      dispatch(setVoiceStatus(VOICE_STATUS.FAIL));
     }
   };
 
@@ -446,23 +448,30 @@ export default () => {
   }) => {
     if (!session) return;
     //false일 때 뮤트 처리됨
-    subscribers.map((sm) => {
-      console.log('sm', sm);
-      sm.subscribeToAudio(!muteTo);
-    });
-    dispatch(toggleMyVolMute());
-    await axios.post(`${APPLICATION_VOICE_URL}/toggle-mute/${MUTE_TYPE.VOL}`, {
-      userName: playerId,
-      muteTo,
-    });
-    const sendingData = JSON.stringify({
-      user: playerId,
-      muteTo,
-    });
-    session?.signal({
-      type: MUTE_TYPE.VOL,
-      data: sendingData,
-    });
+    try {
+      subscribers.map((sm) => {
+        sm.subscribeToAudio(!muteTo);
+      });
+      dispatch(toggleMyVolMute());
+      await axios.post(
+        `${APPLICATION_VOICE_URL}/toggle-mute/${MUTE_TYPE.VOL}`,
+        {
+          userName: playerId,
+          muteTo,
+        }
+      );
+      const sendingData = JSON.stringify({
+        user: playerId,
+        muteTo,
+      });
+      session?.signal({
+        type: MUTE_TYPE.VOL,
+        data: sendingData,
+      });
+    } catch (err) {
+      console.log(err);
+      dispatch(setVoiceStatus(VOICE_STATUS.FAIL));
+    }
   };
 
   //내 마이크 뮤트
@@ -500,6 +509,7 @@ export default () => {
       });
     } catch (err) {
       console.log(err);
+      dispatch(setVoiceStatus(VOICE_STATUS.FAIL));
     }
   };
 
