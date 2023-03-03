@@ -1,5 +1,9 @@
-import { ProbSummary } from '../../pages/editor/editorStyle';
+import { ProbTitleDiv } from '../../pages/editor/editorStyle';
 import RenderSvg from 'components/Svg';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import { middleButtonStyle } from '../../pages/editor/editorStyle';
+import Tooltip from '@mui/material/Tooltip';
+import Button from '@mui/material/Button';
 
 //@ts-ignore
 function ProbTitle(props) {
@@ -8,7 +12,7 @@ function ProbTitle(props) {
   return (
     <>
       {bojProbFullData?.solvedAC?.titleKo ? (
-        <ProbSummary>
+        <ProbTitleDiv>
           <RenderSvg
             svgName={
               bojProbFullData?.solvedAC?.level >= 0
@@ -28,10 +32,24 @@ function ProbTitle(props) {
           >
             {bojProblemId}번 {bojProbFullData?.solvedAC?.titleKo}
           </div>
-        </ProbSummary>
-      ) : (
-        <span></span>
-      )}
+          <Tooltip title="제출하러 가기" arrow>
+            <Button
+              variant="text"
+              href={
+                bojProblemId
+                  ? `https://acmicpc.net/submit/${bojProblemId}`
+                  : `https://acmicpc.net`
+              }
+              target="_blank"
+              rel="noreferrer"
+              sx={{ color: 'rgba(255, 255, 255, 0.7)' }}
+            >
+              <OpenInNewIcon />
+            </Button>
+          </Tooltip>
+        </ProbTitleDiv>
+      ) : // <span></span>
+      null}
     </>
   );
 }

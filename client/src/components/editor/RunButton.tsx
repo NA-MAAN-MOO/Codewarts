@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Tooltip from '@mui/material/Tooltip';
 import Button from '@mui/material/Button';
+import { middleButtonStyle } from 'pages/editor/editorStyle';
 
 const APPLICATION_EDITOR_URL =
   process.env.REACT_APP_EDITOR_URL || 'http://localhost:3001';
@@ -41,10 +42,8 @@ function RunButton(props) {
         <Button
           onClick={runCode}
           color="primary"
-          style={{
-            fontFamily: 'Cascadia Code, Pretendard-Regular',
-            fontSize: '17px',
-          }}
+          variant="outlined"
+          style={middleButtonStyle}
         >
           ▶️ RUN
         </Button>
