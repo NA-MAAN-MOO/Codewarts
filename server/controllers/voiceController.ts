@@ -149,6 +149,32 @@ export const deleteSession = async (req: Request, res: Response) => {
   }
 };
 
+//특정 커넥션 제거(openvidu rest-api 이용)
+export const deleteConnection = async (req: Request, res: Response) => {
+  try {
+    const { sessionId, connectionId } = req.params;
+
+    const { data } = await axios.delete(
+      `${OPENVIDU_URL}/openvidu/api/sessions/${sessionId}/connection/${connectionId}`,
+      {
+        headers: {
+          Authorization: `Basic ${authCode}`,
+        },
+      }
+    );
+
+    res.status(200).end();
+  } catch (err: unknown) {
+    console.log(err);
+    if (err instanceof AxiosError && err.response?.status === 400) {
+      // 세션 지워짐
+      res.send(false);
+      return;
+    }
+    res.status(500).send(err);
+  }
+};
+
 //특정 커넥션 제거(voiceController에 있는 connectionList에서 지운다는 개념)
 // export const deleteConnection = async (req: Request, res: Response) => {
 //   try {

@@ -186,13 +186,34 @@ export default () => {
     } = props;
     try {
       if (!session || !sessionId || !OV) return;
-      const content: Connection[] | false = await getConnections(sessionId);
-      if (content === false) {
+      const connectionList: Connection[] | false = await getConnections(
+        sessionId
+      );
+      if (connectionList === false) {
         console.log('세션 존재 안 함');
         // 세션 아직 존재하지 않음
         return;
       }
-      // const isConnectExist = content.some((con: Connection) => {
+
+      //이미 커넥션이 있을 때. userId와 일치하는 커넥션 있는지 확인
+      const myConList = connectionList.filter((con: Connection) => {
+        if (!con.clientData) return false;
+        const { user } = JSON.parse(con.clientData);
+        return user === userName;
+      });
+
+      //userId와 일치하는 커넥션 있으면 종료하기
+      if (myConList.length > 0) {
+        await Promise.all(
+          myConList.map(async (con: Connection) => {
+            const connectionId = con.id;
+            await axios.delete(
+              `${APPLICATION_VOICE_URL}/delete-connection/${sessionId}/${connectionId}`
+            );
+          })
+        );
+      }
+      // const isConnectExist = connectionList.some((con: Connection) => {
       //   if (!con.clientData) return false;
       //   const { user } = JSON.parse(con.clientData);
       //   return user === userName;
@@ -329,9 +350,9 @@ export default () => {
 
       // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
       // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
+      await mySession.connect(token, { user: userName });
 
       // ---Publish your stream ---
-      await mySession.connect(token, { user: userName });
 
       // Init a passing undefined as targetElement (we don't want OpenVidu to insert a video
       // element: we will manage it on our own) and with the desired properties
