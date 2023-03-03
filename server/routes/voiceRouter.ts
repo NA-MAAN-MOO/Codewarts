@@ -6,7 +6,7 @@ import {
   getSessions,
   getSessionFromId,
   deleteSession,
-  // deleteConnection,
+  deleteConnection,
   // resetConnection,
   toggleMute,
   getMuteInfo,
@@ -21,7 +21,7 @@ router.get('/get-connections', getConnections);
 router.get('/get-sessions', getSessions);
 router.get('/get-session-from-id', getSessionFromId);
 router.delete('/delete-session/:sessionId', deleteSession);
-// router.delete('/delete-connection/:sessionId', deleteConnection);
+router.delete('/delete-connection/:sessionId/:connectionId', deleteConnection);
 // router.delete('/reset-connection', resetConnection);
 router.post('/toggle-mute/:type', toggleMute);
 router.get('/get-mute-info', getMuteInfo);

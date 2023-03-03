@@ -71,10 +71,11 @@ const Voice = ({ roomKey, session, handleSession, ...rest }: VoiceProp) => {
     //roomKey를 바탕으로 sessionId를 가져온다.
     //가져온 sessionId와 만든 세션을 서버에서 생성한다.
 
-    const result = await createSession(roomKey);
-    if (!result) {
-      return;
-    }
+    //createSession 로직을 registerSession 쪽으로 뺐음.
+    // const result = await createSession(roomKey);
+    // if (!result) {
+    //   return;
+    // }
     handleSession(session);
     setOV(OV);
   };
@@ -98,6 +99,10 @@ const Voice = ({ roomKey, session, handleSession, ...rest }: VoiceProp) => {
     })();
   }, [session, OV]);
 
+  const resetSession = async () => {
+    handleSession(undefined);
+  };
+
   return (
     <>
       {status === GAME_STATUS.GAME ? (
@@ -106,6 +111,7 @@ const Voice = ({ roomKey, session, handleSession, ...rest }: VoiceProp) => {
           subscribers={subscribers}
           joinSession={joinSession}
           publisher={publisher}
+          resetSession={resetSession}
         />
       ) : (
         <EditorVoice

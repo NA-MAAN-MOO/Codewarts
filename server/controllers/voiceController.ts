@@ -36,22 +36,18 @@ export const createSession = async (req: Request, res: Response) => {
 
 export const createConnection = async (req: Request, res: Response) => {
   try {
-    const { userName } = req.body;
     const { sessionId } = req.params;
-    const session = openvidu.activeSessions.find(
+    let session = openvidu.activeSessions.find(
       (s) => s.sessionId === sessionId
     );
     if (!session) {
-      console.log('세션 존재하지 않음');
-      return res.status(404).end();
+      //세션 존재하지 않는 상태. 세션 생성하기
+      console.log('세션 존재하지 않아서 새로 생성');
+      session = await openvidu.createSession({
+        customSessionId: sessionId,
+      });
+      // return res.status(404).end();
     }
-
-    //이미 해당 유저의 커넥션 있는지 확인
-    // const conKey = `${sessionId}:${userName}`;
-    // if (!!connectionList[conKey]) {
-    //   //이미 커넥션 있으면
-    //   return res.send(null);
-    // }
 
     const connection = await session.createConnection(req.body);
     // connectionList[conKey] = connection;
@@ -145,6 +141,36 @@ export const deleteSession = async (req: Request, res: Response) => {
     res.status(200).end();
   } catch (err: unknown) {
     console.log('세션 존재하지 않음');
+    res.status(500).send(err);
+  }
+};
+
+//특정 커넥션 제거(openvidu rest-api 이용)
+export const deleteConnection = async (req: Request, res: Response) => {
+  try {
+    console.log('deleteConnection 수행');
+    const { sessionId, connectionId } = req.params;
+
+    const { data } = await axios.delete(
+      `${OPENVIDU_URL}/openvidu/api/sessions/${sessionId}/connection/${connectionId}`,
+      {
+        headers: {
+          Authorization: `Basic ${authCode}`,
+        },
+      }
+    );
+
+    res.status(200).end();
+  } catch (err: unknown) {
+    console.log(err);
+    if (
+      err instanceof AxiosError &&
+      (err.response?.status === 400 || err.response?.status === 404)
+    ) {
+      // 세션 없거나 커넥션 없는 경우. deleteConnection 호출하고 지워진 모양
+      res.status(200).end();
+      return;
+    }
     res.status(500).send(err);
   }
 };
