@@ -29,7 +29,8 @@ const Game = (props: VoiceProp) => {
   const mySocket = getPhaserSocket();
 
   const handleMainClick = () => {
-    handleScene(GAME_STATUS.START);
+    window.location.reload();
+    // handleScene(GAME_STATUS.START);
   };
 
   return (
