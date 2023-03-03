@@ -323,8 +323,8 @@ export default class MainScene extends Phaser.Scene {
     /*---- Whiteboard Interaction ----*/
     let boundWhiteboard = this.whiteboard.getBounds();
     boundWhiteboard.setSize(
-      this.whiteboard.width * 1.2,
-      this.whiteboard.height * 1.2
+      this.whiteboard.width * 1,
+      this.whiteboard.height * 1
     );
     let boundPlayer = this.player?.getBounds();
     if (
@@ -332,9 +332,9 @@ export default class MainScene extends Phaser.Scene {
     ) {
       this.whiteboardButton.setVisible(true);
       if (Phaser.Input.Keyboard.JustDown(this.player?.inputKeys.open)) {
-        console.log('화이트보드에서 E 누름');
+        // console.log('화이트보드에서 E 누름');
         store.dispatch(openWhiteboard());
-        this.player?.updateDialogBubble('🤣');
+        // this.player?.updateDialogBubble('🤣');
       }
     } else {
       this.whiteboardButton.setVisible(false);
