@@ -12,3 +12,9 @@ export const MUTE_TYPE = {
   SET_VOL: 'SET_VOL',
   SET_MIC: 'SET_MIC',
 };
+
+export const VOICE_STATUS = {
+  LOADING: 'LOADING',
+  COMPLETE: 'COMPLETE',
+  FAIL: 'FAIL',
+};

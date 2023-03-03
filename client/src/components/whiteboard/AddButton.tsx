@@ -12,7 +12,7 @@ export default function AddButton(props: any) {
         color="secondary"
         aria-label="add"
         onClick={addMemo}
-        sx={{ float: 'right', marginRight: '20px' }}
+        sx={{ marginRight: '20px' }}
       >
         <AddIcon />
       </Fab>
@@ -21,8 +21,12 @@ export default function AddButton(props: any) {
 }
 
 const AddBtnWrapper = styled.div`
-  width: 100%;
+  // width: 100%;
   height: 10%;
   position: absolute;
+  float: right;
+  display: flex;
   bottom: 0;
+  right: 0;
+  // border: 1px solid red;
 `;

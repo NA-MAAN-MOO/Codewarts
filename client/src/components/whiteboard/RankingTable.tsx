@@ -31,17 +31,25 @@ export default function RankingTable(props: any) {
   const myNickname = useSelector((state: RootState) => state.user.playerId);
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} sx={{ height: '74vh' }}>
       <Table
         sx={{ minWidth: '40%', height: 'max-content' }}
-        aria-label="simple table"
+        aria-label="sticky table"
+        stickyHeader
       >
         <TableHead>
           <TableRow sx={{ background: 'darkred' }}>
             {colNames.map((colName: string) => (
               <TableCell
+                key={colName}
                 align="center"
-                sx={{ color: 'white', fontWeight: '700', fontSize: '1em' }}
+                variant="head"
+                sx={{
+                  background: 'darkred',
+                  color: 'white',
+                  fontWeight: '700',
+                  fontSize: '1em',
+                }}
               >
                 {colName}
               </TableCell>

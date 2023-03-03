@@ -31,7 +31,7 @@ function AlgoHeaderTab(props) {
   }
 
   /* 백준 문제 정보 가져오기 */
-  // const fetchBojProbSummary = async () => {
+  // const fetchBojProbTitleDiv = async () => {
   //   if (bojProbDataRef.current === null) return;
 
   //   let probId = bojProbDataRef.current.value;
@@ -87,26 +87,23 @@ function AlgoHeaderTab(props) {
     }
   };
 
-  useEffect(() => {
-    return setBojProbFullData(null);
-  }, []);
+  // useEffect(() => {
+  //   return setBojProbFullData(null);
+  // }, []);
 
   return (
     <HeaderTab>
-      <AlgoInputWrap>
-        <div style={{ marginLeft: '5px' }}>
-          <AlgoTextField
-            id="reddit-input"
-            label="번호로 바로가기"
-            variant="filled"
-            size="small"
-            inputRef={bojProbDataRef}
-            autoFocus={true}
-            type="text"
-            onKeyDown={handleKeyDown}
-          />
-        </div>
-      </AlgoInputWrap>
+      <AlgoTextField
+        id="reddit-input"
+        label="문제 번호로 바로가기"
+        variant="filled"
+        size="small"
+        inputRef={bojProbDataRef}
+        autoFocus={true}
+        type="text"
+        onKeyDown={handleKeyDown}
+        fullWidth
+      />
     </HeaderTab>
   );
 }

@@ -11,6 +11,7 @@ import missSoundFile from '../../assets/sound_effect/miss_sound.mp3';
 //@ts-ignore
 import hitSoundFile from '../../assets/sound_effect/hit_sound.mp3';
 import SoundPlayer from 'hooks/useSoundPlayer';
+import { middleButtonStyle } from 'pages/editor/editorStyle';
 
 const APPLICATION_EDITOR_URL =
   process.env.REACT_APP_EDITOR_URL || 'http://localhost:3001';
@@ -158,7 +159,7 @@ function EvaluateButton(props) {
       return;
     }
     if (markingPercent === '100') {
-      notifySuccess(editorName, bojProblemId);
+      // notifySuccess(editorName, bojProblemId);
       newHitSoundToggle();
       broadcastSuccess();
     } else {
@@ -172,14 +173,12 @@ function EvaluateButton(props) {
     <>
       <Tooltip title="코드와트 가채점">
         <Button
+          variant="outlined"
           color="primary"
           onClick={evaluateCode}
-          style={{
-            fontFamily: 'Cascadia Code, Pretendard-Regular',
-            fontSize: '17px',
-          }}
+          style={middleButtonStyle}
         >
-          가채점
+          SUBMIT
         </Button>
       </Tooltip>
       {/* ▼ 문제 성공 알림을 테스트하고 싶으면 주석 해제 */}

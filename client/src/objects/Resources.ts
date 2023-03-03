@@ -132,18 +132,22 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
           other.bodyB.gameObject instanceof Player &&
           !(other.bodyB.gameObject instanceof OtherPlayer)
         ) {
-          this.buttonEditor = new Button({
-            scene: this.scene,
-            x: this.x,
-            y: this.y - 20,
-            text: 'E를 눌러 참여하기',
-            style: {
-              fontSize: '20px',
-              backgroundColor: 'white',
-              color: 'black',
-              resolution: 20,
-            },
-          }).getBtn();
+          this.buttonEditor = this.scene.add
+            .image(this.x, this.y - 20, 'participate_button')
+            .setDepth(60);
+          // this.buttonEditor = new Button({
+          //   scene: this.scene,
+          //   x: this.x,
+          //   y: this.y - 20,
+          //   text: 'E를 눌러 참여하기',
+          //   style: {
+          //     fontSize: '20px',
+          //     backgroundColor: 'white',
+          //     color: 'black',
+          //     resolution: 20,
+          //   },
+          // }).getBtn();
+          this.buttonEditor.scale *= 0.9;
           this.buttonEditor.setInteractive(); // 이거 해줘야 function 들어감!!!!! 3시간 버린듯;
 
           // 딱 하나만 볼 수 있게하기

@@ -63,7 +63,9 @@ export default class Table {
       }
 
       let editorButton = this.scene.add
-        .text(0, 0, str)
+        .text(0, 0, str, {
+          fontFamily: 'NeoDunggeunmoPro-Regular',
+        })
         .setStyle(fontStyle)
         .setOrigin(0.5, 0.5)
         .setPadding(15, 5, 15, 5);
@@ -76,7 +78,9 @@ export default class Table {
       );
     }
     let backButton = this.scene.add
-      .text(0, 0, '돌아가기')
+      .text(0, 0, '돌아가기', {
+        fontFamily: 'NeoDunggeunmoPro-Regular',
+      })
       .setStyle({ fontSize: '18px', color: '#333333', align: 'center' })
       .setPosition(this.tableObject.x, this.tableObject.y + 40)
       .setOrigin(0.5, 0.5)
@@ -171,7 +175,7 @@ export default class Table {
       this.sitOnChair(idx, player);
     } else {
       this.standUpFromChair(idx, player);
-      console.log('일어나');
+      // console.log('일어나');
     }
   }
 }
