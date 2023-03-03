@@ -262,8 +262,8 @@ export default class MainScene extends Phaser.Scene {
         phaserGame.userName !== payLoad[2]
       ) {
         Swal.fire({
-          title: '🥹',
-          text: `🚫${this.editorOwner}의 방에서 강퇴당하셨습니다!🚫`,
+          icon: 'error',
+          title: `${this.editorOwner}의 방에서 강퇴당하셨습니다!`,
         });
         store.dispatch(openGame());
       }
