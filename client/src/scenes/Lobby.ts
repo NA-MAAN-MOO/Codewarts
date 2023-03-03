@@ -84,7 +84,7 @@ export default class Lobby extends Phaser.Scene {
     /* Add door */
     const door = this.add.image(
       this.cameras.main.width / 2,
-      this.cameras.main.height / 1.8,
+      this.cameras.main.height / 2,
       'door'
     );
     door.setScale(scale).setScrollFactor(0);
