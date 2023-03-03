@@ -45,7 +45,7 @@ export default class MainScene extends Phaser.Scene {
   idxEnter?: Phaser.Input.Keyboard.Key;
   idxUp?: Phaser.Input.Keyboard.Key;
   whiteboard: Resource;
-  whiteboardButton!: Button;
+  whiteboardButton!: Phaser.GameObjects.Image;
 
   constructor() {
     // Scene의 key값은 MainScene
@@ -278,18 +278,24 @@ export default class MainScene extends Phaser.Scene {
     });
 
     /* Whiteboard Interaction Dialog */
-    this.whiteboardButton = new Button({
-      scene: this,
-      x: this.whiteboard.x,
-      y: this.whiteboard.y,
-      text: 'E를 눌러 화이트보드 보기',
-      style: {
-        fontSize: '20px',
-        backgroundColor: 'white',
-        color: 'black',
-        resolution: 20,
-      },
-    }).getBtn();
+    this.whiteboardButton = this.add.image(
+      this.whiteboard.x - 2,
+      this.whiteboard.y + 4,
+      'board_button'
+    );
+    // this.whiteboardButton = new Button({
+    //   scene: this,
+    //   x: this.whiteboard.x,
+    //   y: this.whiteboard.y,
+    //   text: 'E를 눌러 화이트보드 보기',
+    //   style: {
+    //     fontSize: '20px',
+    //     backgroundColor: 'white',
+    //     color: 'black',
+    //     resolution: 20,
+    //   },
+    // }).getBtn();
+    this.whiteboardButton.scale *= 0.65;
     this.whiteboardButton.setVisible(false);
 
     // Listen for the "Big Deal" event on the client side
@@ -297,7 +303,7 @@ export default class MainScene extends Phaser.Scene {
       showSuccessToast(payload.editorName, payload.problemId);
       newHitSoundToggle();
       /* If player solve a problem, turn the solved effect on */
-      // this.player.problemSolvedEffect();
+      this.showProblemSolvedEffect(payload.editorName);
     });
 
     phaserGame.socket?.on('getEmoji', (payload) => {
@@ -317,8 +323,8 @@ export default class MainScene extends Phaser.Scene {
     /*---- Whiteboard Interaction ----*/
     let boundWhiteboard = this.whiteboard.getBounds();
     boundWhiteboard.setSize(
-      this.whiteboard.width * 1.2,
-      this.whiteboard.height * 1.2
+      this.whiteboard.width * 1,
+      this.whiteboard.height * 1
     );
     let boundPlayer = this.player?.getBounds();
     if (
@@ -326,9 +332,9 @@ export default class MainScene extends Phaser.Scene {
     ) {
       this.whiteboardButton.setVisible(true);
       if (Phaser.Input.Keyboard.JustDown(this.player?.inputKeys.open)) {
-        console.log('화이트보드에서 E 누름');
+        // console.log('화이트보드에서 E 누름');
         store.dispatch(openWhiteboard());
-        this.player?.updateDialogBubble('🤣');
+        // this.player?.updateDialogBubble('🤣');
       }
     } else {
       this.whiteboardButton.setVisible(false);
@@ -534,6 +540,12 @@ export default class MainScene extends Phaser.Scene {
           payLoad.x - otherPlayer.width / 1.5,
           payLoad.y - otherPlayer.height - 80
         );
+
+        /* Success Effect */
+        otherPlayer.successEffect?.setPosition(
+          payLoad.x,
+          otherPlayer.playerNameBubble.y + 80
+        );
       }
     });
   }
@@ -571,6 +583,18 @@ export default class MainScene extends Phaser.Scene {
       store.dispatch(setUserName(phaserGame.userName));
       // 에디터 창 열기
       store.dispatch(openEditor());
+    }
+  }
+
+  /* Effect on when player solve a problem */
+  showProblemSolvedEffect(nickname: string) {
+    console.log(nickname, phaserGame.userName);
+    if (nickname === phaserGame.userName) {
+      this.player.problemSolvedEffect();
+    } else {
+      this.otherPlayers.forEach((other) => {
+        if (nickname === other.playerName) return other.problemSolvedEffect();
+      });
     }
   }
 }

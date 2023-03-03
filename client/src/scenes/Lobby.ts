@@ -78,23 +78,35 @@ export default class Lobby extends Phaser.Scene {
       .play('yellow');
 
     this.portal = this.matter.add
-      .sprite(this.scale.width / 4.7, this.scale.height * 0.5, 'green', 0)
+      .sprite(this.scale.width / 4.5, this.scale.height * 0.5, 'green', 0)
       .play('green');
 
+    /* Add door */
+    const door = this.add.image(
+      this.cameras.main.width / 2,
+      this.cameras.main.height / 1.8,
+      'door'
+    );
+    door.setScale(scale).setScrollFactor(0);
+
     /* Guide to enter classroom */
-    this.buttonForList = new Button({
-      scene: this,
-      x: this.portal.x,
-      y: this.portal.y / 1.6,
-      text: 'E를 누르면 강의실에 들어갈 수 있어요!',
-      style: {
-        //https://photonstorm.github.io/phaser3-docs/Phaser.Types.GameObjects.Text.html#.TextStyle
-        backgroundColor: '#fff',
-        color: '#111',
-        fontSize: '24px',
-        resolution: 20,
-      },
-    }).getBtn();
+    this.buttonForList = this.add.image(this.portal.x, this.portal.y, 'enter');
+    // this.buttonForList = new Button({
+    //   scene: this,
+    //   x: this.portal.x,
+    //   y: this.portal.y,
+    //   text: 'E를 눌러\n입장하기',
+    //   style: {
+    //     //https://photonstorm.github.io/phaser3-docs/Phaser.Types.GameObjects.Text.html#.TextStyle
+    //     // backgroundColor: '#fff',
+    //     color: '#111',
+    //     fontSize: '32px',
+    //     fontStyle: 'strong',
+    //     resolution: 10,
+    //   },
+    // }).getBtn();
+
+    // this.buttonForList.setPadding(5, 5, 5, 5);
 
     this.buttonForList.setVisible(false);
     this.buttonForList.setScrollFactor(0);
@@ -142,9 +154,14 @@ export default class Lobby extends Phaser.Scene {
       open: Phaser.Input.Keyboard.KeyCodes.E,
     });
 
-    /* Lock specific key (up, down) */
     this.player.inputKeys['up'].enabled = false;
     this.player.inputKeys['down'].enabled = false;
+
+    /* Lock specific key (up, down) */
+    this.game.events.on('resume', () => {
+      this.player.inputKeys['up'].enabled = false;
+      this.player.inputKeys['down'].enabled = false;
+    });
 
     createCharacterAnims(this.playerTexture, this.player.anims);
   }
@@ -189,6 +206,7 @@ export default class Lobby extends Phaser.Scene {
         this.player.displayHeight -= this.player.height / 150;
         this.cameras.main.alpha -= 0.005;
         this.cameras.main.shake(undefined, 0.005);
+        this.buttonForList.setVisible(false);
       }
     }
   }
