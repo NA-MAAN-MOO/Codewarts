@@ -1,10 +1,6 @@
 import axios from 'axios';
-/* GraphQL queries */
-import PROBLEMQUERY from '../../graphql/problemQuery';
 import {
   HeaderTab,
-  StyledTabs,
-  StyledTab,
   AlgoInputWrap,
   AlgoTextField,
 } from '../../../src/pages/editor/editorStyle';
@@ -15,24 +11,9 @@ const APPLICATION_EDITOR_URL =
 
 //@ts-ignore
 function AlgoHeaderTab(props) {
-  const {
-    algoSelect,
-    setAlgoSelect,
-    setBojProbData,
-    setLeetProbData,
-    bojProbDataRef,
-    leetProbDataRef,
-    setBojProbFullData,
-    bojProblemId,
-    setBojProblemId,
-  } = props;
+  const { bojProbDataRef, setBojProbFullData, setBojProblemId } = props;
 
-  //@ts-ignore
-  const selectChange = (event, newValue: number) => {
-    setAlgoSelect(newValue);
-  };
-
-  /* 서버로 몽고DB에 저장된 백준 문제 정보 요청 */
+  /* 서버로 몽고DB에 저장된 백준 문제 전체 정보 요청 */
   async function fetchBojProbFullData(probId: string) {
     if (bojProbDataRef.current === null) return;
 
@@ -50,61 +31,59 @@ function AlgoHeaderTab(props) {
   }
 
   /* 백준 문제 정보 가져오기 */
-  const fetchBojProbInfo = async () => {
-    if (bojProbDataRef.current === null) return;
+  // const fetchBojProbSummary = async () => {
+  //   if (bojProbDataRef.current === null) return;
 
-    let probId = bojProbDataRef.current.value;
-    setBojProblemId(probId);
-    console.log(probId);
+  //   let probId = bojProbDataRef.current.value;
+  //   setBojProblemId(probId);
+  //   console.log(probId);
 
-    try {
-      const response = await axios.get(
-        `https://solved.ac/api/v3/problem/show?problemId=${probId}`
-      );
+  //   try {
+  //     const response = await axios.get(
+  //       `https://solved.ac/api/v3/problem/show?problemId=${probId}`
+  //     );
 
-      let probData = response.data;
-      console.log(probData);
-      setBojProbData(probData);
-      fetchBojProbFullData(probId);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  //     let probData = response.data;
+  //     console.log(probData);
+  //     setBojProbData(probData);
+  //     fetchBojProbFullData(probId);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   /* leetcode 문제 정보 가져오기 */
-  const fetchLeetProbInfo = async () => {
-    if (leetProbDataRef.current === null) return;
+  // const fetchLeetProbInfo = async () => {
+  //   if (leetProbDataRef.current === null) return;
 
-    const problemQueryVariable = {
-      //@ts-ignore
-      titleSlug: leetProbDataRef.current.value,
-    };
+  //   const problemQueryVariable = {
+  //     //@ts-ignore
+  //     titleSlug: leetProbDataRef.current.value,
+  //   };
 
-    try {
-      const response = await axios.post(
-        'https://cors-anywhere.herokuapp.com/https://leetcode.com/graphql',
-        {
-          query: PROBLEMQUERY,
-          variables: problemQueryVariable,
-        }
-      );
+  //   try {
+  //     const response = await axios.post(
+  //       'https://cors-anywhere.herokuapp.com/https://leetcode.com/graphql',
+  //       {
+  //         query: PROBLEMQUERY,
+  //         variables: problemQueryVariable,
+  //       }
+  //     );
 
-      let probData = response.data;
-      console.log(probData.data);
-      setLeetProbData(probData.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  //     let probData = response.data;
+  //     console.log(probData.data);
+  //     setLeetProbData(probData.data);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   //@ts-ignore
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
-      if (algoSelect === 0) {
-        fetchBojProbInfo();
-      } else {
-        fetchLeetProbInfo();
-      }
+      let probId = bojProbDataRef.current.value;
+      setBojProblemId(parseInt(probId));
+      fetchBojProbFullData(probId);
     }
   };
 
@@ -114,23 +93,14 @@ function AlgoHeaderTab(props) {
 
   return (
     <HeaderTab>
-      <StyledTabs
-        value={algoSelect}
-        onChange={selectChange}
-        aria-label="algo-selector"
-      >
-        <StyledTab label="Baekjoon" />
-        <StyledTab label="LeetCode" />
-      </StyledTabs>
-
       <AlgoInputWrap>
-        <div>
+        <div style={{ marginLeft: '5px' }}>
           <AlgoTextField
             id="reddit-input"
-            label={algoSelect === 0 ? '백준 문제 번호' : 'leetcode-title-slug'}
+            label="번호로 바로가기"
             variant="filled"
             size="small"
-            inputRef={algoSelect === 0 ? bojProbDataRef : leetProbDataRef}
+            inputRef={bojProbDataRef}
             autoFocus={true}
             type="text"
             onKeyDown={handleKeyDown}

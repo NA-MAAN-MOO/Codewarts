@@ -23,11 +23,11 @@ import CloseIcon from '@mui/icons-material/Close';
 import PeopleIcon from '@mui/icons-material/People';
 import Board from './Board';
 import { toggleWhiteboard } from 'stores/whiteboardSlice';
-import { Socket } from 'socket.io-client';
 import FloatingButton from 'components/FloatingButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import QuizIcon from '@mui/icons-material/Quiz';
 
-const rightDrawerWidth = 240;
+const rightDrawerWidth = 350;
 
 const Main = muiStyled('main', {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -36,7 +36,7 @@ const Main = muiStyled('main', {
 }>(({ theme, open }) => ({
   flexGrow: 1,
   padding: theme.spacing(3),
-  border: '2px solid orange', // for debugging
+  // border: '2px solid orange', // for debugging
   transition: theme.transitions.create('margin', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -134,7 +134,7 @@ const Editor = (props: VoiceProp & YjsProp) => {
           <Box
             sx={{
               display: 'flex',
-              border: '3px solid green', // for debugging
+              // border: '3px solid green', // for debugging
               width: '100%',
               height: '100%',
             }}
@@ -144,7 +144,9 @@ const Editor = (props: VoiceProp & YjsProp) => {
               position="fixed"
               open={open}
               color="transparent"
-              sx={{ border: '1px solid lightgreen' }}
+              // sx={{
+              //   border: '1px solid lightgreen'
+              //  }}
             >
               <Toolbar
                 sx={{
@@ -159,7 +161,7 @@ const Editor = (props: VoiceProp & YjsProp) => {
                   edge="start"
                   sx={{ mr: 2, ...(leftOpen && { display: 'none' }) }}
                 >
-                  <MenuIcon />
+                  <QuizIcon />
                 </IconButton>
                 <Header />
                 <BtnDiv>

@@ -147,17 +147,23 @@ export default () => {
     sessionId: string;
     userName: string;
   }) => {
-    const response = await axios.post(
-      APPLICATION_VOICE_URL +
-        '/create-connection/' +
-        sessionId +
-        '/connections',
-      { userName: userName },
-      {
-        headers: { 'Content-Type': 'application/json' },
-      }
-    );
-    return response.data; // The token
+    try {
+      const response = await axios.post(
+        APPLICATION_VOICE_URL +
+          '/create-connection/' +
+          sessionId +
+          '/connections',
+        { userName: userName },
+        {
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
+
+      return response.data; // The token
+    } catch (e) {
+      console.log('createToken 에러');
+      console.log(e);
+    }
   };
 
   const registerSession = async (props: {
@@ -180,18 +186,18 @@ export default () => {
     } = props;
     try {
       if (!session || !sessionId || !OV) return;
-
       const content: Connection[] | false = await getConnections(sessionId);
       if (content === false) {
+        console.log('세션 존재 안 함');
         // 세션 아직 존재하지 않음
         return;
       }
-      const isConnectExist = content.some((con: Connection) => {
-        if (!con.clientData) return false;
-        const { user } = JSON.parse(con.clientData);
-        return user === userName;
-      });
-      if (isConnectExist) return;
+      // const isConnectExist = content.some((con: Connection) => {
+      //   if (!con.clientData) return false;
+      //   const { user } = JSON.parse(con.clientData);
+      //   return user === userName;
+      // });
+      // if (isConnectExist) return;
 
       // Get a token from the OpenVidu deployment
       const token = await createToken({ sessionId, userName });
@@ -213,6 +219,11 @@ export default () => {
 
         // Update the state with the new subscribers
         addSubscriber(subscriber);
+
+        //새로 들어온 사람 뮤트 정보 초기화
+        const { user } = JSON.parse(event.stream?.connection?.data);
+        dispatch(setVolMute({ user, muteTo: false }));
+        dispatch(setMicMute({ user, muteTo: false }));
       });
 
       // On every Stream destroyed...
@@ -245,7 +256,6 @@ export default () => {
 
       //다른 유저가 세션을 나갔을 때 호출
       mySession.on('connectionDestroyed', async (event: ConnectionEvent) => {
-        console.log('세션나감');
         const session = event.target as Session;
         const sessionId = session.sessionId;
         deleteSubscriber(event.target);
@@ -319,6 +329,8 @@ export default () => {
 
       // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
       // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
+
+      // ---Publish your stream ---
       await mySession.connect(token, { user: userName });
 
       // Init a passing undefined as targetElement (we don't want OpenVidu to insert a video
@@ -333,11 +345,14 @@ export default () => {
         insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
         mirror: false, // Whether to mirror your local video or not
       });
-
-      // ---Publish your stream ---
-
+      console.log('pub', pubNow);
       await mySession.publish(pubNow);
       handlePublisher(pubNow);
+      console.log('여기까지옴3');
+
+      // if(myVolMute){
+      //   handleMyVolumeMute()
+      // }
     } catch (error) {
       console.log(error);
     }
@@ -411,6 +426,7 @@ export default () => {
     if (!session) return;
     //false일 때 뮤트 처리됨
     subscribers.map((sm) => {
+      console.log('sm', sm);
       sm.subscribeToAudio(!muteTo);
     });
     dispatch(toggleMyVolMute());
@@ -466,6 +482,26 @@ export default () => {
     }
   };
 
+  //유저 뮤트 정보 가져오기
+  const getMuteInfo = async () => {
+    try {
+      return await axios.get(`${APPLICATION_VOICE_URL}/get-mute-info`);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  //유저 서버의 뮤트인포에서 삭제하기
+  const deleteMuteInfo = async (userName: string) => {
+    try {
+      await axios.post(`${APPLICATION_VOICE_URL}/delete-mute`, {
+        userName: userName,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return {
     initSession,
     createSession,
@@ -480,5 +516,7 @@ export default () => {
     // handleDisconnect,
     handleMyVolumeMute,
     handleMyMicMute,
+    getMuteInfo,
+    deleteMuteInfo,
   };
 };

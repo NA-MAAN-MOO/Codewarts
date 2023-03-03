@@ -2,14 +2,13 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import CharRoundLogo from 'components/CharRoundLogo';
+import BadgeLogo from 'components/BadgeLogo';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'stores';
-import VolumeIcon from 'components/VolumeIcon';
-import MicIcon from 'components/MicIcon';
 import { GameVoiceType } from 'types';
 import VoiceItem from 'components/VoiceItem';
 import styled from 'styled-components';
+import svgs from 'assets/solvedac_badges/index';
 
 const EditorPlayerItem = (
   props: GameVoiceType & { name: string; char: string }
@@ -18,20 +17,37 @@ const EditorPlayerItem = (
   const { volMuteInfo, micMuteInfo, playerId, editorName } = useSelector(
     (state: RootState) => ({ ...state.chat, ...state.user, ...state.editor })
   );
-  const dispatch = useDispatch();
+  const rankInfos = useSelector((state: RootState) => state.rank.infos);
+
+  const myTier = rankInfos?.find((d) => d.nickname === name)?.tier || '';
+  const SvgComponent = myTier ? svgs[`Svg${myTier}`] : svgs.Svg0;
 
   return (
-    <ListItem key={name} disablePadding sx={{ display: 'flex', gap: '10px' }}>
+    <ListItem key={name} disablePadding>
       <StyledItem>
-        <ListItemIcon>
-          <CharRoundLogo charName={char} isSpecial={playerId === name} />
-        </ListItemIcon>
-        <ListItemText
-          primary={name}
-          primaryTypographyProps={{
-            fontFamily: 'Firenze',
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.4rem',
           }}
-        />
+        >
+          <SvgComponent width="35px" />
+          <ListItemIcon>
+            <BadgeLogo
+              charName={char}
+              isSpecial={playerId === name}
+              name={name}
+            />
+          </ListItemIcon>
+          <ListItemText
+            primary={name}
+            primaryTypographyProps={{
+              fontFamily: 'Firenze',
+            }}
+          />
+        </div>
+
         <VoiceItem
           isSuperior={playerId === editorName}
           isMe={name === playerId}

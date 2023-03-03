@@ -22,12 +22,12 @@ const CurrentPlayer = ({
 
   return (
     <Box
-      sx={{ width: 240 }}
+      sx={{ width: '100%' }}
       role="presentation"
       // onClick={handleDrawer}
       onKeyDown={handleDrawer}
     >
-      <Title>현재 접속중인 사람</Title>
+      <Title>참여 중인 유저</Title>
       <Divider />
       {status === GAME_STATUS.GAME ? (
         <List>
@@ -51,7 +51,7 @@ const CurrentPlayer = ({
 export default CurrentPlayer;
 
 const Title = styled.div`
-  padding: 15%;
+  padding: 10%;
   text-align: center;
   font-size: 1.5rem;
   font-family: ${({ theme }) => theme.mainFont};

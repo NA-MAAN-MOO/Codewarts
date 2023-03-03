@@ -85,7 +85,6 @@ const Voice = ({ roomKey, session, handleSession, ...rest }: VoiceProp) => {
         await joinSession();
         return;
       }
-
       await registerSession({
         session,
         sessionId: roomKey,
@@ -105,7 +104,6 @@ const Voice = ({ roomKey, session, handleSession, ...rest }: VoiceProp) => {
         <GameVoice
           session={session}
           subscribers={subscribers}
-          leaveSession={leaveSession}
           joinSession={joinSession}
           publisher={publisher}
         />
@@ -113,7 +111,6 @@ const Voice = ({ roomKey, session, handleSession, ...rest }: VoiceProp) => {
         <EditorVoice
           session={session}
           subscribers={subscribers}
-          leaveSession={leaveSession}
           joinSession={joinSession}
           publisher={publisher}
           {...rest}

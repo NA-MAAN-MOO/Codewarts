@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React from 'react';
 import { useMemo, useRef, useEffect, useState, useCallback } from 'react';
 import { debounce } from 'lodash';

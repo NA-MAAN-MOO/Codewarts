@@ -20,8 +20,16 @@ function EvaluateButton(props) {
   const { userName, editorName } = useSelector(
     (state: RootState) => state.editor
   );
-  const { ytext, bojProbData, markingPercent, setMarkingPercent, mySocket } =
-    props;
+
+  const {
+    ytext,
+    bojProblemId,
+    markingPercent,
+    setMarkingPercent,
+    mySocket,
+    bojProbFullData,
+  } = props;
+
   let [진행완료, set진행완료] = useState(false);
   const newMissSoundToggle = SoundPlayer(missSoundFile);
   const newHitSoundToggle = SoundPlayer(hitSoundFile);
@@ -42,7 +50,7 @@ function EvaluateButton(props) {
   const broadcastSuccess = () => {
     mySocket?.emit('Big Deal', {
       editorName: editorName,
-      problemId: bojProbData?.problemId || null,
+      problemId: bojProblemId || null,
       broadcast: true,
     });
   };
@@ -55,7 +63,7 @@ function EvaluateButton(props) {
     }
 
     // 현재는 '19940 피자오븐', '19939 박 터뜨리기' 문제만 가채점 가능!
-    if (bojProbData?.problemId !== 19940 && bojProbData?.problemId !== 19939) {
+    if (bojProblemId !== 19940 && bojProblemId !== 19939) {
       alert('채점 가능한 문제 선택해주세요:  19940번, 19939번');
       return;
     }
@@ -63,16 +71,16 @@ function EvaluateButton(props) {
     let hitCount = 0;
     let totalCases = 0; // 전체 testcase 개수
 
-    if (bojProbData?.problemId === 19940) {
+    if (bojProblemId === 19940) {
       totalCases = 2; // 19940번 테스트 케이스 개수
     } else {
-      totalCases = 10; // 19939번 테스트 케이스 개수
+      totalCases = 5; // 19939번 테스트 케이스 개수
     }
 
     try {
       for (let i = 1; i < 50; i++) {
         const fetchInput = await fetchInputFileText(
-          `/assets/olympiad/${bojProbData?.problemId}/${i}.in`
+          `/assets/olympiad/${bojProblemId}/${i}.in`
         );
 
         if (fetchInput === null || fetchInput?.startsWith('<!DOCTYPE html>')) {
@@ -91,7 +99,7 @@ function EvaluateButton(props) {
         );
 
         const fetchOutput = await fetchInputFileText(
-          `assets/olympiad/${bojProbData?.problemId}/${i}.out`
+          `assets/olympiad/${bojProblemId}/${i}.out`
         );
         const jdoodleOutput = data.output;
 
@@ -110,18 +118,51 @@ function EvaluateButton(props) {
     }
   };
 
+  async function callCloudFunction(data: any) {
+    const url = `https://asia-northeast3-codeuk-379309.cloudfunctions.net/compiler`;
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    };
+    console.log(options);
+
+    const response = await fetch(url, options);
+    const result = await response.json();
+    return result;
+  }
+
+  const evaluateSample = async () => {
+    console.log(bojProbFullData?.samples?.[1].input.toString());
+    const inputData = {
+      code: ytext.toString(),
+      // stdin: '1\n', // todo: 실제 input value로 바꾸기
+      stdin: bojProbFullData?.samples?.[1].input.toString() || '',
+    };
+
+    callCloudFunction(inputData)
+      .then((result) => {
+        console.log('Result:', result);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  };
+
   useEffect(() => {
-    if (!bojProbData?.problemId) return;
+    if (!bojProblemId) return;
     if (진행완료 === false) {
       // console.log('아직 채점 다 안 끝났어요~');
       return;
     }
     if (markingPercent === '100') {
-      notifySuccess(editorName, bojProbData.problemId);
+      notifySuccess(editorName, bojProblemId);
       newHitSoundToggle();
       broadcastSuccess();
     } else {
-      notifyFail(editorName, bojProbData.problemId);
+      notifyFail(editorName, bojProblemId);
       newMissSoundToggle();
     }
     set진행완료(false);
@@ -145,6 +186,16 @@ function EvaluateButton(props) {
       {/* <button onClick={broadcastSuccess}>
         테스트버튼: "{editorName}"님이 문제 맞췄다고 알리기
       </button> */}
+      {/* <Button
+        color="primary"
+        style={{
+          fontFamily: 'Cascadia Code, Pretendard-Regular',
+          fontSize: '17px',
+        }}
+        onClick={evaluateSample}
+      >
+        예제채점
+      </Button>{' '} */}
     </>
   );
 }

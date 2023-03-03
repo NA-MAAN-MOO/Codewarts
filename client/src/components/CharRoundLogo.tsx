@@ -13,6 +13,7 @@ const CharRoundLogo = ({
 }: {
   charName: string;
   isSpecial: boolean;
+  name: string;
 }) => {
   const muiTheme = useTheme();
   const charUrl = characters[charName];
@@ -38,7 +39,7 @@ const CuttedWrapper = styled.div<CuttedWrapperProps>`
       ? `3px inset ${theme.lightRed}`
       : `3px inset ${muiTheme.palette.info.main}`};
   width: 50px;
-  border-radius: 100%;
   height: 50px;
+  border-radius: 100%;
   overflow: hidden;
 `;

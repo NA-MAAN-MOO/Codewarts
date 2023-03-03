@@ -14,7 +14,7 @@ export default function LimitTags(props: any) {
       renderInput={(params) => (
         <TextField
           {...params}
-          label="문제 검색하기"
+          // label="문제 검색하기"
           placeholder="검색 필터 추가"
         />
       )}
@@ -32,7 +32,7 @@ export default function LimitTags(props: any) {
 
 const algoFilter = [
   { tag: '백준' },
-  { tag: '리트코드' },
+  // { tag: '리트코드' },
   { tag: '브론즈' },
   { tag: '실버' },
   { tag: '골드' },
@@ -40,9 +40,9 @@ const algoFilter = [
   { tag: '다이아몬드' },
   { tag: '루비' },
   { tag: '난이도 없음' },
-  { tag: 'easy' },
-  { tag: 'medium' },
-  { tag: 'difficult' },
+  // { tag: 'easy' },
+  // { tag: 'medium' },
+  // { tag: 'difficult' },
   { tag: '채점가능' },
   { tag: '한국정보올림피아드' },
 ];

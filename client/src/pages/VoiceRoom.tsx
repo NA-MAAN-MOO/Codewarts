@@ -63,7 +63,6 @@ const VoiceRoom = () => {
     }
   }, [status]);
 
-  console.log('VoiceRoom 호출 시점');
   return (
     <>
       {status === GAME ? (
