@@ -14,6 +14,18 @@ const notifySuccess = (userName: string, problemId: number) => {
     theme: 'colored',
   });
 };
+const notifyKickedOut = (userName: string) => {
+  toast.warning(`🚫 ${userName}님의 에디터에서 강퇴당하셨습니다!`, {
+    position: 'top-center',
+    autoClose: 4000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: false,
+    draggable: true,
+    progress: undefined,
+    theme: 'colored',
+  });
+};
 
 const notifyFail = (userName: string, problemId: number) => {
   toast.warning(`❌ ${userName}님 ${problemId}번 문제 실패!`, {
@@ -57,4 +69,10 @@ const notifyThree = () => {
   }}
 />;
 
-export { notifySuccess, notifyFail, notifyThree, ToastContainer };
+export {
+  notifySuccess,
+  notifyFail,
+  notifyThree,
+  notifyKickedOut,
+  ToastContainer,
+};
