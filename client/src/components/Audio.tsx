@@ -1,11 +1,16 @@
 import React, { useRef, useEffect } from 'react';
-import { OpenVidu, Session, StreamManager } from 'openvidu-browser';
+import { Subscriber } from 'openvidu-browser';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from 'stores';
 
 type AudioType = null | MediaStreamTrack;
 
-const Audio = (props: { streamManager: StreamManager }) => {
+const Audio = (props: { streamManager: Subscriber }) => {
   const { streamManager } = props;
   const audioRef = useRef(null);
+  const { myVolMute } = useSelector((state: RootState) => {
+    return state.chat;
+  });
 
   useEffect(() => {
     if (!!streamManager && !!audioRef && !!audioRef.current) {
@@ -13,7 +18,7 @@ const Audio = (props: { streamManager: StreamManager }) => {
     }
   }, [props]);
 
-  return <audio autoPlay={true} ref={audioRef} />;
+  return <audio autoPlay={true} ref={audioRef} muted={myVolMute} />;
 };
 
 export default Audio;

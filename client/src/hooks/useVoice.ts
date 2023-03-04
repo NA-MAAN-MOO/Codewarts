@@ -211,18 +211,12 @@ export default () => {
         // so OpenVidu doesn't create an HTML video by its own
 
         const subscriber = mySession.subscribe(event.stream, undefined);
-        if (volMuteInfo[userName]) {
-          //만약 내가 볼륨 뮤트 상태라면, 뮤트 처리
-          subscriber.subscribeToAudio(false);
-        }
-        // Update the state with the new subscribers
         addSubscriber(subscriber);
 
-        //지금로직 : 내 뒤로 들어온 사람 말고도 내 전에 들어온 사람도 뮤트 정보 초기화하고 있음... 바꿔야 됨...
-        //새로 들어온 사람 뮤트 정보 초기화
-        // const { user } = JSON.parse(event.stream?.connection?.data);
-        // dispatch(setVolMute({ user, muteTo: false }));
-        // dispatch(setMicMute({ user, muteTo: false }));
+        // if (volMuteInfo[userName]) {
+        //   //만약 내가 볼륨 뮤트 상태라면, 뮤트 처리
+        //   subscriber.subscribeToAudio(false);
+        // }
       });
 
       // On every Stream destroyed...
@@ -460,9 +454,10 @@ export default () => {
     if (!session) return;
     //false일 때 뮤트 처리됨
     try {
-      subscribers.map((sm) => {
-        sm.subscribeToAudio(!muteTo);
-      });
+      //audio 태그의 mute로 대신함..
+      // subscribers.map((sm) => {
+      //   sm.subscribeToAudio(!muteTo);
+      // });
       dispatch(toggleMyVolMute());
       await axios.post(
         `${APPLICATION_VOICE_URL}/toggle-mute/${MUTE_TYPE.VOL}`,
