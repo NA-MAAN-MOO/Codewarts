@@ -73,7 +73,6 @@ export const chatSlice = createSlice({
     },
     initialMyMute: (state, action) => {
       const me = action.payload;
-      console.log(me);
       if (state.volMuteInfo[me]) {
         state.myVolMute = true;
       }

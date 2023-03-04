@@ -143,9 +143,11 @@ export default () => {
   const createToken = async ({
     sessionId,
     userName,
+    session,
   }: {
     sessionId: string;
     userName: string;
+    session?: Session;
   }) => {
     try {
       const response = await axios.post(
@@ -163,6 +165,9 @@ export default () => {
     } catch (e) {
       console.log('createToken 에러');
       dispatch(setVoiceStatus(VOICE_STATUS.FAIL));
+      if (session) {
+        disconnectSession(session);
+      }
       console.log(e);
     }
   };
@@ -206,14 +211,12 @@ export default () => {
         // so OpenVidu doesn't create an HTML video by its own
 
         const subscriber = mySession.subscribe(event.stream, undefined);
-
-        // Update the state with the new subscribers
         addSubscriber(subscriber);
 
-        //새로 들어온 사람 뮤트 정보 초기화
-        const { user } = JSON.parse(event.stream?.connection?.data);
-        dispatch(setVolMute({ user, muteTo: false }));
-        dispatch(setMicMute({ user, muteTo: false }));
+        // if (volMuteInfo[userName]) {
+        //   //만약 내가 볼륨 뮤트 상태라면, 뮤트 처리
+        //   subscriber.subscribeToAudio(false);
+        // }
       });
 
       // On every Stream destroyed...
@@ -345,7 +348,7 @@ export default () => {
       }
 
       // Get a token from the OpenVidu deployment
-      const token = await createToken({ sessionId, userName });
+      const token = await createToken({ sessionId, userName, session });
       if (!token) {
         //이미 커넥션 생성됨
         return;
@@ -356,13 +359,12 @@ export default () => {
       await mySession.connect(token, { user: userName });
 
       // ---Publish your stream ---
-
       // Init a passing undefined as targetElement (we don't want OpenVidu to insert a video
       // element: we will manage it on our own) and with the desired properties
       let pubNow = await OV.initPublisherAsync(undefined, {
         audioSource: undefined, // The source of audio. If undefined default microphone
         videoSource: false, // The source of video. If undefined default webcam
-        publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+        publishAudio: micMuteInfo[userName] ? false : true, // 마이크뮤트 info 적용
         publishVideo: false, // Whether you want to start publishing with your video enabled or not
         resolution: '640x480', // The resolution of your video
         frameRate: 30, // The frame rate of your video
@@ -377,6 +379,9 @@ export default () => {
       dispatch(setVoiceStatus(VOICE_STATUS.COMPLETE));
     } catch (error) {
       console.log(error);
+      if (session) {
+        disconnectSession(session);
+      }
       dispatch(setVoiceStatus(VOICE_STATUS.FAIL));
     }
   };
@@ -449,9 +454,10 @@ export default () => {
     if (!session) return;
     //false일 때 뮤트 처리됨
     try {
-      subscribers.map((sm) => {
-        sm.subscribeToAudio(!muteTo);
-      });
+      //audio 태그의 mute로 대신함..
+      // subscribers.map((sm) => {
+      //   sm.subscribeToAudio(!muteTo);
+      // });
       dispatch(toggleMyVolMute());
       await axios.post(
         `${APPLICATION_VOICE_URL}/toggle-mute/${MUTE_TYPE.VOL}`,
