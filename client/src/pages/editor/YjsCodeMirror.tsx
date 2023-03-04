@@ -13,8 +13,9 @@ import { WebsocketProvider } from 'y-websocket';
 /* codemirror */
 import { basicSetup } from 'codemirror';
 import { python } from '@codemirror/lang-python';
+import { indentUnit } from '@codemirror/language';
 import { EditorState } from '@codemirror/state';
-import { keymap, EditorView } from '@codemirror/view';
+import { keymap, EditorView, placeholder } from '@codemirror/view';
 import {
   defaultKeymap,
   indentWithTab,
@@ -47,7 +48,6 @@ import { ToastContainer } from '../../components/editor/toast';
 /* components */
 import EditorThemeSwitch from 'components/editor/EditorThemeSwitch';
 import RunButton from 'components/editor/RunButton';
-import SubmitButton from 'components/editor/SubmitButton';
 import EvaluateButton from 'components/editor/EvaluateButton';
 import CompilerField from 'components/editor/CompilerField';
 import AlgoHeaderTab from 'components/editor/AlgoHeaderTab';
@@ -179,6 +179,8 @@ function YjsCodeMirror(props: YjsProp) {
       },
     });
 
+    const editorPlaceHolder = `def solution():`;
+
     /* editor instance 생성; state, view 생성 */
     const state = EditorState.create({
       doc: ytext.toString(),
@@ -191,6 +193,9 @@ function YjsCodeMirror(props: YjsProp) {
         keymap.of(defaultKeymap),
         editorThemeMode,
         basicThemeSet,
+        indentUnit.of('\t'),
+        // foldGutter(),
+        placeholder(editorPlaceHolder),
       ],
     });
 
