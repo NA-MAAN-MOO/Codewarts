@@ -21,6 +21,7 @@ import friendSoundFile from '../assets/sound_effect/friend_sound.mp3';
 import hitSoundFile from '../assets/sound_effect/hit_sound.mp3';
 import Button from 'objects/Button';
 import { showSuccessToast } from 'pages/Game';
+import Swal from 'sweetalert2';
 
 export default class MainScene extends Phaser.Scene {
   // class 속성 명시는 constructor 이전에 명시하면 되는듯
@@ -260,6 +261,10 @@ export default class MainScene extends Phaser.Scene {
         this.editorOwner === payLoad[2] &&
         phaserGame.userName !== payLoad[2]
       ) {
+        Swal.fire({
+          icon: 'error',
+          title: `${this.editorOwner}의 방에서 강퇴당하셨습니다!`,
+        });
         store.dispatch(openGame());
       }
       // removeCurrentUser하려면 updateTable(idx, '')하면 됨
