@@ -22,6 +22,10 @@ import CharInfo from '../services/CharInfo';
 //   return hashedPassword;
 // }
 
+interface CurUser {
+  [userNickname: string]: number;
+}
+
 export const signUp = async (req: Request, res: Response) => {
   try {
     console.log('signup');
@@ -66,7 +70,7 @@ export const signUp = async (req: Request, res: Response) => {
   }
 };
 
-let curUser = {};
+let curUser: CurUser = {};
 
 export const removeCurUser = (userNickname: string) => {
   if (userNickname in curUser) {
