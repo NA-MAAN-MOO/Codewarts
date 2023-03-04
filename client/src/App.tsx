@@ -28,8 +28,8 @@ function App() {
   // }, []);
   return (
     <HoverDiv>
-      {/* <TestVoiceButtons /> */}
-      {playerId === '개발자' && <TestVoiceButtons />}
+      <TestVoiceButtons />
+      {/* {playerId === '개발자' && <TestVoiceButtons />} */}
       {status === START ? (
         <Start></Start>
       ) : //불필요한 로비 삭제

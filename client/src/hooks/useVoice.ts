@@ -211,14 +211,18 @@ export default () => {
         // so OpenVidu doesn't create an HTML video by its own
 
         const subscriber = mySession.subscribe(event.stream, undefined);
-
+        if (volMuteInfo[userName]) {
+          //만약 내가 볼륨 뮤트 상태라면, 뮤트 처리
+          subscriber.subscribeToAudio(false);
+        }
         // Update the state with the new subscribers
         addSubscriber(subscriber);
 
+        //지금로직 : 내 뒤로 들어온 사람 말고도 내 전에 들어온 사람도 뮤트 정보 초기화하고 있음... 바꿔야 됨...
         //새로 들어온 사람 뮤트 정보 초기화
-        const { user } = JSON.parse(event.stream?.connection?.data);
-        dispatch(setVolMute({ user, muteTo: false }));
-        dispatch(setMicMute({ user, muteTo: false }));
+        // const { user } = JSON.parse(event.stream?.connection?.data);
+        // dispatch(setVolMute({ user, muteTo: false }));
+        // dispatch(setMicMute({ user, muteTo: false }));
       });
 
       // On every Stream destroyed...
@@ -361,13 +365,12 @@ export default () => {
       await mySession.connect(token, { user: userName });
 
       // ---Publish your stream ---
-
       // Init a passing undefined as targetElement (we don't want OpenVidu to insert a video
       // element: we will manage it on our own) and with the desired properties
       let pubNow = await OV.initPublisherAsync(undefined, {
         audioSource: undefined, // The source of audio. If undefined default microphone
         videoSource: false, // The source of video. If undefined default webcam
-        publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+        publishAudio: micMuteInfo[userName] ? false : true, // 마이크뮤트 info 적용
         publishVideo: false, // Whether you want to start publishing with your video enabled or not
         resolution: '640x480', // The resolution of your video
         frameRate: 30, // The frame rate of your video

@@ -93,8 +93,6 @@ io.on('connection', (socket: Socket) => {
       playerInfo.charKey = charKey;
       playerInfo.userName = userName;
       CharInfo.set(userName, charKey);
-      VolMuteInfo.set(userName, false);
-      MicMuteInfo.set(userName, false);
     }
   );
 

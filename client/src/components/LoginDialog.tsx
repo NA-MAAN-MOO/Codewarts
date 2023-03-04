@@ -20,7 +20,7 @@ import {
   setUserLoginId,
 } from 'stores/userSlice';
 // import { initialMyMute } from 'stores/chatSlice';
-import { fetchMuteInfo } from 'stores/chatSlice';
+// import { fetchMuteInfo } from 'stores/chatSlice';
 import { useDispatch } from 'react-redux';
 import { handleScene } from 'lib/phaserLib';
 import { GAME_STATUS } from 'utils/Constants';
@@ -129,8 +129,8 @@ const LoginDialog = () => {
             playerId: payload.userNickname,
             playerTexture: avatars[avatarIndex].name,
           });
-          // 자기 자신 서버 뮤트인포에서 삭제
-          await deleteMuteInfo(payload.userNickname);
+          // // 자기 자신 서버 뮤트인포에서 삭제
+          // await deleteMuteInfo(payload.userNickname);
           // 뮤트인포에 그 정보 업데이트
           // await appDispatch(fetchMuteInfo());
 

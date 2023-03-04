@@ -42,16 +42,6 @@ const VoiceRoom = () => {
       disconnectSession(session);
       setSession(undefined);
       dispatch(setVoiceStatus(VOICE_STATUS.LOADING));
-    } else {
-      if (
-        Object.keys(volMuteInfo).length === 0 &&
-        Object.keys(micMuteInfo).length === 0
-      ) {
-        (async () => {
-          // 뮤트인포 정보 업데이트
-          await appDispatch(fetchMuteInfo());
-        })();
-      }
     }
   }, [status, editorName]);
 
