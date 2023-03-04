@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Session } from 'openvidu-browser';
 import useVoice from 'hooks/useVoice';
 import { useSelector, useDispatch } from 'react-redux';
-import type { RootState } from 'stores';
+import { RootState, useAppDispatch } from 'stores';
 import { Game } from 'pages/Game';
 import Editor from 'pages/Editor';
 import { GAME_STATUS, VOICE_STATUS } from 'utils/Constants';
 import { stringToAscii } from 'lib/voiceLib';
 import { Socket } from 'socket.io-client';
 import { WebsocketProvider } from 'y-websocket';
-import { setVoiceStatus } from 'stores/chatSlice';
+import { fetchMuteInfo, setVoiceStatus } from 'stores/chatSlice';
 
 const VoiceRoom = () => {
   const [session, setSession] = useState<Session>();
@@ -17,18 +17,19 @@ const VoiceRoom = () => {
   const [provider, setProvider] = useState<WebsocketProvider | undefined>(
     undefined
   );
-  const { disconnectSession } = useVoice();
+  const { disconnectSession, deleteMuteInfo } = useVoice();
   const { START, LOBBY, GAME, EDITOR } = GAME_STATUS;
-  const { status, editorName } = useSelector((state: RootState) => {
-    return { status: state.mode.status, editorName: state.editor.editorName };
-  });
+  const { status, editorName, volMuteInfo, micMuteInfo } = useSelector(
+    (state: RootState) => {
+      return { ...state.mode, ...state.editor, ...state.chat };
+    }
+  );
   const [roomKey, setRoomKey] = useState(editorName);
   const handleSession = (newSession: Session | undefined) => {
     setSession(newSession);
   };
-
   const dispatch = useDispatch();
-
+  const appDispatch = useAppDispatch();
   const handleSocket = (soc: Socket) => {
     setSocket(soc);
   };
@@ -41,6 +42,16 @@ const VoiceRoom = () => {
       disconnectSession(session);
       setSession(undefined);
       dispatch(setVoiceStatus(VOICE_STATUS.LOADING));
+    } else {
+      if (
+        Object.keys(volMuteInfo).length === 0 &&
+        Object.keys(micMuteInfo).length === 0
+      ) {
+        (async () => {
+          // 뮤트인포 정보 업데이트
+          await appDispatch(fetchMuteInfo());
+        })();
+      }
     }
   }, [status, editorName]);
 

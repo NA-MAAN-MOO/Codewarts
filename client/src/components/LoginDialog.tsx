@@ -132,7 +132,7 @@ const LoginDialog = () => {
           // 자기 자신 서버 뮤트인포에서 삭제
           await deleteMuteInfo(payload.userNickname);
           // 뮤트인포에 그 정보 업데이트
-          await appDispatch(fetchMuteInfo());
+          // await appDispatch(fetchMuteInfo());
 
           // dispatch(initialMyMute(payload.userNickname));
         }
