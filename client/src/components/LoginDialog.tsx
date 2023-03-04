@@ -26,7 +26,7 @@ import { handleScene } from 'lib/phaserLib';
 import { GAME_STATUS } from 'utils/Constants';
 import { Snackbar, SnackbarOrigin } from '@mui/material';
 import SignUpForm from './SignUpForm';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import MySnackbar from './MySnackbar';
 import { useAppDispatch } from 'stores';
 
@@ -138,7 +138,7 @@ const LoginDialog = () => {
           // dispatch(initialMyMute(payload.userNickname));
         }
       } catch (e) {
-        if (e.response.status === 420) {
+        if (e instanceof AxiosError && e.response?.status === 420) {
           setLoginFailMsg('이미 접속한 유저입니다.');
         } else {
           setLoginFailMsg('아이디와 비밀번호를 다시 확인해 주세요.');
