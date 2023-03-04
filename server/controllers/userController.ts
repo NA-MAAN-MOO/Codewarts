@@ -66,6 +66,8 @@ export const signUp = async (req: Request, res: Response) => {
   }
 };
 
+let curUser: string[] = [];
+
 export const login = async (req: Request, res: Response) => {
   // * Validate user input
   if (!req.body.userId) {
@@ -96,6 +98,14 @@ export const login = async (req: Request, res: Response) => {
     userPw: userPw,
   });
 
+  if (curUser.includes(userId)) {
+    console.log('double');
+    return res.status(420).json({
+      status: 420,
+      message: '이미 접속한 유저입니다.',
+    });
+  }
+
   if (isPasswordCorrect) {
     res.status(200).json({
       status: 200,
@@ -106,6 +116,7 @@ export const login = async (req: Request, res: Response) => {
         userLeetId: foundUser.userLeetId,
       },
     });
+    curUser.push(userId);
   } else {
     return res.status(400).json({
       status: 400,
