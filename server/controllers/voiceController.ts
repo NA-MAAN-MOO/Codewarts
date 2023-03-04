@@ -210,14 +210,14 @@ export const deleteConnection = async (req: Request, res: Response) => {
 export const toggleMute = async (req: Request, res: Response) => {
   try {
     const { type } = req.params;
-    const { userName } = req.body;
+    const { userName, muteTo } = req.body;
 
     if (type === MUTE_TYPE.VOL) {
       //볼륨 뮤트/언뮤트
-      VolMuteInfo.switch(userName);
+      VolMuteInfo.set(userName, muteTo);
     } else {
       // 마이크 뮤트/언뮤트
-      MicMuteInfo.switch(userName);
+      MicMuteInfo.set(userName, muteTo);
     }
     res.status(200).end();
   } catch (err: unknown) {
