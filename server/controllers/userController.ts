@@ -68,41 +68,10 @@ export const signUp = async (req: Request, res: Response) => {
 
 let curUser = {};
 
-export const logout = async (req: Request, res: Response) => {
-  console.log('fdasfdas');
-  const { userLoginId } = req.body;
-  if (userLoginId in curUser) {
-    const success = delete curUser[userLoginId];
-    if (success) {
-      return res.status(200).json({
-        status: 200,
-        message: '잘 나감.',
-      });
-    } else {
-      return res.status(420).json({
-        status: 420,
-        message: '안나가네.',
-      });
-    }
-  } else {
-    return res.status(420).json({
-      status: 420,
-      message: '그런애없음.',
-    });
+export const removeCurUser = (userNickname: string) => {
+  if (userNickname in curUser) {
+    console.log(delete curUser[userNickname]);
   }
-
-  // try {
-  //   const userId = req.params.username;
-  //   if (!CharInfo.get(username)) {
-  //     //CharInfo에 username이 없음 => 오픈비두 서버에는 있는 username이지만, 현재 서버에는 없는 유저임.
-  //     //에러 처리하지 않고, 그냥 빈칸 처리
-  //     return res.send('');
-  //   }
-  //   res.send(CharInfo.get(username));
-  // } catch (e) {
-  //   console.log(e);
-  //   res.status(500).send(e);
-  // }
 };
 
 export const login = async (req: Request, res: Response) => {
@@ -153,7 +122,7 @@ export const login = async (req: Request, res: Response) => {
         userLeetId: foundUser.userLeetId,
       },
     });
-    curUser[userId] = 1;
+    curUser[isPasswordCorrect.userNickname] = 1;
   } else {
     return res.status(400).json({
       status: 400,
