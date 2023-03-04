@@ -129,7 +129,7 @@ const AlgoTextField = styled((props: TextFieldProps) => (
     color: 'papayawhip',
   },
   // 컴파일칸 라벨
-  '& .css-1gds3nb-MuiFormLabel-root-MuiInputLabel-root': {
+  '& .css-1pv68re-MuiFormLabel-root-MuiInputLabel-root': {
     fontSize: '1.5rem',
   },
 
@@ -332,7 +332,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 const middleButtonStyle = {
   fontFamily: 'Cascadia Code, Pretendard-Regular',
-  fontSize: '17px',
+  fontSize: '18px',
   boxShadow: 'inset 0.2em 0.2em #ededed',
   marginRight: '5px',
   marginLeft: '5px',

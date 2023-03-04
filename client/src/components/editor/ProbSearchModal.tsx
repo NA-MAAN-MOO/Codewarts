@@ -89,7 +89,7 @@ export default function SearchModal(props: any) {
             boxShadow: 'inset 0.2em 0.2em #ededed',
           }}
         >
-          filter🔍
+          FILTER🔍
         </Button>
       </ThemeProvider>
 

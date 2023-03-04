@@ -16,6 +16,8 @@ import dbServer from './servers/dbServer';
 import { PlayerType, TableType, CharInfoType } from './types/Game';
 import CharInfo from './services/CharInfo';
 
+import { removeCurUser } from './controllers/userController';
+
 import cookieParser from 'cookie-parser';
 import VolMuteInfo from './services/VolMuteInfo';
 import MicMuteInfo from './services/MicMuteInfo';
@@ -122,6 +124,7 @@ io.on('connection', (socket: Socket) => {
   socket.on('disconnect', () => {
     // socket이 연결 해제됩니다~
     console.log('user disconnected!!!');
+    console.log(players);
     // tables에 '내' 에디터가 있는지 검사하고, 있다면 삭제
     // FIXME: removeEditor를 클라이언트에 쏴주면 클라에서 나오게?
     // 그러면 '내가 누구 꺼 보는지'를 알아야겠다.
@@ -142,7 +145,21 @@ io.on('connection', (socket: Socket) => {
         player.socket.emit('playerDisconnect', socket.id);
       }
     });
-    players = players.filter((player) => player.socketId !== socket.id);
+    let userNickname: string = '';
+    players = players.filter((player) => {
+      if (player.socketId !== socket.id) {
+        return 1;
+      } else {
+        userNickname = player.userName;
+        return 0;
+      }
+    });
+    // console.log(curUser);
+    // if (userNickname !== undefined && userNickname in curUser) {
+    //   const success = delete curUser[userNickname];
+    // }
+    removeCurUser(userNickname);
+    console.log(userNickname);
   });
   // 나의 창에 접속중인 유저들을 그려준다.
   socket.on('currentPlayers', () => {

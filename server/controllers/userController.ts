@@ -38,8 +38,8 @@ export const signUp = async (req: Request, res: Response) => {
       userNickname: user.userNickname,
     });
     if (foundUserByNick) {
-      return res.status(409).json({
-        status: 409,
+      return res.status(410).json({
+        status: 410,
         message: '이미 존재하는 닉네임입니다.',
       });
     }
@@ -63,6 +63,14 @@ export const signUp = async (req: Request, res: Response) => {
     });
   } catch (e) {
     console.log(e);
+  }
+};
+
+let curUser = {};
+
+export const removeCurUser = (userNickname: string) => {
+  if (userNickname in curUser) {
+    console.log(delete curUser[userNickname]);
   }
 };
 
@@ -96,6 +104,14 @@ export const login = async (req: Request, res: Response) => {
     userPw: userPw,
   });
 
+  if (userId in curUser) {
+    console.log('double');
+    return res.status(420).json({
+      status: 420,
+      message: '이미 접속한 유저입니다.',
+    });
+  }
+
   if (isPasswordCorrect) {
     res.status(200).json({
       status: 200,
@@ -106,6 +122,7 @@ export const login = async (req: Request, res: Response) => {
         userLeetId: foundUser.userLeetId,
       },
     });
+    curUser[isPasswordCorrect.userNickname] = 1;
   } else {
     return res.status(400).json({
       status: 400,

@@ -13,8 +13,9 @@ import { WebsocketProvider } from 'y-websocket';
 /* codemirror */
 import { basicSetup } from 'codemirror';
 import { python } from '@codemirror/lang-python';
+import { indentUnit } from '@codemirror/language';
 import { EditorState } from '@codemirror/state';
-import { keymap, EditorView } from '@codemirror/view';
+import { keymap, EditorView, placeholder } from '@codemirror/view';
 import {
   defaultKeymap,
   indentWithTab,
@@ -47,7 +48,6 @@ import { ToastContainer } from '../../components/editor/toast';
 /* components */
 import EditorThemeSwitch from 'components/editor/EditorThemeSwitch';
 import RunButton from 'components/editor/RunButton';
-import SubmitButton from 'components/editor/SubmitButton';
 import EvaluateButton from 'components/editor/EvaluateButton';
 import CompilerField from 'components/editor/CompilerField';
 import AlgoHeaderTab from 'components/editor/AlgoHeaderTab';
@@ -86,7 +86,7 @@ function YjsCodeMirror(props: YjsProp) {
   let [editorThemeMode, setEditorTheme] = useState(okaidia);
   let [bojProblemId, setBojProblemId] = useState();
   let [bojProbFullData, setBojProbFullData] = useState();
-  let [markingPercent, setMarkingPercent] = useState(0);
+  let [markingPercent, setMarkingPercent] = useState(null);
   const [algoSelect, setAlgoSelect] = useState(0); // 백준(0), 리트코드(1)
   const [undoManager, setUndoManager] = useState();
   const [ytext, setYtext] = useState();
@@ -179,6 +179,8 @@ function YjsCodeMirror(props: YjsProp) {
       },
     });
 
+    const editorPlaceHolder = `def solution():`;
+
     /* editor instance 생성; state, view 생성 */
     const state = EditorState.create({
       doc: ytext.toString(),
@@ -191,6 +193,9 @@ function YjsCodeMirror(props: YjsProp) {
         keymap.of(defaultKeymap),
         editorThemeMode,
         basicThemeSet,
+        indentUnit.of('\t'),
+        // foldGutter(),
+        placeholder(editorPlaceHolder),
       ],
     });
 
@@ -294,7 +299,7 @@ function YjsCodeMirror(props: YjsProp) {
                 value={markingPercent}
                 min={0}
                 max={100}
-                label={`정답률: ${markingPercent}%`}
+                label={markingPercent === null ? '' : `${markingPercent}점`}
               />
             </ThemeProvider>
           </MiddleWrapper>
