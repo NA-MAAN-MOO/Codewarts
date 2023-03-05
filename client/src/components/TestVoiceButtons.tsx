@@ -4,7 +4,7 @@ import { GAME_STATUS } from 'utils/Constants';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from 'stores';
 import axios from 'axios';
-import { stringToAscii } from 'lib/voiceLib';
+import { stringToUnicode } from 'lib/voiceLib';
 
 const APPLICATION_VOICE_URL = process.env.REACT_APP_SERVER_URL
   ? `${process.env.REACT_APP_SERVER_URL}/voice`
@@ -50,7 +50,7 @@ const TestVoiceButtons = () => {
         type="button"
         onClick={async () => {
           const conn = await getConnections(
-            roomKey === GAME_STATUS.GAME ? roomKey : stringToAscii(roomKey)
+            roomKey === GAME_STATUS.GAME ? roomKey : stringToUnicode(roomKey)
           );
           console.log(conn);
         }}
