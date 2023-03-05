@@ -13,8 +13,9 @@ import { WebsocketProvider } from 'y-websocket';
 /* codemirror */
 import { basicSetup } from 'codemirror';
 import { python } from '@codemirror/lang-python';
+import { indentUnit } from '@codemirror/language';
 import { EditorState } from '@codemirror/state';
-import { keymap, EditorView } from '@codemirror/view';
+import { keymap, EditorView, placeholder } from '@codemirror/view';
 import {
   defaultKeymap,
   indentWithTab,
@@ -34,6 +35,7 @@ import {
   Main,
   DrawerHeader,
   leftDrawerWidth,
+  AlgoInputWrap,
 } from './editorStyle';
 import 'styles/fonts.css'; /* FONT */
 import { ThemeProvider, useTheme } from '@mui/material/styles';
@@ -46,7 +48,6 @@ import { ToastContainer } from '../../components/editor/toast';
 /* components */
 import EditorThemeSwitch from 'components/editor/EditorThemeSwitch';
 import RunButton from 'components/editor/RunButton';
-import SubmitButton from 'components/editor/SubmitButton';
 import EvaluateButton from 'components/editor/EvaluateButton';
 import CompilerField from 'components/editor/CompilerField';
 import AlgoHeaderTab from 'components/editor/AlgoHeaderTab';
@@ -64,6 +65,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import IconButton from '@mui/material/IconButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+
 const APPLICATION_YJS_URL =
   process.env.REACT_APP_YJS_URL || 'ws://localhost:1234/';
 
@@ -84,7 +86,7 @@ function YjsCodeMirror(props: YjsProp) {
   let [editorThemeMode, setEditorTheme] = useState(okaidia);
   let [bojProblemId, setBojProblemId] = useState();
   let [bojProbFullData, setBojProbFullData] = useState();
-  let [markingPercent, setMarkingPercent] = useState(0);
+  let [markingPercent, setMarkingPercent] = useState(null);
   const [algoSelect, setAlgoSelect] = useState(0); // 백준(0), 리트코드(1)
   const [undoManager, setUndoManager] = useState();
   const [ytext, setYtext] = useState();
@@ -148,10 +150,10 @@ function YjsCodeMirror(props: YjsProp) {
     let basicThemeSet = EditorView.theme({
       '&': {
         borderRadius: '.5em', // '.cm-gutters'와 같이 조절할 것
-        height: '400px',
+        // height: '400px',
         // maxHeight: '400px',
         // minHeight: '400px',
-        // height: '100%',
+        height: '50vh',
       },
       '.cm-editor': {
         // maxHeight: '50%',
@@ -177,6 +179,8 @@ function YjsCodeMirror(props: YjsProp) {
       },
     });
 
+    const editorPlaceHolder = `def solution():`;
+
     /* editor instance 생성; state, view 생성 */
     const state = EditorState.create({
       doc: ytext.toString(),
@@ -189,6 +193,9 @@ function YjsCodeMirror(props: YjsProp) {
         keymap.of(defaultKeymap),
         editorThemeMode,
         basicThemeSet,
+        indentUnit.of('\t'),
+        // foldGutter(),
+        placeholder(editorPlaceHolder),
       ],
     });
 
@@ -210,10 +217,11 @@ function YjsCodeMirror(props: YjsProp) {
         <CssBaseline />
         <Drawer
           sx={{
-            width: leftDrawerWidth,
+            width: leftDrawerWidth + '%',
             flexShrink: 0,
+            // border: '1px solid green',
             '& .MuiDrawer-paper': {
-              width: leftDrawerWidth,
+              width: leftDrawerWidth - 1.5 + '%',
               boxSizing: 'border-box',
             },
           }}
@@ -222,10 +230,19 @@ function YjsCodeMirror(props: YjsProp) {
           open={leftOpen}
         >
           <DrawerHeader>
-            <ProbTitle
-              bojProblemId={bojProblemId}
-              bojProbFullData={bojProbFullData}
-            />
+            <AlgoInputWrap>
+              <AlgoHeaderTab
+                bojProbDataRef={bojProbDataRef}
+                setBojProbFullData={setBojProbFullData}
+                setBojProblemId={setBojProblemId}
+              />
+              <SearchModal
+                setBojProbFullData={setBojProbFullData}
+                setBojProblemId={setBojProblemId}
+                setAlgoSelect={setAlgoSelect}
+              />
+            </AlgoInputWrap>
+
             <IconButton onClick={handleLeftDrawerClose}>
               {theme.direction === 'ltr' ? (
                 <ChevronLeftIcon />
@@ -243,18 +260,10 @@ function YjsCodeMirror(props: YjsProp) {
                 boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)',
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <AlgoHeaderTab
-                  bojProbDataRef={bojProbDataRef}
-                  setBojProbFullData={setBojProbFullData}
-                  setBojProblemId={setBojProblemId}
-                />
-                <SearchModal
-                  setBojProbFullData={setBojProbFullData}
-                  setBojProblemId={setBojProblemId}
-                  setAlgoSelect={setAlgoSelect}
-                />
-              </div>
+              <ProbTitle
+                bojProblemId={bojProblemId}
+                bojProbFullData={bojProbFullData}
+              />
               <AlgoInfoAccordion
                 inputStdin={inputStdin}
                 bojProbFullData={bojProbFullData}
@@ -277,7 +286,7 @@ function YjsCodeMirror(props: YjsProp) {
                 setCpuTime={setCpuTime}
                 inputStdin={inputStdin.current}
               />
-              <SubmitButton bojProblemId={bojProblemId} />
+              {/* <SubmitButton bojProblemId={bojProblemId} /> */}
               <EvaluateButton
                 ytext={ytext}
                 bojProblemId={bojProblemId}
@@ -290,7 +299,7 @@ function YjsCodeMirror(props: YjsProp) {
                 value={markingPercent}
                 min={0}
                 max={100}
-                label={`정답 게이지: ${markingPercent}%`}
+                label={markingPercent === null ? '' : `${markingPercent}점`}
               />
             </ThemeProvider>
           </MiddleWrapper>

@@ -20,13 +20,13 @@ import {
   setUserLoginId,
 } from 'stores/userSlice';
 // import { initialMyMute } from 'stores/chatSlice';
-import { fetchMuteInfo } from 'stores/chatSlice';
+// import { fetchMuteInfo } from 'stores/chatSlice';
 import { useDispatch } from 'react-redux';
 import { handleScene } from 'lib/phaserLib';
 import { GAME_STATUS } from 'utils/Constants';
 import { Snackbar, SnackbarOrigin } from '@mui/material';
 import SignUpForm from './SignUpForm';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import MySnackbar from './MySnackbar';
 import { useAppDispatch } from 'stores';
 
@@ -63,7 +63,7 @@ const avatars: { name: string; img: string }[] = Array.from(
 let randomNumber = Math.floor(Math.random() * 28);
 const LoginDialog = () => {
   const [openLoginWarn, setOpenLoginWarn] = React.useState(false);
-  const [openSignUp, setOpenSignUp] = React.useState(false);
+  const [loginFailMsg, setLoginFailMsg] = React.useState('');
 
   const handleClick = () => {
     setOpenLoginWarn(true);
@@ -76,7 +76,7 @@ const LoginDialog = () => {
     if (reason === 'clickaway') {
       return;
     }
-
+    setLoginFailMsg('');
     setOpenLoginWarn(false);
   };
 
@@ -108,6 +108,7 @@ const LoginDialog = () => {
           `${APPLICATION_DB_URL}/user/login`,
           body
         );
+        console.log(response.data.status);
         if (response.data.status === 200) {
           // handleScene(GAME_STATUS.LOBBY);
           const { payload } = response.data; //userId, userNickname, userBojId, userLeetId
@@ -129,14 +130,19 @@ const LoginDialog = () => {
             playerId: payload.userNickname,
             playerTexture: avatars[avatarIndex].name,
           });
-          // 자기 자신 서버 뮤트인포에서 삭제
-          await deleteMuteInfo(payload.userNickname);
+          // // 자기 자신 서버 뮤트인포에서 삭제
+          // await deleteMuteInfo(payload.userNickname);
           // 뮤트인포에 그 정보 업데이트
-          await appDispatch(fetchMuteInfo());
+          // await appDispatch(fetchMuteInfo());
 
           // dispatch(initialMyMute(payload.userNickname));
         }
       } catch (e) {
+        if (e instanceof AxiosError && e.response?.status === 420) {
+          setLoginFailMsg('이미 접속한 유저입니다.');
+        } else {
+          setLoginFailMsg('아이디와 비밀번호를 다시 확인해 주세요.');
+        }
         handleClick();
         setUserId('');
         setUserPw('');
@@ -151,7 +157,7 @@ const LoginDialog = () => {
       style={{ position: 'absolute' }}
     >
       <MySnackbar
-        text="아이디와 비밀번호를 다시 확인해 주세요"
+        text={loginFailMsg}
         state="warning"
         onClose={handleClose}
         onOpen={openLoginWarn}

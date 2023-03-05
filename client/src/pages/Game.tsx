@@ -4,9 +4,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import Voice from 'pages/Voice';
 import { handleScene } from 'lib/phaserLib';
 import { GAME_STATUS } from 'utils/Constants';
-import Button from '@mui/material/Button';
-import { styledTheme } from 'styles/theme';
-import useVoice from 'hooks/useVoice';
 import { VoiceProp } from 'types';
 import FloatingButton from 'components/FloatingButton';
 import {
@@ -15,8 +12,6 @@ import {
   ToastContainer,
 } from '../components/editor/toast'; /* toast for event alarm */
 import { getPhaserSocket } from 'network/phaserSocket';
-import phaserGame from 'codeuk';
-import SimplePopper from 'components/SimplePopper';
 
 const showSuccessToast = (editorName: string, problemId: number) => {
   notifySuccess(editorName, problemId);
@@ -29,7 +24,8 @@ const Game = (props: VoiceProp) => {
   const mySocket = getPhaserSocket();
 
   const handleMainClick = () => {
-    handleScene(GAME_STATUS.START);
+    window.location.reload();
+    // handleScene(GAME_STATUS.START);
   };
 
   return (

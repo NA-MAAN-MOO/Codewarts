@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import type { RootState } from 'stores';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, useAppDispatch } from 'stores';
 import { OpenVidu, Subscriber, Publisher } from 'openvidu-browser';
 import useVoice from 'hooks/useVoice';
 import { VoiceProp } from 'types';
 import GameVoice from 'pages/voice/GameVoice';
 import { GAME_STATUS } from 'utils/Constants';
 import EditorVoice from 'pages/voice/EditorVoice';
+import { fetchMuteInfo, setVoiceStatus } from 'stores/chatSlice';
+import { initialMyMute } from 'stores/chatSlice';
 
 //Voice 방 컴포넌트
 const Voice = ({ roomKey, session, handleSession, ...rest }: VoiceProp) => {
@@ -20,13 +22,17 @@ const Voice = ({ roomKey, session, handleSession, ...rest }: VoiceProp) => {
     initSession,
     getUsers,
   } = useVoice();
+  const appDispatch = useAppDispatch();
+  const dispatch = useDispatch();
 
   const onBeforeUnload = (e: BeforeUnloadEvent) => {
     leaveSession();
   };
-  const { playerId, status } = useSelector((state: RootState) => {
-    return { ...state.user, ...state.mode };
-  });
+  const { playerId, status, volMuteInfo, micMuteInfo } = useSelector(
+    (state: RootState) => {
+      return { ...state.user, ...state.mode, ...state.chat };
+    }
+  );
 
   useEffect(() => {
     window.addEventListener('beforeunload', onBeforeUnload);
@@ -82,6 +88,14 @@ const Voice = ({ roomKey, session, handleSession, ...rest }: VoiceProp) => {
 
   useEffect(() => {
     (async () => {
+      if (
+        Object.keys(volMuteInfo).length === 0 &&
+        Object.keys(micMuteInfo).length === 0
+      ) {
+        // 뮤트인포 정보 업데이트
+        await appDispatch(fetchMuteInfo());
+        dispatch(initialMyMute(playerId));
+      }
       if (!session) {
         await joinSession();
         return;
@@ -100,7 +114,15 @@ const Voice = ({ roomKey, session, handleSession, ...rest }: VoiceProp) => {
   }, [session, OV]);
 
   const resetSession = async () => {
-    handleSession(undefined);
+    await registerSession({
+      session,
+      sessionId: roomKey,
+      addSubscriber,
+      deleteSubscriber,
+      handlePublisher,
+      OV,
+      userName: playerId,
+    });
   };
 
   return (

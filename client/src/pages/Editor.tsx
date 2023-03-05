@@ -24,7 +24,6 @@ import PeopleIcon from '@mui/icons-material/People';
 import Board from './Board';
 import { toggleWhiteboard } from 'stores/whiteboardSlice';
 import FloatingButton from 'components/FloatingButton';
-import MenuIcon from '@mui/icons-material/Menu';
 import QuizIcon from '@mui/icons-material/Quiz';
 
 const rightDrawerWidth = 350;
@@ -199,6 +198,7 @@ const Editor = (props: VoiceProp & YjsProp) => {
                 '& .MuiDrawer-paper': {
                   width: rightDrawerWidth,
                   backgroundColor: darkTheme.palette.primary.main,
+                  overflowX: 'hidden',
                 },
               }}
               variant="persistent"
