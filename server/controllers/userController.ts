@@ -78,6 +78,18 @@ export const removeCurUser = (userNickname: string) => {
   }
 };
 
+export const addCurUser = (userNickname: string) => {
+  curUser[userNickname] = 1;
+};
+
+export const isInCurUser = (userNickname: string) => {
+  if (userNickname in curUser) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
 export const login = async (req: Request, res: Response) => {
   // * Validate user input
   if (!req.body.userId) {
@@ -108,7 +120,7 @@ export const login = async (req: Request, res: Response) => {
     userPw: userPw,
   });
 
-  if (userId in curUser) {
+  if (isInCurUser(userId)) {
     console.log('double');
     return res.status(420).json({
       status: 420,
@@ -126,7 +138,7 @@ export const login = async (req: Request, res: Response) => {
         userLeetId: foundUser.userLeetId,
       },
     });
-    curUser[isPasswordCorrect.userNickname] = 1;
+    // curUser[isPasswordCorrect.userNickname] = 1;
   } else {
     return res.status(400).json({
       status: 400,
