@@ -12,6 +12,8 @@ import {
   ToastContainer,
 } from '../components/editor/toast'; /* toast for event alarm */
 import { getPhaserSocket } from 'network/phaserSocket';
+import Whiteboard from './Whiteboard';
+import { RootState } from 'stores';
 
 const showSuccessToast = (editorName: string, problemId: number) => {
   notifySuccess(editorName, problemId);
@@ -22,6 +24,12 @@ const showSuccessToast = (editorName: string, problemId: number) => {
 const Game = (props: VoiceProp) => {
   const dispatch = useDispatch();
   const mySocket = getPhaserSocket();
+  const { START, WHITEBOARD, GAME, EDITOR } = GAME_STATUS;
+  const { status, editorName, volMuteInfo, micMuteInfo } = useSelector(
+    (state: RootState) => {
+      return { ...state.mode, ...state.editor, ...state.chat };
+    }
+  );
 
   const handleMainClick = () => {
     window.location.reload();
@@ -30,10 +38,9 @@ const Game = (props: VoiceProp) => {
 
   return (
     <BackgroundDiv>
+      {status === WHITEBOARD && <Whiteboard />}
+      <Voice {...props} />
       <ToastContainer />
-      <div id="profile">
-        <Voice {...props} />
-      </div>
       <BtnDiv>
         {/* <Button
           type="button"
@@ -58,6 +65,7 @@ const BackgroundDiv = styled.div`
   width: 100%;
   height: 100%;
   position: relative;
+  overflow: hidden;
 `;
 const BtnDiv = styled.div`
   display: flex;
