@@ -198,9 +198,9 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     });
 
     this.successEffect = this.scene.add
-      .sprite(this.x, this.y + 20, 'success', 0)
+      .sprite(this.x, this.y + 20, 'gold', 0)
       .setScale(1.8)
-      .play('success');
+      .play('gold');
 
     setTimeout(() => {
       this.successEffect.destroy();
