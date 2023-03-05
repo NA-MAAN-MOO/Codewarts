@@ -6,7 +6,7 @@ import { RootState, useAppDispatch } from 'stores';
 import { Game } from 'pages/Game';
 import Editor from 'pages/Editor';
 import { GAME_STATUS, VOICE_STATUS } from 'utils/Constants';
-import { stringToAscii } from 'lib/voiceLib';
+import { stringToUnicode } from 'lib/voiceLib';
 import { Socket } from 'socket.io-client';
 import { WebsocketProvider } from 'y-websocket';
 import { fetchMuteInfo, setVoiceStatus } from 'stores/chatSlice';
@@ -18,7 +18,7 @@ const VoiceRoom = () => {
     undefined
   );
   const { disconnectSession, deleteMuteInfo } = useVoice();
-  const { START, LOBBY, GAME, EDITOR } = GAME_STATUS;
+  const { START, WHITEBOARD, GAME, EDITOR } = GAME_STATUS;
   const { status, editorName, volMuteInfo, micMuteInfo } = useSelector(
     (state: RootState) => {
       return { ...state.mode, ...state.editor, ...state.chat };
@@ -39,6 +39,9 @@ const VoiceRoom = () => {
 
   useEffect(() => {
     if (!!session) {
+      if (status === WHITEBOARD || status === session.sessionId) {
+        return;
+      }
       disconnectSession(session);
       setSession(undefined);
       dispatch(setVoiceStatus(VOICE_STATUS.LOADING));
@@ -47,7 +50,7 @@ const VoiceRoom = () => {
 
   useEffect(() => {
     if (!editorName) return;
-    setRoomKey(stringToAscii(editorName));
+    setRoomKey(stringToUnicode(editorName));
   }, [editorName]);
 
   useEffect(() => {
@@ -68,12 +71,14 @@ const VoiceRoom = () => {
 
   return (
     <>
-      {status === GAME ? (
-        <Game
-          session={session}
-          handleSession={handleSession}
-          roomKey={GAME}
-        ></Game>
+      {status === GAME || status === WHITEBOARD ? (
+        <>
+          <Game
+            session={session}
+            handleSession={handleSession}
+            roomKey={GAME}
+          ></Game>
+        </>
       ) : (
         <Editor
           session={session}
