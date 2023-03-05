@@ -64,7 +64,7 @@ function MemoFooter(props: any) {
         }}
       >
         {participants.map((participant: string) => (
-          <AvatarWithPopper participant={participant} />
+          <AvatarWithPopper participant={participant} key={participant} />
         ))}
       </AvatarGroup>
 

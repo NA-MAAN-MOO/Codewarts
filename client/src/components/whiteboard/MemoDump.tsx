@@ -20,8 +20,9 @@ function MemoDump(props: any) {
   return (
     <>
       {memos.length !== 0 ? (
-        memos.map((memo: {}) => (
+        memos.map((memo: any) => (
           <Memo
+            key={memo._id}
             memo={memo}
             getMemos={getMemos}
             deleteMemo={deleteMemo}
