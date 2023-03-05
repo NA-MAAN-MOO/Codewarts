@@ -2,10 +2,11 @@ import { Schema, model, Document, Model, Types } from 'mongoose';
 
 export function getDate(): string {
   let dateNow = new Date();
+
   let fullYear = String(dateNow.getFullYear());
   let year = fullYear.substring(2, 4);
-  let month = String(dateNow.getMonth());
-  let day = String(dateNow.getDay());
+  let month = String(dateNow.getMonth() + 1);
+  let day = String(dateNow.getDate());
   let hour = String(dateNow.getHours());
   let minute = String(dateNow.getMinutes());
   return year + '.' + month + '.' + day + '. ' + hour + ':' + minute;
