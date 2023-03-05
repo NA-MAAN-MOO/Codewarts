@@ -22,6 +22,10 @@ import CharInfo from '../services/CharInfo';
 //   return hashedPassword;
 // }
 
+interface CurUser {
+  [userNickname: string]: number;
+}
+
 export const signUp = async (req: Request, res: Response) => {
   try {
     console.log('signup');
@@ -66,11 +70,23 @@ export const signUp = async (req: Request, res: Response) => {
   }
 };
 
-let curUser = {};
+let curUser: CurUser = {};
 
 export const removeCurUser = (userNickname: string) => {
   if (userNickname in curUser) {
     console.log(delete curUser[userNickname]);
+  }
+};
+
+export const addCurUser = (userNickname: string) => {
+  curUser[userNickname] = 1;
+};
+
+export const isInCurUser = (userNickname: string) => {
+  if (userNickname in curUser) {
+    return true;
+  } else {
+    return false;
   }
 };
 
@@ -104,7 +120,7 @@ export const login = async (req: Request, res: Response) => {
     userPw: userPw,
   });
 
-  if (userId in curUser) {
+  if (isInCurUser(userId)) {
     console.log('double');
     return res.status(420).json({
       status: 420,
@@ -122,7 +138,7 @@ export const login = async (req: Request, res: Response) => {
         userLeetId: foundUser.userLeetId,
       },
     });
-    curUser[isPasswordCorrect.userNickname] = 1;
+    // curUser[isPasswordCorrect.userNickname] = 1;
   } else {
     return res.status(400).json({
       status: 400,
