@@ -1,4 +1,4 @@
-export const stringToAscii = (s: string) => {
+export const stringToUnicode = (s: string) => {
   let charCodeStr = '';
   for (let i = 0; i < s.length; i++) {
     let code = s.charCodeAt(i);

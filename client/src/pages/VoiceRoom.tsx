@@ -6,7 +6,7 @@ import { RootState, useAppDispatch } from 'stores';
 import { Game } from 'pages/Game';
 import Editor from 'pages/Editor';
 import { GAME_STATUS, VOICE_STATUS } from 'utils/Constants';
-import { stringToAscii } from 'lib/voiceLib';
+import { stringToUnicode } from 'lib/voiceLib';
 import { Socket } from 'socket.io-client';
 import { WebsocketProvider } from 'y-websocket';
 import { fetchMuteInfo, setVoiceStatus } from 'stores/chatSlice';
@@ -47,7 +47,7 @@ const VoiceRoom = () => {
 
   useEffect(() => {
     if (!editorName) return;
-    setRoomKey(stringToAscii(editorName));
+    setRoomKey(stringToUnicode(editorName));
   }, [editorName]);
 
   useEffect(() => {
