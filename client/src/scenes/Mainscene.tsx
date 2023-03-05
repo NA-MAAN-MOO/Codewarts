@@ -315,8 +315,10 @@ export default class MainScene extends Phaser.Scene {
             return other.updateDialogBubble(payload.emoji);
         });
       }
+
       // this.player?.updateDialogBubble(payload.emoji);
     });
+    // this.player?.problemSolvedEffect();
   }
 
   update() {

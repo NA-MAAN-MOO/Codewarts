@@ -120,6 +120,11 @@ export default class Background extends Phaser.Scene {
       'assets/effect/confetti.png',
       'assets/effect/gold.json'
     );
+    this.load.atlas(
+      'success',
+      'assets/effect/success.png',
+      'assets/effect/success.json'
+    );
 
     /* Buttons */
     this.load.image('board_button', 'assets/room/board_button.png');
