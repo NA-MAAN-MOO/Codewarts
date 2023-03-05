@@ -1,17 +1,21 @@
 import {
-  getAllUsers,
+  sendUsersBojInfo,
   addMemo,
   updateMemo,
   getMemo,
   deleteMemo,
   changeMemoPos,
   participateInMemo,
+  getUsersBojInfo,
 } from '../controllers/whiteboardController';
 import express from 'express';
 
 const router = express.Router();
 
-router.get('/user-infos', getAllUsers);
+// FIXME: node cron
+router.get('/boj-infos', getUsersBojInfo);
+// send to client
+router.get('/user-rank', sendUsersBojInfo);
 
 router.post('/add-memo', addMemo);
 router.post('/delete-memo', deleteMemo);

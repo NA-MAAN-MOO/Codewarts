@@ -186,6 +186,17 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
       repeat: -1,
     });
 
+    this.scene.anims.create({
+      key: 'success',
+      frames: this.scene.anims.generateFrameNames('success', {
+        start: 0,
+        end: 22,
+        prefix: 'success-',
+      }),
+      frameRate: 30,
+      repeat: -1,
+    });
+
     this.successEffect = this.scene.add
       .sprite(this.x, this.y + 20, 'gold', 0)
       .setScale(1.8)

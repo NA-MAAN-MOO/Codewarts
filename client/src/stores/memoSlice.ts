@@ -45,10 +45,6 @@ export const memoSlice = createSlice({
   name: 'memo',
   initialState,
   reducers: {
-    // addMemo: (state, action: PayloadAction) => {
-    //   //FIXME: 굉장히 이상..
-    //   allMemos.push({ ...initialState, authorId: action.payload });
-    // },
     removeMemo: (state, action: PayloadAction<string>) => {},
     editMemo: (state, action: PayloadAction<string>) => {},
     participateIn: (state, action: PayloadAction<string>) => {},
