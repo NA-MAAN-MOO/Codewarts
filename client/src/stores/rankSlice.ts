@@ -7,42 +7,43 @@ import axios from 'axios';
 const APPLICATION_DB_URL =
   process.env.REACT_APP_DB_URL || 'http://localhost:3003';
 
-const getEachUserBojInfo = async (bojId: string) => {
-  try {
-    const data = await axios.get(
-      `https://solved.ac/api/v3/user/show?handle=${bojId}`
-    );
-    // console.log(data.data);
-    return data.data;
-  } catch (e) {
-    return false;
-  }
-};
+// const getEachUserBojInfo = async (bojId: string) => {
+//   try {
+//     const data = await axios.get(
+//       `https://solved.ac/api/v3/user/show?handle=${bojId}`
+//     );
+//     // console.log(data.data);
+//     return data.data;
+//   } catch (e) {
+//     return false;
+//   }
+// };
 
-const regenerateData = async (datum: any) => {
-  let result = [];
-  for await (const data of datum) {
-    const eachData: any = await getEachUserBojInfo(data.userBojId);
+// const regenerateData = async (datum: any) => {
+//   let result = [];
+//   for await (const data of datum) {
+//     const eachData: any = await getEachUserBojInfo(data.userBojId);
 
-    if (!!eachData) {
-      result.push({
-        nickname: data.userNickname,
-        id: data.userId,
-        bojId: data.userBojId,
-        tier: eachData.tier,
-        maxStreak: eachData.maxStreak,
-        solved: eachData.solvedCount,
-      });
-    }
-  }
-  return result;
-};
+//     if (!!eachData) {
+//       result.push({
+//         nickname: data.userNickname,
+//         id: data.userId,
+//         bojId: data.userBojId,
+//         tier: eachData.tier,
+//         maxStreak: eachData.maxStreak,
+//         solved: eachData.solvedCount,
+//       });
+//     }
+//   }
+//   return result;
+// };
 
 export const getbojInfos = createAsyncThunk('rank/getbojInfos', async () => {
   try {
-    const response = await axios.get(APPLICATION_DB_URL + '/user-infos');
-    const bojInfos = await regenerateData(response.data); //.data 붙이고 await 붙이는 거 중요함 ...
-    return bojInfos;
+    const tryGetBojInfos = await axios.get(APPLICATION_DB_URL + '/boj-infos');
+    const response = await axios.get(APPLICATION_DB_URL + '/user-rank');
+    // const bojInfos = await regenerateData(response.data); //.data 붙이고 await 붙이는 거 중요함 ...
+    return response.data;
   } catch (e) {
     // console.error(e);
   }
