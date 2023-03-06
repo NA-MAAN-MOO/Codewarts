@@ -19,7 +19,7 @@ interface ResponseType {
 }
 
 let response: ResponseType[] = [];
-const task = cron.schedule('*/5 * * * *', async () => {
+const task = cron.schedule('*/10 * * * *', async () => {
   await getUsersBojInfo();
   console.log('가져온 랭킹 수', response.length);
 });
@@ -80,16 +80,10 @@ export const getUsersBojInfo = async () => {
   if (response.length) {
     await response.sort((a, b) => b.tier - a.tier);
   }
-
-  /* Send response */
-  // if (response.length === 0) {
-  //   res.status(404).send('No valid Boj Users Id');
-  // } else {
-  //   // res.status(200).send(response);
-  //   res.status(200).send('Call sendUsersBojInfo() method to get infos!');
-  // }
-  // console.log(response, 'getUsersBojInfo');
 };
+
+/* When server starts, it brings boj infos */
+getUsersBojInfo();
 
 /* Send Boj Infos saved in heap(?) */
 export const sendUsersBojInfo = (req: Request, res: Response) => {
