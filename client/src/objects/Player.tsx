@@ -173,8 +173,6 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
   /* Called whenever player solve a problem  */
   problemSolvedEffect() {
-    /* TODO: Add solved state */
-    // if (solved)
     this.scene.anims.create({
       key: 'gold',
       frames: this.scene.anims.generateFrameNames('gold', {

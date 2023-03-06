@@ -31,6 +31,37 @@ const buttonTheme = createTheme({
   },
 });
 
+const editorThemeCSS = {
+  '&': {
+    borderRadius: '.5em', // '.cm-gutters'와 같이 조절할 것
+    // height: '400px',
+    // maxHeight: '400px',
+    // minHeight: '400px',
+    height: '50vh',
+  },
+  '.cm-editor': {
+    // maxHeight: '50%',
+    // height: '100%',
+  },
+  '.cm-scroller': {
+    overflow: 'auto',
+  },
+  '.cm-content, .cm-gutter': {
+    fontFamily: 'Cascadia Code, Pretendard-Regular',
+    // height: 'auto',
+    // minHeight: `${400 * 50}%`,
+  },
+  '.cm-content': {
+    fontSize: '1.3em',
+  },
+  '.cm-gutter': {
+    // minHeight: '50%',
+  },
+  '.cm-gutters': {
+    borderRadius: '.5em',
+  },
+};
+
 const EditorWrapper = styledc.div`
   width: 100%;
   height: 100%;
@@ -79,8 +110,7 @@ const ProbTitleDiv = styledc.div`
 text-shadow: 1px 1px 2px grey;
 color: #fff;
 // font-size: 25px;
-font-size: 1.5em;
-// font-weight: bold;
+font-size: 1.7rem;
 width: 100%;
 display: flex;
 flex-direction : row;
@@ -89,7 +119,6 @@ overflow: visible;
 min-height: 100%;
 display: flex,
 justify-content: space-between,
-// word-break: break-all;
 text-align: center;
 // border: 1px solid lightgreen;
 padding: 16px;
@@ -120,6 +149,11 @@ const AlgoTextField = styled((props: TextFieldProps) => (
   '& input': {
     fontFamily: 'Cascadia Code, Pretendard-Regular',
     // color: 'papayawhip',
+  },
+  // '문제 번호로 바로가기' 라벨
+  '.MuiFormLabel-root': {
+    fontSize: '1.1rem',
+    marginTop: '-2.5px',
   },
   '& .MuiInputBase-sizeSmall': {
     // margin: '10px 10px 10px 10px',
@@ -238,6 +272,7 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
+/* 왼쪽 서랍 문제 아코디언 */
 const Accordion = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters elevation={0} {...props} />
 ))(({ theme }) => ({
@@ -252,6 +287,7 @@ const Accordion = styled((props: AccordionProps) => (
   },
 }));
 
+/* 왼쪽 서랍 아코디언 소제목 */
 const AccordionSummary = styled((props: AccordionSummaryProps) => (
   <MuiAccordionSummary
     expandIcon={
@@ -259,6 +295,7 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
         sx={{ fontSize: '0.9rem', color: 'rgba(255, 255, 255, 0.7)' }}
       />
     }
+    sx={{ fontSize: '1.4em' }}
     {...props}
   />
 ))(({ theme }) => ({
@@ -273,8 +310,42 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
   },
 }));
 
+/* 왼쪽 서랍 아코디언 내용 */
+const accordionDetailStyle = {
+  fontSize: '1.2em',
+};
+
+/* 왼쪽 서랍 아코디언 예제 제목*/
+const accordionSampleTitle = {
+  color: 'rgba(255, 255, 255, 0.7)',
+  marginRight: '7px',
+};
+
+/* 왼쪽 서랍 아코디언 예제 내용 */
+const accordionSampleStyle = {
+  color: 'papayawhip',
+  fontFamily: 'Cascadia Code, Pretendard-Regular',
+  textAlign: 'left',
+  fontSize: '1.2em',
+};
+
+const accoSampleTitleStyle = {
+  display: 'flex',
+  alignItems: 'center',
+};
+
 /* Drawer setting */
-const leftDrawerWidth = '40';
+const leftDrawerWidth = 500;
+
+const leftDrawerCSS = {
+  width: leftDrawerWidth,
+  flexShrink: 0,
+  // border: '1px solid green',
+  '& .MuiDrawer-paper': {
+    width: leftDrawerWidth,
+    boxSizing: 'border-box',
+  },
+};
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   open?: boolean;
@@ -288,7 +359,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  marginLeft: `-${leftDrawerWidth}%`,
+  marginLeft: `-${leftDrawerWidth}px`,
   ...(open && {
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeOut,
@@ -310,8 +381,8 @@ const AppBar = styled(MuiAppBar, {
     duration: theme.transitions.duration.leavingScreen,
   }),
   ...(open && {
-    width: `calc(100% - ${leftDrawerWidth} +'%')`,
-    marginLeft: `${leftDrawerWidth}%`,
+    width: `calc(100% - ${leftDrawerWidth}px)`,
+    marginLeft: `${leftDrawerWidth}px`,
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
@@ -354,10 +425,16 @@ export {
   MaterialUISwitch,
   AccordionSummary,
   Accordion,
+  accordionDetailStyle,
+  accordionSampleStyle,
+  accordionSampleTitle,
+  accoSampleTitleStyle,
   buttonTheme,
   Main,
   AppBar,
   DrawerHeader,
   leftDrawerWidth,
+  leftDrawerCSS,
   middleButtonStyle,
+  editorThemeCSS,
 };
