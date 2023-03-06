@@ -196,8 +196,6 @@ export default class Lobby extends Phaser.Scene {
     );
 
     this.bgImage.setScale(imageScale).setScrollFactor(0);
-
-    /* Add door */
   };
 
   addDoor = (sceneWidth: number, sceneHeight: number) => {
