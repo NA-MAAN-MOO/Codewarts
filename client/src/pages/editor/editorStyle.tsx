@@ -307,6 +307,16 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
 /* Drawer setting */
 const leftDrawerWidth = 500;
 
+const leftDrawerCSS = {
+  width: leftDrawerWidth,
+  flexShrink: 0,
+  // border: '1px solid green',
+  '& .MuiDrawer-paper': {
+    width: leftDrawerWidth,
+    boxSizing: 'border-box',
+  },
+};
+
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   open?: boolean;
 }>(({ theme, open }) => ({
@@ -390,6 +400,7 @@ export {
   AppBar,
   DrawerHeader,
   leftDrawerWidth,
+  leftDrawerCSS,
   middleButtonStyle,
   editorThemeCSS,
 };

@@ -34,7 +34,7 @@ import {
   buttonTheme,
   Main,
   DrawerHeader,
-  leftDrawerWidth,
+  leftDrawerCSS,
   AlgoInputWrap,
   editorThemeCSS,
 } from './editorStyle';
@@ -187,15 +187,7 @@ function YjsCodeMirror(props: YjsProp) {
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <Drawer
-          sx={{
-            width: leftDrawerWidth,
-            flexShrink: 0,
-            // border: '1px solid green',
-            '& .MuiDrawer-paper': {
-              width: leftDrawerWidth,
-              boxSizing: 'border-box',
-            },
-          }}
+          sx={leftDrawerCSS}
           variant="persistent"
           anchor="left"
           open={leftOpen}
