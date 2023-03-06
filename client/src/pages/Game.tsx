@@ -51,9 +51,11 @@ const Game = (props: VoiceProp) => {
         >
           에디터 키기
         </Button> */}
-        <FloatingButton onClick={handleMainClick}>
-          첫 화면으로 가기
-        </FloatingButton>
+        {status === GAME && (
+          <FloatingButton onClick={handleMainClick}>
+            첫 화면으로 가기
+          </FloatingButton>
+        )}
       </BtnDiv>
     </BackgroundDiv>
   );
