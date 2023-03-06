@@ -120,7 +120,7 @@ export const login = async (req: Request, res: Response) => {
     userPw: userPw,
   });
 
-  if (isInCurUser(userId)) {
+  if (isInCurUser(foundUser.userNickname)) {
     console.log('double');
     return res.status(420).json({
       status: 420,
