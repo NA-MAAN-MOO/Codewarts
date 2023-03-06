@@ -22,6 +22,7 @@ export default class Lobby extends Phaser.Scene {
   network: boolean;
   private sceneChange!: any = false;
   socket: Socket | undefined;
+  howTo: Phaser.GameObjects.Image;
   // const {nickName, characterModel} = useSelector((state:RootState)=> state.charactor);
 
   constructor() {
@@ -74,8 +75,14 @@ export default class Lobby extends Phaser.Scene {
     });
 
     this.add
-      .sprite(this.scale.width / 1.2, this.scale.height * 0.5, 'yellow', 0)
+      .sprite(this.scale.width / 1.25, this.scale.height * 0.5, 'yellow', 0)
       .play('yellow');
+
+    this.howTo = this.add.image(
+      this.scale.width / 1.25,
+      this.scale.height * 0.5,
+      'howTo'
+    );
 
     this.portal = this.matter.add
       .sprite(this.scale.width / 4.5, this.scale.height * 0.5, 'green', 0)
@@ -84,7 +91,7 @@ export default class Lobby extends Phaser.Scene {
     /* Add door */
     const door = this.add.image(
       this.cameras.main.width / 2,
-      this.cameras.main.height / 1.8,
+      this.cameras.main.height / 2,
       'door'
     );
     door.setScale(scale).setScrollFactor(0);
@@ -167,6 +174,13 @@ export default class Lobby extends Phaser.Scene {
   }
 
   update() {
+    // const maxHeight = this.scale.y / 2 - 30;
+    // const minHeight = this.scale.y / 2 + 30;
+    // if (this.howTo.y > maxHeight) {
+    //   this.howTo.y--;
+    // } else if (this.howTo.y < minHeight) {
+    //   this.howTo.y++;
+    // }
     if (this.player && this.network) {
       /* Control Player Movement */
       const playerId = store.getState().user.playerId;

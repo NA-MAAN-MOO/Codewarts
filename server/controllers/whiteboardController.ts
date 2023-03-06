@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 
-import { Types } from 'mongoose';
 import User from '../models/User';
 import Memo from '../models/Memo';
 
@@ -30,6 +29,7 @@ const getEachUserBojInfo = async (bojId: string) => {
 
 /* Recreate response based on info through solved.ac api */
 const regenerateData = async (datum: any) => {
+  let result: ResponseType[] = [];
   for await (const data of datum) {
     // console.log(data);
     const eachData: false | AxiosResponse<any, any> = await getEachUserBojInfo(
@@ -37,7 +37,7 @@ const regenerateData = async (datum: any) => {
     );
 
     if (!!eachData) {
-      response.push({
+      result.push({
         nickname: data.userNickname,
         id: data.userId,
         bojId: data.userBojId,
@@ -47,40 +47,51 @@ const regenerateData = async (datum: any) => {
       });
     }
   }
+  response = [...result];
 };
 
 /* Get all user's number of solved problems through boj ids in DB */
-// export const getUsersBojInfo = async (req: Request, res: Response) => {
-//   const datum = await User.find({});
+// FIXME: node cron
+export const getUsersBojInfo = async (req: Request, res: Response) => {
+  const datum = await User.find({});
 
-//   await regenerateData(datum);
+  await regenerateData(datum);
 
-//   /* Sort by tier */
-//   if (response.length) {
-//     await response.sort((a, b) => b.tier - a.tier);
-//   }
+  /* Sort by tier */
+  if (response.length) {
+    await response.sort((a, b) => b.tier - a.tier);
+  }
 
-//   /* Send response */
-//   if (response.length === 0) {
-//     res.status(404).send('No valid Boj Users Id');
-//   } else {
-//     res.status(200).send(response);
-//   }
-
-//   /* Empty data */
-//   response = [];
-// };
-
-export const getAllUsers = async (req: Request, res: Response) => {
-  try {
-    const datum = await User.find({});
-    res.status(200).send(datum);
-    // console.log(datum);
-  } catch (e) {
-    console.error(e);
+  /* Send response */
+  if (response.length === 0) {
     res.status(404).send('No valid Boj Users Id');
+  } else {
+    // res.status(200).send(response);
+    res.status(200).send('Call sendUsersBojInfo() method to get infos!');
+  }
+  // console.log(response, 'getUsersBojInfo');
+};
+
+/* Send Boj Infos saved in heap(?) */
+export const sendUsersBojInfo = (req: Request, res: Response) => {
+  // console.log(response, 'sendUsersBojInfo');
+  if (response.length === 0) {
+    res.status(404).send('No valid Boj Users Id');
+  } else {
+    res.status(200).send(response);
   }
 };
+
+// export const getAllUsers = async (req: Request, res: Response) => {
+//   try {
+//     const datum = await User.find({});
+//     res.status(200).send(datum);
+//     // console.log(datum);
+//   } catch (e) {
+//     console.error(e);
+//     res.status(404).send('No valid Boj Users Id');
+//   }
+// };
 
 /* Save memo to DB */
 export const addMemo = async (req: Request, res: Response) => {

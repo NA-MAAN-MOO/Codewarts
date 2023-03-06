@@ -84,7 +84,7 @@ function Memo(props: any) {
   };
 
   const bringToFront = () => {
-    console.log('찍힘');
+    // console.log('찍힘');
     // let tempZIndex = maxZindex + 1;
     setIsDragging(true);
     setmaxZIndex(maxZIndex + 1);
@@ -107,13 +107,13 @@ function Memo(props: any) {
       onDrag={(e, data) => {
         // e.stopPropagation();
         onChangePosition(data);
-        changeMemoPos(memo._id, data.x, data.y);
       }}
       onMouseDown={bringToFront}
       onStart={bringToFront}
       onStop={(e, data) => {
         setIsDragging(false);
         fixZIndex();
+        changeMemoPos(memo._id, data.x, data.y);
       }}
     >
       <Card

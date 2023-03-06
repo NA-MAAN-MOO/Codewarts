@@ -127,7 +127,7 @@ const Voice = ({ roomKey, session, handleSession, ...rest }: VoiceProp) => {
 
   return (
     <>
-      {status === GAME_STATUS.GAME ? (
+      {status === (GAME_STATUS.GAME || GAME_STATUS.WHITEBOARD) ? (
         <GameVoice
           session={session}
           subscribers={subscribers}

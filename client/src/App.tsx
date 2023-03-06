@@ -59,14 +59,12 @@ function App() {
     <HoverDiv>
       <BgmPlayer />
       {/* <TestVoiceButtons /> */}
-      {/* {playerId === '개발자' && <TestVoiceButtons />} */}
+      {playerId === '개발자' && <TestVoiceButtons />}
       {status === START ? (
         <Start></Start>
       ) : //불필요한 로비 삭제
-      status === GAME || status === EDITOR ? (
+      status === GAME || status === EDITOR || status === WHITEBOARD ? (
         <VoiceRoom />
-      ) : status === WHITEBOARD ? (
-        <Whiteboard />
       ) : (
         <></>
       )}
