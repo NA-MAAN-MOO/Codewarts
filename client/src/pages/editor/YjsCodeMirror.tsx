@@ -207,7 +207,6 @@ function YjsCodeMirror(props: YjsProp) {
               boxSizing: 'border-box',
             },
           }}
-          sx={leftDrawerCSS}
           variant="persistent"
           anchor="left"
           open={leftOpen}
