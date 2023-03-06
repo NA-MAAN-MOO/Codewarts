@@ -110,7 +110,7 @@ const ProbTitleDiv = styledc.div`
 text-shadow: 1px 1px 2px grey;
 color: #fff;
 // font-size: 25px;
-font-size: 1.5em;
+font-size: 1.7rem;
 width: 100%;
 display: flex;
 flex-direction : row;
@@ -149,6 +149,11 @@ const AlgoTextField = styled((props: TextFieldProps) => (
   '& input': {
     fontFamily: 'Cascadia Code, Pretendard-Regular',
     // color: 'papayawhip',
+  },
+  // '문제 번호로 바로가기' 라벨
+  '.MuiFormLabel-root': {
+    fontSize: '1.1rem',
+    marginTop: '-2.5px',
   },
   '& .MuiInputBase-sizeSmall': {
     // margin: '10px 10px 10px 10px',
@@ -313,6 +318,7 @@ const accordionDetailStyle = {
 /* 왼쪽 서랍 아코디언 예제 제목*/
 const accordionSampleTitle = {
   color: 'rgba(255, 255, 255, 0.7)',
+  marginRight: '7px',
 };
 
 /* 왼쪽 서랍 아코디언 예제 내용 */
@@ -321,6 +327,11 @@ const accordionSampleStyle = {
   fontFamily: 'Cascadia Code, Pretendard-Regular',
   textAlign: 'left',
   fontSize: '1.2em',
+};
+
+const accoSampleTitleStyle = {
+  display: 'flex',
+  alignItems: 'center',
 };
 
 /* Drawer setting */
@@ -417,6 +428,7 @@ export {
   accordionDetailStyle,
   accordionSampleStyle,
   accordionSampleTitle,
+  accoSampleTitleStyle,
   buttonTheme,
   Main,
   AppBar,
