@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 import { useSelector } from 'react-redux';
 import { RootState } from 'stores';
 /* toast */
-import { notifySuccess, notifyFail } from './toast';
+import { notifyFail } from './toast';
 //@ts-ignore
 import missSoundFile from '../../assets/sound_effect/miss_sound.mp3';
 //@ts-ignore
@@ -31,7 +31,7 @@ function EvaluateButton(props) {
     bojProbFullData,
   } = props;
 
-  let [진행완료, set진행완료] = useState(false);
+  let [evalFinished, setEvalFinished] = useState(false);
   const newMissSoundToggle = SoundPlayer(missSoundFile);
   const newHitSoundToggle = SoundPlayer(hitSoundFile);
 
@@ -86,7 +86,7 @@ function EvaluateButton(props) {
 
         if (fetchInput === null || fetchInput?.startsWith('<!DOCTYPE html>')) {
           console.log('더 이상 채점할 파일이 없어요!!');
-          set진행완료(true);
+          setEvalFinished(true);
           break;
         }
 
@@ -154,20 +154,23 @@ function EvaluateButton(props) {
 
   useEffect(() => {
     if (!bojProblemId) return;
-    if (진행완료 === false) {
+    if (evalFinished === false) {
       // console.log('아직 채점 다 안 끝났어요~');
       return;
     }
     if (markingPercent === '100') {
-      // notifySuccess(editorName, bojProblemId);
       newHitSoundToggle();
       broadcastSuccess();
     } else {
-      notifyFail(editorName, bojProblemId);
       newMissSoundToggle();
+      notifyFail(editorName, bojProblemId);
     }
-    set진행완료(false);
-  }, [markingPercent, 진행완료]);
+    setEvalFinished(false);
+
+    setTimeout(() => {
+      setMarkingPercent(null);
+    }, 4000);
+  }, [markingPercent, evalFinished]);
 
   return (
     <>

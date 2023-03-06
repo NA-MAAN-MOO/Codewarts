@@ -11,6 +11,7 @@
 .bar {
   height: 100%;
   background-color: green;
+  border: 1px dotted red;
   position: absolute;
   top: 0;
   left: 0;
