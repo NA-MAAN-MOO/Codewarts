@@ -55,6 +55,7 @@ export default class Background extends Phaser.Scene {
     this.load.image('lobby', 'assets/lobby/lobby_scene.png');
     this.load.image('door', 'assets/lobby/door.png');
     this.load.image('enter', 'assets/lobby/enter.png');
+    this.load.image('lobby_statue', 'assets/lobby/lobby_statue.png');
 
     this.load.atlas(
       'green',
