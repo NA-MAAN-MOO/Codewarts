@@ -19,7 +19,7 @@ export const store = configureStore({
 });
 
 // store.dispatch(fetchMuteInfo());
-store.dispatch(getbojInfos());
+// store.dispatch(getbojInfos());
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;
