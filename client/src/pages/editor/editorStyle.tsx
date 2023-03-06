@@ -335,7 +335,7 @@ const accoSampleTitleStyle = {
 };
 
 /* Drawer setting */
-const leftDrawerWidth = 500;
+const leftDrawerWidth = 40;
 
 const leftDrawerCSS = {
   width: leftDrawerWidth,
@@ -359,7 +359,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  marginLeft: `-${leftDrawerWidth}px`,
+  marginLeft: `-${leftDrawerWidth}%`,
   ...(open && {
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeOut,
@@ -381,8 +381,8 @@ const AppBar = styled(MuiAppBar, {
     duration: theme.transitions.duration.leavingScreen,
   }),
   ...(open && {
-    width: `calc(100% - ${leftDrawerWidth}px)`,
-    marginLeft: `${leftDrawerWidth}px`,
+    width: `calc(100% - ${leftDrawerWidth}%)`,
+    marginLeft: `${leftDrawerWidth}%`,
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
