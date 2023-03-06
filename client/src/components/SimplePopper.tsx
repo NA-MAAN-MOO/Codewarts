@@ -47,19 +47,21 @@ export default function SimplePopper() {
         placement={placement}
         transition
       >
-        {({ TransitionProps }) => (
-          <Fade {...TransitionProps} timeout={350}>
-            <Paper
-              sx={{
-                backgroundColor: 'transparent',
-                border: 'none',
-                boxShadow: 'none',
-              }}
-            >
-              <SimpleZoom clickEmoji={clickEmoji} emojies={emojies} />
-            </Paper>
-          </Fade>
-        )}
+        {({ TransitionProps }) =>
+          open && (
+            <Fade {...TransitionProps} timeout={350}>
+              <Paper
+                sx={{
+                  backgroundColor: 'transparent',
+                  border: 'none',
+                  boxShadow: 'none',
+                }}
+              >
+                <SimpleZoom clickEmoji={clickEmoji} emojies={emojies} />
+              </Paper>
+            </Fade>
+          )
+        }
       </Popper>
 
       <Button
