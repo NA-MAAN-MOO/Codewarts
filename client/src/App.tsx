@@ -9,6 +9,7 @@ import Start from 'pages/Start';
 import TestVoiceButtons from 'components/TestVoiceButtons';
 import Whiteboard from 'pages/Whiteboard';
 import axios from 'axios';
+import BgmPlayer from 'components/musicplayer/BgmPlayer';
 
 const APPLICATION_DB_URL =
   process.env.REACT_APP_DB_URL || 'http://localhost:3003';
@@ -56,6 +57,7 @@ function App() {
 
   return (
     <HoverDiv>
+      <BgmPlayer />
       {/* <TestVoiceButtons /> */}
       {playerId === '개발자' && <TestVoiceButtons />}
       {status === START ? (
