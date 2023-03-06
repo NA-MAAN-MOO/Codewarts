@@ -75,6 +75,6 @@ const BtnDiv = styled.div`
   justify-content: center;
   gap: 10px;
   position: absolute;
-  bottom: 30px;
-  right: 25px;
+  top: 2%;
+  right: 2%;
 `;
