@@ -6,17 +6,19 @@ import AudiotrackIcon from '@mui/icons-material/Audiotrack';
 import bgm1 from '../../assets/bgms/Rinne - End world.mp3';
 //@ts-ignore
 import bgm2 from '../../assets/bgms/Bgm2.mp3';
+//@ts-ignore
+import bgm3 from '../../assets/bgms/bgm3.mp3';
 import { Button, Fab, Fade } from '@mui/material';
 import { RootState } from 'stores';
 import { useSelector } from 'react-redux';
 
 const BgmPlayer = () => {
-  const bgms = [bgm1, bgm2];
-  // const [bgmIdx, setBgmIdx] = useState(0);
-  let bgmIdx = 0;
-  const setBgmIdx = (idx: number) => {
-    bgmIdx = idx;
-  };
+  const bgms = [bgm1, bgm2, bgm3];
+  const [bgmIdx, setBgmIdx] = useState(2);
+  // let bgmIdx = 0;
+  // const setBgmIdx = (idx: number) => {
+  //   bgmIdx = idx;
+  // };
   const player = useRef<AudioPlayer>(null);
   const { userBgmState } = useSelector((state: RootState) => {
     return state.user;
@@ -29,20 +31,21 @@ const BgmPlayer = () => {
       //왜 011 반복이지
       setBgmIdx(0);
     } else {
-      setBgmIdx(bgmIdx + 1);
+      setBgmIdx((prev) => prev + 1);
     }
-    console.log(bgmIdx);
-    setSelectedBgm(`${bgms[bgmIdx]}`);
+    // setSelectedBgm(`${bgms[bgmIdx]}`);
   };
   const onClickPrev = () => {
     if (bgmIdx - 1 === -1) {
       setBgmIdx(bgms.length - 1);
     } else {
-      setBgmIdx(bgmIdx - 1);
+      setBgmIdx((prev) => prev - 1);
     }
-    setSelectedBgm(`${bgms[bgmIdx]}`);
   };
 
+  useEffect(() => {
+    setSelectedBgm(`${bgms[bgmIdx]}`);
+  }, [bgmIdx]);
   const playerPlay = () => {
     player.current?.audio?.current?.play();
   };
