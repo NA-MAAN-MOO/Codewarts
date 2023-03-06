@@ -38,19 +38,18 @@ const DrawerHeader = muiStyled('div')(({ theme }) => ({
 }));
 
 const EditorVoice = (props: GameVoiceType) => {
-  const { session, joinSession, handleDrawerClose, subscribers, publisher } =
-    props;
+  const { session, joinSession, subscribers, publisher } = props;
   const theme = useTheme();
 
   return (
     <>
-      <DrawerHeader>
+      <AudioList subscribers={subscribers} />
+      {/* <DrawerHeader>
         <IconButton onClick={handleDrawerClose}>
           <ChevronRightIcon />
         </IconButton>
-        <AudioList subscribers={subscribers} />
       </DrawerHeader>
-      <Divider />
+      <Divider /> */}
       {!!publisher ? (
         <CurrentPlayer {...props} />
       ) : (

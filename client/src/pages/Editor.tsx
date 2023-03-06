@@ -25,6 +25,7 @@ import Board from './Board';
 import { toggleWhiteboard } from 'stores/whiteboardSlice';
 import FloatingButton from 'components/FloatingButton';
 import QuizIcon from '@mui/icons-material/Quiz';
+import ToggleButton from '@mui/material/ToggleButton';
 
 const rightDrawerWidth = 350;
 
@@ -102,12 +103,8 @@ const Editor = (props: VoiceProp & YjsProp) => {
     setLeftOpen(false);
   };
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
+  const handleDrawer = () => {
+    setOpen(!open);
   };
 
   const handleExit = () => {
@@ -168,15 +165,6 @@ const Editor = (props: VoiceProp & YjsProp) => {
                     style={{ color: 'white', cursor: 'pointer' }}
                     onClick={handleExit}
                   />
-                  <IconButton
-                    color="secondary"
-                    aria-label="open drawer"
-                    edge="end"
-                    onClick={handleDrawerOpen}
-                    sx={{ ...(open && { display: 'none' }) }}
-                  >
-                    <PeopleIcon />
-                  </IconButton>
                 </BtnDiv>
               </Toolbar>
             </AppBar>
@@ -205,7 +193,7 @@ const Editor = (props: VoiceProp & YjsProp) => {
               anchor="right"
               open={open}
             >
-              <Voice handleDrawerClose={handleDrawerClose} {...props} />
+              <Voice {...props} />
             </Drawer>
           </Box>
         </ThemeProvider>
@@ -222,6 +210,19 @@ const Editor = (props: VoiceProp & YjsProp) => {
         >
           {onWhiteBoard}
         </FloatingButton>
+        <ThemeProvider theme={darkTheme}>
+          <ToggleButton
+            value="open"
+            selected={open}
+            color="secondary"
+            onClick={handleDrawer}
+            sx={{
+              borderRadius: '50%',
+            }}
+          >
+            <PeopleIcon />
+          </ToggleButton>
+        </ThemeProvider>
       </FixedBtnDiv>
     </>
   );
@@ -263,8 +264,8 @@ const FixedBtnDiv = styled.div`
   justify-content: center;
   gap: 10px;
   position: fixed;
-  right: 40px;
-  bottom: 20px;
+  right: 2%;
+  bottom: 2%;
 `;
 const Whiteboard = styled.div<{ isChecked: boolean }>`
   display: ${(props) => (props.isChecked ? 'fixed' : 'none')};
