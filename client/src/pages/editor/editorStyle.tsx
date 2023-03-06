@@ -111,7 +111,6 @@ text-shadow: 1px 1px 2px grey;
 color: #fff;
 // font-size: 25px;
 font-size: 1.5em;
-// font-weight: bold;
 width: 100%;
 display: flex;
 flex-direction : row;
@@ -120,7 +119,6 @@ overflow: visible;
 min-height: 100%;
 display: flex,
 justify-content: space-between,
-// word-break: break-all;
 text-align: center;
 // border: 1px solid lightgreen;
 padding: 16px;
@@ -290,6 +288,7 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
         sx={{ fontSize: '0.9rem', color: 'rgba(255, 255, 255, 0.7)' }}
       />
     }
+    sx={{ fontSize: '1.2em' }}
     {...props}
   />
 ))(({ theme }) => ({
@@ -303,6 +302,17 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
     marginLeft: theme.spacing(1),
   },
 }));
+
+const accordionDetailStyle = {
+  fontSize: '1.05em',
+};
+
+const accordionItemStyle = {
+  color: 'papayawhip',
+  fontFamily: 'Cascadia Code, Pretendard-Regular',
+  textAlign: 'left',
+  fontSize: '1.05em',
+};
 
 /* Drawer setting */
 const leftDrawerWidth = 500;
@@ -395,6 +405,8 @@ export {
   MaterialUISwitch,
   AccordionSummary,
   Accordion,
+  accordionDetailStyle,
+  accordionItemStyle,
   buttonTheme,
   Main,
   AppBar,
