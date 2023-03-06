@@ -15,7 +15,7 @@ export default function SimpleZoom(props: SimpleZoomProps) {
           <Zoom
             in={checked}
             style={{
-              transitionDelay: checked ? `${100 * (index + 1)}ms` : '0ms',
+              transitionDelay: checked ? `${60 * (index + 1)}ms` : '0ms',
             }}
             key={item}
           >

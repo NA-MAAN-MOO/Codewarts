@@ -53,16 +53,17 @@ const BgmPlayer = () => {
     player.current?.audio?.current?.pause();
   };
   useEffect(playerPlay, [userBgmState]);
+  const [checked, setChecked] = useState(false);
 
   const AudioPlayerToggle = (
-    <div style={{ width: '20%', height: '10%' }}>
+    <div style={{ width: '20%', height: '10%', zIndex: `${checked}` }}>
       <AudioPlayer
         showSkipControls
         showJumpControls={false}
         style={{ minWidth: '300px' }}
         onClickNext={onClickNext}
         onClickPrevious={onClickPrev}
-        // customProgressBarSection={[]}
+        customProgressBarSection={[]}
         ref={player}
         loop={true}
         volume={0.3}
@@ -72,8 +73,6 @@ const BgmPlayer = () => {
     </div>
   );
 
-  const [checked, setChecked] = useState(false);
-
   const handleChange = () => {
     setChecked((prev) => !prev);
   };
@@ -81,18 +80,25 @@ const BgmPlayer = () => {
   return (
     <div
       style={{
-        padding: '10px',
+        padding: '4px',
         gap: '10px',
         display: 'flex',
         position: 'absolute',
-        top: '0',
+        bottom: '0%',
         left: '0',
-        zIndex: '99',
       }}
     >
-      <Fab onClick={handleChange} size="small" color="primary" aria-label="add">
-        <AudiotrackIcon />
-      </Fab>
+      <div>
+        <div style={{ height: '35%' }}></div>
+        <Fab
+          onClick={handleChange}
+          size="small"
+          color="primary"
+          aria-label="add"
+        >
+          <AudiotrackIcon />
+        </Fab>
+      </div>
       <Fade in={checked}>{AudioPlayerToggle}</Fade>
     </div>
   );
