@@ -179,6 +179,7 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
           this.scene.player.touching = this.scene.player.touching.filter(
             (button: any) => button !== this
           );
+          //FIXME: destroy 잘 안되는 경우 찾기
           this.buttonEditor.destroy();
         }
       },
