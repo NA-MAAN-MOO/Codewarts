@@ -8,6 +8,7 @@ import RankingHeader from 'components/whiteboard/RankingHeader';
 import MainField from 'components/whiteboard/MainField';
 import RankingList from 'components/whiteboard/RankingList';
 import { useSelector } from 'react-redux';
+import 'animate.css';
 
 const APPLICATION_DB_URL =
   process.env.REACT_APP_DB_URL || 'http://localhost:3003';
@@ -52,7 +53,10 @@ function Whiteboard() {
   return (
     <>
       <Background>
-        <Box sx={{ display: 'flex' }}>
+        <Box
+          sx={{ display: 'flex', animationDuration: '0.8s' }}
+          className="animate__animated animate__zoomIn"
+        >
           <RankingHeader />
 
           <RankingList
