@@ -66,7 +66,11 @@ function Whiteboard() {
     <>
       <Background>
         <Box
-          sx={{ display: 'flex', animationDuration: '0.8s' }}
+          sx={{
+            display: 'flex',
+            animationDuration: '0.8s',
+            // background: 'darkred',
+          }}
           className="animate__animated animate__zoomIn"
         >
           <RankingHeader />

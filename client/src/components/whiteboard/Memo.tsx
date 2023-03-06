@@ -126,7 +126,7 @@ function Memo(props: any) {
           zIndex: isDragging ? maxZIndex : ownZIndex,
         }}
       >
-        <CardContent sx={{ fontSize: '0.9em', color: 'gray' }}>
+        <CardContent sx={{ fontSize: '1.0em', color: 'gray' }}>
           <div id="draggable-div" style={{ height: '30px' }}>
             <span>
               [{memo.date}] &nbsp; {memo.authorNickname}
@@ -178,7 +178,7 @@ const MemoContent = styled.textarea`
   padding: 5px;
   margin-bottom: 20px;
   font-family: 'Noto Sans KR';
-  font-size: 1.1em;
+  font-size: 1.4em;
 `;
 
 // const MemoWrapper = styled.div`
