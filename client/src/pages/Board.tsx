@@ -1,20 +1,31 @@
 import React, { useRef, useEffect, useState } from 'react';
-import io from 'socket.io-client';
+import io, { Socket } from 'socket.io-client';
 import './styles/board.css';
 import styled from 'styled-components';
 import { CirclePicker } from 'react-color';
 import ColorLensIcon from '@mui/icons-material/ColorLens';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import FloatingButton from 'components/FloatingButton';
+import { useSelector } from 'react-redux';
+import { RootState } from 'stores';
 
 const APPLICATION_BOARD_URL =
   process.env.REACT_APP_SERVER_URL || 'http://localhost:3004';
 
-const Board = (props: any) => {
-  const { handleSocket } = props;
+type BoardType = {
+  roomKey: string;
+  handleSocket?: (soc: Socket) => void;
+  handleBoard?: () => void;
+};
+
+const Board = (props: BoardType) => {
+  const { handleSocket, handleBoard } = props;
   const canvasRef = useRef(null);
   const colorsRef = useRef(null);
-  const socketRef: any = useRef();
-
+  const socketRef = useRef<Socket>();
+  const { isChecked } = useSelector((state: RootState) => {
+    return { isChecked: state.board.isChecked };
+  });
   useEffect(() => {
     // getContext() method returns a drawing context on the canvas
 
@@ -33,6 +44,8 @@ const Board = (props: any) => {
       y: 0,
     };
 
+    console.log('초기화', current);
+
     const removeCanvas = () => {
       canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
     };
@@ -41,6 +54,7 @@ const Board = (props: any) => {
 
     // helper that will update the current color
     const onColorUpdate = (e: any) => {
+      console.log(e);
       let arr = e.target.style.MozBoxShadow.split(' ');
       current.color = arr[arr.length - 1];
     };
@@ -75,6 +89,7 @@ const Board = (props: any) => {
       const w = canvas.width;
       const h = canvas.height;
 
+      if (!socketRef.current) return;
       socketRef.current.emit('drawing', {
         roomKey: props.roomKey,
         x0: x0 / w,
@@ -178,16 +193,17 @@ const Board = (props: any) => {
     socketRef.current = io(`${APPLICATION_BOARD_URL}`, {
       path: '/board/',
     });
-    handleSocket(socketRef.current);
+    if (!!handleSocket) {
+      handleSocket(socketRef.current);
+    }
     socketRef.current.emit('joinRoom', props.roomKey);
     socketRef.current.on('drawing', onDrawingEvent);
   }, []);
 
   // pallete is go
   let [toggle, setToggle] = useState(false);
-  const hadleToggle = () => {
+  const handleToggle = () => {
     setToggle(!toggle);
-    console.log(toggle);
   };
 
   const colors = [
@@ -213,49 +229,69 @@ const Board = (props: any) => {
   ];
   const circleSize = 35;
   const circleSpacing = 10;
-  let [palleteWidth, setPalleteWidth] = useState(
-    Math.ceil(
-      (colors.length * (circleSize + circleSpacing)) / window.innerHeight
-    ) *
-      (circleSize + circleSpacing)
-  );
-  const updateWidth = () => {
-    setPalleteWidth(
-      Math.ceil(
-        (colors.length * (circleSize + circleSpacing)) / window.innerHeight
-      ) *
-        (circleSize + circleSpacing)
-    );
-  };
+  // let [palleteWidth, setPalleteWidth] = useState(
+  //   Math.ceil(
+  //     (colors.length * (circleSize + circleSpacing)) / window.innerHeight
+  //   ) *
+  //     (circleSize + circleSpacing)
+  // );
+  // console.log(palleteWidth);
+  // const updateWidth = () => {
+  //   setPalleteWidth(
+  //     Math.ceil(
+  //       (colors.length * (circleSize + circleSpacing)) / window.innerHeight
+  //     ) *
+  //       (circleSize + circleSpacing)
+  //   );
+  // };
 
-  useEffect(() => {
-    window.addEventListener('resize', updateWidth, false);
-  }, []);
+  // useEffect(() => {
+  //   window.addEventListener('resize', updateWidth, false);
+  // }, []);
 
   return (
-    <ColorWrapper ref={colorsRef} className="colors">
-      <canvas ref={canvasRef} className="whiteboard" />
+    <>
+      <Whiteboard isChecked={isChecked}>
+        <ColorWrapper ref={colorsRef} className="colors">
+          <canvas ref={canvasRef} className="whiteboard" />
+        </ColorWrapper>
+      </Whiteboard>
+
       <PalleteWrapper>
-        <CircleWrapper palleteWidth={palleteWidth} toggle={toggle}>
-          <CirclePicker
-            width="auto"
-            colors={colors}
-            circleSpacing={circleSpacing}
-            circleSize={circleSize}
-            className="color"
+        <FloatingButton
+          variant="contained"
+          // color="primary"
+          size="small"
+          onClick={handleBoard}
+        >
+          {isChecked ? '화이트보드 끄기' : '화이트보드 켜기'}
+        </FloatingButton>
+        <InvisibleWrapper isChecked={isChecked}>
+          <DeleteForeverIcon
+            className="palleteBtn removeBtn"
+            sx={{ fontSize: 40 }}
           />
-        </CircleWrapper>
-        <ColorLensIcon
-          onClick={hadleToggle}
-          className="palleteBtn"
-          sx={{ fontSize: 40 }}
-        />
-        <DeleteForeverIcon
-          className="palleteBtn removeBtn"
-          sx={{ fontSize: 40 }}
-        />
+          <ColorLensIcon
+            onClick={handleToggle}
+            className="palleteBtn"
+            sx={{ fontSize: 40 }}
+          />
+          <CircleWrapper
+            toggle={toggle}
+            palleteWidth={colors.length * (circleSize + circleSpacing)}
+            circleSize={circleSize}
+          >
+            <CirclePicker
+              width="auto"
+              colors={colors}
+              circleSpacing={circleSpacing}
+              circleSize={circleSize}
+              className="color"
+            />
+          </CircleWrapper>
+        </InvisibleWrapper>
       </PalleteWrapper>
-    </ColorWrapper>
+    </>
   );
 };
 
@@ -268,14 +304,37 @@ const ColorWrapper = styled.div`
 `;
 const PalleteWrapper = styled.div`
   display: flex;
-  flex-flow: row wrap;
-  align-items: flex-end;
+  align-items: center;
+  gap: 10px;
+  position: fixed;
+  left: 2%;
+  bottom: 2%;
+  max-width: calc(100vw - 100px);
+`;
+const CircleWrapper = styled.div<{
+  toggle: boolean;
+  circleSize: number;
+  palleteWidth: number;
+}>`
+  display: flex;
+  // display: ${(props) => (props.toggle ? 'flex' : 'none')};
+  // width: ${(props) => (props.toggle ? `${props.palleteWidth}px` : 0)};
+  height: ${(props) => `${props.circleSize}px`};
+  opacity: ${(props) => (props.toggle ? 1 : 0)};
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  transform: ${(props) =>
+    props.toggle ? 'translateY(0)' : 'translateY(100px)'};
+`;
+const Whiteboard = styled.div<{ isChecked: boolean }>`
+  display: ${(props) => (props.isChecked ? 'fixed' : 'none')};
+  overflow: ${(props) => (props.isChecked ? 'hidden' : 'visible')};
+  width: 100%;
   height: 100%;
 `;
-const CircleWrapper = styled.div<{ toggle: boolean; palleteWidth: number }>`
-  display: flex;
-  height: 100%;
-  width: ${(props) => (props.toggle ? `${props.palleteWidth}px` : '0%')};
-  overflow: hidden;
-  transition: all 1s;
+
+const InvisibleWrapper = styled.div<{ isChecked: boolean }>`
+  display: ${(props) => (props.isChecked ? 'flex' : 'none')};
+  align-items: center;
+  gap: 10px;
 `;

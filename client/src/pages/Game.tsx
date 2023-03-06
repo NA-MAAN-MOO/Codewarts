@@ -50,9 +50,11 @@ const Game = (props: VoiceProp) => {
         >
           에디터 키기
         </Button> */}
-        <FloatingButton onClick={handleMainClick}>
-          첫 화면으로 가기
-        </FloatingButton>
+        {status === GAME && (
+          <FloatingButton onClick={handleMainClick}>
+            첫 화면으로 가기
+          </FloatingButton>
+        )}
       </BtnDiv>
     </BackgroundDiv>
   );
@@ -72,6 +74,6 @@ const BtnDiv = styled.div`
   justify-content: center;
   gap: 10px;
   position: absolute;
-  bottom: 30px;
-  right: 25px;
+  top: 2%;
+  right: 2%;
 `;
