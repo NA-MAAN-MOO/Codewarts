@@ -20,12 +20,12 @@
 }
 
 .color {
-  transition: all 1s;
+  /* transition: all 1s; */
   display: flex;
-  flex-flow: column wrap;
+  /* flex-flow: column wrap; */
   width: fit-content;
-  height: 100%;
-  justify-content: flex-end;
+  /* height: 100%; */
+  /* justify-content: flex-end; */
 }
 
 .palleteBtn {

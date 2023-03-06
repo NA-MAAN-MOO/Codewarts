@@ -23,7 +23,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import PeopleIcon from '@mui/icons-material/People';
 import Board from './Board';
 import { toggleWhiteboard } from 'stores/whiteboardSlice';
-import FloatingButton from 'components/FloatingButton';
 import QuizIcon from '@mui/icons-material/Quiz';
 import ToggleButton from '@mui/material/ToggleButton';
 
@@ -198,18 +197,14 @@ const Editor = (props: VoiceProp & YjsProp) => {
           </Box>
         </ThemeProvider>
       </EditorDiv>
-      <Whiteboard isChecked={isChecked}>
-        <Board roomKey={editorName} handleSocket={handleSocket} />
-      </Whiteboard>
+      {/* <Whiteboard isChecked={isChecked}> */}
+      <Board
+        roomKey={editorName}
+        handleSocket={handleSocket}
+        handleBoard={handleBoard}
+      />
+      {/* </Whiteboard> */}
       <FixedBtnDiv>
-        <FloatingButton
-          variant="contained"
-          // color="primary"
-          size="small"
-          onClick={handleBoard}
-        >
-          {onWhiteBoard}
-        </FloatingButton>
         <ThemeProvider theme={darkTheme}>
           <ToggleButton
             value="open"
@@ -266,10 +261,4 @@ const FixedBtnDiv = styled.div`
   position: fixed;
   right: 2%;
   bottom: 2%;
-`;
-const Whiteboard = styled.div<{ isChecked: boolean }>`
-  display: ${(props) => (props.isChecked ? 'fixed' : 'none')};
-  overflow: ${(props) => (props.isChecked ? 'hidden' : 'visible')};
-  width: 100%;
-  height: 100%;
 `;
