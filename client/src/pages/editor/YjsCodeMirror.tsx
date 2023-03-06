@@ -13,7 +13,7 @@ import { WebsocketProvider } from 'y-websocket';
 /* codemirror */
 import { basicSetup } from 'codemirror';
 import { python } from '@codemirror/lang-python';
-import { indentUnit } from '@codemirror/language';
+import { indentUnit, foldGutter } from '@codemirror/language';
 import { EditorState } from '@codemirror/state';
 import { keymap, EditorView, placeholder } from '@codemirror/view';
 import {
@@ -168,7 +168,7 @@ function YjsCodeMirror(props: YjsProp) {
       },
       '.cm-content': {
         fontFamily: 'Cascadia Code, Pretendard-Regular',
-        fontSize: 'large',
+        fontSize: '1.3em',
       },
       '.cm-gutter': {
         // minHeight: '50%',
@@ -194,7 +194,7 @@ function YjsCodeMirror(props: YjsProp) {
         editorThemeMode,
         basicThemeSet,
         indentUnit.of('\t'),
-        // foldGutter(),
+        foldGutter(),
         placeholder(editorPlaceHolder),
       ],
     });
