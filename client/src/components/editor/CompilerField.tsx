@@ -5,6 +5,8 @@ import { AlgoTextField, Item } from '../../../src/pages/editor/editorStyle';
 function CompilerField(props) {
   const { inputStdin, cpuTime, memory, compileOutput } = props;
 
+  const timeMemoryFieldStyle = { p: 0 };
+
   return (
     <Grid container spacing={1.5}>
       <Grid xs>
@@ -14,7 +16,7 @@ function CompilerField(props) {
             label="INPUT"
             multiline
             fullWidth
-            rows={8}
+            rows={6}
             variant="standard"
             inputRef={inputStdin}
             InputLabelProps={{ shrink: true }}
@@ -28,7 +30,7 @@ function CompilerField(props) {
       <Grid xs>
         <Item>
           <Grid container spacing={1.5}>
-            <Grid xs sx={{ p: 0 }}>
+            <Grid xs sx={timeMemoryFieldStyle}>
               <AlgoTextField
                 id="standard-read-only-input"
                 variant="standard"
@@ -44,7 +46,7 @@ function CompilerField(props) {
               />
             </Grid>
 
-            <Grid xs sx={{ p: 0 }}>
+            <Grid xs sx={timeMemoryFieldStyle}>
               <AlgoTextField
                 id="standard-read-only-input"
                 variant="standard"
@@ -65,7 +67,7 @@ function CompilerField(props) {
             label="OUTPUT"
             multiline
             fullWidth
-            rows={6}
+            rows={4}
             variant="standard"
             InputProps={{
               readOnly: true,

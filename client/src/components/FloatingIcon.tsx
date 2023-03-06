@@ -7,6 +7,7 @@ export default function FloatingIcon({
   icon: Icon,
   top,
   right,
+  bottom,
   handleClick,
 }: {
   icon: ComponentType;
@@ -17,7 +18,14 @@ export default function FloatingIcon({
   top?: string;
 }) {
   return (
-    <Box sx={{ position: 'absolute', right: { right }, top: { top } }}>
+    <Box
+      sx={{
+        position: 'absolute',
+        bottom: { bottom },
+        right: { right },
+        top: { top },
+      }}
+    >
       <Fab
         color="secondary"
         onClick={handleClick}

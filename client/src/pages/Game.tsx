@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Voice from 'pages/Voice';
 import { handleScene } from 'lib/phaserLib';
 import { GAME_STATUS } from 'utils/Constants';
@@ -14,6 +14,7 @@ import {
 import { getPhaserSocket } from 'network/phaserSocket';
 import Whiteboard from './Whiteboard';
 import { RootState } from 'stores';
+import { getbojInfos } from 'stores/rankSlice';
 
 const showSuccessToast = (editorName: string, problemId: number) => {
   notifySuccess(editorName, problemId);
@@ -22,7 +23,6 @@ const showSuccessToast = (editorName: string, problemId: number) => {
 // const emojies = ['🤣', '🤪',"🎉", '😡', '🤯', '💪', '🖐', '😭', '💩', '😆',"💯",];
 
 const Game = (props: VoiceProp) => {
-  const dispatch = useDispatch();
   const mySocket = getPhaserSocket();
   const { START, WHITEBOARD, GAME, EDITOR } = GAME_STATUS;
   const { status, editorName, volMuteInfo, micMuteInfo } = useSelector(
@@ -40,7 +40,6 @@ const Game = (props: VoiceProp) => {
     <BackgroundDiv>
       {status === WHITEBOARD && <Whiteboard />}
       <Voice {...props} />
-      <ToastContainer />
       <BtnDiv>
         {/* <Button
           type="button"
@@ -51,9 +50,11 @@ const Game = (props: VoiceProp) => {
         >
           에디터 키기
         </Button> */}
-        <FloatingButton onClick={handleMainClick}>
-          첫 화면으로 가기
-        </FloatingButton>
+        {status === GAME && (
+          <FloatingButton onClick={handleMainClick}>
+            첫 화면으로 가기
+          </FloatingButton>
+        )}
       </BtnDiv>
     </BackgroundDiv>
   );
@@ -73,6 +74,6 @@ const BtnDiv = styled.div`
   justify-content: center;
   gap: 10px;
   position: absolute;
-  bottom: 30px;
-  right: 25px;
+  top: 2%;
+  right: 2%;
 `;

@@ -30,8 +30,8 @@ const GameVoice = (props: GameVoiceType & { resetSession: () => void }) => {
       <FloatingIcon
         icon={PeopleIcon}
         handleClick={() => handleDrawer()}
-        top="1%"
-        right="1%"
+        bottom="2%"
+        right="2%"
       />
       <Drawer anchor="right" isOpen={drawerOpen} handleDrawer={handleDrawer}>
         <CurrentPlayer handleDrawer={handleDrawer} {...props} />

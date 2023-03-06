@@ -5,6 +5,10 @@ import Memo from '../models/Memo';
 
 import axios, { AxiosResponse } from 'axios';
 
+// declare module 'node-cron';
+const cron = require('node-cron');
+// import cron from 'node-cron';
+
 interface ResponseType {
   nickname: string;
   id: string;
@@ -15,6 +19,15 @@ interface ResponseType {
 }
 
 let response: ResponseType[] = [];
+const task = cron.schedule('*/5 * * * *', async () => {
+  await getUsersBojInfo();
+  console.log('가져온 랭킹 수', response.length);
+});
+
+// const task = cron.schedule('30 18 * * *', async () => {
+//   await getUsersBojInfo();
+//   console.log('가져온 랭킹 수', response.length);
+// });
 
 /* Get each user's data */
 const getEachUserBojInfo = async (bojId: string) => {
@@ -23,6 +36,7 @@ const getEachUserBojInfo = async (bojId: string) => {
       `https://solved.ac/api/v3/user/show?handle=${bojId}`
     );
   } catch (e) {
+    console.log(e);
     return false;
   }
 };
@@ -31,7 +45,6 @@ const getEachUserBojInfo = async (bojId: string) => {
 const regenerateData = async (datum: any) => {
   let result: ResponseType[] = [];
   for await (const data of datum) {
-    // console.log(data);
     const eachData: false | AxiosResponse<any, any> = await getEachUserBojInfo(
       data.userBojId
     );
@@ -47,12 +60,18 @@ const regenerateData = async (datum: any) => {
       });
     }
   }
+  /* Error handling (too many requests) */
+  if (result.length === 0) {
+    console.log(`Ranking Update Failed`);
+    return;
+  }
+  // return result;
   response = [...result];
 };
 
 /* Get all user's number of solved problems through boj ids in DB */
 // FIXME: node cron
-export const getUsersBojInfo = async (req: Request, res: Response) => {
+export const getUsersBojInfo = async () => {
   const datum = await User.find({});
 
   await regenerateData(datum);
@@ -63,12 +82,12 @@ export const getUsersBojInfo = async (req: Request, res: Response) => {
   }
 
   /* Send response */
-  if (response.length === 0) {
-    res.status(404).send('No valid Boj Users Id');
-  } else {
-    // res.status(200).send(response);
-    res.status(200).send('Call sendUsersBojInfo() method to get infos!');
-  }
+  // if (response.length === 0) {
+  //   res.status(404).send('No valid Boj Users Id');
+  // } else {
+  //   // res.status(200).send(response);
+  //   res.status(200).send('Call sendUsersBojInfo() method to get infos!');
+  // }
   // console.log(response, 'getUsersBojInfo');
 };
 

@@ -23,8 +23,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import PeopleIcon from '@mui/icons-material/People';
 import Board from './Board';
 import { toggleWhiteboard } from 'stores/whiteboardSlice';
-import FloatingButton from 'components/FloatingButton';
 import QuizIcon from '@mui/icons-material/Quiz';
+import ToggleButton from '@mui/material/ToggleButton';
 
 const rightDrawerWidth = 350;
 
@@ -102,12 +102,8 @@ const Editor = (props: VoiceProp & YjsProp) => {
     setLeftOpen(false);
   };
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
+  const handleDrawer = () => {
+    setOpen(!open);
   };
 
   const handleExit = () => {
@@ -168,15 +164,6 @@ const Editor = (props: VoiceProp & YjsProp) => {
                     style={{ color: 'white', cursor: 'pointer' }}
                     onClick={handleExit}
                   />
-                  <IconButton
-                    color="secondary"
-                    aria-label="open drawer"
-                    edge="end"
-                    onClick={handleDrawerOpen}
-                    sx={{ ...(open && { display: 'none' }) }}
-                  >
-                    <PeopleIcon />
-                  </IconButton>
                 </BtnDiv>
               </Toolbar>
             </AppBar>
@@ -205,23 +192,32 @@ const Editor = (props: VoiceProp & YjsProp) => {
               anchor="right"
               open={open}
             >
-              <Voice handleDrawerClose={handleDrawerClose} {...props} />
+              <Voice {...props} />
             </Drawer>
           </Box>
         </ThemeProvider>
       </EditorDiv>
-      <Whiteboard isChecked={isChecked}>
-        <Board roomKey={editorName} handleSocket={handleSocket} />
-      </Whiteboard>
+      {/* <Whiteboard isChecked={isChecked}> */}
+      <Board
+        roomKey={editorName}
+        handleSocket={handleSocket}
+        handleBoard={handleBoard}
+      />
+      {/* </Whiteboard> */}
       <FixedBtnDiv>
-        <FloatingButton
-          variant="contained"
-          // color="primary"
-          size="small"
-          onClick={handleBoard}
-        >
-          {onWhiteBoard}
-        </FloatingButton>
+        <ThemeProvider theme={darkTheme}>
+          <ToggleButton
+            value="open"
+            selected={open}
+            color="secondary"
+            onClick={handleDrawer}
+            sx={{
+              borderRadius: '50%',
+            }}
+          >
+            <PeopleIcon />
+          </ToggleButton>
+        </ThemeProvider>
       </FixedBtnDiv>
     </>
   );
@@ -263,12 +259,6 @@ const FixedBtnDiv = styled.div`
   justify-content: center;
   gap: 10px;
   position: fixed;
-  right: 40px;
-  bottom: 20px;
-`;
-const Whiteboard = styled.div<{ isChecked: boolean }>`
-  display: ${(props) => (props.isChecked ? 'fixed' : 'none')};
-  overflow: ${(props) => (props.isChecked ? 'hidden' : 'visible')};
-  width: 100%;
-  height: 100%;
+  right: 2%;
+  bottom: 2%;
 `;

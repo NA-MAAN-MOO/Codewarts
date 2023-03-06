@@ -40,7 +40,7 @@ const APPLICATION_DB_URL =
 
 export const getbojInfos = createAsyncThunk('rank/getbojInfos', async () => {
   try {
-    const tryGetBojInfos = await axios.get(APPLICATION_DB_URL + '/boj-infos');
+    // const tryGetBojInfos = await axios.get(APPLICATION_DB_URL + '/boj-infos');
     const response = await axios.get(APPLICATION_DB_URL + '/user-rank');
     // const bojInfos = await regenerateData(response.data); //.data 붙이고 await 붙이는 거 중요함 ...
     return response.data;

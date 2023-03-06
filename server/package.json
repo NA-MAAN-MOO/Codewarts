@@ -22,6 +22,7 @@
     "mongodb": "5.0",
     "mongoose": "^6.9.0",
     "mongoose-paginate-v2": "^1.7.1",
+    "node-cron": "^3.0.2",
     "openvidu-node-client": "^2.25.0",
     "peerjs": "^1.4.7",
     "phaser": "^3.55.2",
