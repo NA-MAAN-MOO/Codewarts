@@ -170,6 +170,11 @@ export default class Lobby extends Phaser.Scene {
       this.player.inputKeys['down'].enabled = false;
     });
 
+    this.game.events.on('focus', () => {
+      this.player.inputKeys['up'].enabled = false;
+      this.player.inputKeys['down'].enabled = false;
+    });
+
     createCharacterAnims(this.playerTexture, this.player.anims);
   }
 
