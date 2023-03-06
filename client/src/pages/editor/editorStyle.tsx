@@ -110,7 +110,7 @@ const ProbTitleDiv = styledc.div`
 text-shadow: 1px 1px 2px grey;
 color: #fff;
 // font-size: 25px;
-font-size: 1.5em;
+font-size: 1.7rem;
 width: 100%;
 display: flex;
 flex-direction : row;
@@ -149,6 +149,11 @@ const AlgoTextField = styled((props: TextFieldProps) => (
   '& input': {
     fontFamily: 'Cascadia Code, Pretendard-Regular',
     // color: 'papayawhip',
+  },
+  // '문제 번호로 바로가기' 라벨
+  '.MuiFormLabel-root': {
+    fontSize: '1.1rem',
+    marginTop: '-2.5px',
   },
   '& .MuiInputBase-sizeSmall': {
     // margin: '10px 10px 10px 10px',
