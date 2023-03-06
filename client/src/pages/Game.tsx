@@ -24,9 +24,10 @@ const showSuccessToast = (editorName: string, problemId: number) => {
 
 const Game = (props: VoiceProp) => {
   const appDispatch = useAppDispatch();
+
   useEffect(() => {
     appDispatch(getbojInfos());
-  });
+  }, []);
 
   const mySocket = getPhaserSocket();
   const { START, WHITEBOARD, GAME, EDITOR } = GAME_STATUS;
