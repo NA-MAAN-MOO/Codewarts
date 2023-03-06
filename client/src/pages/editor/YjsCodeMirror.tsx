@@ -217,11 +217,11 @@ function YjsCodeMirror(props: YjsProp) {
         <CssBaseline />
         <Drawer
           sx={{
-            width: leftDrawerWidth + '%',
+            width: leftDrawerWidth,
             flexShrink: 0,
             // border: '1px solid green',
             '& .MuiDrawer-paper': {
-              width: leftDrawerWidth - 1.5 + '%',
+              width: leftDrawerWidth,
               boxSizing: 'border-box',
             },
           }}
