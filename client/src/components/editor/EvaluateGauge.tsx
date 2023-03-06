@@ -7,7 +7,7 @@ const GaugeBar = ({ value, min, max, label, shining, totalCases }) => {
   const barStyle = {
     width: barWidth,
     borderRadius: '5px',
-    transition: 'width 0.4s border 0.4s',
+    transition: 'width 0.7s',
     animationIterationCount: totalCases,
   };
   return (
