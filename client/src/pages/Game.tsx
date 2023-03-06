@@ -46,7 +46,6 @@ const Game = (props: VoiceProp) => {
     <BackgroundDiv>
       {status === WHITEBOARD && <Whiteboard />}
       <Voice {...props} />
-      <ToastContainer />
       <BtnDiv>
         {/* <Button
           type="button"
