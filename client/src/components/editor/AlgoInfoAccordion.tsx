@@ -6,6 +6,7 @@ import {
   accordionDetailStyle,
   accordionSampleStyle,
   accordionSampleTitle,
+  accoSampleTitleStyle,
 } from '../../../src/pages/editor/editorStyle';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Tooltip from '@mui/material/Tooltip';
@@ -68,15 +69,17 @@ function AlgoInfoAccordion(props) {
                       return (
                         <Grid xs key={key}>
                           <Item sx={accordionSampleStyle}>
-                            <span style={accordionSampleTitle}>
-                              예제{key} INPUT
-                            </span>
-                            <Tooltip title="INPUT 칸으로 복사하기" arrow>
-                              <InputIcon
-                                //@ts-ignore
-                                onClick={() => copyToInput(key)}
-                              />
-                            </Tooltip>
+                            <div style={accoSampleTitleStyle}>
+                              <span style={accordionSampleTitle}>
+                                예제{key} INPUT
+                              </span>
+                              <Tooltip title="INPUT 칸으로 복사하기" arrow>
+                                <InputIcon
+                                  //@ts-ignore
+                                  onClick={() => copyToInput(key)}
+                                />
+                              </Tooltip>
+                            </div>
                             <div
                               dangerouslySetInnerHTML={{
                                 __html: bojProbFullData?.samples?.[

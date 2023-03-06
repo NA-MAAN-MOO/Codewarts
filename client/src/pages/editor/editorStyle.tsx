@@ -313,6 +313,7 @@ const accordionDetailStyle = {
 /* 왼쪽 서랍 아코디언 예제 제목*/
 const accordionSampleTitle = {
   color: 'rgba(255, 255, 255, 0.7)',
+  marginRight: '7px',
 };
 
 /* 왼쪽 서랍 아코디언 예제 내용 */
@@ -321,6 +322,11 @@ const accordionSampleStyle = {
   fontFamily: 'Cascadia Code, Pretendard-Regular',
   textAlign: 'left',
   fontSize: '1.2em',
+};
+
+const accoSampleTitleStyle = {
+  display: 'flex',
+  alignItems: 'center',
 };
 
 /* Drawer setting */
@@ -417,6 +423,7 @@ export {
   accordionDetailStyle,
   accordionSampleStyle,
   accordionSampleTitle,
+  accoSampleTitleStyle,
   buttonTheme,
   Main,
   AppBar,
