@@ -25,6 +25,7 @@ const FloatingButton = ({ ...props }) => {
         '&.MuiButton-outlined': {
           backgroundColor: 'white',
           color: 'black',
+          border: 'black',
         },
       }}
       {...props}
