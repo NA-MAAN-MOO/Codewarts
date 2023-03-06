@@ -267,6 +267,7 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
+/* 왼쪽 서랍 문제 아코디언 */
 const Accordion = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters elevation={0} {...props} />
 ))(({ theme }) => ({
@@ -281,6 +282,7 @@ const Accordion = styled((props: AccordionProps) => (
   },
 }));
 
+/* 왼쪽 서랍 아코디언 소제목 */
 const AccordionSummary = styled((props: AccordionSummaryProps) => (
   <MuiAccordionSummary
     expandIcon={
@@ -288,7 +290,7 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
         sx={{ fontSize: '0.9rem', color: 'rgba(255, 255, 255, 0.7)' }}
       />
     }
-    sx={{ fontSize: '1.2em' }}
+    sx={{ fontSize: '1.4em' }}
     {...props}
   />
 ))(({ theme }) => ({
@@ -303,15 +305,22 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
   },
 }));
 
+/* 왼쪽 서랍 아코디언 내용 */
 const accordionDetailStyle = {
-  fontSize: '1.05em',
+  fontSize: '1.2em',
 };
 
-const accordionItemStyle = {
+/* 왼쪽 서랍 아코디언 예제 제목*/
+const accordionSampleTitle = {
+  color: 'rgba(255, 255, 255, 0.7)',
+};
+
+/* 왼쪽 서랍 아코디언 예제 내용 */
+const accordionSampleStyle = {
   color: 'papayawhip',
   fontFamily: 'Cascadia Code, Pretendard-Regular',
   textAlign: 'left',
-  fontSize: '1.05em',
+  fontSize: '1.2em',
 };
 
 /* Drawer setting */
@@ -406,7 +415,8 @@ export {
   AccordionSummary,
   Accordion,
   accordionDetailStyle,
-  accordionItemStyle,
+  accordionSampleStyle,
+  accordionSampleTitle,
   buttonTheme,
   Main,
   AppBar,

@@ -17,13 +17,3 @@
   opacity: 0.6;
   transition-delay: 0s;
 }
-
-/* 예제 타이틀 */
-.samples-title {
-  color: rgba(255, 255, 255, 0.7);
-  /* text-shadow: 1px 1px 2px #ededed; */
-}
-
-.sample-content {
-  font-family: 'Cascadia Code', 'Pretendard-Regular';
-}
