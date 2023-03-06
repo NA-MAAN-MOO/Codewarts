@@ -58,7 +58,11 @@ export default function RankingTable(props: any) {
         </TableHead>
         <TableBody>
           {bojInfos.map((info: InfoType, index: number) => (
-            <RankingTableContent index={index} info={info} />
+            <RankingTableContent
+              index={index}
+              info={info}
+              key={info.nickname}
+            />
           ))}
         </TableBody>
       </Table>

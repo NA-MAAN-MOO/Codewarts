@@ -68,6 +68,8 @@ export default class Background extends Phaser.Scene {
       'assets/lobby/green.json'
     );
 
+    this.load.image('howTo', 'assets/lobby/how_to.png');
+
     /*** Main Scene(classroom) ***/
     /* Map */
     this.load.image('room_map', 'assets/room/room_map.png');
