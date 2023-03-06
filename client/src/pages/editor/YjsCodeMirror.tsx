@@ -13,7 +13,7 @@ import { WebsocketProvider } from 'y-websocket';
 /* codemirror */
 import { basicSetup } from 'codemirror';
 import { python } from '@codemirror/lang-python';
-import { indentUnit } from '@codemirror/language';
+import { indentUnit, foldGutter } from '@codemirror/language';
 import { EditorState } from '@codemirror/state';
 import { keymap, EditorView, placeholder } from '@codemirror/view';
 import {
@@ -34,8 +34,9 @@ import {
   buttonTheme,
   Main,
   DrawerHeader,
-  leftDrawerWidth,
+  leftDrawerCSS,
   AlgoInputWrap,
+  editorThemeCSS,
 } from './editorStyle';
 import 'styles/fonts.css'; /* FONT */
 import { ThemeProvider, useTheme } from '@mui/material/styles';
@@ -147,37 +148,7 @@ function YjsCodeMirror(props: YjsProp) {
     // handleProvider(provider);
     /* editor theme 설정 */
     if (!provider || !undoManager) return;
-    let basicThemeSet = EditorView.theme({
-      '&': {
-        borderRadius: '.5em', // '.cm-gutters'와 같이 조절할 것
-        // height: '400px',
-        // maxHeight: '400px',
-        // minHeight: '400px',
-        height: '50vh',
-      },
-      '.cm-editor': {
-        // maxHeight: '50%',
-        // height: '100%',
-      },
-      '.cm-scroller': {
-        overflow: 'auto',
-      },
-      '.cm-content, .cm-gutter': {
-        // height: 'auto',
-        // minHeight: `${400 * 50}%`,
-      },
-      '.cm-content': {
-        fontFamily: 'Cascadia Code, Pretendard-Regular',
-        fontSize: 'large',
-      },
-      '.cm-gutter': {
-        // minHeight: '50%',
-        fontFamily: 'Cascadia Code',
-      },
-      '.cm-gutters': {
-        borderRadius: '.5em',
-      },
-    });
+    let basicThemeSet = EditorView.theme(editorThemeCSS);
 
     const editorPlaceHolder = `def solution():`;
 
@@ -194,7 +165,7 @@ function YjsCodeMirror(props: YjsProp) {
         editorThemeMode,
         basicThemeSet,
         indentUnit.of('\t'),
-        // foldGutter(),
+        foldGutter(),
         placeholder(editorPlaceHolder),
       ],
     });
@@ -216,15 +187,7 @@ function YjsCodeMirror(props: YjsProp) {
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <Drawer
-          sx={{
-            width: leftDrawerWidth + '%',
-            flexShrink: 0,
-            // border: '1px solid green',
-            '& .MuiDrawer-paper': {
-              width: leftDrawerWidth - 1.5 + '%',
-              boxSizing: 'border-box',
-            },
-          }}
+          sx={leftDrawerCSS}
           variant="persistent"
           anchor="left"
           open={leftOpen}
@@ -286,7 +249,6 @@ function YjsCodeMirror(props: YjsProp) {
                 setCpuTime={setCpuTime}
                 inputStdin={inputStdin.current}
               />
-              {/* <SubmitButton bojProblemId={bojProblemId} /> */}
               <EvaluateButton
                 ytext={ytext}
                 bojProblemId={bojProblemId}

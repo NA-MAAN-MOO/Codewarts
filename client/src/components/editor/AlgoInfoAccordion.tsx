@@ -3,6 +3,9 @@ import {
   Item,
   AccordionSummary,
   Accordion,
+  accordionDetailStyle,
+  accordionSampleStyle,
+  accordionSampleTitle,
 } from '../../../src/pages/editor/editorStyle';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Tooltip from '@mui/material/Tooltip';
@@ -18,21 +21,6 @@ function AlgoInfoAccordion(props) {
     inputStdin.current.value = bojProbFullData?.samples?.[key].input;
   };
 
-  const summaryStyle = {
-    fontSize: '1.2em',
-  };
-
-  const detailStyle = {
-    fontSize: '1.05em',
-  };
-
-  const itemStyle = {
-    color: 'papayawhip',
-    fontFamily: 'Cascadia Code, Pretendard-Regular',
-    textAlign: 'left',
-    fontSize: '1.05em',
-  };
-
   return (
     <>
       {bojProbFullData?.prob_desc ? (
@@ -41,11 +29,10 @@ function AlgoInfoAccordion(props) {
             <AccordionSummary
               aria-controls="panel1a-content"
               id="panel1a-header"
-              sx={summaryStyle}
             >
               문제 정보
             </AccordionSummary>
-            <AccordionDetails sx={detailStyle}>
+            <AccordionDetails sx={accordionDetailStyle}>
               <div
                 dangerouslySetInnerHTML={{
                   __html: bojProbFullData?.prob_desc
@@ -71,7 +58,6 @@ function AlgoInfoAccordion(props) {
               <AccordionSummary
                 aria-controls="panel2a-content"
                 id="panel2a-header"
-                sx={summaryStyle}
               >
                 예제
               </AccordionSummary>
@@ -81,8 +67,8 @@ function AlgoInfoAccordion(props) {
                     ([key, value]) => {
                       return (
                         <Grid xs key={key}>
-                          <Item sx={itemStyle}>
-                            <span className="samples-title">
+                          <Item sx={accordionSampleStyle}>
+                            <span style={accordionSampleTitle}>
                               예제{key} INPUT
                             </span>
                             <Tooltip title="INPUT 칸으로 복사하기" arrow>
@@ -98,7 +84,7 @@ function AlgoInfoAccordion(props) {
                                 ].input.replace(/\n/g, '<br>'),
                               }}
                             />
-                            <span className="samples-title">
+                            <span style={accordionSampleTitle}>
                               예제{key} OUTPUT
                             </span>
                             <div
