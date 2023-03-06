@@ -31,7 +31,7 @@ export default function RankingTable(props: any) {
   const myNickname = useSelector((state: RootState) => state.user.playerId);
 
   return (
-    <TableContainer component={Paper} sx={{ height: '74vh' }}>
+    <TableContainer component={Paper} sx={{ height: '76vh' }}>
       <Table
         sx={{ minWidth: '40%', height: 'max-content' }}
         aria-label="sticky table"

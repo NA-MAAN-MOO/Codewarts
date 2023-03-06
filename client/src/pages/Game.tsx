@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Voice from 'pages/Voice';
 import { handleScene } from 'lib/phaserLib';
 import { GAME_STATUS } from 'utils/Constants';
@@ -13,7 +13,8 @@ import {
 } from '../components/editor/toast'; /* toast for event alarm */
 import { getPhaserSocket } from 'network/phaserSocket';
 import Whiteboard from './Whiteboard';
-import { RootState } from 'stores';
+import { RootState, useAppDispatch } from 'stores';
+import { getbojInfos } from 'stores/rankSlice';
 
 const showSuccessToast = (editorName: string, problemId: number) => {
   notifySuccess(editorName, problemId);
@@ -22,7 +23,12 @@ const showSuccessToast = (editorName: string, problemId: number) => {
 // const emojies = ['🤣', '🤪',"🎉", '😡', '🤯', '💪', '🖐', '😭', '💩', '😆',"💯",];
 
 const Game = (props: VoiceProp) => {
-  const dispatch = useDispatch();
+  const appDispatch = useAppDispatch();
+
+  useEffect(() => {
+    appDispatch(getbojInfos());
+  }, []);
+
   const mySocket = getPhaserSocket();
   const { START, WHITEBOARD, GAME, EDITOR } = GAME_STATUS;
   const { status, editorName, volMuteInfo, micMuteInfo } = useSelector(
@@ -40,7 +46,6 @@ const Game = (props: VoiceProp) => {
     <BackgroundDiv>
       {status === WHITEBOARD && <Whiteboard />}
       <Voice {...props} />
-      <ToastContainer />
       <BtnDiv>
         {/* <Button
           type="button"

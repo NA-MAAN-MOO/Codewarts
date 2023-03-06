@@ -8,6 +8,7 @@ import RankingHeader from 'components/whiteboard/RankingHeader';
 import MainField from 'components/whiteboard/MainField';
 import RankingList from 'components/whiteboard/RankingList';
 import { useSelector } from 'react-redux';
+import 'animate.css';
 
 const APPLICATION_DB_URL =
   process.env.REACT_APP_DB_URL || 'http://localhost:3003';
@@ -27,8 +28,6 @@ function Whiteboard() {
 
   let [bojInfos, setbojInfos] = useState<DetailInfo[]>(initialState);
 
-  //TODO: export해서 phaser main scene에서 불리게? 또는 Lobby? redis에 저장까지
-  // or 로딩 상태 만들어서 로딩중 ...
   // const getBojInfos = async () => {
   //   try {
   //     const response = await axios.get(`${APPLICATION_DB_URL}/boj-infos`);
@@ -52,7 +51,10 @@ function Whiteboard() {
   return (
     <>
       <Background>
-        <Box sx={{ display: 'flex' }}>
+        <Box
+          sx={{ display: 'flex', animationDuration: '0.8s' }}
+          className="animate__animated animate__zoomIn"
+        >
           <RankingHeader />
 
           <RankingList

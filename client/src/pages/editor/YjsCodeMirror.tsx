@@ -13,7 +13,7 @@ import { WebsocketProvider } from 'y-websocket';
 /* codemirror */
 import { basicSetup } from 'codemirror';
 import { python } from '@codemirror/lang-python';
-import { indentUnit } from '@codemirror/language';
+import { indentUnit, foldGutter } from '@codemirror/language';
 import { EditorState } from '@codemirror/state';
 import { keymap, EditorView, placeholder } from '@codemirror/view';
 import {
@@ -34,8 +34,9 @@ import {
   buttonTheme,
   Main,
   DrawerHeader,
-  leftDrawerWidth,
+  leftDrawerCSS,
   AlgoInputWrap,
+  editorThemeCSS,
 } from './editorStyle';
 import 'styles/fonts.css'; /* FONT */
 import { ThemeProvider, useTheme } from '@mui/material/styles';
@@ -52,7 +53,6 @@ import EvaluateButton from 'components/editor/EvaluateButton';
 import CompilerField from 'components/editor/CompilerField';
 import AlgoHeaderTab from 'components/editor/AlgoHeaderTab';
 import AlgoInfoAccordion from 'components/editor/AlgoInfoAccordion';
-import EvaluateGauge from 'components/editor/EvaluateGauge';
 import ProbTitle from 'components/editor/ProbTitle';
 import SearchModal from '../../components/editor/ProbSearchModal';
 
@@ -65,6 +65,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import IconButton from '@mui/material/IconButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+
+import ResizeSensor from 'resize-sensor';
 
 const APPLICATION_YJS_URL =
   process.env.REACT_APP_YJS_URL || 'ws://localhost:1234/';
@@ -86,12 +88,11 @@ function YjsCodeMirror(props: YjsProp) {
   let [editorThemeMode, setEditorTheme] = useState(okaidia);
   let [bojProblemId, setBojProblemId] = useState();
   let [bojProbFullData, setBojProbFullData] = useState();
-  let [markingPercent, setMarkingPercent] = useState(null);
   const [algoSelect, setAlgoSelect] = useState(0); // 백준(0), 리트코드(1)
   const [undoManager, setUndoManager] = useState();
   const [ytext, setYtext] = useState();
   const theme = useTheme();
-
+  let [drawWidth, setDrawWidth] = useState(0);
   const { handleProvider, provider, leftOpen, handleLeftDrawerClose } = props;
 
   /* roomName 스트링 값 수정하지 말 것(※ 수정할 거면 전부 수정해야 함) */
@@ -147,37 +148,7 @@ function YjsCodeMirror(props: YjsProp) {
     // handleProvider(provider);
     /* editor theme 설정 */
     if (!provider || !undoManager) return;
-    let basicThemeSet = EditorView.theme({
-      '&': {
-        borderRadius: '.5em', // '.cm-gutters'와 같이 조절할 것
-        // height: '400px',
-        // maxHeight: '400px',
-        // minHeight: '400px',
-        height: '50vh',
-      },
-      '.cm-editor': {
-        // maxHeight: '50%',
-        // height: '100%',
-      },
-      '.cm-scroller': {
-        overflow: 'auto',
-      },
-      '.cm-content, .cm-gutter': {
-        // height: 'auto',
-        // minHeight: `${400 * 50}%`,
-      },
-      '.cm-content': {
-        fontFamily: 'Cascadia Code, Pretendard-Regular',
-        fontSize: 'large',
-      },
-      '.cm-gutter': {
-        // minHeight: '50%',
-        fontFamily: 'Cascadia Code',
-      },
-      '.cm-gutters': {
-        borderRadius: '.5em',
-      },
-    });
+    let basicThemeSet = EditorView.theme(editorThemeCSS);
 
     const editorPlaceHolder = `def solution():`;
 
@@ -194,7 +165,7 @@ function YjsCodeMirror(props: YjsProp) {
         editorThemeMode,
         basicThemeSet,
         indentUnit.of('\t'),
-        // foldGutter(),
+        foldGutter(),
         placeholder(editorPlaceHolder),
       ],
     });
@@ -209,19 +180,30 @@ function YjsCodeMirror(props: YjsProp) {
     /* view 중복 생성 방지 */
     return () => view?.destroy();
   }, [editorThemeMode, provider, undoManager]);
+  useEffect(() => {
+    const mainDiv = document.getElementsByClassName('mainDiv')[0];
+
+    // mainDiv.addEventListener('resize', console.log(mainDiv.clientWidth));
+    new ResizeSensor(mainDiv, function () {
+      console.log('Changed to ' + mainDiv.clientWidth);
+      console.log(drawWidth);
+      setDrawWidth(mainDiv.clientWidth * 0.4);
+      console.log(drawWidth);
+    });
+  });
 
   return (
     <EditorWrapper>
       <ToastContainer />
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: 'flex' }} className="mainDiv">
         <CssBaseline />
         <Drawer
           sx={{
-            width: leftDrawerWidth,
+            width: drawWidth,
             flexShrink: 0,
             // border: '1px solid green',
             '& .MuiDrawer-paper': {
-              width: leftDrawerWidth,
+              width: drawWidth,
               boxSizing: 'border-box',
             },
           }}
@@ -286,20 +268,11 @@ function YjsCodeMirror(props: YjsProp) {
                 setCpuTime={setCpuTime}
                 inputStdin={inputStdin.current}
               />
-              {/* <SubmitButton bojProblemId={bojProblemId} /> */}
               <EvaluateButton
                 ytext={ytext}
                 bojProblemId={bojProblemId}
-                markingPercent={markingPercent}
-                setMarkingPercent={setMarkingPercent}
                 mySocket={mySocket}
                 bojProbFullData={bojProbFullData}
-              />
-              <EvaluateGauge
-                value={markingPercent}
-                min={0}
-                max={100}
-                label={markingPercent === null ? '' : `${markingPercent}점`}
               />
             </ThemeProvider>
           </MiddleWrapper>

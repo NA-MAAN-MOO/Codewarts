@@ -23,6 +23,12 @@ export default class Lobby extends Phaser.Scene {
   private sceneChange!: any = false;
   socket: Socket | undefined;
   howTo: Phaser.GameObjects.Image;
+  private sceneWidth!: number;
+  private sceneHeight!: number;
+  private bgImage: Phaser.GameObjects.Image;
+  private door: Phaser.GameObjects.Image;
+  private yellowPortal!: Phaser.Physics.Matter.Sprite;
+  private statue!: Phaser.GameObjects.Image;
   // const {nickName, characterModel} = useSelector((state:RootState)=> state.charactor);
 
   constructor() {
@@ -38,20 +44,7 @@ export default class Lobby extends Phaser.Scene {
   }
 
   create() {
-    /* Add Lobby background */
-    const bg = this.add.image(
-      this.cameras.main.width / 2,
-      this.cameras.main.height / 2,
-      'lobby'
-    );
-    const scale = Math.max(
-      this.cameras.main.width / bg.width,
-      this.cameras.main.height / bg.height
-    );
-    // bg.setDisplaySize(window.innerWidth, window.innerHeight);
-    bg.setScale(scale).setScrollFactor(0);
-
-    /* Add portal */
+    /* Add portal animation*/
     this.anims.create({
       key: 'green',
       frames: this.anims.generateFrameNames('green', {
@@ -74,50 +67,6 @@ export default class Lobby extends Phaser.Scene {
       repeat: -1,
     });
 
-    this.add
-      .sprite(this.scale.width / 1.25, this.scale.height * 0.5, 'yellow', 0)
-      .play('yellow');
-
-    this.howTo = this.add.image(
-      this.scale.width / 1.25,
-      this.scale.height * 0.5,
-      'howTo'
-    );
-
-    this.portal = this.matter.add
-      .sprite(this.scale.width / 4.5, this.scale.height * 0.5, 'green', 0)
-      .play('green');
-
-    /* Add door */
-    const door = this.add.image(
-      this.cameras.main.width / 2,
-      this.cameras.main.height / 2,
-      'door'
-    );
-    door.setScale(scale).setScrollFactor(0);
-
-    /* Guide to enter classroom */
-    this.buttonForList = this.add.image(this.portal.x, this.portal.y, 'enter');
-    // this.buttonForList = new Button({
-    //   scene: this,
-    //   x: this.portal.x,
-    //   y: this.portal.y,
-    //   text: 'E를 눌러\n입장하기',
-    //   style: {
-    //     //https://photonstorm.github.io/phaser3-docs/Phaser.Types.GameObjects.Text.html#.TextStyle
-    //     // backgroundColor: '#fff',
-    //     color: '#111',
-    //     fontSize: '32px',
-    //     fontStyle: 'strong',
-    //     resolution: 10,
-    //   },
-    // }).getBtn();
-
-    // this.buttonForList.setPadding(5, 5, 5, 5);
-
-    this.buttonForList.setVisible(false);
-    this.buttonForList.setScrollFactor(0);
-
     /* Set game world bounds */
     this.matter.world.setBounds(
       0,
@@ -125,21 +74,6 @@ export default class Lobby extends Phaser.Scene {
       this.scale.width * 1.5,
       this.scale.height
     );
-
-    /* Set portal overlap range */
-    const Bodies = this.matter.bodies;
-    this.portalZone = Bodies.rectangle(
-      this.portal.x,
-      this.portal.y,
-      this.portal.width,
-      this.portal.height,
-      {
-        isSensor: true,
-        label: 'portalSensor',
-      }
-    );
-
-    this.portal.setExistingBody(this.portalZone);
 
     /* Add my player */
     this.player = new Player({
@@ -170,7 +104,15 @@ export default class Lobby extends Phaser.Scene {
       this.player.inputKeys['down'].enabled = false;
     });
 
+    this.game.events.on('focus', () => {
+      this.player.inputKeys['up'].enabled = false;
+      this.player.inputKeys['down'].enabled = false;
+    });
+
     createCharacterAnims(this.playerTexture, this.player.anims);
+
+    this.drawLobby();
+    this.scale.on('resize', this.drawLobby, this);
   }
 
   update() {
@@ -224,4 +166,116 @@ export default class Lobby extends Phaser.Scene {
       }
     }
   }
+
+  drawLobby = () => {
+    this.sceneWidth = this.cameras.main.width;
+    this.sceneHeight = this.cameras.main.height;
+
+    this.addBg(this.sceneWidth, this.sceneHeight);
+    this.addStatue(this.sceneWidth, this.sceneHeight);
+    this.addPortals(this.sceneWidth, this.sceneHeight);
+    this.addDoor(this.sceneWidth, this.sceneHeight);
+    this.addDialog(this.sceneWidth, this.sceneHeight);
+
+    this.matter.world.setBounds(0, 0, this.sceneWidth * 1.5, this.sceneHeight);
+
+    this.player.y = this.sceneHeight * 0.7;
+  };
+
+  addBg = (sceneWidth: number, sceneHeight: number) => {
+    if (this.bgImage) {
+      this.bgImage.destroy();
+    }
+
+    /* Add background Image */
+    this.bgImage = this.add.sprite(sceneWidth / 2, sceneHeight / 2, 'lobby');
+
+    const imageScale = Math.max(
+      sceneWidth / this.bgImage.width,
+      sceneHeight / this.bgImage.height
+    );
+
+    this.bgImage.setScale(imageScale).setScrollFactor(0);
+  };
+
+  addDoor = (sceneWidth: number, sceneHeight: number) => {
+    if (this.door) {
+      this.door.destroy();
+    }
+    this.door = this.add.sprite(sceneWidth / 5, sceneHeight / 1.85, 'door');
+
+    // const imageScale = Math.max(
+    //   sceneWidth / this.door.width,
+    //   sceneHeight / this.door.height
+    // );
+
+    // this.door.setScale(imageScale).setScrollFactor(0);
+  };
+
+  addStatue = (sceneWidth: number, sceneHeight: number) => {
+    if (this.statue) {
+      this.statue.destroy();
+    }
+
+    this.statue = this.add.sprite(
+      sceneWidth / 2,
+      sceneHeight / 1.9,
+      'lobby_statue'
+    );
+  };
+
+  addPortals = (sceneWidth: number, sceneHeight: number) => {
+    if (this.portal) {
+      this.portal.destroy();
+    }
+    if (this.yellowPortal) {
+      this.yellowPortal.destroy();
+    }
+
+    if (this.howTo) {
+      this.howTo.destroy();
+    }
+
+    this.portal = this.matter.add
+      .sprite(sceneWidth / 5, sceneHeight / 2, 'green', 0)
+      .play('green');
+
+    /* Set portal overlap range */
+    const Bodies = this.matter.bodies;
+    this.portalZone = Bodies.rectangle(
+      this.portal.x,
+      this.portal.y,
+      this.portal.width,
+      this.portal.height,
+      {
+        isSensor: true,
+        label: 'portalSensor',
+      }
+    );
+
+    this.portal.setExistingBody(this.portalZone);
+
+    this.yellowPortal = this.add
+      .sprite(sceneWidth / 1.25, sceneHeight * 0.5, 'yellow', 0)
+      .play('yellow');
+
+    this.howTo = this.add.image(sceneWidth / 1.25, sceneHeight / 2, 'howTo');
+
+    const imageScale = Math.max(
+      sceneWidth / this.portal.width,
+      sceneHeight / this.portal.height
+    );
+    // this.portal.setScale(imageScale);
+    // this.yellowPortal.setScale(imageScale);
+  };
+
+  addDialog = (sceneWidth: number, sceneHeight: number) => {
+    if (this.buttonForList) {
+      this.buttonForList.destroy();
+    }
+    /* Show guide dialog to enter classroom */
+    this.buttonForList = this.add.image(this.portal.x, this.portal.y, 'enter');
+    this.buttonForList.setVisible(false);
+    this.buttonForList.setScrollFactor(0);
+  };
 }

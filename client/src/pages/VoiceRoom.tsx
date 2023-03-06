@@ -10,6 +10,11 @@ import { stringToUnicode } from 'lib/voiceLib';
 import { Socket } from 'socket.io-client';
 import { WebsocketProvider } from 'y-websocket';
 import { fetchMuteInfo, setVoiceStatus } from 'stores/chatSlice';
+import {
+  notifySuccess,
+  notifyFail,
+  ToastContainer,
+} from '../components/editor/toast'; /* toast for event alarm */
 
 const VoiceRoom = () => {
   const [session, setSession] = useState<Session>();
@@ -73,6 +78,7 @@ const VoiceRoom = () => {
     <>
       {status === GAME || status === WHITEBOARD ? (
         <>
+          <ToastContainer />
           <Game
             session={session}
             handleSession={handleSession}

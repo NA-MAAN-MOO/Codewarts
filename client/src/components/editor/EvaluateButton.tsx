@@ -5,13 +5,14 @@ import Button from '@mui/material/Button';
 import { useSelector } from 'react-redux';
 import { RootState } from 'stores';
 /* toast */
-import { notifySuccess, notifyFail } from './toast';
+import { notifyFail } from './toast';
 //@ts-ignore
 import missSoundFile from '../../assets/sound_effect/miss_sound.mp3';
 //@ts-ignore
 import hitSoundFile from '../../assets/sound_effect/hit_sound.mp3';
 import SoundPlayer from 'hooks/useSoundPlayer';
 import { middleButtonStyle } from 'pages/editor/editorStyle';
+import EvaluateGauge from 'components/editor/EvaluateGauge';
 
 const APPLICATION_EDITOR_URL =
   process.env.REACT_APP_EDITOR_URL || 'http://localhost:3001';
@@ -22,18 +23,17 @@ function EvaluateButton(props) {
     (state: RootState) => state.editor
   );
 
-  const {
-    ytext,
-    bojProblemId,
-    markingPercent,
-    setMarkingPercent,
-    mySocket,
-    bojProbFullData,
-  } = props;
+  const { ytext, bojProblemId, mySocket, bojProbFullData } = props;
 
-  let [진행완료, set진행완료] = useState(false);
+  let [markingPercent, setMarkingPercent] = useState('');
+  let [shining, setShining] = useState(false);
+  let [evalFinished, setEvalFinished] = useState(false);
   const newMissSoundToggle = SoundPlayer(missSoundFile);
   const newHitSoundToggle = SoundPlayer(hitSoundFile);
+  let [totalCases, setTotalCases] = useState(0);
+
+  const pizzaovenCase = 2; // 19940번 테스트 케이스 개수
+  const gourdPop = 5; // 19939번 테스트 케이스 개수
 
   /* fetching '.in' file */
   async function fetchInputFileText(url: string) {
@@ -70,12 +70,14 @@ function EvaluateButton(props) {
     }
 
     let hitCount = 0;
-    let totalCases = 0; // 전체 testcase 개수
+    let cases = 0; // 전체 testcase 개수 (state 대신 쓰기 위해 필요)
 
     if (bojProblemId === 19940) {
-      totalCases = 2; // 19940번 테스트 케이스 개수
+      setTotalCases(pizzaovenCase);
+      cases = pizzaovenCase; // 19940번 테스트 케이스 개수
     } else {
-      totalCases = 5; // 19939번 테스트 케이스 개수
+      setTotalCases(gourdPop);
+      cases = gourdPop; // 19939번 테스트 케이스 개수
     }
 
     try {
@@ -86,7 +88,7 @@ function EvaluateButton(props) {
 
         if (fetchInput === null || fetchInput?.startsWith('<!DOCTYPE html>')) {
           console.log('더 이상 채점할 파일이 없어요!!');
-          set진행완료(true);
+          setEvalFinished(true);
           break;
         }
 
@@ -111,7 +113,8 @@ function EvaluateButton(props) {
           console.log(`${i}번 테스트 케이스 틀림`);
         }
 
-        setMarkingPercent(`${(hitCount / totalCases) * 100}`);
+        setMarkingPercent(`${(hitCount / cases) * 100}`);
+        setShining(true);
       }
     } catch (error) {
       console.error(error);
@@ -154,20 +157,24 @@ function EvaluateButton(props) {
 
   useEffect(() => {
     if (!bojProblemId) return;
-    if (진행완료 === false) {
+    if (evalFinished === false) {
       // console.log('아직 채점 다 안 끝났어요~');
       return;
     }
     if (markingPercent === '100') {
-      // notifySuccess(editorName, bojProblemId);
       newHitSoundToggle();
       broadcastSuccess();
     } else {
-      notifyFail(editorName, bojProblemId);
       newMissSoundToggle();
+      notifyFail(editorName, bojProblemId);
     }
-    set진행완료(false);
-  }, [markingPercent, 진행완료]);
+    setEvalFinished(false);
+
+    setTimeout(() => {
+      setMarkingPercent('');
+      setShining(false);
+    }, 4000);
+  }, [markingPercent, evalFinished]);
 
   return (
     <>
@@ -181,6 +188,14 @@ function EvaluateButton(props) {
           SUBMIT
         </Button>
       </Tooltip>
+      <EvaluateGauge
+        value={markingPercent}
+        min={0}
+        max={100}
+        label={markingPercent === '' ? '' : `${markingPercent}점`}
+        shining={shining}
+        totalCases={totalCases}
+      />
       {/* ▼ 문제 성공 알림을 테스트하고 싶으면 주석 해제 */}
       {/* <button onClick={broadcastSuccess}>
         테스트버튼: "{editorName}"님이 문제 맞췄다고 알리기
