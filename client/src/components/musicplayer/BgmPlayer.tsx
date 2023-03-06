@@ -56,7 +56,7 @@ const BgmPlayer = () => {
   const [checked, setChecked] = useState(false);
 
   const AudioPlayerToggle = (
-    <div style={{ width: '20%', height: '10%', zIndex: `${checked}` }}>
+    <div style={{ width: '20%', height: '10%', zIndex: `1` }}>
       <AudioPlayer
         showSkipControls
         showJumpControls={false}
