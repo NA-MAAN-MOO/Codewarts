@@ -371,10 +371,8 @@ export default () => {
         insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
         mirror: false, // Whether to mirror your local video or not
       });
-      console.log('pub', pubNow);
       await mySession.publish(pubNow);
       handlePublisher(pubNow);
-      console.log('여기까지옴3');
 
       dispatch(setVoiceStatus(VOICE_STATUS.COMPLETE));
     } catch (error) {
