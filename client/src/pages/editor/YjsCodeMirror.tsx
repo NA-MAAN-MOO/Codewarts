@@ -53,7 +53,6 @@ import EvaluateButton from 'components/editor/EvaluateButton';
 import CompilerField from 'components/editor/CompilerField';
 import AlgoHeaderTab from 'components/editor/AlgoHeaderTab';
 import AlgoInfoAccordion from 'components/editor/AlgoInfoAccordion';
-import EvaluateGauge from 'components/editor/EvaluateGauge';
 import ProbTitle from 'components/editor/ProbTitle';
 import SearchModal from '../../components/editor/ProbSearchModal';
 
@@ -87,7 +86,6 @@ function YjsCodeMirror(props: YjsProp) {
   let [editorThemeMode, setEditorTheme] = useState(okaidia);
   let [bojProblemId, setBojProblemId] = useState();
   let [bojProbFullData, setBojProbFullData] = useState();
-  let [markingPercent, setMarkingPercent] = useState(null);
   const [algoSelect, setAlgoSelect] = useState(0); // 백준(0), 리트코드(1)
   const [undoManager, setUndoManager] = useState();
   const [ytext, setYtext] = useState();
@@ -252,16 +250,8 @@ function YjsCodeMirror(props: YjsProp) {
               <EvaluateButton
                 ytext={ytext}
                 bojProblemId={bojProblemId}
-                markingPercent={markingPercent}
-                setMarkingPercent={setMarkingPercent}
                 mySocket={mySocket}
                 bojProbFullData={bojProbFullData}
-              />
-              <EvaluateGauge
-                value={markingPercent}
-                min={0}
-                max={100}
-                label={markingPercent === null ? '' : `${markingPercent}점`}
               />
             </ThemeProvider>
           </MiddleWrapper>
