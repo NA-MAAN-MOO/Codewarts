@@ -8,7 +8,7 @@ const FloatingButton = ({ ...props }) => {
   return (
     <Button
       color="secondary"
-      variant="contained"
+      variant="outlined"
       sx={{
         border: `3px ridge ${styledTheme.lightRed}`,
         fontFamily: `${styledTheme.mainFont}`,
@@ -22,6 +22,10 @@ const FloatingButton = ({ ...props }) => {
         justifyContent: 'center',
         gap: '1rem',
         minHeight: '3rem',
+        '&.MuiButton-outlined': {
+          backgroundColor: 'white',
+          color: 'black',
+        },
       }}
       {...props}
     ></Button>
