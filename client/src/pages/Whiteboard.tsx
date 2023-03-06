@@ -2,7 +2,8 @@ import axios from 'axios';
 import { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { openGame } from 'stores/modeSlice';
-import store, { RootState } from 'stores';
+import store, { RootState, useAppDispatch } from 'stores';
+import { getbojInfos } from 'stores/rankSlice';
 import Box from '@mui/material/Box';
 import RankingHeader from 'components/whiteboard/RankingHeader';
 import MainField from 'components/whiteboard/MainField';
@@ -24,6 +25,13 @@ interface DetailInfo {
 
 function Whiteboard() {
   const initialState: [] = [];
+
+  const appDispatch = useAppDispatch();
+
+  useEffect(() => {
+    appDispatch(getbojInfos());
+  }, []);
+
   let rankInfos: any = useSelector((state: RootState) => state.rank.infos);
 
   let [bojInfos, setbojInfos] = useState<DetailInfo[]>(initialState);

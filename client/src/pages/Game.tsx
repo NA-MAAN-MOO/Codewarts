@@ -13,7 +13,7 @@ import {
 } from '../components/editor/toast'; /* toast for event alarm */
 import { getPhaserSocket } from 'network/phaserSocket';
 import Whiteboard from './Whiteboard';
-import { RootState, useAppDispatch } from 'stores';
+import { RootState } from 'stores';
 import { getbojInfos } from 'stores/rankSlice';
 
 const showSuccessToast = (editorName: string, problemId: number) => {
@@ -23,12 +23,6 @@ const showSuccessToast = (editorName: string, problemId: number) => {
 // const emojies = ['🤣', '🤪',"🎉", '😡', '🤯', '💪', '🖐', '😭', '💩', '😆',"💯",];
 
 const Game = (props: VoiceProp) => {
-  const appDispatch = useAppDispatch();
-
-  useEffect(() => {
-    appDispatch(getbojInfos());
-  }, []);
-
   const mySocket = getPhaserSocket();
   const { START, WHITEBOARD, GAME, EDITOR } = GAME_STATUS;
   const { status, editorName, volMuteInfo, micMuteInfo } = useSelector(
