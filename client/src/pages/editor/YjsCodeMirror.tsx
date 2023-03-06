@@ -36,6 +36,7 @@ import {
   DrawerHeader,
   leftDrawerWidth,
   AlgoInputWrap,
+  editorThemeCSS,
 } from './editorStyle';
 import 'styles/fonts.css'; /* FONT */
 import { ThemeProvider, useTheme } from '@mui/material/styles';
@@ -147,37 +148,7 @@ function YjsCodeMirror(props: YjsProp) {
     // handleProvider(provider);
     /* editor theme 설정 */
     if (!provider || !undoManager) return;
-    let basicThemeSet = EditorView.theme({
-      '&': {
-        borderRadius: '.5em', // '.cm-gutters'와 같이 조절할 것
-        // height: '400px',
-        // maxHeight: '400px',
-        // minHeight: '400px',
-        height: '50vh',
-      },
-      '.cm-editor': {
-        // maxHeight: '50%',
-        // height: '100%',
-      },
-      '.cm-scroller': {
-        overflow: 'auto',
-      },
-      '.cm-content, .cm-gutter': {
-        // height: 'auto',
-        // minHeight: `${400 * 50}%`,
-      },
-      '.cm-content': {
-        fontFamily: 'Cascadia Code, Pretendard-Regular',
-        fontSize: '1.3em',
-      },
-      '.cm-gutter': {
-        // minHeight: '50%',
-        fontFamily: 'Cascadia Code',
-      },
-      '.cm-gutters': {
-        borderRadius: '.5em',
-      },
-    });
+    let basicThemeSet = EditorView.theme(editorThemeCSS);
 
     const editorPlaceHolder = `def solution():`;
 

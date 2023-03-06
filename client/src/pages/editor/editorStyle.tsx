@@ -31,6 +31,37 @@ const buttonTheme = createTheme({
   },
 });
 
+const editorThemeCSS = {
+  '&': {
+    borderRadius: '.5em', // '.cm-gutters'와 같이 조절할 것
+    // height: '400px',
+    // maxHeight: '400px',
+    // minHeight: '400px',
+    height: '50vh',
+  },
+  '.cm-editor': {
+    // maxHeight: '50%',
+    // height: '100%',
+  },
+  '.cm-scroller': {
+    overflow: 'auto',
+  },
+  '.cm-content, .cm-gutter': {
+    fontFamily: 'Cascadia Code, Pretendard-Regular',
+    // height: 'auto',
+    // minHeight: `${400 * 50}%`,
+  },
+  '.cm-content': {
+    fontSize: '1.3em',
+  },
+  '.cm-gutter': {
+    // minHeight: '50%',
+  },
+  '.cm-gutters': {
+    borderRadius: '.5em',
+  },
+};
+
 const EditorWrapper = styledc.div`
   width: 100%;
   height: 100%;
@@ -360,4 +391,5 @@ export {
   DrawerHeader,
   leftDrawerWidth,
   middleButtonStyle,
+  editorThemeCSS,
 };
