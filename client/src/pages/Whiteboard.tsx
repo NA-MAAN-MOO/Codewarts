@@ -26,33 +26,39 @@ interface DetailInfo {
 function Whiteboard() {
   const initialState: [] = [];
 
-  const appDispatch = useAppDispatch();
+  // const appDispatch = useAppDispatch();
 
-  useEffect(() => {
-    appDispatch(getbojInfos());
-  }, []);
+  // useEffect(() => {
+  //   appDispatch(getbojInfos());
+  // }, []);
 
-  let rankInfos: any = useSelector((state: RootState) => state.rank.infos);
+  // let rankInfos: any = useSelector((state: RootState) => state.rank.infos);
 
   let [bojInfos, setbojInfos] = useState<DetailInfo[]>(initialState);
 
-  // const getBojInfos = async () => {
-  //   try {
-  //     const response = await axios.get(`${APPLICATION_DB_URL}/boj-infos`);
-  //     setbojInfos(response.data);
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // };
+  const getBojInfos = async () => {
+    try {
+      const response = await axios.get(`${APPLICATION_DB_URL}/user-rank`);
+      // console.log(response.data);
+      setbojInfos(response.data);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
+  useEffect(() => {
+    getBojInfos();
+  }, []);
+  // console.log('bojInfos', bojInfos);
+  // console.log(Boolean(bojInfos));
   // const getBojInfos = () => {};
   // useEffect(()=> {})
-  useEffect(() => {
-    setbojInfos(rankInfos);
-  }, []);
+  // useEffect(() => {
+  //   setbojInfos(rankInfos);
+  // }, []);
 
   const handleClose = () => {
-    setbojInfos([]);
+    // setbojInfos([]);
     store.dispatch(openGame());
   };
 

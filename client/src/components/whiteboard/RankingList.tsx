@@ -59,7 +59,7 @@ export default function RankingList(props: any) {
         <AntTab label="최장스트릭" />
         <AntTab label="맞힌문제" />
       </AntTabs>
-      {bojInfos ? (
+      {bojInfos.length !== 0 ? (
         tabValue === 0 ? (
           <RankingTable bojInfos={bojInfoSortedByTier} />
         ) : tabValue === 1 ? (
@@ -73,8 +73,14 @@ export default function RankingList(props: any) {
           <div style={{ background: 'white', borderRadius: '30px' }}>
             코드와트 코딩 랭킹은
             <br />
-            매일 오후 6시 30분에 갱신됩니다!
+            5분마다 한 번 갱신됩니다!
+            <br />
           </div>
+          <br />
+          🛠 랭킹을 가져오는 중입니다. <br />
+          잠시 후 게시판을 다시 열어주세요.
+          <br />
+          <br />
         </NothingToShow>
       )}
       {/* <RankingTable bojInfos={bojInfos} /> */}
