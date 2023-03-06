@@ -66,6 +66,8 @@ import IconButton from '@mui/material/IconButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
+import ResizeSensor from 'resize-sensor';
+
 const APPLICATION_YJS_URL =
   process.env.REACT_APP_YJS_URL || 'ws://localhost:1234/';
 
@@ -91,7 +93,7 @@ function YjsCodeMirror(props: YjsProp) {
   const [undoManager, setUndoManager] = useState();
   const [ytext, setYtext] = useState();
   const theme = useTheme();
-
+  let [drawWidth, setDrawWidth] = useState(0);
   const { handleProvider, provider, leftOpen, handleLeftDrawerClose } = props;
 
   /* roomName 스트링 값 수정하지 말 것(※ 수정할 거면 전부 수정해야 함) */
@@ -209,19 +211,30 @@ function YjsCodeMirror(props: YjsProp) {
     /* view 중복 생성 방지 */
     return () => view?.destroy();
   }, [editorThemeMode, provider, undoManager]);
+  useEffect(() => {
+    const mainDiv = document.getElementsByClassName('mainDiv')[0];
+
+    // mainDiv.addEventListener('resize', console.log(mainDiv.clientWidth));
+    new ResizeSensor(mainDiv, function () {
+      console.log('Changed to ' + mainDiv.clientWidth);
+      console.log(drawWidth);
+      setDrawWidth(mainDiv.clientWidth * 0.4);
+      console.log(drawWidth);
+    });
+  });
 
   return (
     <EditorWrapper>
       <ToastContainer />
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: 'flex' }} className="mainDiv">
         <CssBaseline />
         <Drawer
           sx={{
-            width: leftDrawerWidth + '%',
+            width: drawWidth,
             flexShrink: 0,
             // border: '1px solid green',
             '& .MuiDrawer-paper': {
-              width: leftDrawerWidth - 1.5 + '%',
+              width: drawWidth,
               boxSizing: 'border-box',
             },
           }}
