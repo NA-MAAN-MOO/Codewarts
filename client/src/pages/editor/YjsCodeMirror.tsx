@@ -53,7 +53,6 @@ import EvaluateButton from 'components/editor/EvaluateButton';
 import CompilerField from 'components/editor/CompilerField';
 import AlgoHeaderTab from 'components/editor/AlgoHeaderTab';
 import AlgoInfoAccordion from 'components/editor/AlgoInfoAccordion';
-import EvaluateGauge from 'components/editor/EvaluateGauge';
 import ProbTitle from 'components/editor/ProbTitle';
 import SearchModal from '../../components/editor/ProbSearchModal';
 
@@ -66,6 +65,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import IconButton from '@mui/material/IconButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+
+import ResizeSensor from 'resize-sensor';
 
 const APPLICATION_YJS_URL =
   process.env.REACT_APP_YJS_URL || 'ws://localhost:1234/';
@@ -87,12 +88,11 @@ function YjsCodeMirror(props: YjsProp) {
   let [editorThemeMode, setEditorTheme] = useState(okaidia);
   let [bojProblemId, setBojProblemId] = useState();
   let [bojProbFullData, setBojProbFullData] = useState();
-  let [markingPercent, setMarkingPercent] = useState(null);
   const [algoSelect, setAlgoSelect] = useState(0); // 백준(0), 리트코드(1)
   const [undoManager, setUndoManager] = useState();
   const [ytext, setYtext] = useState();
   const theme = useTheme();
-
+  let [drawWidth, setDrawWidth] = useState(0);
   const { handleProvider, provider, leftOpen, handleLeftDrawerClose } = props;
 
   /* roomName 스트링 값 수정하지 말 것(※ 수정할 거면 전부 수정해야 함) */
@@ -180,14 +180,33 @@ function YjsCodeMirror(props: YjsProp) {
     /* view 중복 생성 방지 */
     return () => view?.destroy();
   }, [editorThemeMode, provider, undoManager]);
+  useEffect(() => {
+    const mainDiv = document.getElementsByClassName('mainDiv')[0];
+
+    // mainDiv.addEventListener('resize', console.log(mainDiv.clientWidth));
+    new ResizeSensor(mainDiv, function () {
+      console.log('Changed to ' + mainDiv.clientWidth);
+      console.log(drawWidth);
+      setDrawWidth(mainDiv.clientWidth * 0.4);
+      console.log(drawWidth);
+    });
+  });
 
   return (
     <EditorWrapper>
       <ToastContainer />
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: 'flex' }} className="mainDiv">
         <CssBaseline />
         <Drawer
-          sx={leftDrawerCSS}
+          sx={{
+            width: drawWidth,
+            flexShrink: 0,
+            // border: '1px solid green',
+            '& .MuiDrawer-paper': {
+              width: drawWidth,
+              boxSizing: 'border-box',
+            },
+          }}
           variant="persistent"
           anchor="left"
           open={leftOpen}
@@ -252,16 +271,8 @@ function YjsCodeMirror(props: YjsProp) {
               <EvaluateButton
                 ytext={ytext}
                 bojProblemId={bojProblemId}
-                markingPercent={markingPercent}
-                setMarkingPercent={setMarkingPercent}
                 mySocket={mySocket}
                 bojProbFullData={bojProbFullData}
-              />
-              <EvaluateGauge
-                value={markingPercent}
-                min={0}
-                max={100}
-                label={markingPercent === null ? '' : `${markingPercent}점`}
               />
             </ThemeProvider>
           </MiddleWrapper>
