@@ -17,6 +17,7 @@ import {
   setPlayerId,
   setPlayerLeetId,
   setPlayerTexture,
+  setUserBgmState,
   setUserLoginId,
 } from 'stores/userSlice';
 // import { initialMyMute } from 'stores/chatSlice';
@@ -90,6 +91,10 @@ const LoginDialog = () => {
   const dispatch = useDispatch();
   const appDispatch = useAppDispatch();
   const { deleteMuteInfo } = useVoice();
+
+  const autoPlay = () => {
+    dispatch(setUserBgmState(true));
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -210,6 +215,7 @@ const LoginDialog = () => {
         <Right>
           <div style={{ height: '20px' }}></div>
           <TextField
+            onFocus={autoPlay}
             fullWidth
             label="ID"
             variant="outlined"

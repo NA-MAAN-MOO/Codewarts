@@ -26,8 +26,12 @@ export const userSlice = createSlice({
     playerBojId: 'Unknown',
     playerLeetId: 'Unknown',
     userLoginId: '',
+    userBgmState: false,
   },
   reducers: {
+    setUserBgmState: (state, action: PayloadAction<boolean>) => {
+      state.userBgmState = action.payload;
+    },
     toggleBackgroundMode: (state) => {
       const newMode =
         state.backgroundMode === BackgroundMode.DAY
@@ -83,6 +87,7 @@ export const {
   setPlayerLeetId,
   setPlayerBojId,
   setUserLoginId,
+  setUserBgmState,
 } = userSlice.actions;
 
 export default userSlice.reducer;
