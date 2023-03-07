@@ -10,7 +10,8 @@ export default function RankingTableContent(props: any) {
   const bgColor = '#ffe8e8';
   const fontColor = '#ba3232';
   const fontWeight = 700;
-  const fontSize = '1em';
+  const fontSize = '1.1em';
+  const fontFamily = 'Cascadia Code';
 
   return (
     <TableRow
@@ -20,6 +21,7 @@ export default function RankingTableContent(props: any) {
         background: myNickname === info.nickname ? bgColor : 'none',
         fontWeight: myNickname === info.nickname ? fontWeight : 'normal',
         fontSize: fontSize,
+        fontFamily: fontFamily,
       }}
     >
       <TableCell
@@ -30,6 +32,7 @@ export default function RankingTableContent(props: any) {
           color: myNickname === info.nickname ? fontColor : 'black',
           fontWeight: myNickname === info.nickname ? fontWeight : 'normal',
           fontSize: fontSize,
+          fontFamily: fontFamily,
         }}
       >
         {index + 1}
@@ -40,6 +43,7 @@ export default function RankingTableContent(props: any) {
           color: myNickname === info.nickname ? fontColor : 'black',
           fontWeight: myNickname === info.nickname ? fontWeight : 'normal',
           fontSize: fontSize,
+          fontFamily: fontFamily,
         }}
       >
         {info.nickname}
@@ -59,6 +63,7 @@ export default function RankingTableContent(props: any) {
           color: myNickname === info.nickname ? fontColor : 'black',
           fontWeight: myNickname === info.nickname ? fontWeight : 'normal',
           fontSize: fontSize,
+          fontFamily: fontFamily,
         }}
       >
         <RenderTier svgName={info.tier} />
@@ -69,6 +74,7 @@ export default function RankingTableContent(props: any) {
           color: myNickname === info.nickname ? fontColor : 'black',
           fontWeight: myNickname === info.nickname ? fontWeight : 'normal',
           fontSize: fontSize,
+          fontFamily: fontFamily,
         }}
       >
         {info.maxStreak}일
@@ -79,6 +85,7 @@ export default function RankingTableContent(props: any) {
           color: myNickname === info.nickname ? fontColor : 'black',
           fontWeight: myNickname === info.nickname ? fontWeight : 'normal',
           fontSize: fontSize,
+          fontFamily: fontFamily,
         }}
       >
         {info.solved}개
