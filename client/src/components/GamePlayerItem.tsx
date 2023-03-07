@@ -65,9 +65,9 @@ const GamePlayerItem = ({ name, char }: { name: string; char: string }) => {
             gap: '1rem',
           }}
         >
-          <SvgComponent width="35px" />
+          <SvgComponent width="35px" style={{ minWidth: '35px' }} />
 
-          <ListItemIcon>
+          <ListItemIcon style={{ minWidth: 0 }}>
             <BadgeLogo
               charName={char}
               isSpecial={playerId === name}
