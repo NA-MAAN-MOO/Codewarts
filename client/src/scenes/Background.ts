@@ -25,18 +25,10 @@ export default class Background extends Phaser.Scene {
   preload() {
     /*** Loading Bar ***/
     let progressBar = this.add.graphics();
-    let progressBox = this.add.graphics();
-    progressBox.fillStyle(0xffffff, 0.5);
-    progressBox.fillRect(
-      this.cameras.main.width / 4,
-      this.cameras.main.height / 3,
-      this.cameras.main.width / 2,
-      this.cameras.main.height / 10
-    );
     let loadingText = this.add.text(
       this.cameras.main.width / 2,
-      this.cameras.main.height / 3.8,
-      'Loading...',
+      this.cameras.main.height / 3,
+      'Heading to Codewarts🪄',
       {
         fontFamily: 'NeoDunggeunmoPro-Regular',
         fontSize: '48px',
@@ -174,16 +166,15 @@ export default class Background extends Phaser.Scene {
       progressBar.fillStyle(0x8b0000, 1);
       progressBar.fillRect(
         camera.width / 4,
-        camera.height / 3,
+        camera.height / 2.5,
         (value * camera.width) / 2,
-        camera.height / 10
+        camera.height / 20
       );
       console.log(typeof value);
     });
 
     this.load.on('complete', function () {
       progressBar.destroy();
-      progressBox.destroy();
       loadingText.destroy();
       percentText.destroy();
       console.log('Loading complete');

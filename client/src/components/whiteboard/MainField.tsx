@@ -104,7 +104,6 @@ function MainField(props: any) {
 
   return (
     <>
-      {/* FIXME: memo board styling */}
       <Drawer
         sx={{
           width: `${drawerWidth}%`,
