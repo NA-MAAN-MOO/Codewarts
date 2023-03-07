@@ -55,9 +55,9 @@ export default function RankingList(props: any) {
       <Toolbar variant="dense" sx={{ marginTop: '-10px' }} />
       {/* 탭이 가운데에 있는 게 좋으면 centered 키워드 붙이기 */}
       <AntTabs value={tabValue} onChange={handleChange} centered>
-        <AntTab label="티어" />
-        <AntTab label="최장스트릭" />
-        <AntTab label="맞힌문제" />
+        <AntTab label="티어순" />
+        <AntTab label="최장스트릭순" />
+        <AntTab label="맞힌문제순" />
       </AntTabs>
       {bojInfos.length !== 0 ? (
         tabValue === 0 ? (
@@ -102,9 +102,9 @@ const NothingToShow = styledc.div`
 
 /* Custom Style */
 const AntTabs = styled(Tabs)({
-  borderBottom: '1px solid #e8e8e8',
+  borderBottom: '1px solid #7F170E',
   '& .MuiTabs-indicator': {
-    backgroundColor: '#760002',
+    backgroundColor: '#D8BE6E',
   },
 });
 
@@ -118,19 +118,22 @@ const AntTab = styled((props: StyledTabProps) => (
   },
   fontWeight: theme.typography.fontWeightRegular,
   marginRight: theme.spacing(1),
-  color: 'rgba(0, 0, 0, 0.85)',
-  fontFamily: ['-apple-system'].join(','),
-  fontSize: '1.1em',
+  color: 'white',
+  // fontFamily: ['-apple-system'].join(','),
+  fontFamily: 'NeoDunggeunmoPro-Regular',
+  // fontFamily: 'Firenze',
+  fontSize: '1.3em',
   '&:hover': {
-    color: '#ab0508',
+    color: '#9e6d03',
+    fontWeight: theme.typography.fontWeightBold,
     opacity: 1,
   },
   '&.Mui-selected': {
-    color: '#760002',
-    fontWeight: theme.typography.fontWeightMedium,
+    color: '#D8BE6E',
+    fontWeight: theme.typography.fontWeightBold,
   },
   '&.Mui-focusVisible': {
-    backgroundColor: '#f79294',
+    backgroundColor: '#D8BE6E',
   },
 }));
 

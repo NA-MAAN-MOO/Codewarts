@@ -13,6 +13,7 @@ import hitSoundFile from '../../assets/sound_effect/hit_sound.mp3';
 import SoundPlayer from 'hooks/useSoundPlayer';
 import { middleButtonStyle } from 'pages/editor/editorStyle';
 import EvaluateGauge from 'components/editor/EvaluateGauge';
+import { Fireworks } from './fireworks';
 
 const APPLICATION_EDITOR_URL =
   process.env.REACT_APP_EDITOR_URL || 'http://localhost:3001';
@@ -188,6 +189,8 @@ function EvaluateButton(props) {
           SUBMIT
         </Button>
       </Tooltip>
+      {markingPercent === '100' ? <Fireworks /> : null}
+
       <EvaluateGauge
         value={markingPercent}
         min={0}
@@ -196,6 +199,7 @@ function EvaluateButton(props) {
         shining={shining}
         totalCases={totalCases}
       />
+
       {/* ▼ 문제 성공 알림을 테스트하고 싶으면 주석 해제 */}
       {/* <button onClick={broadcastSuccess}>
         테스트버튼: "{editorName}"님이 문제 맞췄다고 알리기

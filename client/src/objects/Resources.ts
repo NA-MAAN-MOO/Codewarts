@@ -7,7 +7,8 @@ import Table from './Table';
 export default class Resource extends Phaser.Physics.Matter.Sprite {
   tableSensor!: any;
 
-  buttonEditor!: any;
+  buttonEditor!: Phaser.GameObjects.Image | undefined;
+  buttonArray!: Phaser.GameObjects.Image[];
   mainScene: Phaser.Scene;
   buttonToEditor!: any;
   whiteboardButton!: any;
@@ -23,6 +24,7 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
       resource.name
     );
 
+    this.buttonArray = [];
     this.mainScene = scene;
 
     this.object = scene.add.existing(this);
@@ -135,31 +137,12 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
           this.buttonEditor = this.scene.add
             .image(this.x, this.y - 20, 'participate_button')
             .setDepth(60);
-          // this.buttonEditor = new Button({
-          //   scene: this.scene,
-          //   x: this.x,
-          //   y: this.y - 20,
-          //   text: 'E를 눌러 참여하기',
-          //   style: {
-          //     fontSize: '20px',
-          //     backgroundColor: 'white',
-          //     color: 'black',
-          //     resolution: 20,
-          //   },
-          // }).getBtn();
           this.buttonEditor.scale *= 0.9;
+          this.buttonArray.push(this.buttonEditor);
           this.buttonEditor.setInteractive(); // 이거 해줘야 function 들어감!!!!! 3시간 버린듯;
-
-          // 딱 하나만 볼 수 있게하기
-          // @ts-ignore
-          // const table = this.mainScene.tableMap.get(this.body.id);
-          // this.mainScene.input.keyboard.on('keydown-E', () =>
-          //   console.log(table.tableId)
-          // );
-
-          //TODO: 여기에서 사용자가 키보드 누르면 상호작용 하도록 만듦
           //@ts-ignore
           this.scene.player.touching.push(this);
+          console.log('touching', this.buttonEditor, this.buttonArray);
           // redux로 상태 바꿔서 component 보이게? Table 클래스 내의 정보 이용해서 자리별 사용 여부, user count 등 띄우기
         }
       },
@@ -180,7 +163,12 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
             (button: any) => button !== this
           );
           //FIXME: destroy 잘 안되는 경우 찾기
-          this.buttonEditor.destroy();
+          console.log('destroy', this.buttonEditor, this.buttonArray);
+          this.buttonArray.forEach((button: Phaser.GameObjects.Image) => {
+            button.destroy();
+          });
+          this.buttonArray = [];
+          // this.buttonEditor.destroy();
         }
       },
       context: this.scene,
