@@ -118,8 +118,7 @@ function YjsCodeMirror(props: YjsProp) {
   }, [ydoc]);
 
   useEffect(() => {
-    if (!provider) return;
-    console.log(provider);
+    if (!provider || !ydoc) return;
     provider.on('status', (event: any) => {
       console.log(event.status); // logs "connected" or "disconnected"
     });

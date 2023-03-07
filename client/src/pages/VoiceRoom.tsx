@@ -15,6 +15,7 @@ import {
   notifyFail,
   ToastContainer,
 } from '../components/editor/toast'; /* toast for event alarm */
+import { turnWhiteboardOff } from 'stores/whiteboardSlice';
 
 const VoiceRoom = () => {
   const [session, setSession] = useState<Session>();
@@ -51,6 +52,7 @@ const VoiceRoom = () => {
       setSession(undefined);
       dispatch(setVoiceStatus(VOICE_STATUS.LOADING));
     }
+    dispatch(turnWhiteboardOff());
   }, [status, editorName]);
 
   useEffect(() => {
