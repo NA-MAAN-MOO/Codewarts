@@ -12,6 +12,7 @@ import styled from 'styled-components';
 import MemoFooter from './MemoFooter';
 import { useSelector } from 'react-redux';
 import { RootState } from 'stores';
+import Image from '../../assets/images/memo_bg1.jpg';
 
 const memoColors = [
   '#ffe552',
@@ -121,6 +122,8 @@ function Memo(props: any) {
           width: '300px',
           minHeight: '240px',
           background: color,
+          backgroundImage: `url(${Image})`,
+          backgroundSize: '100% 100%',
           display: 'inline',
           position: 'absolute',
           zIndex: isDragging ? maxZIndex : ownZIndex,
