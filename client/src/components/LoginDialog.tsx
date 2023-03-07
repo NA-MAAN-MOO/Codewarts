@@ -11,6 +11,7 @@ import 'swiper/css/navigation';
 import logo from 'assets/images/logo.png';
 import logo_new from 'assets/images/logo_new.png';
 import chars from 'assets/characters';
+import loginFrame from '../assets/images/frame.png';
 import { styledTheme } from 'styles/theme';
 import {
   setPlayerBojId,
@@ -158,8 +159,12 @@ const LoginDialog = () => {
 
   return (
     <Wrapper
-      className="animate__animated animate__fadeIn"
-      style={{ position: 'absolute' }}
+      className="animate__animated animate__fadeIn animate__delay-0.8s"
+      style={{
+        position: 'absolute',
+        backgroundImage: `url(${loginFrame})`,
+        backgroundSize: '100% 100%',
+      }}
     >
       <MySnackbar
         text={loginFailMsg}
