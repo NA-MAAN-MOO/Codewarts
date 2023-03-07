@@ -26,3 +26,25 @@
    docker run -p 4443:4443 --rm -e OPENVIDU_SECRET=MY_SECRET openvidu/openvidu-dev:2.25.0
 
    (개발용이기 때문에 배포 시 새로 파야 함)
+
+bgm정보
+
+✔ 영원한 약속(永遠約束) by Rinne
+
+🎧 Rinne
+
+- https://www.youtube.com/channel/UCo7fO7SwKzRmm9xGxHJVhaA/videos
+
+🎧 Download / Stream
+
+- https://www.sellbuymusic.com/musicDetail/19242
+
+✔ End world by Rinne
+
+🎧 Rinne
+
+- https://www.youtube.com/channel/UCo7fO7SwKzRmm9xGxHJVhaA/videos
+
+🎧 Download / Stream
+
+- https://www.sellbuymusic.com/musicDetail/19205

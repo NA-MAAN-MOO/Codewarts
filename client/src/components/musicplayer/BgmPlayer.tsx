@@ -8,13 +8,15 @@ import bgm1 from '../../assets/bgms/Rinne - End world.mp3';
 import bgm2 from '../../assets/bgms/Bgm2.mp3';
 //@ts-ignore
 import bgm3 from '../../assets/bgms/bgm3.mp3';
+//@ts-ignore
+import bgm4 from '../../assets/bgms/Rinne2.mp3';
 import { Button, Fab, Fade } from '@mui/material';
 import { RootState } from 'stores';
 import { useSelector } from 'react-redux';
 
 const BgmPlayer = () => {
-  const bgms = [bgm1, bgm2, bgm3];
-  const [bgmIdx, setBgmIdx] = useState(2);
+  const bgms = [bgm1, bgm2, bgm3, bgm4];
+  const [bgmIdx, setBgmIdx] = useState(3);
   // let bgmIdx = 0;
   // const setBgmIdx = (idx: number) => {
   //   bgmIdx = idx;
