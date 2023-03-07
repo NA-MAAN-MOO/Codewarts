@@ -9,6 +9,7 @@ export default function FloatingIcon({
   right,
   bottom,
   handleClick,
+  position = 'absolute',
 }: {
   icon: ComponentType;
   handleClick: () => void;
@@ -16,11 +17,12 @@ export default function FloatingIcon({
   bottom?: string;
   right?: string;
   top?: string;
+  position?: string;
 }) {
   return (
     <Box
       sx={{
-        position: 'absolute',
+        position: position,
         bottom: { bottom },
         right: { right },
         top: { top },
@@ -31,6 +33,7 @@ export default function FloatingIcon({
         onClick={handleClick}
         sx={{
           border: `3px ridge ${styledTheme.lightRed}`,
+          padding: '2rem',
         }}
       >
         <Icon />

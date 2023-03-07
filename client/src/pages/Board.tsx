@@ -261,7 +261,7 @@ const Board = (props: BoardType) => {
         <FloatingButton
           variant="contained"
           // color="primary"
-          size="small"
+          // size="small"
           onClick={handleBoard}
         >
           {isChecked ? '화이트보드 끄기' : '화이트보드 켜기'}
@@ -307,7 +307,7 @@ const PalleteWrapper = styled.div`
   align-items: center;
   gap: 10px;
   position: fixed;
-  left: 2%;
+  left: 5.5%;
   bottom: 2%;
   max-width: calc(100vw - 100px);
 `;

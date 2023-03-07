@@ -4,7 +4,7 @@ import AudioList from 'components/AudioList';
 import VoiceItem from 'components/VoiceItem';
 import useVoice from 'hooks/useVoice';
 
-const GameVoiceBox = (props: GameVoiceType & { useFloatBox?: boolean }) => {
+const GameVoiceBox = (props: GameVoiceType) => {
   const { subscribers } = props;
 
   return (
