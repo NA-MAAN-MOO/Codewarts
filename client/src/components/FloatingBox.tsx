@@ -24,5 +24,5 @@ const FloatingDiv = styled.div`
   font-family: ${({ theme }) => theme.mainFont};
   position: absolute;
   bottom: 2%;
-  left: 1%;
+  left: 5.5%;
 `;

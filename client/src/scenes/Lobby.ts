@@ -29,6 +29,8 @@ export default class Lobby extends Phaser.Scene {
   private door: Phaser.GameObjects.Image;
   private yellowPortal!: Phaser.Physics.Matter.Sprite;
   private statue!: Phaser.GameObjects.Image;
+  private portalAnim!: any;
+  private yellowPortalAnim!: any;
   // const {nickName, characterModel} = useSelector((state:RootState)=> state.charactor);
 
   constructor() {
@@ -45,27 +47,6 @@ export default class Lobby extends Phaser.Scene {
 
   create() {
     /* Add portal animation*/
-    this.anims.create({
-      key: 'green',
-      frames: this.anims.generateFrameNames('green', {
-        start: 0,
-        end: 90,
-        prefix: `thing-`,
-      }),
-      frameRate: 60,
-      repeat: -1,
-    });
-
-    this.anims.create({
-      key: 'yellow',
-      frames: this.anims.generateFrameNames('yellow', {
-        start: 0,
-        end: 90,
-        prefix: `thing-`,
-      }),
-      frameRate: 60,
-      repeat: -1,
-    });
 
     /* Set game world bounds */
     this.matter.world.setBounds(
@@ -235,6 +216,36 @@ export default class Lobby extends Phaser.Scene {
     if (this.howTo) {
       this.howTo.destroy();
     }
+
+    if (this.portalAnim) {
+      this.portalAnim.destroy();
+    }
+
+    if (this.yellowPortalAnim) {
+      this.yellowPortalAnim.destroy();
+    }
+
+    this.portalAnim = this.anims.create({
+      key: 'green',
+      frames: this.anims.generateFrameNames('green', {
+        start: 0,
+        end: 90,
+        prefix: `thing-`,
+      }),
+      frameRate: 60,
+      repeat: -1,
+    });
+
+    this.yellowPortalAnim = this.anims.create({
+      key: 'yellow',
+      frames: this.anims.generateFrameNames('yellow', {
+        start: 0,
+        end: 90,
+        prefix: `thing-`,
+      }),
+      frameRate: 60,
+      repeat: -1,
+    });
 
     this.portal = this.matter.add
       .sprite(sceneWidth / 5, sceneHeight / 2, 'green', 0)

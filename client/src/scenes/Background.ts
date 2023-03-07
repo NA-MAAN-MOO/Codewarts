@@ -1,7 +1,6 @@
 import Phaser from 'phaser';
-
-// import { BackgroundMode } from '../../../server/types/BackgroundMode';
-// import { BackgroundMode } from '../../../server/types/BackgroundMode';
+import { openLogin } from 'stores/modeSlice';
+import store from 'stores';
 
 export enum BackgroundMode {
   DAY,
@@ -24,6 +23,32 @@ export default class Background extends Phaser.Scene {
   }
 
   preload() {
+    /*** Loading Bar ***/
+    let progressBar = this.add.graphics();
+    let loadingText = this.add.text(
+      this.cameras.main.width / 2,
+      this.cameras.main.height / 3,
+      'Heading to Codewarts🪄',
+      {
+        fontFamily: 'NeoDunggeunmoPro-Regular',
+        fontSize: '48px',
+        color: '#ffffff',
+      }
+    );
+    loadingText.setOrigin(0.5, 0.5);
+
+    let percentText = this.add.text(
+      this.cameras.main.width / 2,
+      this.cameras.main.height / 2,
+      '0%',
+      {
+        fontFamily: 'NeoDunggeunmoPro-Regular',
+        fontSize: '48px',
+        color: '#ffffff',
+      }
+    );
+    percentText.setOrigin(0.5, 0.5);
+
     /*** Characters ***/
     for (let i = 0; i <= 27; i++) {
       this.load.atlas(
@@ -132,6 +157,30 @@ export default class Background extends Phaser.Scene {
     /* Buttons */
     this.load.image('board_button', 'assets/room/board_button.png');
     this.load.image('participate_button', 'assets/room/participate_button.png');
+
+    const camera = this.cameras.main;
+    /* ---------Load event handler -----------*/
+    this.load.on('progress', function (value: number) {
+      percentText.setText(`${Math.ceil(value * 100)}%`);
+      progressBar.clear();
+      progressBar.fillStyle(0x8b0000, 1);
+      progressBar.fillRect(
+        camera.width / 4,
+        camera.height / 2.5,
+        (value * camera.width) / 2,
+        camera.height / 20
+      );
+    });
+
+    this.load.on('complete', function () {
+      progressBar.destroy();
+      loadingText.destroy();
+      percentText.destroy();
+      console.log('Loading complete');
+      // onLoadComplete();
+      store.dispatch(openLogin());
+      // 로그인 띄우기
+    });
   }
 
   create(data: { backgroundMode: BackgroundMode }) {

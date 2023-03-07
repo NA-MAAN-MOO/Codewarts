@@ -2,15 +2,13 @@ import { useEffect, useRef, useState } from 'react';
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 import AudiotrackIcon from '@mui/icons-material/Audiotrack';
-//@ts-ignore
-import bgm1 from '../../assets/bgms/bgm1.mp3';
-//@ts-ignore
-import bgm2 from '../../assets/bgms/bgm2.mp3';
-//@ts-ignore
-import bgm3 from '../../assets/bgms/bgm3.mp3';
+import bgm1 from 'assets/bgms/bgm1.mp3';
+import bgm2 from 'assets/bgms/bgm2.mp3';
+import bgm3 from 'assets/bgms/bgm3.mp3';
 import { Button, Fab, Fade } from '@mui/material';
 import { RootState } from 'stores';
 import { useSelector } from 'react-redux';
+import FloatingIcon from 'components/FloatingIcon';
 
 const BgmPlayer = () => {
   const bgms = [bgm1, bgm2, bgm3];
@@ -80,25 +78,22 @@ const BgmPlayer = () => {
   return (
     <div
       style={{
-        padding: '4px',
+        // padding: '4px',
         gap: '10px',
         display: 'flex',
         position: 'absolute',
-        bottom: '0%',
-        left: '0',
+        bottom: '2%',
+        left: '1%',
+        flexDirection: 'column',
+        flexFlow: 'column-reverse',
       }}
     >
-      <div>
-        <div style={{ height: '35%' }}></div>
-        <Fab
-          onClick={handleChange}
-          size="small"
-          color="primary"
-          aria-label="add"
-        >
-          <AudiotrackIcon />
-        </Fab>
-      </div>
+      <FloatingIcon
+        icon={AudiotrackIcon}
+        handleClick={handleChange}
+        position="static"
+      />
+      {/* <AudiotrackIcon /> */}
       <Fade in={checked}>{AudioPlayerToggle}</Fade>
     </div>
   );

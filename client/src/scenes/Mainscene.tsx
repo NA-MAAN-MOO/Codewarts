@@ -510,6 +510,7 @@ export default class MainScene extends Phaser.Scene {
         removingName = player.name;
         player.destroy();
         player.playerNameBubble.destroy();
+        player.destroySuccessEffect();
       }
     });
     // store.dispatch(removeUser(removingName));
