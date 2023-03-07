@@ -9,15 +9,44 @@ import VolumeIcon from 'components/VolumeIcon';
 import MicIcon from 'components/MicIcon';
 import { styledTheme } from 'styles/theme';
 import svgs from 'assets/solvedac_badges/index';
+import { APPLICATION_URL } from 'utils/Constants';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+
+interface DetailInfo {
+  bojId: string;
+  id: string;
+  maxStreak: number;
+  nickname: string;
+  tier: number;
+  solved: number;
+}
 
 const GamePlayerItem = ({ name, char }: { name: string; char: string }) => {
   const { volMuteInfo, micMuteInfo, playerId } = useSelector(
     (state: RootState) => ({ ...state.chat, ...state.user })
   );
-  const rankInfos = useSelector((state: RootState) => state.rank.infos);
+  const { APPLICATION_DB_URL } = APPLICATION_URL;
 
-  const myTier = rankInfos?.find((d) => d.nickname === name)?.tier || '';
-  const SvgComponent = myTier ? svgs[`Svg${myTier}`] : svgs.Svg0;
+  const [myTier, setMyTier] = useState(0);
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data }: { data: DetailInfo[] } = await axios.get(
+          `${APPLICATION_DB_URL}/user-rank`
+        );
+        const tier = data?.find((d) => d.nickname === name)?.tier || 0;
+        setMyTier(tier);
+      } catch (e) {
+        console.error(e);
+      }
+    })();
+  }, []);
+
+  // const rankInfos = useSelector((state: RootState) => state.rank.infos);
+
+  // const myTier = rankInfos?.find((d) => d.nickname === name)?.tier || '';
+  const SvgComponent = svgs[`Svg${myTier}`];
 
   return (
     <ListItem key={name} disablePadding sx={{ display: 'flex' }}>
