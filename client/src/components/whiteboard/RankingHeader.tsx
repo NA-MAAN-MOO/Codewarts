@@ -32,8 +32,10 @@ export default function RankingHeader() {
             sx={{
               textAlign: 'center',
               fontFamily: 'Firenze',
-              fontSize: '2em',
+              // fontFamily: 'NeoDunggeunmoPro-Regular',
+              fontSize: '2.3em',
               fontWeight: '800',
+              // color: '#D8BE6E',
             }}
           >
             코드와트 코딩 랭킹 🔥

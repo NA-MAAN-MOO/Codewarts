@@ -73,7 +73,7 @@ export default function RankingList(props: any) {
           <div style={{ background: 'white', borderRadius: '30px' }}>
             코드와트 코딩 랭킹은
             <br />
-            5분마다 한 번 갱신됩니다!
+            10분마다 한 번 갱신됩니다!
             <br />
           </div>
           <br />
