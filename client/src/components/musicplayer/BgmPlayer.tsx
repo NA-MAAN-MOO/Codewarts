@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 import AudiotrackIcon from '@mui/icons-material/Audiotrack';
-import bgm1 from 'assets/bgms/Rinne - End world.mp3';
-import bgm2 from 'assets/bgms/Bgm2.mp3';
+import bgm1 from 'assets/bgms/bgm1.mp3';
+import bgm2 from 'assets/bgms/bgm2.mp3';
 import bgm3 from 'assets/bgms/bgm3.mp3';
 import { Button, Fab, Fade } from '@mui/material';
 import { RootState } from 'stores';
@@ -12,7 +12,7 @@ import FloatingIcon from 'components/FloatingIcon';
 
 const BgmPlayer = () => {
   const bgms = [bgm1, bgm2, bgm3];
-  const [bgmIdx, setBgmIdx] = useState(2);
+  const [bgmIdx, setBgmIdx] = useState(0);
   // let bgmIdx = 0;
   // const setBgmIdx = (idx: number) => {
   //   bgmIdx = idx;
