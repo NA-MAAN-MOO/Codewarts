@@ -42,6 +42,7 @@ export const styledTheme = {
   darkBlue: '#4682B4',
   mainRed: '#A52A2A',
   darkRed: '#800000',
+  darkerRed: '#3D0000',
   lightRed: '#DC143C',
   lightYellow: '#F5DEB3',
   lighterBlue: '#F0F8FF',

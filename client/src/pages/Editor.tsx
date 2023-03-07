@@ -24,6 +24,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import Board from './Board';
 import { toggleWhiteboard } from 'stores/whiteboardSlice';
 import QuizIcon from '@mui/icons-material/Quiz';
+import { styledTheme } from 'styles/theme';
 import ToggleButton from '@mui/material/ToggleButton';
 
 const rightDrawerWidth = 350;
@@ -198,19 +199,41 @@ const Editor = (props: VoiceProp & YjsProp) => {
       />
       {/* </Whiteboard> */}
       <FixedBtnDiv>
-        <ThemeProvider theme={darkTheme}>
-          <ToggleButton
-            value="open"
-            selected={open}
-            color="secondary"
-            onClick={handleDrawer}
-            sx={{
-              borderRadius: '50%',
-            }}
-          >
-            <PeopleIcon />
-          </ToggleButton>
-        </ThemeProvider>
+        <ToggleButton
+          value="open"
+          selected={open}
+          color="secondary"
+          onClick={handleDrawer}
+          sx={{
+            // borderRadius: '50%',
+            border: `3px ridge ${styledTheme.lightRed}`,
+            fontFamily: `${styledTheme.mainFont}`,
+            borderRadius: '3.75rem',
+            padding: '1rem',
+            transitionDuration: '0.2s',
+            boxShadow: `${({ open }: { open: boolean }) =>
+              open ? 'none' : '3px 3px 3px #696969'}`,
+            backgroundColor: styledTheme.mainRed,
+            color: 'white',
+            filter: 'brightness(100%)',
+            '&:hover': {
+              backgroundColor: styledTheme.darkRed,
+            },
+            '&.Mui-selected': {
+              backgroundColor: styledTheme.darkRed,
+              color: 'white',
+              filter: 'brightness(80%)',
+            },
+            '&.Mui-selected:hover': {
+              backgroundColor: styledTheme.mainRed,
+              color: 'white',
+              filter: 'brightness(80%)',
+              // backgroundColor: styledTheme.darkerRed,
+            },
+          }}
+        >
+          <PeopleIcon />
+        </ToggleButton>
       </FixedBtnDiv>
     </>
   );
