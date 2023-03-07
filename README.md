@@ -28,23 +28,8 @@
    (개발용이기 때문에 배포 시 새로 파야 함)
 
 bgm정보
+https://gongu.copyright.or.kr/gongu/wrt/wrtCl/listWrtSound.do?menuNo=200020 공유마당에 게시된 음원을 합법적으로 사용하기 위한 출처입니다.
 
-✔ 영원한 약속(永遠約束) by Rinne
-
-🎧 Rinne
-
-- https://www.youtube.com/channel/UCo7fO7SwKzRmm9xGxHJVhaA/videos
-
-🎧 Download / Stream
-
-- https://www.sellbuymusic.com/musicDetail/19242
-
-✔ End world by Rinne
-
-🎧 Rinne
-
-- https://www.youtube.com/channel/UCo7fO7SwKzRmm9xGxHJVhaA/videos
-
-🎧 Download / Stream
-
-- https://www.sellbuymusic.com/musicDetail/19205
+bgm1 : https://gongu.copyright.or.kr/gongu/wrt/wrt/view.do?wrtSn=13073758&menuNo=200020
+bgm2 : https://gongu.copyright.or.kr/gongu/wrt/wrt/view.do?wrtSn=13048800&menuNo=200026
+bgm3 : https://gongu.copyright.or.kr/gongu/wrt/wrt/view.do?wrtSn=13073793&menuNo=200020
