@@ -30,12 +30,13 @@ export default function RankingHeader() {
             component="div"
             align="center"
             sx={{
+              marginTop: '2vh',
               textAlign: 'center',
-              fontFamily: 'Firenze',
-              // fontFamily: 'NeoDunggeunmoPro-Regular',
+              // fontFamily: 'Firenze',
+              fontFamily: 'NeoDunggeunmoPro-Regular',
               fontSize: '2.3em',
               fontWeight: '800',
-              // color: '#D8BE6E',
+              color: '#D8BE6E',
             }}
           >
             코드와트 코딩 랭킹 🔥

@@ -10,6 +10,7 @@ import MainField from 'components/whiteboard/MainField';
 import RankingList from 'components/whiteboard/RankingList';
 import { useSelector } from 'react-redux';
 import 'animate.css';
+import Image from '../assets/images/leaderboard_bg.png';
 
 const APPLICATION_DB_URL =
   process.env.REACT_APP_DB_URL || 'http://localhost:3003';
@@ -66,10 +67,15 @@ function Whiteboard() {
     <>
       <Background>
         <Box
+          // component="image"
           sx={{
             display: 'flex',
             animationDuration: '0.8s',
             // background: 'darkred',
+            backgroundImage: `url(${Image})`,
+            backgroundSize: '40% 100%',
+            backgroundRepeat: 'no-repeat',
+            // border: '1px solid black',
           }}
           className="animate__animated animate__zoomIn"
         >
@@ -94,4 +100,5 @@ const Background = styled.div`
   height: 100%;
   background-color: rgba(255, 255, 255, 0.9);
   overflow: hidden;
+  // border: 1px solid blue;
 `;
