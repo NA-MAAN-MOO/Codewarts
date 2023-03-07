@@ -150,7 +150,7 @@ function YjsCodeMirror(props: YjsProp) {
     if (!provider || !undoManager) return;
     let basicThemeSet = EditorView.theme(editorThemeCSS);
 
-    const editorPlaceHolder = `def solution():`;
+    const editorPlaceHolder = `def python():`;
 
     /* editor instance 생성; state, view 생성 */
     const state = EditorState.create({
