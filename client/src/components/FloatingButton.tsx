@@ -21,7 +21,7 @@ const FloatingButton = ({ ...props }) => {
         alignItems: 'center',
         justifyContent: 'center',
         gap: '1rem',
-        minHeight: '3rem',
+        minHeight: '4.3rem',
         '&.MuiButton-outlined': {
           backgroundColor: 'white',
           color: 'black',
