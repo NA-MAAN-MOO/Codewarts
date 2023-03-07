@@ -205,6 +205,14 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     }, 120000);
   }
 
+  /* When player close editor or exits, 강제적으로 성공 이펙트 없애버림 */
+  //FIXME:
+  destroySuccessEffect() {
+    if (this.successEffect) {
+      this.successEffect.destroy();
+    }
+  }
+
   //emoji
 
   updateDialogBubble(content: string) {
