@@ -31,7 +31,6 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
     this.object = this.scene.add.existing(this); // 플레이어 객체가 생기는 시점.
     this.object.setDepth(50);
-    console.log(scene);
 
     if (scene.scene.key === 'Lobby') {
       this.scale *= 2.3;
@@ -206,7 +205,6 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
   }
 
   /* When player close editor or exits, 강제적으로 성공 이펙트 없애버림 */
-  //FIXME:
   destroySuccessEffect() {
     if (this.successEffect) {
       this.successEffect.destroy();
