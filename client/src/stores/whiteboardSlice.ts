@@ -11,9 +11,12 @@ const boardSlice = createSlice({
     toggleWhiteboard: (state) => {
       state.isChecked = !state.isChecked;
     },
+    turnWhiteboardOff: (state) => {
+      state.isChecked = false;
+    },
   },
 });
 
-export const { toggleWhiteboard } = boardSlice.actions;
+export const { toggleWhiteboard, turnWhiteboardOff } = boardSlice.actions;
 
 export default boardSlice.reducer;

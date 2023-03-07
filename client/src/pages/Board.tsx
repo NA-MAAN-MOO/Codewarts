@@ -307,7 +307,7 @@ const PalleteWrapper = styled.div`
   align-items: center;
   gap: 10px;
   position: fixed;
-  left: 5.5%;
+  left: calc(75px + 1%);
   bottom: 2%;
   max-width: calc(100vw - 100px);
 `;
