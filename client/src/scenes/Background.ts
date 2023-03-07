@@ -170,7 +170,6 @@ export default class Background extends Phaser.Scene {
         (value * camera.width) / 2,
         camera.height / 20
       );
-      console.log(typeof value);
     });
 
     this.load.on('complete', function () {
