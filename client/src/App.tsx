@@ -16,7 +16,7 @@ const APPLICATION_DB_URL =
 
 function App() {
   const mode = process.env.REACT_APP_MODE;
-  const { START, LOBBY, GAME, EDITOR, WHITEBOARD } = GAME_STATUS;
+  const { START, LOBBY, GAME, EDITOR, WHITEBOARD, LOGIN } = GAME_STATUS;
   const { userLoginId, playerId, status } = useSelector((state: RootState) => {
     return { ...state.user, ...state.mode };
   });
@@ -60,7 +60,7 @@ function App() {
       <BgmPlayer />
       {/* <TestVoiceButtons /> */}
       {playerId === '개발자' && <TestVoiceButtons />}
-      {status === START ? (
+      {status === START || status === LOGIN ? (
         <Start></Start>
       ) : //불필요한 로비 삭제
       status === GAME || status === EDITOR || status === WHITEBOARD ? (

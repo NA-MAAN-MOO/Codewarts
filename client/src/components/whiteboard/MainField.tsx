@@ -8,6 +8,10 @@ import { RootState } from 'stores';
 import { useSelector } from 'react-redux';
 import { useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
+import Image from '../../assets/images/memoboard_bg.jpg';
+// import Image from '../../assets/images/memo_bg1.jpg';
+// import Image from '../../assets/images/old_paper.jpg';
+// import Image from '../../assets/images/old_paper2.jpeg';
 
 const drawerWidth = 60;
 
@@ -104,12 +108,15 @@ function MainField(props: any) {
       <Drawer
         sx={{
           width: `${drawerWidth}%`,
+          //FIXME: 전체 보드 높이 100vh
+          height: '100vh',
           flexShrink: 0,
           '& .MuiDrawer-paper': {
             width: `${drawerWidth}%`,
             boxSizing: 'border-box',
-            background: 'transparent',
-            // background: 'white',
+            // background: 'transparent',
+            backgroundImage: `url(${Image})`,
+            backgroundSize: 'cover',
             overflow: 'hidden',
 
             // position: 'relative',
