@@ -4,6 +4,7 @@ import Phaser from 'phaser';
 import PhaserMatterCollisionPlugin from 'phaser-matter-collision-plugin';
 import { GameType } from 'types';
 import Background from './scenes/Background';
+import RoomBackground from 'scenes/RoomBackground';
 
 const pluginConfig = {
   // The plugin class:
@@ -33,7 +34,7 @@ const config = {
   // backgroundColor: '#EEEEEE', //  scene이 그려지는 canvas의 backgroundColor 값
   type: Phaser.AUTO,
   parent: 'codeuk',
-  scene: [Background, Lobby, MainScene],
+  scene: [Background, Lobby, RoomBackground, MainScene],
   scale: {
     // mode: Phaser.Scale.FIT,
     mode: Phaser.Scale.ScaleModes.RESIZE,
