@@ -13,7 +13,6 @@ import express from 'express';
 
 const router = express.Router();
 
-// FIXME: node cron
 router.get('/boj-infos', getUsersBojInfo);
 // send to client
 router.get('/user-rank', sendUsersBojInfo);

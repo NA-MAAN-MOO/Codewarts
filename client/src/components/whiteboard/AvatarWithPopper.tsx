@@ -84,7 +84,7 @@ function AvatarWithPopper(props: any) {
         onClose={handlePopoverClose}
         disableRestoreFocus
       >
-        <Typography sx={{ p: 1, fontFamily: 'NeoDunggeunmoPro-Regular' }}>
+        <Typography sx={{ fontFamily: 'NeoDunggeunmoPro-Regular' }}>
           {participant}
         </Typography>
       </Popover>

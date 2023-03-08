@@ -124,8 +124,8 @@ export const addMemo = async (req: Request, res: Response) => {
     authorId: req.body.authorId,
     authorNickname: req.body.authorNickname,
     content: '',
-    x: 80,
-    y: 40,
+    x: 0.3,
+    y: 0.2,
   });
 
   try {
@@ -193,7 +193,7 @@ export const participateInMemo = async (req: Request, res: Response) => {
       { _id: objectId },
       { participants: newParticipants }
     );
-    console.log(newParticipants);
+    // console.log(newParticipants);
     res.status(200).json(result);
   } catch (e) {
     console.error(e);
@@ -217,7 +217,7 @@ export const dropOutOfMemo = async (req: Request, res: Response) => {
       { _id: objectId },
       { participants: newParticipants }
     );
-    console.log(newParticipants);
+    // console.log(newParticipants);
     res.status(200).json(result);
   } catch (e) {
     console.error(e);
