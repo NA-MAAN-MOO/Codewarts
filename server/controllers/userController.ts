@@ -74,8 +74,8 @@ export const signUp = async (req: Request, res: Response) => {
         },
       });
     } else {
-      return res.json({
-        success: false,
+      return res.status(420).json({
+        status: 420,
         message: '양식에 맞지 않는 입력입니다',
       });
     }
