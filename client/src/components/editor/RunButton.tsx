@@ -27,7 +27,7 @@ function RunButton(props) {
       );
 
       console.log(data); // 전체 reponse body (output, statusCode, memory, cpuTime)
-      setCompileOutput(data.output.replace(/\n/g, '<br>'));
+      setCompileOutput(data.output.replace(/ \n/g, '\r\n').trimEnd());
       setMemory(data.memory);
       setCpuTime(data.cpuTime);
     } catch (error) {
