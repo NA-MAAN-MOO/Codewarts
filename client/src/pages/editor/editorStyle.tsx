@@ -411,6 +411,18 @@ const middleButtonStyle = {
   marginBottom: '5px',
 };
 
+const filterButtonStyle = {
+  wordBreak: 'keep-all',
+  wrap: 'no-wrap',
+  padding: '8px 5px 6px 14px',
+  margin: '10px',
+  width: 120,
+  fontFamily: 'Cascadia Code, Pretendard-Regular',
+  fontWeight: 'bold',
+  fontSize: '1.2rem',
+  boxShadow: 'inset 0.2em 0.2em #ededed',
+};
+
 export {
   HeaderTab,
   AlgoInput,
@@ -438,4 +450,5 @@ export {
   leftDrawerCSS,
   middleButtonStyle,
   editorThemeCSS,
+  filterButtonStyle,
 };

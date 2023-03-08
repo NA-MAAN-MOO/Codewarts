@@ -10,7 +10,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import RenderSvg from 'components/Svg';
-import { buttonTheme } from 'pages/editor/editorStyle';
+import { buttonTheme, filterButtonStyle } from 'pages/editor/editorStyle';
 import { ThemeProvider } from '@mui/material/styles';
 
 const APPLICATION_EDITOR_URL =
@@ -77,17 +77,7 @@ export default function SearchModal(props: any) {
           onClick={handleOpen}
           color="primary"
           variant="outlined"
-          sx={{
-            wordBreak: 'keep-all',
-            wrap: 'no-wrap',
-            padding: '10px 5px 10px 11px',
-            margin: '10px',
-            width: 100,
-            fontFamily: 'Cascadia Code, Pretendard-Regular',
-            fontWeight: 'bold',
-            fontSize: '1rem',
-            boxShadow: 'inset 0.2em 0.2em #ededed',
-          }}
+          sx={filterButtonStyle}
         >
           FILTER🔍
         </Button>
