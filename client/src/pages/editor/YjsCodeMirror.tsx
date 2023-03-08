@@ -42,6 +42,12 @@ import 'styles/fonts.css'; /* FONT */
 import { ThemeProvider, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
+import Drawer from '@mui/material/Drawer';
+import CssBaseline from '@mui/material/CssBaseline';
+import IconButton from '@mui/material/IconButton';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ResizeSensor from 'resize-sensor';
 
 /* toast */
 import { ToastContainer } from '../../components/editor/toast';
@@ -59,14 +65,6 @@ import SearchModal from '../../components/editor/ProbSearchModal';
 /* network */
 import { getPhaserSocket } from 'network/phaserSocket';
 import { YjsProp } from 'types';
-
-import Drawer from '@mui/material/Drawer';
-import CssBaseline from '@mui/material/CssBaseline';
-import IconButton from '@mui/material/IconButton';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-
-import ResizeSensor from 'resize-sensor';
 
 const APPLICATION_YJS_URL =
   process.env.REACT_APP_YJS_URL || 'ws://localhost:1234/';

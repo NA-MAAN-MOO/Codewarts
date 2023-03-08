@@ -1,7 +1,6 @@
-import { ProbTitleDiv } from '../../pages/editor/editorStyle';
+import { ProbTitleDiv, tooltipStyle } from '../../pages/editor/editorStyle';
 import RenderSvg from 'components/Svg';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import { middleButtonStyle } from '../../pages/editor/editorStyle';
 import Tooltip from '@mui/material/Tooltip';
 import Button from '@mui/material/Button';
 
@@ -32,7 +31,7 @@ function ProbTitle(props) {
           >
             {bojProblemId}번 {bojProbFullData?.solvedAC?.titleKo}
           </div>
-          <Tooltip title="제출하러 가기" arrow>
+          <Tooltip title="제출하러 가기" arrow slotProps={tooltipStyle}>
             <Button
               variant="text"
               href={
