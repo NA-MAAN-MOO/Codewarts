@@ -62,7 +62,7 @@ function AlgoInfoAccordion(props) {
               >
                 예제
               </AccordionSummary>
-              <AccordionDetails>
+              <AccordionDetails sx={{ marginBottom: '200px' }}>
                 <Grid container spacing={3}>
                   {Object.entries(bojProbFullData?.samples).map(
                     ([key, value]) => {
