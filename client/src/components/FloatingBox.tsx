@@ -19,6 +19,7 @@ const FloatingDiv = styled.div`
   justify-content: center;
   gap: 1rem;
   min-height: 2rem;
+  max-height: 4.4rem;
   border: 3px ridge ${({ theme }) => theme.lightRed};
   color: white;
   font-family: ${({ theme }) => theme.mainFont};
