@@ -73,13 +73,13 @@ const EditorWrapper = styledc.div`
   `;
 
 const EditorInfo = styledc.div`
-font-family: 'Cascadia Code', 'Pretendard-Regular';
+font-family: 'Firenze';
 // color: rgba(255, 255, 255, 0.7);
-font-size: 35px; 
+font-size: 40px; 
 font-weight: 600; 
 // margin-top: 3%;
 text-align: center;
-filter: drop-shadow(0px 4px 4px rgba(255, 255, 255, 0.5));
+// filter: drop-shadow(0px 4px 4px rgba(255, 255, 255, 0.5));
 `;
 
 const AlgoInfoWrap = styledc.div`
@@ -218,7 +218,8 @@ const MiddleWrapper = styledc.div`
   martgin-top: 10px;
   font-size: 20px;
   text-align: right;
-  font-family: 'Cascadia Code', 'Pretendard-Regular';
+  // font-family: 'Cascadia Code', 'Pretendard-Regular';
+
   color: papayawhip;
 `;
 
@@ -401,8 +402,9 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 const middleButtonStyle = {
-  fontFamily: 'Cascadia Code, Pretendard-Regular',
-  fontSize: '18px',
+  // fontFamily: 'Cascadia Code, Pretendard-Regular',
+  fontFamily: 'Firenze, Pretendard-Regular',
+  fontSize: '1.5rem',
   boxShadow: 'inset 0.2em 0.2em #ededed',
   marginRight: '5px',
   marginLeft: '5px',

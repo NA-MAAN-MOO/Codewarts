@@ -14,6 +14,7 @@ import SoundPlayer from 'hooks/useSoundPlayer';
 import { middleButtonStyle } from 'pages/editor/editorStyle';
 import EvaluateGauge from 'components/editor/EvaluateGauge';
 import { Fireworks } from './fireworks';
+import TaskIcon from '@mui/icons-material/Task';
 
 const APPLICATION_EDITOR_URL =
   process.env.REACT_APP_EDITOR_URL || 'http://localhost:3001';
@@ -61,6 +62,11 @@ function EvaluateButton(props) {
   const evaluateCode = async () => {
     if (!ytext.toString()) {
       alert('채점을 위해 코드를 작성해주세요');
+      return;
+    }
+
+    if (!bojProblemId) {
+      alert('문제 ');
       return;
     }
 
@@ -230,7 +236,8 @@ function EvaluateButton(props) {
           onClick={evaluateCode}
           style={middleButtonStyle}
         >
-          SUBMIT
+          <TaskIcon sx={{ marginRight: '5px' }} />
+          제출
         </Button>
       </Tooltip>
       {markingPercent === '100' ? <Fireworks /> : null}

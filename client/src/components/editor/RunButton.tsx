@@ -45,7 +45,7 @@ function RunButton(props) {
           variant="outlined"
           style={middleButtonStyle}
         >
-          ▶️ RUN
+          ▶️ 실행
         </Button>
       </Tooltip>
     </>
