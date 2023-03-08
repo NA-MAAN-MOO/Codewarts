@@ -52,7 +52,7 @@ const editorThemeCSS = {
     // minHeight: `${400 * 50}%`,
   },
   '.cm-content': {
-    fontSize: '1.3em',
+    fontSize: '1.7em',
   },
   '.cm-gutter': {
     // minHeight: '50%',
@@ -109,8 +109,7 @@ width: 100%
 const ProbTitleDiv = styledc.div`
 text-shadow: 1px 1px 2px grey;
 color: #fff;
-// font-size: 25px;
-font-size: 1.7rem;
+font-size: 1.9rem;
 width: 100%;
 display: flex;
 flex-direction : row;
@@ -295,7 +294,7 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
         sx={{ fontSize: '0.9rem', color: 'rgba(255, 255, 255, 0.7)' }}
       />
     }
-    sx={{ fontSize: '1.4em' }}
+    sx={{ fontSize: '1.5rem' }}
     {...props}
   />
 ))(({ theme }) => ({
@@ -312,7 +311,7 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
 
 /* 왼쪽 서랍 아코디언 내용 */
 const accordionDetailStyle = {
-  fontSize: '1.2em',
+  fontSize: '1.3rem',
 };
 
 /* 왼쪽 서랍 아코디언 예제 제목*/
