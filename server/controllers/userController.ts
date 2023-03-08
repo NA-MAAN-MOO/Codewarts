@@ -31,7 +31,6 @@ interface CurUser {
 
 export const signUp = async (req: Request, res: Response) => {
   try {
-    console.log('signup');
     const user = req.body;
 
     const foundUserById = await User.findOne({ userId: user.userId });
