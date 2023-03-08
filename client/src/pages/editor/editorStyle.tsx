@@ -48,6 +48,7 @@ const editorThemeCSS = {
   },
   '.cm-content, .cm-gutter': {
     fontFamily: 'Cascadia Code, Pretendard-Regular',
+    fontSize: '1.4em',
     // height: 'auto',
     // minHeight: `${400 * 50}%`,
   },
@@ -207,7 +208,7 @@ const ProfileInfo = styledc.div`
 
 /* Paper element theme setting */
 const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#272822' : '#272822',
+  backgroundColor: '#272822',
   ...theme.typography.body2,
   padding: theme.spacing(1),
   textAlign: 'center',
