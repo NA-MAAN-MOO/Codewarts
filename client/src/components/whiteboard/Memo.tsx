@@ -148,7 +148,7 @@ function Memo(props: any) {
                 sx={{ float: 'right', marginTop: '-5px' }}
                 onClick={onClickDelete}
               >
-                <DeleteForeverIcon htmlColor="#ffffff" viewBox="0 0 25 25 " />
+                <DeleteForeverIcon htmlColor="#b52216" viewBox="0 0 20 20 " />
               </IconButton>
             )}
           </div>
