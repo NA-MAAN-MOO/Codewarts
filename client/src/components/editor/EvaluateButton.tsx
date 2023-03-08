@@ -150,7 +150,7 @@ function EvaluateButton(props) {
               stdin: inputWithLf,
             }
           );
-          const jdoodleOutput = data.output.trimEnd();
+          const jdoodleOutput = data.output.replace(/ \n/g, '\n').trimEnd();
           if (jdoodleOutput === outputWithLf) {
             console.log(`${i}번 테스트 케이스 맞음`);
             hitCount++;
