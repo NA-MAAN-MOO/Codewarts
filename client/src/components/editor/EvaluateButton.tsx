@@ -250,21 +250,10 @@ function EvaluateButton(props) {
         shining={shining}
         totalCases={totalCases}
       />
-
       {/* ▼ 문제 성공 알림을 테스트하고 싶으면 주석 해제 */}
       {/* <button onClick={broadcastSuccess}>
         테스트버튼: "{editorName}"님이 문제 맞췄다고 알리기
       </button> */}
-      {/* <Button
-        color="primary"
-        style={{
-          fontFamily: 'Cascadia Code, Pretendard-Regular',
-          fontSize: '17px',
-        }}
-        onClick={evaluateSample}
-      >
-        예제채점
-      </Button>{' '} */}
     </>
   );
 }

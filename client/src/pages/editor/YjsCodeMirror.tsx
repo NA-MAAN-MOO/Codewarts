@@ -185,10 +185,10 @@ function YjsCodeMirror(props: YjsProp) {
 
     // mainDiv.addEventListener('resize', console.log(mainDiv.clientWidth));
     new ResizeSensor(mainDiv, function () {
-      console.log('Changed to ' + mainDiv.clientWidth);
-      console.log(drawWidth);
+      // console.log('Changed to ' + mainDiv.clientWidth);
+      // console.log(drawWidth);
       setDrawWidth(mainDiv.clientWidth * 0.4);
-      console.log(drawWidth);
+      // console.log(drawWidth);
     });
   });
 
