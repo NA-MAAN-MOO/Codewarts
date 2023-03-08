@@ -9,9 +9,11 @@ import VolumeIcon from 'components/VolumeIcon';
 import MicIcon from 'components/MicIcon';
 import { styledTheme } from 'styles/theme';
 import svgs from 'assets/solvedac_badges/index';
-import { APPLICATION_URL } from 'utils/Constants';
+import { APPLICATION_URL, GAME_STATUS } from 'utils/Constants';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { GameVoiceType } from 'types';
+import VoiceItem from 'components/VoiceItem';
 
 interface DetailInfo {
   bojId: string;
@@ -22,13 +24,21 @@ interface DetailInfo {
   solved: number;
 }
 
-const GamePlayerItem = ({ name, char }: { name: string; char: string }) => {
-  const { volMuteInfo, micMuteInfo, playerId } = useSelector(
-    (state: RootState) => ({ ...state.chat, ...state.user })
-  );
+const GamePlayerItem = (
+  props: { name: string; char: string } & GameVoiceType
+) => {
+  const { name, char } = props;
+  const { volMuteInfo, micMuteInfo, playerId, status, editorName } =
+    useSelector((state: RootState) => ({
+      ...state.chat,
+      ...state.user,
+      ...state.mode,
+      ...state.editor,
+    }));
   const { APPLICATION_DB_URL } = APPLICATION_URL;
 
   const [myTier, setMyTier] = useState(0);
+
   useEffect(() => {
     (async () => {
       try {
@@ -83,22 +93,30 @@ const GamePlayerItem = ({ name, char }: { name: string; char: string }) => {
             }}
           />
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1%' }}>
-          {volMuteInfo?.[name] && (
-            <VolumeIcon
-              color="gray"
-              isMute={true}
-              size={styledTheme.smallIconSize}
-            />
-          )}
-          {micMuteInfo?.[name] && (
-            <MicIcon
-              color="gray"
-              isMute={true}
-              size={styledTheme.smallIconSize}
-            />
-          )}
-        </div>
+        {status === GAME_STATUS.GAME ? (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1%' }}>
+            {volMuteInfo?.[name] && (
+              <VolumeIcon
+                color="gray"
+                isMute={true}
+                size={styledTheme.smallIconSize}
+              />
+            )}
+            {micMuteInfo?.[name] && (
+              <MicIcon
+                color="gray"
+                isMute={true}
+                size={styledTheme.smallIconSize}
+              />
+            )}
+          </div>
+        ) : (
+          <VoiceItem
+            isSuperior={playerId === editorName}
+            isMe={name === playerId}
+            {...props}
+          />
+        )}
       </ListItemButton>
     </ListItem>
   );

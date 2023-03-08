@@ -5,9 +5,7 @@ import Divider from '@mui/material/Divider';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { RootState } from 'stores';
-import GamePlayerItem from 'components/GamePlayerItem';
-import EditorPlayerItem from 'components/EditorPlayerItem';
-import { GAME_STATUS } from 'utils/Constants';
+import PlayerItem from 'components/PlayerItem';
 import { GameVoiceType } from 'types';
 
 const CurrentPlayer = ({
@@ -29,21 +27,11 @@ const CurrentPlayer = ({
     >
       <Title>참여 중인 유저</Title>
       <Divider />
-      {status === GAME_STATUS.GAME ? (
-        <List>
-          {users.map(({ name, char }, index) => (
-            <GamePlayerItem name={name} char={char} key={name} />
-          ))}
-        </List>
-      ) : (
-        status === GAME_STATUS.EDITOR && (
-          <List>
-            {users.map(({ name, char }, index) => (
-              <EditorPlayerItem name={name} char={char} key={name} {...rest} />
-            ))}
-          </List>
-        )
-      )}
+      <List>
+        {users.map(({ name, char }, index) => (
+          <PlayerItem name={name} char={char} key={name} {...rest} />
+        ))}
+      </List>
     </Box>
   );
 };
