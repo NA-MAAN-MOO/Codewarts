@@ -11,7 +11,7 @@ import missSoundFile from '../../assets/sound_effect/miss_sound.mp3';
 //@ts-ignore
 import hitSoundFile from '../../assets/sound_effect/hit_sound.mp3';
 import SoundPlayer from 'hooks/useSoundPlayer';
-import { middleButtonStyle } from 'pages/editor/editorStyle';
+import { middleButtonStyle, tooltipStyle } from 'pages/editor/editorStyle';
 import EvaluateGauge from 'components/editor/EvaluateGauge';
 import { Fireworks } from './fireworks';
 import TaskIcon from '@mui/icons-material/Task';
@@ -229,7 +229,7 @@ function EvaluateButton(props) {
 
   return (
     <>
-      <Tooltip title="코드와트 가채점">
+      <Tooltip title="코드와트 가채점" arrow slotProps={tooltipStyle}>
         <Button
           variant="outlined"
           color="primary"

@@ -10,8 +10,13 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import RenderSvg from 'components/Svg';
-import { buttonTheme, filterButtonStyle } from 'pages/editor/editorStyle';
+import {
+  buttonTheme,
+  filterButtonStyle,
+  tooltipStyle,
+} from 'pages/editor/editorStyle';
 import { ThemeProvider } from '@mui/material/styles';
+import Tooltip from '@mui/material/Tooltip';
 
 const APPLICATION_EDITOR_URL =
   process.env.REACT_APP_EDITOR_URL || 'http://localhost:3001';
@@ -73,14 +78,16 @@ export default function SearchModal(props: any) {
   return (
     <div>
       <ThemeProvider theme={buttonTheme}>
-        <Button
-          onClick={handleOpen}
-          color="primary"
-          variant="outlined"
-          sx={filterButtonStyle}
-        >
-          FILTER🔍
-        </Button>
+        <Tooltip title="필터로 검색하기" arrow slotProps={tooltipStyle}>
+          <Button
+            onClick={handleOpen}
+            color="primary"
+            variant="outlined"
+            sx={filterButtonStyle}
+          >
+            FILTER🔍
+          </Button>
+        </Tooltip>
       </ThemeProvider>
 
       <Modal

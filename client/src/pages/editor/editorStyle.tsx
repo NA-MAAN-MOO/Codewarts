@@ -423,6 +423,15 @@ const filterButtonStyle = {
   boxShadow: 'inset 0.2em 0.2em #ededed',
 };
 
+const tooltipStyle = {
+  tooltip: {
+    sx: {
+      fontFamily: 'Cascadia Code, Pretendard-Regular',
+      fontSize: '1rem',
+    },
+  },
+};
+
 export {
   HeaderTab,
   AlgoInput,
@@ -451,4 +460,5 @@ export {
   middleButtonStyle,
   editorThemeCSS,
   filterButtonStyle,
+  tooltipStyle,
 };

@@ -1,5 +1,8 @@
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { MaterialUISwitch } from '../../../src/pages/editor/editorStyle';
+import {
+  MaterialUISwitch,
+  tooltipStyle,
+} from '../../../src/pages/editor/editorStyle';
 import { okaidia } from '@uiw/codemirror-theme-okaidia';
 import { solarizedLight } from '@uiw/codemirror-theme-solarized';
 import Tooltip from '@mui/material/Tooltip';
@@ -26,6 +29,7 @@ function EditorThemeSwitch(props) {
             : '다크 모드로 바꾸기'
         }
         arrow
+        slotProps={tooltipStyle}
       >
         <FormControlLabel
           control={
