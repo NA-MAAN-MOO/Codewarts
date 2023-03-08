@@ -28,7 +28,6 @@ export default function FormDialog() {
 
   const submitSignUpForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('제출');
     try {
       let body = {
         userId: userForm.userId,
@@ -42,7 +41,6 @@ export default function FormDialog() {
         body
       );
       if (signUpResponse.data.status === 200) {
-        console.log('회원가입 성공');
         setSignUpSuccess(true);
         setSignUpFail(false);
         setOpenSignUpForm(false);

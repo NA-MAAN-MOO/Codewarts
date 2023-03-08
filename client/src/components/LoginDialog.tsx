@@ -114,17 +114,10 @@ const LoginDialog = () => {
           `${APPLICATION_DB_URL}/user/login`,
           body
         );
-        console.log(response.data.status);
         if (response.data.status === 200) {
           // handleScene(GAME_STATUS.LOBBY);
           const { payload } = response.data; //userId, userNickname, userBojId, userLeetId
           //todo payload 값 리덕스에 저장하기
-          console.log(
-            'Join! Name:',
-            userId,
-            'Avatar:',
-            avatars[avatarIndex].name
-          );
           dispatch(openGame());
           dispatch(setPlayerId(payload.userNickname));
           dispatch(setPlayerBojId(payload.userBojId));
@@ -152,13 +145,13 @@ const LoginDialog = () => {
         handleClick();
         setUserId('');
         setUserPw('');
-        console.log('불통요');
       }
     }
   };
 
   return (
     <Wrapper
+      onFocus={autoPlay}
       className="animate__animated animate__fadeIn animate__delay-0.8s"
       style={{
         position: 'absolute',
@@ -220,7 +213,6 @@ const LoginDialog = () => {
         <Right>
           <div style={{ height: '20px' }}></div>
           <TextField
-            onFocus={autoPlay}
             fullWidth
             label="ID"
             variant="outlined"
