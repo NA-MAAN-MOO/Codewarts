@@ -52,7 +52,10 @@ function Memo(props: any) {
   const onChangePosition = useCallback(
     (data: any) =>
       debounce(() => {
-        setPosition({ x: data.x, y: data.y });
+        setPosition({
+          x: data.x,
+          y: data.y,
+        });
       }),
     [memo._id, setPosition]
   );
@@ -94,11 +97,15 @@ function Memo(props: any) {
   const fixZIndex = () => {
     setOwnZIndex(maxZIndex);
   };
+  // console.log();
 
   return (
     <Draggable
       handle="#draggable-div"
-      defaultPosition={{ x: memo.x, y: memo.y }}
+      defaultPosition={{
+        x: memo.x * window.innerWidth * 0.6,
+        y: memo.y * window.innerHeight,
+      }}
       bounds={{
         left: -window.innerWidth * 0.1,
         top: 0,
@@ -114,7 +121,11 @@ function Memo(props: any) {
       onStop={(e, data) => {
         setIsDragging(false);
         fixZIndex();
-        changeMemoPos(memo._id, data.x, data.y);
+        changeMemoPos(
+          memo._id,
+          (data.x / window.innerWidth) * 0.6,
+          data.y / window.innerHeight
+        );
       }}
     >
       <Card
@@ -148,7 +159,7 @@ function Memo(props: any) {
                 sx={{ float: 'right', marginTop: '-5px' }}
                 onClick={onClickDelete}
               >
-                <DeleteForeverIcon htmlColor="#ffffff" viewBox="0 0 25 25 " />
+                <DeleteForeverIcon htmlColor="#b52216" viewBox="0 0 20 20 " />
               </IconButton>
             )}
           </div>

@@ -82,7 +82,6 @@ const regenerateData = async (datum: any) => {
 };
 
 /* Get all user's number of solved problems through boj ids in DB */
-// FIXME: node cron
 export const getUsersBojInfo = async () => {
   const datum = await User.find({});
 
@@ -125,8 +124,8 @@ export const addMemo = async (req: Request, res: Response) => {
     authorId: req.body.authorId,
     authorNickname: req.body.authorNickname,
     content: '',
-    x: 80,
-    y: 40,
+    x: 0.3,
+    y: 0.2,
   });
 
   try {
@@ -183,14 +182,46 @@ export const changeMemoPos = async (req: Request, res: Response) => {
 export const participateInMemo = async (req: Request, res: Response) => {
   try {
     const objectId = req.body._id;
+    const targetUser = req.body.target;
+
+    const targetMemo = await Memo.findOne({ _id: objectId });
+    let newParticipants = targetMemo?.participants;
+
+    newParticipants?.push(targetUser);
+
     const result = await Memo.updateOne(
       { _id: objectId },
-      { participants: [...req.body.participants] }
+      { participants: newParticipants }
     );
+    // console.log(newParticipants);
     res.status(200).json(result);
   } catch (e) {
     console.error(e);
     res.status(400).json({ message: '참여 실패' });
+  }
+};
+
+export const dropOutOfMemo = async (req: Request, res: Response) => {
+  try {
+    const objectId = req.body._id;
+    const targetUser = req.body.target;
+
+    const targetMemo = await Memo.findOne({ _id: objectId });
+    let prevParticipants = targetMemo?.participants;
+
+    let newParticipants = prevParticipants?.filter((participant: string) => {
+      return participant !== targetUser;
+    });
+
+    const result = await Memo.updateOne(
+      { _id: objectId },
+      { participants: newParticipants }
+    );
+    // console.log(newParticipants);
+    res.status(200).json(result);
+  } catch (e) {
+    console.error(e);
+    res.status(400).json({ message: '체크 해제 실패' });
   }
 };
 
