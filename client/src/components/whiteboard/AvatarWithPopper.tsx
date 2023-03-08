@@ -3,6 +3,7 @@ import Avatar from '@mui/material/Avatar';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import { useState, MouseEvent } from 'react';
+import { NONE } from 'phaser';
 
 function AvatarWithPopper(props: any) {
   const [color, setColor] = useState('#');
@@ -53,8 +54,13 @@ function AvatarWithPopper(props: any) {
         sx={{
           fontSize: '1em',
           fontWeight: '700',
+          fontFamily: 'NeoDunggeunmoPro-Regular',
+          // fontFamily: 'Cascadia Code',
+          marginLeft: '-7px',
+
           '&': {
             background: color,
+            border: 0,
           },
         }}
         onMouseEnter={handlePopoverOpen}
@@ -78,7 +84,9 @@ function AvatarWithPopper(props: any) {
         onClose={handlePopoverClose}
         disableRestoreFocus
       >
-        <Typography sx={{ p: 1 }}>{participant}</Typography>
+        <Typography sx={{ p: 1, fontFamily: 'NeoDunggeunmoPro-Regular' }}>
+          {participant}
+        </Typography>
       </Popover>
     </>
   );
