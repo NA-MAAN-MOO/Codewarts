@@ -8,6 +8,7 @@ import Paper from '@mui/material/Paper';
 import { useSelector } from 'react-redux';
 import { RootState } from 'stores';
 import RankingTableContent from './RankingTableContent';
+import './RankingTable.css';
 
 const colNames = [
   '순위',
@@ -31,7 +32,11 @@ export default function RankingTable(props: any) {
   const myNickname = useSelector((state: RootState) => state.user.playerId);
 
   return (
-    <TableContainer component={Paper} sx={{ height: '76vh' }}>
+    <TableContainer
+      component={Paper}
+      sx={{ height: '76vh' }}
+      className="table-container"
+    >
       <Table
         sx={{ minWidth: '40%', height: 'max-content' }}
         aria-label="sticky table"
@@ -48,7 +53,7 @@ export default function RankingTable(props: any) {
                   background: 'darkred',
                   color: 'white',
                   fontWeight: '700',
-                  fontSize: '1.2em',
+                  fontSize: '1.2vw',
                   fontFamily: 'Pretendard-Regular',
                 }}
               >
