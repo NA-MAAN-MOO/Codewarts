@@ -25,16 +25,28 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <link rel="favicon" href="./favicon.ico" />
-    <link
+    <!-- <link
       rel="preload"
       as="font"
       href="../src/styles/fonts.css"
       type="font/ttf"
-    />
+      crossorigin="use-credentials"
+    /> -->
     <title>CODEWARTS</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+    <!-- for loading font -->
+    <div
+      style="
+        font-family: NeoDunggeunmoPro-Regular;
+        position: absolute;
+        left: -10000px;
+        display: hidden;
+      "
+    >
+      .
+    </div>
     <div style="position: fixed" id="codeuk"></div>
     <div id="root"></div>
     <!--
