@@ -13,12 +13,10 @@ import {
   ThemeProvider,
   useTheme,
 } from '@mui/material/styles';
-
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import Divider from '@mui/material/Divider';
 import AudioList from 'components/AudioList';
+import { VOICE_STATUS } from 'utils/Constants';
+import type { RootState } from 'stores';
+import { useSelector, useDispatch } from 'react-redux';
 
 type GameVoiceType = {
   session: Session | undefined;
@@ -39,6 +37,9 @@ const DrawerHeader = muiStyled('div')(({ theme }) => ({
 
 const EditorVoice = (props: GameVoiceType) => {
   const { session, joinSession, subscribers, publisher } = props;
+  const { voiceStatus } = useSelector((state: RootState) => {
+    return state.chat;
+  });
   const theme = useTheme();
 
   return (
@@ -50,7 +51,7 @@ const EditorVoice = (props: GameVoiceType) => {
         </IconButton>
       </DrawerHeader>
       <Divider /> */}
-      {!!publisher ? (
+      {voiceStatus === VOICE_STATUS.COMPLETE ? (
         <CurrentPlayer {...props} />
       ) : (
         <div

@@ -14,6 +14,7 @@ export interface ChatState {
   myVolMute: boolean;
   myMicMute: boolean;
   voiceStatus: 'LOADING' | 'COMPLETE' | 'FAIL';
+  isMicAllowed: boolean;
 }
 
 //유저 뮤트 정보 가져와서 initial state에 넣어둠
@@ -32,6 +33,7 @@ const initialState: ChatState = {
   myVolMute: false,
   myMicMute: false,
   voiceStatus: 'LOADING',
+  isMicAllowed: true,
 };
 
 export const chatSlice = createSlice({
@@ -83,6 +85,12 @@ export const chatSlice = createSlice({
     setVoiceStatus: (state, action) => {
       state.voiceStatus = action.payload;
     },
+    setMicDenied: (state) => {
+      state.isMicAllowed = false;
+    },
+    setMicAllowed: (state) => {
+      state.isMicAllowed = true;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchMuteInfo.fulfilled, (state, action) => {
@@ -103,6 +111,8 @@ export const {
   setVolMute,
   setMicMute,
   setVoiceStatus,
+  setMicDenied,
+  setMicAllowed,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;
