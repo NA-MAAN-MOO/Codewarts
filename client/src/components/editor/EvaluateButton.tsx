@@ -138,11 +138,10 @@ function EvaluateButton(props) {
             /\r\n/g,
             '\n'
           );
-          const outputWithLf = bojProbFullData.samples[i].output.replace(
-            /\r\n/g,
-            '\n'
-          );
-          console.log(outputWithLf);
+          const outputWithLf = bojProbFullData.samples[i].output
+            .replace(/\r\n/g, '\n')
+            .trimEnd();
+          // return;
           const { data } = await axios.post(
             `${APPLICATION_EDITOR_URL}/code_to_run`,
             {
@@ -151,7 +150,7 @@ function EvaluateButton(props) {
               stdin: inputWithLf,
             }
           );
-          const jdoodleOutput = data.output;
+          const jdoodleOutput = data.output.trimEnd();
           if (jdoodleOutput === outputWithLf) {
             console.log(`${i}번 테스트 케이스 맞음`);
             hitCount++;
