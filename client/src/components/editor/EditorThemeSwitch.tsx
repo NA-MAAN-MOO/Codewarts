@@ -1,7 +1,11 @@
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { MaterialUISwitch } from '../../../src/pages/editor/editorStyle';
+import {
+  MaterialUISwitch,
+  tooltipStyle,
+} from '../../../src/pages/editor/editorStyle';
 import { okaidia } from '@uiw/codemirror-theme-okaidia';
 import { solarizedLight } from '@uiw/codemirror-theme-solarized';
+import Tooltip from '@mui/material/Tooltip';
 
 //@ts-ignore
 function EditorThemeSwitch(props) {
@@ -18,19 +22,29 @@ function EditorThemeSwitch(props) {
 
   return (
     <>
-      <FormControlLabel
-        control={
-          <MaterialUISwitch
-            sx={{ ml: 3 }}
-            defaultChecked
-            onClick={(checked) => {
-              //@ts-ignore
-              switchTheme(checked);
-            }}
-          />
+      <Tooltip
+        title={
+          editorThemeMode === okaidia
+            ? '라이트 모드로 바꾸기'
+            : '다크 모드로 바꾸기'
         }
-        label=""
-      />
+        arrow
+        slotProps={tooltipStyle}
+      >
+        <FormControlLabel
+          control={
+            <MaterialUISwitch
+              sx={{ ml: 3 }}
+              defaultChecked
+              onClick={(checked) => {
+                //@ts-ignore
+                switchTheme(checked);
+              }}
+            />
+          }
+          label=""
+        />
+      </Tooltip>
     </>
   );
 }

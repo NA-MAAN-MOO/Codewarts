@@ -21,7 +21,7 @@ function SubmitButton(props) {
           rel="noreferrer"
           style={middleButtonStyle}
         >
-          SUBMIT
+          제출
         </Button>
       </Tooltip>
     </>
