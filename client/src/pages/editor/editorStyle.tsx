@@ -48,6 +48,7 @@ const editorThemeCSS = {
   },
   '.cm-content, .cm-gutter': {
     fontFamily: 'Cascadia Code, Pretendard-Regular',
+    fontSize: '1.4em',
     // height: 'auto',
     // minHeight: `${400 * 50}%`,
   },
