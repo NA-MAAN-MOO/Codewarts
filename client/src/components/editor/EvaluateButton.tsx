@@ -15,6 +15,7 @@ import { middleButtonStyle, tooltipStyle } from 'pages/editor/editorStyle';
 import EvaluateGauge from 'components/editor/EvaluateGauge';
 import { Fireworks } from './fireworks';
 import TaskIcon from '@mui/icons-material/Task';
+import Swal from 'sweetalert2';
 
 const APPLICATION_EDITOR_URL =
   process.env.REACT_APP_EDITOR_URL || 'http://localhost:3001';
@@ -61,12 +62,18 @@ function EvaluateButton(props) {
   /* 유저가 작성한 코드 가채점하기 위해 서버로 보냄 */
   const evaluateCode = async () => {
     if (!ytext.toString()) {
-      alert('채점을 위해 코드를 작성해주세요');
+      Swal.fire({
+        icon: 'error',
+        title: '채점을 위해 코드를 작성하세요',
+      });
       return;
     }
 
     if (!bojProblemId) {
-      alert('문제 ');
+      Swal.fire({
+        icon: 'error',
+        title: '채점할 문제를 선택하세요',
+      });
       return;
     }
 
@@ -250,21 +257,10 @@ function EvaluateButton(props) {
         shining={shining}
         totalCases={totalCases}
       />
-
       {/* ▼ 문제 성공 알림을 테스트하고 싶으면 주석 해제 */}
       {/* <button onClick={broadcastSuccess}>
         테스트버튼: "{editorName}"님이 문제 맞췄다고 알리기
       </button> */}
-      {/* <Button
-        color="primary"
-        style={{
-          fontFamily: 'Cascadia Code, Pretendard-Regular',
-          fontSize: '17px',
-        }}
-        onClick={evaluateSample}
-      >
-        예제채점
-      </Button>{' '} */}
     </>
   );
 }

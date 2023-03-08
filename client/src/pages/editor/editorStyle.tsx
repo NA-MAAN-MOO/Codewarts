@@ -207,7 +207,7 @@ const ProfileInfo = styledc.div`
 
 /* Paper element theme setting */
 const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#272822' : '#272822',
+  backgroundColor: '#272822',
   ...theme.typography.body2,
   padding: theme.spacing(1),
   textAlign: 'center',
