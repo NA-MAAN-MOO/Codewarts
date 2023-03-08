@@ -275,10 +275,10 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: rgba(255, 255, 255, 0.85);
+  background-color: rgba(255, 255, 255, 0);
   border-radius: 16px;
   padding: 36px 60px;
-  box-shadow: 0px 0px 5px #0000006f;
+  // box-shadow: 0px 0px 5px #0000006f;
   img {
     -webkit-user-select: none;
     -khtml-user-select: none;
