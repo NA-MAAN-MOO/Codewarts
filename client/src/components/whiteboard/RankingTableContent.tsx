@@ -10,7 +10,7 @@ export default function RankingTableContent(props: any) {
   const bgColor = '#ffe8e8';
   const fontColor = '#ba3232';
   const fontWeight = 700;
-  const fontSize = '1.1em';
+  const fontSize = '1.2vw';
   const fontFamily = 'Cascadia Code';
 
   return (

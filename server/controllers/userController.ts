@@ -31,7 +31,6 @@ interface CurUser {
 
 export const signUp = async (req: Request, res: Response) => {
   try {
-    console.log('signup');
     const user = req.body;
 
     const foundUserById = await User.findOne({ userId: user.userId });
@@ -74,8 +73,8 @@ export const signUp = async (req: Request, res: Response) => {
         },
       });
     } else {
-      return res.json({
-        success: false,
+      return res.status(420).json({
+        status: 420,
         message: '양식에 맞지 않는 입력입니다',
       });
     }

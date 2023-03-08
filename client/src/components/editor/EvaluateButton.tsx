@@ -11,9 +11,11 @@ import missSoundFile from '../../assets/sound_effect/miss_sound.mp3';
 //@ts-ignore
 import hitSoundFile from '../../assets/sound_effect/hit_sound.mp3';
 import SoundPlayer from 'hooks/useSoundPlayer';
-import { middleButtonStyle } from 'pages/editor/editorStyle';
+import { middleButtonStyle, tooltipStyle } from 'pages/editor/editorStyle';
 import EvaluateGauge from 'components/editor/EvaluateGauge';
 import { Fireworks } from './fireworks';
+import TaskIcon from '@mui/icons-material/Task';
+import Swal from 'sweetalert2';
 
 const APPLICATION_EDITOR_URL =
   process.env.REACT_APP_EDITOR_URL || 'http://localhost:3001';
@@ -60,62 +62,117 @@ function EvaluateButton(props) {
   /* 유저가 작성한 코드 가채점하기 위해 서버로 보냄 */
   const evaluateCode = async () => {
     if (!ytext.toString()) {
-      alert('채점을 위해 코드를 작성해주세요');
+      Swal.fire({
+        icon: 'error',
+        title: '채점을 위해 코드를 작성하세요',
+      });
       return;
     }
 
-    // 현재는 '19940 피자오븐', '19939 박 터뜨리기' 문제만 가채점 가능!
-    if (bojProblemId !== 19940 && bojProblemId !== 19939) {
-      alert('채점 가능한 문제 선택해주세요:  19940번, 19939번');
+    if (!bojProblemId) {
+      Swal.fire({
+        icon: 'error',
+        title: '채점할 문제를 선택하세요',
+      });
       return;
     }
 
     let hitCount = 0;
     let cases = 0; // 전체 testcase 개수 (state 대신 쓰기 위해 필요)
+    let isOlympiad = 1;
 
     if (bojProblemId === 19940) {
       setTotalCases(pizzaovenCase);
       cases = pizzaovenCase; // 19940번 테스트 케이스 개수
-    } else {
+    } else if (bojProblemId === 19939) {
       setTotalCases(gourdPop);
       cases = gourdPop; // 19939번 테스트 케이스 개수
+    } else if (bojProblemId !== 19939 || bojProblemId !== 19940) {
+      let sampleNum = Object.keys(bojProbFullData?.samples).length;
+      setTotalCases(sampleNum);
+      cases = sampleNum; // 19939번 테스트 케이스 개수
+      isOlympiad = 0;
+      // console.log(Object.keys(bojProbFullData?.samples).length);
+    } else {
+      alert('채점할 테스트 케이스가 없어요!');
+      return;
     }
 
     try {
-      for (let i = 1; i < 50; i++) {
-        const fetchInput = await fetchInputFileText(
-          `/assets/olympiad/${bojProblemId}/${i}.in`
-        );
+      if (isOlympiad === 1) {
+        for (let i = 1; i < 50; i++) {
+          const fetchInput = await fetchInputFileText(
+            `/assets/olympiad/${bojProblemId}/${i}.in`
+          );
 
-        if (fetchInput === null || fetchInput?.startsWith('<!DOCTYPE html>')) {
-          console.log('더 이상 채점할 파일이 없어요!!');
-          setEvalFinished(true);
-          break;
-        }
-
-        const { data } = await axios.post(
-          `${APPLICATION_EDITOR_URL}/code_to_run`,
-          {
-            codeToRun: ytext.toString(),
-            //@ts-ignore
-            stdin: fetchInput,
+          if (
+            fetchInput === null ||
+            fetchInput?.startsWith('<!DOCTYPE html>')
+          ) {
+            console.log('더 이상 채점할 파일이 없어요!!');
+            setEvalFinished(true);
+            break;
           }
-        );
 
-        const fetchOutput = await fetchInputFileText(
-          `assets/olympiad/${bojProblemId}/${i}.out`
-        );
-        const jdoodleOutput = data.output;
+          const { data } = await axios.post(
+            `${APPLICATION_EDITOR_URL}/code_to_run`,
+            {
+              codeToRun: ytext.toString(),
+              //@ts-ignore
+              stdin: fetchInput,
+            }
+          );
 
-        if (jdoodleOutput === fetchOutput) {
-          console.log(`${i}번 테스트 케이스 맞음`);
-          hitCount++;
-        } else {
-          console.log(`${i}번 테스트 케이스 틀림`);
+          const fetchOutput = await fetchInputFileText(
+            `assets/olympiad/${bojProblemId}/${i}.out`
+          );
+          const jdoodleOutput = data.output;
+
+          if (jdoodleOutput === fetchOutput) {
+            console.log(`${i}번 테스트 케이스 맞음`);
+            hitCount++;
+          } else {
+            console.log(`${i}번 테스트 케이스 틀림`);
+          }
+
+          setMarkingPercent(`${(hitCount / cases) * 100}`);
+          setShining(true);
         }
-
-        setMarkingPercent(`${(hitCount / cases) * 100}`);
-        setShining(true);
+      } else {
+        // 올림피아드 문제 아닌 샘플로만 채점할 것들!!
+        console.log(bojProbFullData.samples);
+        for (let i = 1; i < 50; i++) {
+          if (!bojProbFullData.samples[i]) {
+            console.log('더 이상 채점할 파일이 없어요!!');
+            setEvalFinished(true);
+            break;
+          }
+          const inputWithLf = bojProbFullData.samples[i].input.replace(
+            /\r\n/g,
+            '\n'
+          );
+          const outputWithLf = bojProbFullData.samples[i].output
+            .replace(/\r\n/g, '\n')
+            .trimEnd();
+          // return;
+          const { data } = await axios.post(
+            `${APPLICATION_EDITOR_URL}/code_to_run`,
+            {
+              codeToRun: ytext.toString(),
+              //@ts-ignore
+              stdin: inputWithLf,
+            }
+          );
+          const jdoodleOutput = data.output.replace(/ \n/g, '\n').trimEnd();
+          if (jdoodleOutput === outputWithLf) {
+            console.log(`${i}번 테스트 케이스 맞음`);
+            hitCount++;
+          } else {
+            console.log(`${i}번 테스트 케이스 틀림`);
+          }
+          setMarkingPercent(`${(hitCount / cases) * 100}`);
+          setShining(true);
+        }
       }
     } catch (error) {
       console.error(error);
@@ -179,14 +236,15 @@ function EvaluateButton(props) {
 
   return (
     <>
-      <Tooltip title="코드와트 가채점">
+      <Tooltip title="코드와트 가채점" arrow slotProps={tooltipStyle}>
         <Button
           variant="outlined"
           color="primary"
           onClick={evaluateCode}
           style={middleButtonStyle}
         >
-          SUBMIT
+          <TaskIcon sx={{ marginRight: '5px' }} />
+          제출
         </Button>
       </Tooltip>
       {markingPercent === '100' ? <Fireworks /> : null}
@@ -199,21 +257,10 @@ function EvaluateButton(props) {
         shining={shining}
         totalCases={totalCases}
       />
-
       {/* ▼ 문제 성공 알림을 테스트하고 싶으면 주석 해제 */}
       {/* <button onClick={broadcastSuccess}>
         테스트버튼: "{editorName}"님이 문제 맞췄다고 알리기
       </button> */}
-      {/* <Button
-        color="primary"
-        style={{
-          fontFamily: 'Cascadia Code, Pretendard-Regular',
-          fontSize: '17px',
-        }}
-        onClick={evaluateSample}
-      >
-        예제채점
-      </Button>{' '} */}
     </>
   );
 }

@@ -5,6 +5,18 @@ import Memo from '../models/Memo';
 
 import axios, { AxiosResponse } from 'axios';
 
+export function getDate(): string {
+  let dateNow = new Date();
+
+  let fullYear = String(dateNow.getFullYear());
+  let year = fullYear.substring(2, 4);
+  let month = String(dateNow.getMonth() + 1);
+  let day = String(dateNow.getDate());
+  let hour = String(dateNow.getHours());
+  let minute = String(dateNow.getMinutes());
+  return year + '.' + month + '.' + day + '. ' + hour + ':' + minute;
+}
+
 // declare module 'node-cron';
 const cron = require('node-cron');
 // import cron from 'node-cron';
@@ -109,6 +121,7 @@ export const sendUsersBojInfo = (req: Request, res: Response) => {
 /* Save memo to DB */
 export const addMemo = async (req: Request, res: Response) => {
   const memo = new Memo({
+    date: getDate(),
     authorId: req.body.authorId,
     authorNickname: req.body.authorNickname,
     content: '',

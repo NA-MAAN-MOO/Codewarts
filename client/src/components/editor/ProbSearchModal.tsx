@@ -10,8 +10,13 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import RenderSvg from 'components/Svg';
-import { buttonTheme } from 'pages/editor/editorStyle';
+import {
+  buttonTheme,
+  filterButtonStyle,
+  tooltipStyle,
+} from 'pages/editor/editorStyle';
 import { ThemeProvider } from '@mui/material/styles';
+import Tooltip from '@mui/material/Tooltip';
 
 const APPLICATION_EDITOR_URL =
   process.env.REACT_APP_EDITOR_URL || 'http://localhost:3001';
@@ -32,7 +37,7 @@ const style = {
 };
 
 export default function SearchModal(props: any) {
-  const { setBojProbFullData, setBojProblemId, setAlgoSelect } = props;
+  const { setBojProbFullData, setBojProblemId } = props;
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -73,24 +78,16 @@ export default function SearchModal(props: any) {
   return (
     <div>
       <ThemeProvider theme={buttonTheme}>
-        <Button
-          onClick={handleOpen}
-          color="primary"
-          variant="outlined"
-          sx={{
-            wordBreak: 'keep-all',
-            wrap: 'no-wrap',
-            padding: '10px 5px 10px 11px',
-            margin: '10px',
-            width: 100,
-            fontFamily: 'Cascadia Code, Pretendard-Regular',
-            fontWeight: 'bold',
-            fontSize: '1rem',
-            boxShadow: 'inset 0.2em 0.2em #ededed',
-          }}
-        >
-          FILTER🔍
-        </Button>
+        <Tooltip title="필터로 검색하기" arrow slotProps={tooltipStyle}>
+          <Button
+            onClick={handleOpen}
+            color="primary"
+            variant="outlined"
+            sx={filterButtonStyle}
+          >
+            FILTER🔍
+          </Button>
+        </Tooltip>
       </ThemeProvider>
 
       <Modal
@@ -147,8 +144,7 @@ export default function SearchModal(props: any) {
                   setBojProblemId(value?.probId);
                   //@ts-ignore
                   setBojProbFullData(pagedProbData[key]);
-                  setAlgoSelect(0);
-                  // todo; 여기서 algoSelect 값을 0 혹은 1로 세팅도 해줄 것!
+                  // setAlgoSelect(0); // 추후에 리트코드 추가할 수도 있어서 남겨둔 변수
                 }}
               >
                 <ListItemIcon sx={{ color: 'inherit' }}>

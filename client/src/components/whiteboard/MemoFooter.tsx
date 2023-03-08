@@ -53,33 +53,34 @@ function MemoFooter(props: any) {
   };
 
   return (
-    <FooterWrapper>
-      <AvatarGroup
-        max={6}
-        sx={{
-          paddingLeft: '10px',
-          border: 'none',
-          '&.MuiAvatarGroup-root': { border: 'none' },
-          '&.MuiAvatarGroup-avatar': { border: 'none' },
-        }}
-      >
-        {participants.map((participant: string) => (
-          <AvatarWithPopper participant={participant} key={participant} />
-        ))}
-      </AvatarGroup>
-
-      <Checkbox
-        checked={checked}
-        onChange={handleChange}
-        sx={{
-          // marginRight: '10px',
-          color: 'white',
-          '&.Mui-checked': { color: '#00c410' },
-          margin: '0 0 10px 10px',
-        }}
-        disabled={isChecked ? true : false}
-      />
-    </FooterWrapper>
+    <>
+      <FooterWrapper>
+        <AvatarGroup
+          max={6}
+          sx={{
+            paddingLeft: '10px',
+            '&..MuiAvatarGroup-avatar': {
+              border: 0,
+            },
+          }}
+        >
+          {participants.map((participant: string) => (
+            <AvatarWithPopper participant={participant} key={participant} />
+          ))}
+        </AvatarGroup>
+        <Checkbox
+          checked={checked}
+          onChange={handleChange}
+          sx={{
+            // marginRight: '10px',
+            color: 'white',
+            '&.Mui-checked': { color: '#00c410' },
+            margin: '0 0 10px 10px',
+          }}
+          disabled={isChecked ? true : false}
+        />
+      </FooterWrapper>
+    </>
   );
 }
 

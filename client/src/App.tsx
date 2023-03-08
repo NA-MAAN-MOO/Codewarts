@@ -22,39 +22,6 @@ function App() {
   });
   const dispatch = useDispatch();
 
-  // let loadFlag = false;
-
-  // useEffect(() => {
-  //   if (mode === EDITOR) {
-  //     dispatch(openEditor());
-  //   } else if (mode === GAME) {
-  //     dispatch(openGame());
-  //   }
-  //   loadFlag = true;
-  // }, []);
-
-  // const onBeforeUnload = async () => {
-  //   try {
-  //     const response = await axios.post(
-  //       `${APPLICATION_DB_URL}/user/logout`,
-  //       userLoginId
-  //     );
-  //     if (response.data.status === 200) {
-  //       console.log(`${userLoginId} 잘나감`);
-  //     }
-  //   } catch (e) {
-  //     console.log(`${userLoginId} 왜안나감?`);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   window.addEventListener('beforeunload', onBeforeUnload);
-
-  //   return function cleanup() {
-  //     window.removeEventListener('beforeunload', onBeforeUnload);
-  //   };
-  // }, []);
-
   return (
     <HoverDiv>
       <BgmPlayer />

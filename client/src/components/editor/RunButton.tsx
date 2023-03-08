@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Tooltip from '@mui/material/Tooltip';
 import Button from '@mui/material/Button';
-import { middleButtonStyle } from 'pages/editor/editorStyle';
+import { middleButtonStyle, tooltipStyle } from 'pages/editor/editorStyle';
 
 const APPLICATION_EDITOR_URL =
   process.env.REACT_APP_EDITOR_URL || 'http://localhost:3001';
@@ -27,7 +27,7 @@ function RunButton(props) {
       );
 
       console.log(data); // 전체 reponse body (output, statusCode, memory, cpuTime)
-      setCompileOutput(data.output.replace(/\n/g, '<br>'));
+      setCompileOutput(data.output.replace(/ \n/g, '\r\n').trimEnd());
       setMemory(data.memory);
       setCpuTime(data.cpuTime);
     } catch (error) {
@@ -38,14 +38,14 @@ function RunButton(props) {
 
   return (
     <>
-      <Tooltip title="코드 실행하기" arrow>
+      <Tooltip title="코드 실행하기" arrow slotProps={tooltipStyle}>
         <Button
           onClick={runCode}
           color="primary"
           variant="outlined"
           style={middleButtonStyle}
         >
-          ▶️ RUN
+          ▶️ 실행
         </Button>
       </Tooltip>
     </>
