@@ -6,6 +6,7 @@ import {
   deleteMemo,
   changeMemoPos,
   participateInMemo,
+  dropOutOfMemo,
   getUsersBojInfo,
 } from '../controllers/whiteboardController';
 import express from 'express';
@@ -23,5 +24,6 @@ router.post('/update-memo', updateMemo);
 router.get('/get-memos', getMemo);
 router.post('/change-memo-pos', changeMemoPos);
 router.post('/participate-in-memo', participateInMemo);
+router.post('/drop-out-of-memo', dropOutOfMemo);
 
 export default router;
