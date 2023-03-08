@@ -37,7 +37,7 @@ const style = {
 };
 
 export default function SearchModal(props: any) {
-  const { setBojProbFullData, setBojProblemId, setAlgoSelect } = props;
+  const { setBojProbFullData, setBojProblemId } = props;
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -144,8 +144,7 @@ export default function SearchModal(props: any) {
                   setBojProblemId(value?.probId);
                   //@ts-ignore
                   setBojProbFullData(pagedProbData[key]);
-                  setAlgoSelect(0);
-                  // todo; 여기서 algoSelect 값을 0 혹은 1로 세팅도 해줄 것!
+                  // setAlgoSelect(0); // 추후에 리트코드 추가할 수도 있어서 남겨둔 변수
                 }}
               >
                 <ListItemIcon sx={{ color: 'inherit' }}>

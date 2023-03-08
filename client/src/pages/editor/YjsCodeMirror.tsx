@@ -88,7 +88,7 @@ function YjsCodeMirror(props: YjsProp) {
   let [editorThemeMode, setEditorTheme] = useState(okaidia);
   let [bojProblemId, setBojProblemId] = useState();
   let [bojProbFullData, setBojProbFullData] = useState();
-  const [algoSelect, setAlgoSelect] = useState(0); // 백준(0), 리트코드(1)
+  // const [algoSelect, setAlgoSelect] = useState(0); // 백준(0), 리트코드(1)
   const [undoManager, setUndoManager] = useState();
   const [ytext, setYtext] = useState();
   const theme = useTheme();
@@ -221,7 +221,7 @@ function YjsCodeMirror(props: YjsProp) {
               <SearchModal
                 setBojProbFullData={setBojProbFullData}
                 setBojProblemId={setBojProblemId}
-                setAlgoSelect={setAlgoSelect}
+                // setAlgoSelect={setAlgoSelect}
               />
             </AlgoInputWrap>
 
