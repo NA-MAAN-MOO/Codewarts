@@ -52,7 +52,7 @@ const editorThemeCSS = {
     // minHeight: `${400 * 50}%`,
   },
   '.cm-content': {
-    fontSize: '1.3em',
+    fontSize: '1.7em',
   },
   '.cm-gutter': {
     // minHeight: '50%',
@@ -73,13 +73,13 @@ const EditorWrapper = styledc.div`
   `;
 
 const EditorInfo = styledc.div`
-font-family: 'Cascadia Code', 'Pretendard-Regular';
+font-family: 'Firenze';
 // color: rgba(255, 255, 255, 0.7);
-font-size: 35px; 
+font-size: 40px; 
 font-weight: 600; 
 // margin-top: 3%;
 text-align: center;
-filter: drop-shadow(0px 4px 4px rgba(255, 255, 255, 0.5));
+// filter: drop-shadow(0px 4px 4px rgba(255, 255, 255, 0.5));
 `;
 
 const AlgoInfoWrap = styledc.div`
@@ -109,8 +109,7 @@ width: 100%
 const ProbTitleDiv = styledc.div`
 text-shadow: 1px 1px 2px grey;
 color: #fff;
-// font-size: 25px;
-font-size: 1.7rem;
+font-size: 1.9rem;
 width: 100%;
 display: flex;
 flex-direction : row;
@@ -219,7 +218,8 @@ const MiddleWrapper = styledc.div`
   martgin-top: 10px;
   font-size: 20px;
   text-align: right;
-  font-family: 'Cascadia Code', 'Pretendard-Regular';
+  // font-family: 'Cascadia Code', 'Pretendard-Regular';
+
   color: papayawhip;
 `;
 
@@ -295,7 +295,7 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
         sx={{ fontSize: '0.9rem', color: 'rgba(255, 255, 255, 0.7)' }}
       />
     }
-    sx={{ fontSize: '1.4em' }}
+    sx={{ fontSize: '1.5rem' }}
     {...props}
   />
 ))(({ theme }) => ({
@@ -312,7 +312,7 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
 
 /* 왼쪽 서랍 아코디언 내용 */
 const accordionDetailStyle = {
-  fontSize: '1.2em',
+  fontSize: '1.3rem',
 };
 
 /* 왼쪽 서랍 아코디언 예제 제목*/
@@ -402,12 +402,34 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 const middleButtonStyle = {
-  fontFamily: 'Cascadia Code, Pretendard-Regular',
-  fontSize: '18px',
+  // fontFamily: 'Cascadia Code, Pretendard-Regular',
+  fontFamily: 'Firenze, Pretendard-Regular',
+  fontSize: '1.5rem',
   boxShadow: 'inset 0.2em 0.2em #ededed',
   marginRight: '5px',
   marginLeft: '5px',
   marginBottom: '5px',
+};
+
+const filterButtonStyle = {
+  wordBreak: 'keep-all',
+  wrap: 'no-wrap',
+  padding: '8px 5px 6px 14px',
+  margin: '10px',
+  width: 120,
+  fontFamily: 'Cascadia Code, Pretendard-Regular',
+  fontWeight: 'bold',
+  fontSize: '1.2rem',
+  boxShadow: 'inset 0.2em 0.2em #ededed',
+};
+
+const tooltipStyle = {
+  tooltip: {
+    sx: {
+      fontFamily: 'Cascadia Code, Pretendard-Regular',
+      fontSize: '1rem',
+    },
+  },
 };
 
 export {
@@ -437,4 +459,6 @@ export {
   leftDrawerCSS,
   middleButtonStyle,
   editorThemeCSS,
+  filterButtonStyle,
+  tooltipStyle,
 };

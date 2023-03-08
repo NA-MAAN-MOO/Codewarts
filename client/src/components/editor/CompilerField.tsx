@@ -73,11 +73,7 @@ function CompilerField(props) {
               readOnly: true,
             }}
             InputLabelProps={{ shrink: true }}
-            value={
-              compileOutput
-                ? compileOutput.replace('<br>', '').replace(/<br>/g, '\n')
-                : null
-            }
+            value={compileOutput ? compileOutput : null}
           />
         </Item>
       </Grid>
