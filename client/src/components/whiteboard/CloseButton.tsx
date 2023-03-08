@@ -10,7 +10,12 @@ export default function CloseButton(props: any) {
       size="large"
       onClick={handleClose}
       color="secondary"
-      sx={{ float: 'right', marginRight: '20px', marginTop: '10px' }}
+      sx={{
+        float: 'right',
+        marginRight: '20px',
+        marginTop: '10px',
+        zIndex: 999,
+      }}
     >
       <Close />
     </IconButton>
