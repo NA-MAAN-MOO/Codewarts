@@ -70,6 +70,7 @@ function AvatarWithPopper(props: any) {
         id="mouse-over-popover"
         sx={{
           pointerEvents: 'none',
+          fontFamily: 'NeoDunggeunmoPro-Regular',
         }}
         open={open}
         anchorEl={anchorEl}
@@ -82,11 +83,12 @@ function AvatarWithPopper(props: any) {
           horizontal: 'left',
         }}
         onClose={handlePopoverClose}
-        disableRestoreFocus
+        // disableRestoreFocus
       >
-        <Typography sx={{ fontFamily: 'NeoDunggeunmoPro-Regular' }}>
-          {participant}
-        </Typography>
+        <p style={{ fontFamily: 'NeoDunggeunmoPro-Regular' }}>{participant}</p>
+        {/* <Typography sx={{ fontFamily: 'NeoDunggeunmoPro-Regular' }}> */}
+
+        {/* </Typography> */}
       </Popover>
     </>
   );
