@@ -9,6 +9,7 @@ import { Button, Fab, Fade } from '@mui/material';
 import { RootState } from 'stores';
 import { useSelector } from 'react-redux';
 import FloatingIcon from 'components/FloatingIcon';
+import './BgmPlayer.css';
 
 const BgmPlayer = () => {
   const bgms = [bgm1, bgm2, bgm3];
