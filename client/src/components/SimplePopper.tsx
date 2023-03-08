@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Popper, { PopperPlacementType } from '@mui/material/Popper';
-import FloatingBox from './FloatingBox';
 import { Button, Fade, Grid, Paper } from '@mui/material';
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import SimpleZoom from './SimpleZoom';

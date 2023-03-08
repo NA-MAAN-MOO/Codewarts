@@ -129,7 +129,13 @@ function Memo(props: any) {
           zIndex: isDragging ? maxZIndex : ownZIndex,
         }}
       >
-        <CardContent sx={{ fontSize: '1.0em', color: 'gray' }}>
+        <CardContent
+          sx={{
+            fontSize: '1.0em',
+            color: 'gray',
+            fontFamily: 'NeoDunggeunmoPro-Regular',
+          }}
+        >
           <div id="draggable-div" style={{ height: '30px' }}>
             <span>
               [{memo.date}] &nbsp; {memo.authorNickname}
@@ -180,7 +186,9 @@ const MemoContent = styled.textarea`
   user-select: auto;
   padding: 5px;
   margin-bottom: 20px;
-  font-family: 'Noto Sans KR';
+  // font-family: 'GangwonEduHyeonokT_OTFMediumA';
+  // font-family: 'NeoDunggeunmoPro-Regular';
+  font-family: 'Pretendard-Regular';
   font-size: 1.4em;
 `;
 

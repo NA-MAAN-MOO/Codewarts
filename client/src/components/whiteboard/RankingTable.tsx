@@ -48,7 +48,8 @@ export default function RankingTable(props: any) {
                   background: 'darkred',
                   color: 'white',
                   fontWeight: '700',
-                  fontSize: '1em',
+                  fontSize: '1.2em',
+                  fontFamily: 'Pretendard-Regular',
                 }}
               >
                 {colName}

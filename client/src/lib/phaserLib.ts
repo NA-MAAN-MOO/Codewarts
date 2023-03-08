@@ -35,6 +35,7 @@ export const handleScene = async (statusTo: string, data: any = {}) => {
       if (phaserGame.scene.isSleeping('MainScene')) {
         phaserGame.scene.wake('MainScene');
       } else {
+        phaserGame.scene.start('RoomBackground');
         phaserGame.scene.start('MainScene');
       }
       break;
