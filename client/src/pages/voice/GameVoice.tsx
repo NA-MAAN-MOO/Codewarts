@@ -36,7 +36,7 @@ const GameVoice = (props: GameVoiceType & { resetSession: () => void }) => {
       <Drawer anchor="right" isOpen={drawerOpen} handleDrawer={handleDrawer}>
         <CurrentPlayer handleDrawer={handleDrawer} {...props} />
       </Drawer>
-      {voiceStatus === VOICE_STATUS.COMPLETE && !!publisher ? (
+      {voiceStatus === VOICE_STATUS.COMPLETE ? (
         <GameVoiceBox {...props} />
       ) : voiceStatus === VOICE_STATUS.LOADING ? (
         <FloatingBox>

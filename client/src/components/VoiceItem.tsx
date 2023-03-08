@@ -10,6 +10,8 @@ import useVoice from 'hooks/useVoice';
 import { styledTheme } from 'styles/theme';
 import FloatingBox from 'components/FloatingBox';
 import SimplePopper from 'components/SimplePopper';
+import { styled as muiStyled } from '@mui/material/styles';
+import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 
 const VoiceItem = ({
   session,
@@ -28,10 +30,32 @@ const VoiceItem = ({
 }) => {
   const dispatch = useDispatch();
   const { handleMyMicMute, handleMyVolumeMute } = useVoice();
-  const { playerId, myVolMute, myMicMute, volMuteInfo, micMuteInfo } =
-    useSelector((state: RootState) => {
-      return { ...state.user, ...state.chat };
-    });
+  const {
+    playerId,
+    myVolMute,
+    myMicMute,
+    volMuteInfo,
+    micMuteInfo,
+    isMicAllowed,
+  } = useSelector((state: RootState) => {
+    return { ...state.user, ...state.chat };
+  });
+
+  const LightTooltip = muiStyled(({ className, ...props }: TooltipProps) => (
+    <Tooltip classes={{ popper: className }} {...props} />
+  ))(({ theme }) => ({
+    '& .MuiTooltip-tooltip': {
+      backgroundColor: 'rgb(226, 178, 100, 0.9)',
+      boxShadow: theme.shadows[1],
+      fontSize: 16,
+      padding: '13px',
+      borderRadius: '50px',
+      border: 'solid rgb(172, 0, 0) 2px',
+      color: styledTheme.darkRed,
+      fontFamily: 'Pretendard-Regular',
+      fontWeight: 'bold',
+    },
+  }));
 
   const isVolMute = isMe ? myVolMute : volMuteInfo[name];
   const isMicMute = isMe ? myMicMute : micMuteInfo[name];
@@ -92,16 +116,43 @@ const VoiceItem = ({
             useFloatBox ? styledTheme.normalIconSize : styledTheme.smallIconSize
           }
         />
-        <MicIcon
-          color={isMe || isSuperior ? 'white' : 'gray'}
-          handleMic={
-            isMe ? handleMyMic : isSuperior ? handleGuestMic : undefined
-          }
-          isMute={isMicMute}
-          size={
-            useFloatBox ? styledTheme.normalIconSize : styledTheme.smallIconSize
-          }
-        />
+        {isMicAllowed && !!publisher ? (
+          //마이크 권한 허용
+          <MicIcon
+            color={isMe || isSuperior ? 'white' : 'gray'}
+            handleMic={
+              isMe ? handleMyMic : isSuperior ? handleGuestMic : undefined
+            }
+            isMute={isMicMute}
+            size={
+              useFloatBox
+                ? styledTheme.normalIconSize
+                : styledTheme.smallIconSize
+            }
+          />
+        ) : (
+          //마이크 권한 허용하지 않았을 때
+          <LightTooltip
+            title={
+              !isMicAllowed
+                ? '마이크 권한을 허용해 주세요.'
+                : '마이크를 인식하지 못했습니다.'
+            }
+            placement="top"
+          >
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <MicIcon
+                color={isMe || isSuperior ? 'white' : 'gray'}
+                isMute={true}
+                size={
+                  useFloatBox
+                    ? styledTheme.normalIconSize
+                    : styledTheme.smallIconSize
+                }
+              />
+            </div>
+          </LightTooltip>
+        )}
         {useFloatBox && <SimplePopper />}
       </WrapperDiv>
     </>

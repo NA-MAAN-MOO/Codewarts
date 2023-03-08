@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import {
   ConnectionEvent,
   OpenVidu,
+  OpenViduError,
   Publisher,
   Session,
   SessionDisconnectedEvent,
@@ -17,6 +18,8 @@ import {
   setVolMute,
   setMicMute,
   setVoiceStatus,
+  setMicAllowed,
+  setMicDenied,
 } from 'stores/chatSlice';
 import { Connection } from 'types';
 import _ from 'lodash';
@@ -373,14 +376,23 @@ export default () => {
       });
       await mySession.publish(pubNow);
       handlePublisher(pubNow);
-
+      dispatch(setMicAllowed());
       dispatch(setVoiceStatus(VOICE_STATUS.COMPLETE));
     } catch (error) {
       console.log(error);
-      if (session) {
-        disconnectSession(session);
+      if (
+        error instanceof OpenViduError &&
+        error.name === 'DEVICE_ACCESS_DENIED'
+      ) {
+        //마이크 권한 없어서 나는 에러
+        dispatch(setMicDenied());
+        dispatch(setVoiceStatus(VOICE_STATUS.COMPLETE));
+      } else {
+        if (session) {
+          disconnectSession(session);
+        }
+        dispatch(setVoiceStatus(VOICE_STATUS.FAIL));
       }
-      dispatch(setVoiceStatus(VOICE_STATUS.FAIL));
     }
   };
 
