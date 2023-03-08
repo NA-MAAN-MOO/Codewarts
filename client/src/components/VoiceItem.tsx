@@ -90,7 +90,6 @@ const VoiceItem = ({
   const handleGuestMic = () => {
     if (!session) return console.log('세션없음');
     const otherMuteNow = micMuteInfo[name];
-    console.log(otherMuteNow);
     const sendingData = JSON.stringify({
       user: name,
       muteTo: !otherMuteNow,
@@ -116,21 +115,7 @@ const VoiceItem = ({
             useFloatBox ? styledTheme.normalIconSize : styledTheme.smallIconSize
           }
         />
-        {isMicAllowed && !!publisher ? (
-          //마이크 권한 허용
-          <MicIcon
-            color={isMe || isSuperior ? 'white' : 'gray'}
-            handleMic={
-              isMe ? handleMyMic : isSuperior ? handleGuestMic : undefined
-            }
-            isMute={isMicMute}
-            size={
-              useFloatBox
-                ? styledTheme.normalIconSize
-                : styledTheme.smallIconSize
-            }
-          />
-        ) : (
+        {!isMicAllowed && isMe ? (
           //마이크 권한 허용하지 않았을 때
           <LightTooltip
             title={
@@ -152,6 +137,20 @@ const VoiceItem = ({
               />
             </div>
           </LightTooltip>
+        ) : (
+          //마이크 권한 허용
+          <MicIcon
+            color={isMe || isSuperior ? 'white' : 'gray'}
+            handleMic={
+              isMe ? handleMyMic : isSuperior ? handleGuestMic : undefined
+            }
+            isMute={isMicMute}
+            size={
+              useFloatBox
+                ? styledTheme.normalIconSize
+                : styledTheme.smallIconSize
+            }
+          />
         )}
         {useFloatBox && <SimplePopper />}
       </WrapperDiv>
