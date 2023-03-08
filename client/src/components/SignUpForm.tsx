@@ -41,7 +41,6 @@ export default function FormDialog() {
         `${APPLICATION_DB_URL}/user/signup`,
         body
       );
-      console.log(signUpResponse.data);
       if (signUpResponse.data.status === 200) {
         console.log('회원가입 성공');
         setSignUpSuccess(true);
@@ -53,6 +52,10 @@ export default function FormDialog() {
         setSignUpFailMsg('이미 존재하는 아이디 입니다');
       } else if (error?.response?.status === 410) {
         setSignUpFailMsg('이미 존재하는 닉네임 입니다');
+      } else {
+        setSignUpFailMsg(
+          '아이디와 닉네임은 공백과 특수기호를 포함할 수 없습니다'
+        );
       }
       setSignUpFail(true);
       setSignUpSuccess(false);
