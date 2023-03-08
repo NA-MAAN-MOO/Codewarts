@@ -294,7 +294,6 @@ export default () => {
         }) as Subscriber[];
 
         await handleMyVolumeMute({
-          subscribers,
           session,
           muteTo,
         });
@@ -384,8 +383,8 @@ export default () => {
         error instanceof OpenViduError &&
         error.name === 'DEVICE_ACCESS_DENIED'
       ) {
-        //마이크 권한 없어서 나는 에러
-        dispatch(setMicDenied());
+        //마이크 권한 없어서 나는 에러임. 권한 없음 처리
+        await handleMyMicDenied({ session });
         dispatch(setVoiceStatus(VOICE_STATUS.COMPLETE));
       } else {
         if (session) {
@@ -453,11 +452,9 @@ export default () => {
 
   //내 볼륨 뮤트
   const handleMyVolumeMute = async ({
-    subscribers,
     session,
     muteTo,
   }: {
-    subscribers: Subscriber[];
     session?: Session;
     muteTo: boolean;
   }) => {
@@ -526,6 +523,33 @@ export default () => {
     } catch (err) {
       console.log(err);
       dispatch(setVoiceStatus(VOICE_STATUS.FAIL));
+    }
+  };
+
+  //내 마이크 권한없음 설정
+  const handleMyMicDenied = async ({ session }: { session?: Session }) => {
+    try {
+      if (!session) return;
+
+      dispatch(setMicDenied());
+
+      await axios.post(
+        `${APPLICATION_VOICE_URL}/toggle-mute/${MUTE_TYPE.MIC}`,
+        {
+          userName: playerId,
+          muteTo: true,
+        }
+      );
+      const sendingData = JSON.stringify({
+        user: playerId,
+        muteTo: true,
+      });
+      session?.signal({
+        type: MUTE_TYPE.MIC,
+        data: sendingData,
+      });
+    } catch (err) {
+      console.log(err);
     }
   };
 

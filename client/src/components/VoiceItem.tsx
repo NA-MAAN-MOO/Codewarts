@@ -63,7 +63,7 @@ const VoiceItem = ({
   //내 볼륨 음소거 처리
   const handleMyVolume = async () => {
     if (!session) return;
-    await handleMyVolumeMute({ subscribers, session, muteTo: !myVolMute });
+    await handleMyVolumeMute({ session, muteTo: !myVolMute });
   };
 
   //내 마이크 음소거 처리
