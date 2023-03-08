@@ -11,9 +11,10 @@ import missSoundFile from '../../assets/sound_effect/miss_sound.mp3';
 //@ts-ignore
 import hitSoundFile from '../../assets/sound_effect/hit_sound.mp3';
 import SoundPlayer from 'hooks/useSoundPlayer';
-import { middleButtonStyle } from 'pages/editor/editorStyle';
+import { middleButtonStyle, tooltipStyle } from 'pages/editor/editorStyle';
 import EvaluateGauge from 'components/editor/EvaluateGauge';
 import { Fireworks } from './fireworks';
+import TaskIcon from '@mui/icons-material/Task';
 
 const APPLICATION_EDITOR_URL =
   process.env.REACT_APP_EDITOR_URL || 'http://localhost:3001';
@@ -61,6 +62,11 @@ function EvaluateButton(props) {
   const evaluateCode = async () => {
     if (!ytext.toString()) {
       alert('채점을 위해 코드를 작성해주세요');
+      return;
+    }
+
+    if (!bojProblemId) {
+      alert('문제 ');
       return;
     }
 
@@ -223,14 +229,15 @@ function EvaluateButton(props) {
 
   return (
     <>
-      <Tooltip title="코드와트 가채점">
+      <Tooltip title="코드와트 가채점" arrow slotProps={tooltipStyle}>
         <Button
           variant="outlined"
           color="primary"
           onClick={evaluateCode}
           style={middleButtonStyle}
         >
-          SUBMIT
+          <TaskIcon sx={{ marginRight: '5px' }} />
+          제출
         </Button>
       </Tooltip>
       {markingPercent === '100' ? <Fireworks /> : null}
