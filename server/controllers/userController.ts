@@ -22,6 +22,9 @@ import CharInfo from '../services/CharInfo';
 //   return hashedPassword;
 // }
 
+const userIdRegex = /^[a-zA-Z0-9]+$/; // Allows only letters and numbers
+const userNicknameRegex = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]+$/; //hanguel, number, alphbet,  not allows special char and white space
+
 interface CurUser {
   [userNickname: string]: number;
 }
@@ -48,23 +51,34 @@ export const signUp = async (req: Request, res: Response) => {
       });
     }
 
-    // user.userPw = await hashPassword(user);
-    const result = await User.collection.insertOne({
-      userId: user.userId,
-      userPw: user.userPw,
-      userNickname: user.userNickname,
-      userBojId: user.userBojId,
-      userLeetId: user.userLeetId,
-    });
-    if (!result) {
-      return res.json({ success: false, message: '회원가입 실패' });
-    }
-    return res.status(200).json({
-      status: 200,
-      payload: {
+    //validation check
+    if (
+      userIdRegex.test(user.userId) &&
+      userNicknameRegex.test(user.userNickname)
+    ) {
+      // user.userPw = await hashPassword(user);
+      const result = await User.collection.insertOne({
         userId: user.userId,
-      },
-    });
+        userPw: user.userPw,
+        userNickname: user.userNickname,
+        userBojId: user.userBojId,
+        userLeetId: user.userLeetId,
+      });
+      if (!result) {
+        return res.json({ success: false, message: '회원가입 실패' });
+      }
+      return res.status(200).json({
+        status: 200,
+        payload: {
+          userId: user.userId,
+        },
+      });
+    } else {
+      return res.json({
+        success: false,
+        message: '양식에 맞지 않는 입력입니다',
+      });
+    }
   } catch (e) {
     console.log(e);
   }

@@ -166,6 +166,7 @@ function YjsCodeMirror(props: YjsProp) {
         indentUnit.of('\t'),
         foldGutter(),
         placeholder(editorPlaceHolder),
+        EditorView.lineWrapping,
       ],
     });
 
