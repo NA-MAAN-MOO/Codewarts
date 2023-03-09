@@ -36,10 +36,13 @@ function Memo(props: any) {
     setmaxZIndex,
   } = props;
 
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [position, setPosition] = useState({
+    x: memo.x * window.innerWidth * 0.6,
+    y: memo.y * window.innerHeight,
+  });
   const [color, setColor] = useState('');
   const [isDragging, setIsDragging] = useState(false);
-  const [ownZIndex, setOwnZIndex] = useState(maxZIndex);
+  const [ownZIndex, setOwnZIndex] = useState(0);
 
   const isMine = currentUserNickname === memo.authorNickname;
 
@@ -66,7 +69,6 @@ function Memo(props: any) {
   const onChangeContent = useMemo(
     () =>
       debounce((e) => {
-        // FIXME: 나만 바꿀 수 있게
         updateMemo(memo._id, e.target.value);
       }, 500),
     []
@@ -91,21 +93,17 @@ function Memo(props: any) {
     // console.log('찍힘');
     // let tempZIndex = maxZindex + 1;
     setIsDragging(true);
-    setmaxZIndex(maxZIndex + 1);
+    setmaxZIndex((zIndex: number) => zIndex + 1);
   };
 
+  // console.log(memo.content, 'max값 ', maxZIndex, '고유값', ownZIndex);
   const fixZIndex = () => {
     setOwnZIndex(maxZIndex);
   };
-  // console.log();
 
   return (
     <Draggable
-      handle="#draggable-div"
-      defaultPosition={{
-        x: memo.x * window.innerWidth * 0.6,
-        y: memo.y * window.innerHeight,
-      }}
+      defaultPosition={position}
       bounds={{
         left: -window.innerWidth * 0.1,
         top: 0,
@@ -116,19 +114,20 @@ function Memo(props: any) {
         // e.stopPropagation();
         onChangePosition(data);
       }}
-      onMouseDown={bringToFront}
+      // onMouseDown={bringToFront}
       onStart={bringToFront}
       onStop={(e, data) => {
         setIsDragging(false);
         fixZIndex();
         changeMemoPos(
           memo._id,
-          (data.x / window.innerWidth) * 0.6,
+          data.x / (window.innerWidth * 0.6),
           data.y / window.innerHeight
         );
       }}
     >
       <Card
+        onMouseDown={bringToFront}
         sx={{
           width: '300px',
           minHeight: '240px',
@@ -147,22 +146,20 @@ function Memo(props: any) {
             fontFamily: 'NeoDunggeunmoPro-Regular',
           }}
         >
-          <div id="draggable-div" style={{ height: '30px' }}>
-            <span>
-              [{memo.date}] &nbsp; {memo.authorNickname}
-            </span>
-            {isMine && (
-              <IconButton
-                aria-label="delete"
-                size="small"
-                color="secondary"
-                sx={{ float: 'right', marginTop: '-5px' }}
-                onClick={onClickDelete}
-              >
-                <DeleteForeverIcon htmlColor="#b52216" viewBox="0 0 20 20 " />
-              </IconButton>
-            )}
-          </div>
+          <span>
+            [{memo.date}] &nbsp; {memo.authorNickname}
+          </span>
+          {isMine && (
+            <IconButton
+              aria-label="delete"
+              size="small"
+              color="secondary"
+              sx={{ float: 'right', marginTop: '-5px' }}
+              onClick={onClickDelete}
+            >
+              <DeleteForeverIcon htmlColor="#b52216" viewBox="0 0 20 20 " />
+            </IconButton>
+          )}
           {isMine ? (
             <MemoContent
               defaultValue={memo.content}
