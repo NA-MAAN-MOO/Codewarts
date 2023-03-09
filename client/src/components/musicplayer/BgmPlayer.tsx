@@ -65,7 +65,7 @@ const BgmPlayer = () => {
         customProgressBarSection={[]}
         ref={player}
         loop={true}
-        volume={0.3}
+        volume={0.1}
         src={selectedBgm}
         // onPlay={(e) => console.log('onPlay')}
       />
