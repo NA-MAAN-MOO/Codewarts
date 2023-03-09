@@ -55,6 +55,18 @@ const VoiceRoom = () => {
     dispatch(turnWhiteboardOff());
   }, [status, editorName]);
 
+  // useEffect(() => {
+  //   if (!provider) {
+  //     console.log(provider);
+  //     return;
+  //   } else {
+  //     provider.on('status', (event: any) => {
+  //       console.log(provider);
+  //       console.log(event.status); // logs "connected" or "disconnected"
+  //     });
+  //   }
+  // }, [provider]);
+
   useEffect(() => {
     if (!editorName) return;
     setRoomKey(stringToUnicode(editorName));
