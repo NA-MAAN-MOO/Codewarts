@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import VoiceRoom from 'pages/VoiceRoom';
 import { GAME_STATUS } from 'utils/Constants';
 import styled from 'styled-components';
@@ -22,13 +22,21 @@ function App() {
   });
   const dispatch = useDispatch();
 
+  const [logined, setLogined] = useState(false);
+  useEffect(() => {
+    if (status !== START && status !== LOGIN) {
+      if (logined) return;
+      setLogined(true);
+    }
+  }, [status]);
+
   return (
     <HoverDiv>
       <BgmPlayer />
       {/* <TestVoiceButtons /> */}
       {playerId === '개발자' && <TestVoiceButtons />}
       {status === START || status === LOGIN ? (
-        <Start></Start>
+        !logined && <Start />
       ) : //불필요한 로비 삭제
       status === GAME || status === EDITOR || status === WHITEBOARD ? (
         <VoiceRoom />

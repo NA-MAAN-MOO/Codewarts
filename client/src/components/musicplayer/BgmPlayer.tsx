@@ -7,9 +7,11 @@ import bgm2 from 'assets/bgms/bgm2.mp3';
 import bgm3 from 'assets/bgms/bgm3.mp3';
 import { Button, Fab, Fade } from '@mui/material';
 import { RootState } from 'stores';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import FloatingIcon from 'components/FloatingIcon';
+import MusicOffRoundedIcon from '@mui/icons-material/MusicOffRounded';
 import './BgmPlayer.css';
+import { setUserBgmState } from 'stores/userSlice';
 
 const BgmPlayer = () => {
   const bgms = [bgm1, bgm2, bgm3];
@@ -22,6 +24,7 @@ const BgmPlayer = () => {
   const { userBgmState } = useSelector((state: RootState) => {
     return state.user;
   });
+  const dispatch = useDispatch();
 
   const [selectedBgm, setSelectedBgm] = useState(bgm1);
 
@@ -48,10 +51,10 @@ const BgmPlayer = () => {
   const playerPlay = () => {
     player.current?.audio?.current?.play();
   };
-  const playerPauseResume = () => {
+  const playerPause = () => {
     player.current?.audio?.current?.pause();
   };
-  useEffect(playerPlay, [userBgmState]);
+  useEffect(userBgmState ? playerPlay : playerPause, [userBgmState]);
   const [checked, setChecked] = useState(false);
 
   const AudioPlayerToggle = (
@@ -90,12 +93,13 @@ const BgmPlayer = () => {
       }}
     >
       <FloatingIcon
-        icon={AudiotrackIcon}
-        handleClick={handleChange}
+        icon={userBgmState ? AudiotrackIcon : MusicOffRoundedIcon}
+        // handleClick={handleChange}
+        handleClick={() => dispatch(setUserBgmState(!userBgmState))}
         position="static"
       />
       {/* <AudiotrackIcon /> */}
-      <Fade in={checked}>{AudioPlayerToggle}</Fade>
+      <Fade in={false}>{AudioPlayerToggle}</Fade>
     </div>
   );
 };
