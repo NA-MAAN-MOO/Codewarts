@@ -1,4 +1,27 @@
-# Codeuk-Codeuk
+# 🏰 Codewarts
+
+코드와트는 어쩌구 저쩌구 온라인 모같코 플랫폼입니다. <br>\*모같코 : 모여서 같이 코딩하기
+
+## 🪄 KEY FEATURE
+
+1. 실시간 공동 편집 코드 에디터
+   - 컴파일도 가능
+2. 알고리즘 문제 제공 및 채점
+3. 실시간 그림판
+4. 실시간 음성 채팅
+
+## 📚 STACKS
+
+<img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black">
+<img src="https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white">
+<img src="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
+<img src="https://img.shields.io/badge/phaser-3178C6?style=for-the-badge&logo=phaser&logoColor=white">
+<img src="https://img.shields.io/badge/express-000000?style=for-the-badge&logo=express&logoColor=white">
+<img src="https://img.shields.io/badge/socket.io-white?style=for-the-badge&logo=socket.io&logoColor=010101">
+<img src="https://img.shields.io/badge/mongodb-000000?style=for-the-badge&logo=mongodb&logoColor=47A248">
+<img src="https://img.shields.io/badge/css-000000?style=for-the-badge&logo=css&logoColor=47A248">
+<img src="https://img.shields.io/badge/html-000000?style=for-the-badge&logo=html&logoColor=47A248">
+<img src="https://img.shields.io/badge/redux-764ABC?style=for-the-badge&logo=redux&logoColor=white">
 
 ## How to start
 
