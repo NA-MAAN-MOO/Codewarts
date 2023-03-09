@@ -36,10 +36,13 @@ function Memo(props: any) {
     setmaxZIndex,
   } = props;
 
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [position, setPosition] = useState({
+    x: memo.x * window.innerWidth * 0.6,
+    y: memo.y * window.innerHeight,
+  });
   const [color, setColor] = useState('');
   const [isDragging, setIsDragging] = useState(false);
-  const [ownZIndex, setOwnZIndex] = useState(maxZIndex);
+  const [ownZIndex, setOwnZIndex] = useState(0);
 
   const isMine = currentUserNickname === memo.authorNickname;
 
@@ -66,7 +69,6 @@ function Memo(props: any) {
   const onChangeContent = useMemo(
     () =>
       debounce((e) => {
-        // FIXME: 나만 바꿀 수 있게
         updateMemo(memo._id, e.target.value);
       }, 500),
     []
@@ -94,18 +96,15 @@ function Memo(props: any) {
     setmaxZIndex(maxZIndex + 1);
   };
 
+  // console.log(memo.content, 'max값 ', maxZIndex, '고유값', ownZIndex);
   const fixZIndex = () => {
     setOwnZIndex(maxZIndex);
   };
-  // console.log();
 
   return (
     <Draggable
       handle="#draggable-div"
-      defaultPosition={{
-        x: memo.x * window.innerWidth * 0.6,
-        y: memo.y * window.innerHeight,
-      }}
+      defaultPosition={position}
       bounds={{
         left: -window.innerWidth * 0.1,
         top: 0,
@@ -123,7 +122,7 @@ function Memo(props: any) {
         fixZIndex();
         changeMemoPos(
           memo._id,
-          (data.x / window.innerWidth) * 0.6,
+          data.x / (window.innerWidth * 0.6),
           data.y / window.innerHeight
         );
       }}
