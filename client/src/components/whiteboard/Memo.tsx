@@ -93,7 +93,7 @@ function Memo(props: any) {
     // console.log('찍힘');
     // let tempZIndex = maxZindex + 1;
     setIsDragging(true);
-    setmaxZIndex(maxZIndex + 1);
+    setmaxZIndex((zIndex: number) => zIndex + 1);
   };
 
   // console.log(memo.content, 'max값 ', maxZIndex, '고유값', ownZIndex);
@@ -103,7 +103,6 @@ function Memo(props: any) {
 
   return (
     <Draggable
-      handle="#draggable-div"
       defaultPosition={position}
       bounds={{
         left: -window.innerWidth * 0.1,
@@ -115,7 +114,7 @@ function Memo(props: any) {
         // e.stopPropagation();
         onChangePosition(data);
       }}
-      onMouseDown={bringToFront}
+      // onMouseDown={bringToFront}
       onStart={bringToFront}
       onStop={(e, data) => {
         setIsDragging(false);
@@ -128,6 +127,7 @@ function Memo(props: any) {
       }}
     >
       <Card
+        onMouseDown={bringToFront}
         sx={{
           width: '300px',
           minHeight: '240px',
@@ -146,22 +146,20 @@ function Memo(props: any) {
             fontFamily: 'NeoDunggeunmoPro-Regular',
           }}
         >
-          <div id="draggable-div" style={{ height: '30px' }}>
-            <span>
-              [{memo.date}] &nbsp; {memo.authorNickname}
-            </span>
-            {isMine && (
-              <IconButton
-                aria-label="delete"
-                size="small"
-                color="secondary"
-                sx={{ float: 'right', marginTop: '-5px' }}
-                onClick={onClickDelete}
-              >
-                <DeleteForeverIcon htmlColor="#b52216" viewBox="0 0 20 20 " />
-              </IconButton>
-            )}
-          </div>
+          <span>
+            [{memo.date}] &nbsp; {memo.authorNickname}
+          </span>
+          {isMine && (
+            <IconButton
+              aria-label="delete"
+              size="small"
+              color="secondary"
+              sx={{ float: 'right', marginTop: '-5px' }}
+              onClick={onClickDelete}
+            >
+              <DeleteForeverIcon htmlColor="#b52216" viewBox="0 0 20 20 " />
+            </IconButton>
+          )}
           {isMine ? (
             <MemoContent
               defaultValue={memo.content}
