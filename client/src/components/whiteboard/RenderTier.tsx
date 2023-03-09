@@ -43,7 +43,7 @@ function RenderTier(props: any) {
   return (
     <>
       {/* <RenderSvgDiv> */}
-      <SvgComponent width="13px" />
+      <SvgComponent width="1.2vw" />
       {/* &nbsp;<span>{Tier[`${svgName}`]}</span> */}
       {/* </RenderSvgDiv> */}
     </>
