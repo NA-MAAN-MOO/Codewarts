@@ -1,31 +1,49 @@
 # <strong>Codewarts 🏰 </strong>
 
-<div style="font-size: 20px">코드와트는 알고리즘 문제 풀이에 특화된 온라인 모같코 플랫폼입니다.</div><div style="font-size: 12px">*모같코 : 모여서 같이 코딩하기</div>
-<img width="100vw" src="./client/public/assets/readme/room_map.png">
+## 코드와트는 알고리즘 문제 풀이에 특화된 온라인 모같코 플랫폼입니다.
+
+<div style="font-size: 14px">*모같코 : 모여서 같이 코딩하기</div>
+
+<div style="text-align: center"><img width="80%" src="./client/public/assets/readme/room_map.png"></div>
 <div style="font-size: 16px">친구들과 함께 실시간으로 코드를 치며 알고리즘 문제를 맞혀보세요!
 <a href="https://codewarts.store">&nbsp; 👉🏻 코드와트로 날아가기</a></div>
 <br><br>
 
-<h2><strong>KEY FEATURE 🪄 </strong></h2>
+# <strong>KEY FEATURE 🪄 </strong>
 
-<div style="font-size: 20px">1.실시간 공동 편집 코드 에디터</div>
+## 🔮 실시간 공동 편집 코드 에디터
+
 컴파일도 가능
-<div><img width="40vw" src="./client/public/assets/readme/editor_record.gif"></div>
-<div style="font-size: 20px">2. 알고리즘 문제 제공 및 채점</div>
-에디터 내 검색 기능으로 문제를 불러올 수 있어요. 문제 정보를 읽으며 알고리즘 문제를 풀고, 잘 풀었는지 채점도 해보세요!
-<div><img width="40vw" src="./client/public/assets/readme/algorithm_record.gif"></div>
-<div style="font-size: 20px">3. 실시간 그림판</div>
-실시간으로 코드를 보며 그려보세요.
-<div><img width="40vw" src="./client/public/assets/readme/whiteboard_record.gif"></div>
-<div style="font-size: 20px">4. 실시간 음성 채팅</div>
-강의실과 에디터에서 음성 채팅이 가능합니다! 함께 이야기해보세요.
-<div style="font-size: 20px">5. 게시판 (리더보드 및 메모)</div>
-코드와트 학생들의 코딩 랭킹을 확인하고 의지를 불태울 수 있어요! 
-알고리즘 스터디를 지속해보세요!
-<div><img width="100vw" src="./client/public/assets/readme/main_board.png"></div>
-<br><br>
-<h2><strong>STACKS 📚 </strong></h2>
 
+<div style="text-align: center"><img width="40vw" src="./client/public/assets/readme/editor_record.gif"></div>
+
+## 🔮 알고리즘 문제 제공 및 채점
+
+에디터 내 검색 기능으로 문제를 불러올 수 있어요. 문제 정보를 읽으며 알고리즘 문제를 풀고, 잘 풀었는지 채점도 해보세요!
+
+<div style="text-align: center"><img width="40vw" src="./client/public/assets/readme/algorithm_record.gif"></div>
+
+## 🔮 실시간 그림판
+
+실시간으로 코드를 보며 그려보세요.
+
+<div style="text-align: center"><img width="40vw" src="./client/public/assets/readme/whiteboard_record.gif"></div>
+
+## 🔮 실시간 음성 채팅
+
+강의실과 에디터에서 음성 채팅이 가능합니다! 함께 이야기해보세요.
+
+## 🔮 게시판 (리더보드 및 메모)
+
+코드와트 학생들의 코딩 랭킹을 확인하고 의지를 불태울 수 있어요!
+알고리즘 스터디를 지속해보세요!
+
+<div style="text-align: center"><img width="80%" src="./client/public/assets/readme/main_board.png"></div>
+<br><br>
+
+# <strong>STACKS 📚 </strong></h2>
+
+<div display="inline-block">
 <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black" >
 <img src="https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white">
 <img src="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
@@ -39,14 +57,20 @@
 <img src="https://img.shields.io/badge/nginx-009639?style=for-the-badge&logo=nginx&logoColor=white">
 <img src="https://img.shields.io/badge/pm2-2B037A?style=for-the-badge&logo=pm2&logoColor=white">
 <img src="https://img.shields.io/badge/codemirror-D30707?style=for-the-badge&logo=codemirror&logoColor=white">
+</div>
 
 <br><br>
 
-<h2><strong>Team Codewarts 🧑‍🤝‍🧑 </strong></h2>
-김준철 이은민 염혜지 김세희 한동훈 + Github 링크
+# <strong>Team Codewarts 🧑‍🤝‍🧑 </strong></h2>
+|김준철|이은민|염혜지|김세희|한동훈|
+|:------:|:-----:|:-----:|:-----:|:-----:|
+|사진|사진|사진|사진|사진|사진
+|플랫폼 그림판<br> 배포환경 구축|에디터 컴파일 <br>문제 검색 및 채점|플랫폼 UI <br>문제 풀이 랭킹 및 메모|에디터 로그인 <br>이모지 UI|플랫폼 보이스챗<br> 코드 구조 설계
+|[GitHub](https://github.com/juncheolkim)|[GitHub](https://github.com/gcount85)|[GitHub](https://github.com/sententi-a)|[GitHub](https://github.com/sadie100)|[GitHub](https://github.com/mrsuit0114)
+
 <br><br>
 
-<h2><strong>How to start ❓ </strong></h2>
+# <strong>How to start ❓ </strong></h2>
 
 1. **client 디렉토리로 이동해서(cd client), npm install**
 2. **server 디렉토리로 이동해서(cd server), npm install**
@@ -75,7 +99,8 @@
 
 <br><br>
 
-<h2><strong>License</strong></h2><hr>
+# <strong>License</strong></h2>
+
 <div>캐릭터 이미지 : Wayward</div>
 <div>배경음악 : 
 https://gongu.copyright.or.kr/gongu/wrt/wrtCl/listWrtSound.do?menuNo=200020 </div>
