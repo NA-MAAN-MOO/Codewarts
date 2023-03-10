@@ -54,7 +54,8 @@ def hello_world(request: Request):
                      "output": result["output"]}), 200)
     else:
         resp = make_response(
-            jsonify({"error": result["output"],
+            jsonify({"status": "traceback",
+                     "error": result["output"],
                      "traceback": result["traceback"]}), 500)
 
     resp.headers['Access-Control-Allow-Origin'] = '*'

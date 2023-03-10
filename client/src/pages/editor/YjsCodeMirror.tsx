@@ -112,7 +112,7 @@ function YjsCodeMirror(props: YjsProp) {
         // { params: { auth: editorName } } // Specify a query-string that will be url-encoded and attached to the `serverUrl`
       )
     );
-    console.log('provider 생성 시점');
+    // console.log('provider 생성 시점');
   }, [ydoc]);
 
   useEffect(() => {
@@ -147,7 +147,7 @@ function YjsCodeMirror(props: YjsProp) {
     if (!provider || !undoManager) return;
     let basicThemeSet = EditorView.theme(editorThemeCSS);
 
-    const editorPlaceHolder = `def python():`;
+    const editorPlaceHolder = `def hello():\n\tprint("hello world")`;
 
     /* editor instance 생성; state, view 생성 */
     const state = EditorState.create({
@@ -271,6 +271,7 @@ function YjsCodeMirror(props: YjsProp) {
                 bojProblemId={bojProblemId}
                 mySocket={mySocket}
                 bojProbFullData={bojProbFullData}
+                setCompileOutput={setCompileOutput}
               />
             </ThemeProvider>
           </MiddleWrapper>

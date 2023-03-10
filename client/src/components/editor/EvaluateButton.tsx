@@ -26,7 +26,8 @@ function EvaluateButton(props) {
     (state: RootState) => state.editor
   );
 
-  const { ytext, bojProblemId, mySocket, bojProbFullData } = props;
+  const { ytext, bojProblemId, mySocket, bojProbFullData, setCompileOutput } =
+    props;
 
   let [markingPercent, setMarkingPercent] = useState('');
   let [shining, setShining] = useState(false);
@@ -207,9 +208,14 @@ function EvaluateButton(props) {
 
     callCloudFunction(inputData)
       .then((result) => {
-        console.log('Result:', result);
+        console.log('RESULT:', result);
+        if (result.status === 'success') {
+          setCompileOutput(result.output.trimEnd());
+        } else if (result.status === 'traceback') {
+          setCompileOutput(result.traceback.trimEnd());
+        }
       })
-      .catch((error) => {
+      .catch((error: Error) => {
         console.error('Error:', error);
       });
   };
@@ -258,8 +264,15 @@ function EvaluateButton(props) {
         totalCases={totalCases}
       />
       {/* ▼ 문제 성공 알림을 테스트하고 싶으면 주석 해제 */}
-      {/* <button onClick={broadcastSuccess}>
-        테스트버튼: "{editorName}"님이 문제 맞췄다고 알리기
+      {/* <button
+        onClick={broadcastSuccess}
+        style={{
+          border: '1px solid green',
+          backgroundColor: 'transparent',
+          color: 'transparent',
+        }}
+      >
+        {editorName}
       </button> */}
       <Button
         color="primary"
