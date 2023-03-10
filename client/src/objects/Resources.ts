@@ -142,7 +142,7 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
           this.buttonEditor.setInteractive(); // 이거 해줘야 function 들어감!!!!! 3시간 버린듯;
           //@ts-ignore
           this.scene.player.touching.push(this);
-          console.log('touching', this.buttonEditor, this.buttonArray);
+          // console.log('touching', this.buttonEditor, this.buttonArray);
           // redux로 상태 바꿔서 component 보이게? Table 클래스 내의 정보 이용해서 자리별 사용 여부, user count 등 띄우기
         }
       },
@@ -163,7 +163,7 @@ export default class Resource extends Phaser.Physics.Matter.Sprite {
             (button: any) => button !== this
           );
           //FIXME: destroy 잘 안되는 경우 찾기
-          console.log('destroy', this.buttonEditor, this.buttonArray);
+          // console.log('destroy', this.buttonEditor, this.buttonArray);
           this.buttonArray.forEach((button: Phaser.GameObjects.Image) => {
             button.destroy();
           });
