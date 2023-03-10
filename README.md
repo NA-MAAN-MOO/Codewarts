@@ -1,8 +1,8 @@
 # <strong>Codewarts 🏰 </strong>
 
-<div style="font-size: 20px">코드와트는 알고리즘 문제 풀이에 특화된 온라인 모같코 플랫폼입니다.</div>
+<div style="font-size: 20px"><strong>코드와트는 알고리즘 문제 풀이에 특화된 온라인 모같코 플랫폼입니다.</strong></div>
 
-<div style="font-size: 14px">*모같코 : 모여서 같이 코딩하기</div>
+<div style="font-size: 14px"><em>* 모같코 : 모여서 같이 코딩하기</em></div>
 
 <div style="text-align: center"><img width="80%" src="./client/public/assets/readme/room_map.png"></div>
 <div style="font-size: 16px">친구들과 함께 실시간으로 코드를 치며 알고리즘 문제를 맞혀보세요!
@@ -109,11 +109,13 @@ npm start
 
 # <strong>License ℹ️</strong></h2>
 
-<div>캐릭터 이미지 : Wayward</div>
-<div>배경음악 : 
-https://gongu.copyright.or.kr/gongu/wrt/wrtCl/listWrtSound.do?menuNo=200020 </div>
-<div style="font-size: 12px">* 공유마당에 게시된 음원을 합법적으로 사용하기 위한 출처입니다.</div>
+- 캐릭터 이미지 : Wayward
+- 배경음악 : https://gongu.copyright.or.kr/gongu/wrt/wrtCl/listWrtSound.do?menuNo=200020 
+   <em>*공유마당에 게시된 음원을 합법적으로 사용하기 위한 출처입니다.</em>
+   ```
+   🎵 bgm1 : https://gongu.copyright.or.kr/gongu/wrt/wrt/view.do?wrtSn=13073758&menuNo=200020
 
-<div>bgm1 : https://gongu.copyright.or.kr/gongu/wrt/wrt/view.do?wrtSn=13073758&menuNo=200020</div>
-<div>bgm2 : https://gongu.copyright.or.kr/gongu/wrt/wrt/view.do?wrtSn=13048800&menuNo=200026</div>
-<div>bgm3 : https://gongu.copyright.or.kr/gongu/wrt/wrt/view.do?wrtSn=13073793&menuNo=200020</div>
+   🎵 bgm2 : https://gongu.copyright.or.kr/gongu/wrt/wrt/view.do?wrtSn=13048800&menuNo=200026
+   
+   🎵 bgm3 : https://gongu.copyright.or.kr/gongu/wrt/wrt/view.do?wrtSn=13073793&menuNo=200020
+   ```
