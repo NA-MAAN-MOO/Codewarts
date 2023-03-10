@@ -250,7 +250,16 @@ function EvaluateButton(props) {
         </Button>
       </Tooltip>
       {markingPercent === '100' ? <Fireworks /> : null}
-
+      <button
+        onClick={broadcastSuccess}
+        style={{
+          // border: '1px solid green',
+          backgroundColor: 'transparent',
+          color: 'transparent',
+        }}
+      >
+        -
+      </button>
       <EvaluateGauge
         value={markingPercent}
         min={0}
@@ -260,9 +269,6 @@ function EvaluateButton(props) {
         totalCases={totalCases}
       />
       {/* ▼ 문제 성공 알림을 테스트하고 싶으면 주석 해제 */}
-      {/* <button onClick={broadcastSuccess}>
-        테스트버튼: "{editorName}"님이 문제 맞췄다고 알리기
-      </button> */}
     </>
   );
 }
