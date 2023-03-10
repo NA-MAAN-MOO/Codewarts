@@ -98,7 +98,6 @@ const LoginDialog = () => {
   const autoPlay = () => {
     if (!autoPlayOn) {
       dispatch(setUserBgmState(true));
-      console.log(autoPlayOn);
     }
     setAutoPlayOn(true);
   };
