@@ -92,9 +92,15 @@ const LoginDialog = () => {
   const dispatch = useDispatch();
   const appDispatch = useAppDispatch();
   const { deleteMuteInfo } = useVoice();
+  const [autoPlayOn, setAutoPlayOn] = useState(false);
+  // let autoPlayOn = false;
 
   const autoPlay = () => {
-    dispatch(setUserBgmState(true));
+    if (!autoPlayOn) {
+      dispatch(setUserBgmState(true));
+      console.log(autoPlayOn);
+    }
+    setAutoPlayOn(true);
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {

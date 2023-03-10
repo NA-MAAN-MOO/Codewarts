@@ -10,46 +10,57 @@ const APPLICATION_DB_URL =
   process.env.REACT_APP_DB_URL || 'http://localhost:3003';
 
 function MemoFooter(props: any) {
-  const { _id, participants, getMemos, currentUserNickname } = props;
+  let { _id, participants, getMemos, currentUserNickname } = props;
+  const [participantsCopy, setParticipantsCopy] = useState(participants);
 
   const isChecked = participants.includes(currentUserNickname);
   const [checked, setChecked] = useState<boolean>(isChecked);
 
   /* Checkbox function */
-  const participateIn = useCallback(() => {
-    participants.push(currentUserNickname);
+  const participateIn = () => {
+    // participants.push(currentUserNickname);
     try {
       axios.post(APPLICATION_DB_URL + `/participate-in-memo`, {
         _id: _id,
-        participants: participants,
+        target: currentUserNickname,
       });
-      // getMemos();
     } catch (e) {
       console.error(e);
     }
-  }, [participants]);
 
-  const notParticipateIn = useCallback(() => {
+    let newArray = [...participantsCopy, currentUserNickname];
+    setParticipantsCopy(newArray);
+  };
+
+  const notParticipateIn = () => {
     participants.filter(
       (participant: string) => participant !== currentUserNickname
     );
     try {
-      axios.post(APPLICATION_DB_URL + '/participate-in-memo', {
+      axios.post(APPLICATION_DB_URL + '/drop-out-of-memo', {
         _id: _id,
-        participants: participants,
+        target: currentUserNickname,
       });
     } catch (e) {
       console.error(e);
     }
-  }, [participants]);
+
+    let newArray = participantsCopy.filter((p: string) => {
+      return p !== currentUserNickname;
+    });
+
+    setParticipantsCopy(newArray);
+  };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
-    // if (event.target.checked) {
-    participateIn();
-    // } else {
-    //   notParticipateIn();
-    // }
+    if (event.target.checked) {
+      participateIn();
+    } else {
+      notParticipateIn();
+    }
+    // console.log(event.target.checked, participantsCopy);
+    // getMemos();
   };
 
   return (
@@ -59,13 +70,16 @@ function MemoFooter(props: any) {
           max={6}
           sx={{
             paddingLeft: '10px',
-            '&..MuiAvatarGroup-avatar': {
+            '&.MuiAvatarGroup-avatar': {
               border: 0,
             },
           }}
         >
-          {participants.map((participant: string) => (
-            <AvatarWithPopper participant={participant} key={participant} />
+          {participantsCopy.map((participant: string) => (
+            <AvatarWithPopper
+              participant={participant}
+              key={_id + participant}
+            />
           ))}
         </AvatarGroup>
         <Checkbox
@@ -73,11 +87,11 @@ function MemoFooter(props: any) {
           onChange={handleChange}
           sx={{
             // marginRight: '10px',
-            color: 'white',
-            '&.Mui-checked': { color: '#00c410' },
+            color: '#b52216',
+            '&.Mui-checked': { color: '#b52216' },
             margin: '0 0 10px 10px',
           }}
-          disabled={isChecked ? true : false}
+          // disabled={isChecked ? true : false}
         />
       </FooterWrapper>
     </>

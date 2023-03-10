@@ -30,7 +30,7 @@ export default function RankingHeader() {
             component="div"
             align="center"
             sx={{
-              marginTop: '2vh',
+              marginTop: '2.5vh',
               textAlign: 'center',
               // fontFamily: 'Firenze',
               fontFamily: 'NeoDunggeunmoPro-Regular',

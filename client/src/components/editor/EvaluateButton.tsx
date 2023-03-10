@@ -180,6 +180,7 @@ function EvaluateButton(props) {
     }
   };
 
+  /* google cloud functions */
   async function callCloudFunction(data: any) {
     const url = `https://asia-northeast3-codeuk-379309.cloudfunctions.net/compiler`;
     const options = {

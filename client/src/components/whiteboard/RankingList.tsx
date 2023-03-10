@@ -49,7 +49,7 @@ export default function RankingList(props: any) {
         bgcolor: 'tranparent',
         p: 5,
         height: 1,
-        marginTop: '20px',
+        marginTop: '3vh',
       }}
     >
       <Toolbar variant="dense" sx={{ marginTop: '-10px' }} />

@@ -34,7 +34,7 @@ export default function RankingTable(props: any) {
   return (
     <TableContainer
       component={Paper}
-      sx={{ height: '76vh' }}
+      sx={{ height: '73vh' }}
       className="table-container"
     >
       <Table
