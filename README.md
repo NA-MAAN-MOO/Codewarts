@@ -1,10 +1,12 @@
 # <strong>Codewarts 🏰 </strong>
 
-<div style="font-size: 20px"><strong>코드와트는 알고리즘 문제 풀이에 특화된 온라인 모같코 플랫폼입니다.</strong></div>
+<p align="center">
+<img width="50%" src="./client/src/assets/images/logo_new.png"></p>
+<div style="font-size: 2.5vw"><strong>코드와트는 알고리즘 문제 풀이에 특화된 온라인 모같코 플랫폼입니다.</strong></div>
+
 
 <div style="font-size: 14px"><em>* 모같코 : 모여서 같이 코딩하기</em></div>
-
-<div style="text-align: center"><img width="80%" src="./client/public/assets/readme/room_map.png"></div>
+<p align="center"><img width="80%" src="./client/public/assets/readme/room_map.png"></p>
 <div style="font-size: 16px">친구들과 함께 실시간으로 코드를 치며 알고리즘 문제를 맞혀보세요!
 <!-- <a href="https://codewarts.store">&nbsp; 👉🏻 코드와트로 날아가기</a></div> -->
 <br><br>
@@ -22,21 +24,21 @@ Notion : (?)
 - 다른 사람과 함께 코드를 완성해보세요.
 - 컴파일 기능으로 코드 출력 결과를 바로 확인할 수도 있어요.
 
-<div style="text-align: center"><img width="80%" src="./client/public/assets/readme/editor_record.gif"></div>
+<p align="center"><img width="80%" src="./client/public/assets/readme/editor_record.gif"></p>
 
 <h2>🔮 알고리즘 문제 제공 및 채점</h2>
 
 - 에디터 내 검색 기능으로 문제를 불러올 수 있어요. 
 - 문제 정보를 읽으며 알고리즘 문제를 풀고, 잘 풀었는지 채점도 해보세요!
 
-<div style="text-align: center"><img width="80%" src="./client/public/assets/readme/algorithm_record.gif"></div>
+<p align="center"><img width="80%" src="./client/public/assets/readme/algorithm_record.gif"></p>
 
 <h2>🔮 실시간 그림판</h2>
 
 - 실시간으로 코드를 보며 텍스트로는 표현하기 어려운 것을 그려보세요.
 - 소통의 질이 높아진 걸 느낄 수 있을거예요.
 
-<div style="text-align: center"><img width="80%" src="./client/public/assets/readme/whiteboard_record.gif"></div>
+<p align="center"><img width="80%" src="./client/public/assets/readme/whiteboard_record.gif"></p>
 
 <h2>🔮 실시간 음성 채팅</h2>
 
@@ -47,14 +49,14 @@ Notion : (?)
 - 나를 포함한 코드와트 학생들의 코딩 랭킹을 확인하고 의지를 불태울 수 있어요.
 - 메모를 미션 보드처럼 활용해 알고리즘 스터디를 지속해보세요!
 
-<div style="text-align: center"><img width="80%" src="./client/public/assets/readme/main_board.png"></div>
+<p align="center"><img width="80%" src="./client/public/assets/readme/main_board.png"></p>
 
 <h2>🔮 이모지 & 이펙트</h2>
 
 - 코드와트를 조금 더 재미있게 즐겨보세요! 
-<div style="text-align: center">
+<p align="center">
 <img width="80%" src="./client/public/assets/readme/emoji.png">
-<img width="80%" src="./client/public/assets/readme/fire_effect.png"></div>
+<img width="80%" src="./client/public/assets/readme/fire_effect.png"></p>
 <br><br>
 
 
