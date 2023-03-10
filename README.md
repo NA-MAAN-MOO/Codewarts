@@ -21,7 +21,7 @@
 
 <h2>🔮 상호작용 가능한 온라인 가상 공간</h2>
 
-<div style="text-align: center"><img width="80%" src="./client/public/assets/readme/map_people.gif"></div>
+<p align="center"><img width="80%" src="./client/public/assets/readme/map_people.gif"></p>
 
 - 친구들과 함께 교실 맵에서 모임을 가질 수 있어요.
 - 각 캐릭터의 움직임은 실시간으로 반영됩니다.
@@ -52,16 +52,16 @@
 - 강의실과 에디터에서 음성 채팅이 가능합니다! 함께 이야기해보세요.
 - 강의실과 각 에디터들의 채팅 룸은 분리되어 있어 각자 화면에 맞게 이야기할 수 있어요.
 
-<div style="text-align: center"><img width="80%" src="./client/public/assets/readme/map_userlist.gif"></div>
+<p align="center"><img width="80%" src="./client/public/assets/readme/map_userlist.gif"></p>
 
 - 강의실에서 우측 하단 아이콘을 눌러 현재 음성 채팅이 가능한 유저들과 음소거 여부를 볼 수 있습니다.
 
-<div style="text-align: center"><img width="80%" src="./client/public/assets/readme/editor_super_userlist.gif"></div>
+<p align="center"><img width="80%" src="./client/public/assets/readme/editor_super_userlist.gif"></p>
 
 - 에디터에서도 우측 하단 버튼을 눌러 음성 채팅이 가능한 유저를 볼 수 있습니다.
 - 에디터의 주인은 참여한 사람의 마이크/헤드셋을 마음대로 음소거할 수 있어요.
 
-<div style="text-align: center"><img width="80%" src="./client/public/assets/readme/editor_guest_userlist.gif"></div>
+<p align="center"><img width="80%" src="./client/public/assets/readme/editor_guest_userlist.gif"></p>
 
 - 에디터의 게스트는 자기 자신의 마이크/헤드셋만 음소거할 수 있습니다.
 
@@ -76,7 +76,7 @@
 
 - 이모지를 통해 친구들과 풍부한 상호작용을 할 수 있어요.
 
-<div style="text-align: center"><img width="80%" src="./client/public/assets/readme/emoji.gif"></div>
+<p align="center"><img width="80%" src="./client/public/assets/readme/emoji.gif"></p>
 
 - 문제를 맞히거나 에디터를 이용 중인 친구들에게는 특수한 이펙트가 나와요.
 <p align="center">
