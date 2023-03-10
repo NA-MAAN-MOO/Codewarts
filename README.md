@@ -2,12 +2,12 @@
 
 <p align="center">
 <img width="50%" src="./client/src/assets/images/logo_new.png"></p>
-<div style="font-size: 2.5vw"><strong>코드와트는 알고리즘 문제 풀이에 특화된 온라인 모같코 플랫폼입니다.</strong></div>
+<p style="font-size: 2.5vw" align="center"><strong>코드와트는 알고리즘 문제 풀이에 특화된 온라인 모같코 플랫폼입니다.</strong></p>
 
 
-<div style="font-size: 14px"><em>* 모같코 : 모여서 같이 코딩하기</em></div>
+<p align="center"><em>* 모같코 : 모여서 같이 코딩하기</em><br></p>
 <p align="center"><img width="80%" src="./client/public/assets/readme/room_map.png"></p>
-<div style="font-size: 16px">친구들과 함께 실시간으로 코드를 치며 알고리즘 문제를 맞혀보세요!
+<p align="center">친구들과 함께 실시간으로 코드를 치며 알고리즘 문제를 맞혀보세요!</p>
 <!-- <a href="https://codewarts.store">&nbsp; 👉🏻 코드와트로 날아가기</a></div> -->
 <br><br>
 
@@ -91,10 +91,14 @@
 # <strong>Team Codewarts 🧑‍🤝‍🧑 </strong></h2>
 |김준철|이은민|염혜지|한동훈|김세희|
 |:------:|:-----:|:-----:|:-----:|:-----:|
-|사진|사진|사진|사진|사진|사진
+|사진|사진|사진|사진|사진|![세희](https://user-images.githubusercontent.com/77879373/224283531-b110675a-ccb8-49c1-b941-0671245d99a7.jpeg)|
 |플랫폼 그림판<br> 배포환경 구축|에디터 컴파일 <br>문제 검색 및 채점|플랫폼 UI <br>문제 풀이 랭킹 및 메모|에디터 로그인 <br>이모지 UI|플랫폼 보이스챗<br> 코드 구조 설계
 |[GitHub](https://github.com/juncheolkim)|[GitHub](https://github.com/gcount85)|[GitHub](https://github.com/sententi-a)|[GitHub](https://github.com/mrsuit0114)|[GitHub](https://github.com/sadie100)
 
+<br><br>
+
+# <strong>Poster 🖼 </strong></h2>
+<img src="./client/public/assets/readme/poster.png">
 <br><br>
 
 # <strong>How to install ❓ </strong></h2>
