@@ -240,7 +240,7 @@ export default class MainScene extends Phaser.Scene {
         userName: string; //업데이트된 user name(에디터 주인)
         socketId: string;
       }) => {
-        console.log('updateEditor');
+        // console.log('updateEditor');
         const table = this.tableMap.get(payLoad.id);
         if (table) {
           if (phaserGame.socketId === payLoad.socketId) {
@@ -598,7 +598,7 @@ export default class MainScene extends Phaser.Scene {
 
   /* Effect on when player solve a problem */
   showProblemSolvedEffect(nickname: string) {
-    console.log(nickname, phaserGame.userName);
+    // console.log(nickname, phaserGame.userName);
     if (nickname === phaserGame.userName) {
       this.player.problemSolvedEffect();
     } else {

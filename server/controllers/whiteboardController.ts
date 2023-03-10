@@ -17,9 +17,7 @@ export function getDate(): string {
   return year + '.' + month + '.' + day + '. ' + hour + ':' + minute;
 }
 
-// declare module 'node-cron';
 const cron = require('node-cron');
-// import cron from 'node-cron';
 
 interface ResponseType {
   nickname: string;
@@ -36,11 +34,6 @@ const task = cron.schedule('*/10 * * * *', async () => {
   console.log('가져온 랭킹 수', response.length);
 });
 
-// const task = cron.schedule('30 18 * * *', async () => {
-//   await getUsersBojInfo();
-//   console.log('가져온 랭킹 수', response.length);
-// });
-
 /* Get each user's data */
 const getEachUserBojInfo = async (bojId: string) => {
   try {
@@ -48,7 +41,7 @@ const getEachUserBojInfo = async (bojId: string) => {
       `https://solved.ac/api/v3/user/show?handle=${bojId}`
     );
   } catch (e) {
-    console.log(e);
+    // console.log(e);
     return false;
   }
 };
@@ -77,7 +70,6 @@ const regenerateData = async (datum: any) => {
     console.log(`Ranking Update Failed`);
     return;
   }
-  // return result;
   response = [...result];
 };
 
@@ -98,24 +90,12 @@ getUsersBojInfo();
 
 /* Send Boj Infos saved in heap(?) */
 export const sendUsersBojInfo = (req: Request, res: Response) => {
-  // console.log(response, 'sendUsersBojInfo');
   if (response.length === 0) {
     res.status(404).send('No valid Boj Users Id');
   } else {
     res.status(200).send(response);
   }
 };
-
-// export const getAllUsers = async (req: Request, res: Response) => {
-//   try {
-//     const datum = await User.find({});
-//     res.status(200).send(datum);
-//     // console.log(datum);
-//   } catch (e) {
-//     console.error(e);
-//     res.status(404).send('No valid Boj Users Id');
-//   }
-// };
 
 /* Save memo to DB */
 export const addMemo = async (req: Request, res: Response) => {
@@ -166,7 +146,6 @@ export const updateMemo = async (req: Request, res: Response) => {
 /* Change memo position */
 export const changeMemoPos = async (req: Request, res: Response) => {
   try {
-    // const objectId = new Types.ObjectId(req.body._id);
     const objectId = req.body._id;
     const result = await Memo.updateOne(
       { _id: objectId },
@@ -193,7 +172,6 @@ export const participateInMemo = async (req: Request, res: Response) => {
       { _id: objectId },
       { participants: newParticipants }
     );
-    // console.log(newParticipants);
     res.status(200).json(result);
   } catch (e) {
     console.error(e);
@@ -217,7 +195,6 @@ export const dropOutOfMemo = async (req: Request, res: Response) => {
       { _id: objectId },
       { participants: newParticipants }
     );
-    // console.log(newParticipants);
     res.status(200).json(result);
   } catch (e) {
     console.error(e);
@@ -236,5 +213,4 @@ export const deleteMemo = async (req: Request, res: Response) => {
     console.error(e);
     res.status(400).json({ message: '삭제 실패' });
   }
-  // await Memo.remove({ _id: objectId });
 };

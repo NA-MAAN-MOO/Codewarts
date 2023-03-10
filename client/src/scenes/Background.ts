@@ -187,7 +187,7 @@ export default class Background extends Phaser.Scene {
       progressBar.destroy();
       loadingText.destroy();
       percentText.destroy();
-      console.log('Loading complete');
+      // console.log('Loading complete');
       // onLoadComplete();
       store.dispatch(openLogin());
       // 로그인 띄우기

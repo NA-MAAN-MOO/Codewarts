@@ -74,29 +74,15 @@ function Memo(props: any) {
     []
   );
 
-  /* observer? */
-  //   const onChangeSize = useMemo(
-  //     () =>
-  //       debounce((entry) => {
-  //         const { width, height } = entry[0].contentRect;
-  //         setMemoSize(item.id, width, height);
-  //       }, 100),
-  //     [item.id, setMemoSize]
-  //   );
-
   const onClickDelete = () => {
-    // console.log('온클릭딜리트');
     deleteMemo(memo._id);
   };
 
   const bringToFront = () => {
-    // console.log('찍힘');
-    // let tempZIndex = maxZindex + 1;
     setIsDragging(true);
     setmaxZIndex((zIndex: number) => zIndex + 1);
   };
 
-  // console.log(memo.content, 'max값 ', maxZIndex, '고유값', ownZIndex);
   const fixZIndex = () => {
     setOwnZIndex(maxZIndex);
   };
@@ -111,10 +97,8 @@ function Memo(props: any) {
         bottom: window.innerHeight * 0.9,
       }}
       onDrag={(e, data) => {
-        // e.stopPropagation();
         onChangePosition(data);
       }}
-      // onMouseDown={bringToFront}
       onStart={bringToFront}
       onStop={(e, data) => {
         setIsDragging(false);
@@ -194,12 +178,6 @@ const MemoContent = styled.textarea`
   user-select: auto;
   padding: 5px;
   margin-bottom: 20px;
-  // font-family: 'GangwonEduHyeonokT_OTFMediumA';
-  // font-family: 'NeoDunggeunmoPro-Regular';
-  font-family: 'Pretendard-Regular';
+  font-family: 'Cascadia Code';
   font-size: 1.4em;
 `;
-
-// const MemoWrapper = styled.div`
-//   display: inline;
-// `;
