@@ -16,6 +16,7 @@ import EvaluateGauge from 'components/editor/EvaluateGauge';
 import { Fireworks } from './fireworks';
 import TaskIcon from '@mui/icons-material/Task';
 import Swal from 'sweetalert2';
+import _ from 'lodash';
 
 const APPLICATION_EDITOR_URL =
   process.env.REACT_APP_EDITOR_URL || 'http://localhost:3001';
@@ -241,7 +242,7 @@ function EvaluateButton(props) {
         <Button
           variant="outlined"
           color="primary"
-          onClick={evaluateCode}
+          onClick={_.debounce(evaluateCode, 200)}
           style={middleButtonStyle}
         >
           <TaskIcon sx={{ marginRight: '5px' }} />
