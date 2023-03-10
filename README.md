@@ -6,42 +6,59 @@
 
 <div style="text-align: center"><img width="80%" src="./client/public/assets/readme/room_map.png"></div>
 <div style="font-size: 16px">친구들과 함께 실시간으로 코드를 치며 알고리즘 문제를 맞혀보세요!
-<a href="https://codewarts.store">&nbsp; 👉🏻 코드와트로 날아가기</a></div>
+<!-- <a href="https://codewarts.store">&nbsp; 👉🏻 코드와트로 날아가기</a></div> -->
 <br><br>
 
-# <strong>KEY FEATURE 🪄 </strong>
+# <strong>Links 📎 </strong>
+코드와트 : https://codewarts.com <br>
+발표 영상 : <br>
+Notion : (?)
+<br><br>
+
+# <strong>Features 🪄 </strong>
 
 <h2>🔮 실시간 공동 편집 코드 에디터</h2>
 
-컴파일도 가능
+- 다른 사람과 함께 코드를 완성해보세요.
+- 컴파일 기능으로 코드 출력 결과를 바로 확인할 수도 있어요.
 
 <div style="text-align: center"><img width="80%" src="./client/public/assets/readme/editor_record.gif"></div>
 
 <h2>🔮 알고리즘 문제 제공 및 채점</h2>
 
-에디터 내 검색 기능으로 문제를 불러올 수 있어요. 문제 정보를 읽으며 알고리즘 문제를 풀고, 잘 풀었는지 채점도 해보세요!
+- 에디터 내 검색 기능으로 문제를 불러올 수 있어요. 
+- 문제 정보를 읽으며 알고리즘 문제를 풀고, 잘 풀었는지 채점도 해보세요!
 
 <div style="text-align: center"><img width="80%" src="./client/public/assets/readme/algorithm_record.gif"></div>
 
 <h2>🔮 실시간 그림판</h2>
 
-실시간으로 코드를 보며 그려보세요.
+- 실시간으로 코드를 보며 텍스트로는 표현하기 어려운 것을 그려보세요.
+- 소통의 질이 높아진 걸 느낄 수 있을거예요.
 
 <div style="text-align: center"><img width="80%" src="./client/public/assets/readme/whiteboard_record.gif"></div>
 
 <h2>🔮 실시간 음성 채팅</h2>
 
-강의실과 에디터에서 음성 채팅이 가능합니다! 함께 이야기해보세요.
+- 강의실과 에디터에서 음성 채팅이 가능합니다! 함께 이야기해보세요.
 
 <h2>🔮 게시판 (리더보드 및 메모)</h2>
 
-코드와트 학생들의 코딩 랭킹을 확인하고 의지를 불태울 수 있어요!
-알고리즘 스터디를 지속해보세요!
+- 나를 포함한 코드와트 학생들의 코딩 랭킹을 확인하고 의지를 불태울 수 있어요.
+- 메모를 미션 보드처럼 활용해 알고리즘 스터디를 지속해보세요!
 
 <div style="text-align: center"><img width="80%" src="./client/public/assets/readme/main_board.png"></div>
+
+<h2>🔮 이모지 & 이펙트</h2>
+
+- 코드와트를 조금 더 재미있게 즐겨보세요! 
+<div style="text-align: center">
+<img width="80%" src="./client/public/assets/readme/emoji.png">
+<img width="80%" src="./client/public/assets/readme/fire_effect.png"></div>
 <br><br>
 
-# <strong>STACKS 📚 </strong></h2>
+
+# <strong>Stacks 📚 </strong></h2>
 
 <div display="inline-block">
 <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black" >
@@ -99,7 +116,7 @@
 
 <br><br>
 
-# <strong>License</strong></h2>
+# <strong>License ℹ️</strong></h2>
 
 <div>캐릭터 이미지 : Wayward</div>
 <div>배경음악 : 
