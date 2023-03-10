@@ -144,6 +144,28 @@ export default class MainScene extends Phaser.Scene {
     });
     this.watchTable = false;
 
+    this.anims.create({
+      key: 'gold',
+      frames: this.anims.generateFrameNames('gold', {
+        start: 0,
+        end: 59,
+        prefix: 'gold-',
+      }),
+      frameRate: 30,
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: 'success',
+      frames: this.anims.generateFrameNames('success', {
+        start: 0,
+        end: 22,
+        prefix: 'success-',
+      }),
+      frameRate: 30,
+      repeat: -1,
+    });
+
     let camera = this.cameras.main;
     camera.zoom = 1.4;
     camera.startFollow(this.player);
