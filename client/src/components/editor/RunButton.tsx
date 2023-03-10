@@ -41,7 +41,8 @@ function RunButton(props) {
     if (!inputStdin) return;
 
     const inputValue = {
-      code: ytext.toString(),
+      code: 'def main():\n\t' + ytext.toString(),
+      // code: ytext.toString(),
       //@ts-ignore
       stdin: inputStdin.value,
     };

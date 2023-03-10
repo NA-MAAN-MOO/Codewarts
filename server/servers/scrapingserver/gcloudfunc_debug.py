@@ -1,8 +1,8 @@
 import traceback
 import io
-from contextlib import redirect_stdout
 import builtins
 import os
+import sys
 
 
 fileUrl = 'user_code.py'
@@ -10,25 +10,24 @@ fileUrl = 'user_code.py'
 
 def execute_code(code_to_run: str, stdin_value: str):
     try:
-        inputs = []
         # Define a function to read input
-
         def read_input():
-            nonlocal inputs
             if stdin_value is not None:
-                input_value = stdin_value.split('\n')[len(inputs)]
-                inputs.append(input_value)
-                return input_value
-            elif sys.stdin.isatty():
+                input_lines = stdin_value.split('\n')
+                for line in input_lines:
+                    yield line.strip()
+            elif builtins.input == input:
                 # If running in a terminal, prompt the user for input
-                input_value = input()
-                inputs.append(input_value)
-                return input_value
+                while True:
+                    yield input()
             else:
                 # Otherwise, read input from stdin
-                input_value = sys.stdin.readline().rstrip('\n')
-                inputs.append(input_value)
-                return input_value
+                while True:
+                    yield input().rstrip('\n')
+
+        # Define a function to replace the input function in the imported module
+        def new_input(prompt=None):
+            return next(module.read_input)
 
         # Write user's code to a file
         with open(fileUrl, 'w') as f:
@@ -36,23 +35,24 @@ def execute_code(code_to_run: str, stdin_value: str):
 
         # Redirect stdout to a buffer
         stdout = io.StringIO()  # Create a StringIO object to capture stdout
-        with redirect_stdout(stdout):
-            # Execute the file, passing read_input() as the input function
-            exec(open(fileUrl).read(), {'__builtins__': builtins},
-                 {'input': read_input, 'print': print})
+        sys.stdout = stdout
 
-        # Parse the output and format it as a single string
-        output_lines = stdout.getvalue().split('\n')
-        output_lines = [line.strip() for line in output_lines if line.strip()]
-        output_str = ' '.join(output_lines)
+        # Execute the file
+        module = __import__(os.path.splitext(fileUrl)[0])
+        module.read_input = read_input()
+        module.input = new_input
 
-        return {"status": "success", "output": output_str}
+        module.main()
+
+        sys.stdout = sys.__stdout__
+
+        return {"status": "success", "output": stdout.getvalue().strip()}
     except Exception as e:
         tb = traceback.format_exc()
         return {"status": "error", "output": str(e), "traceback": tb}
 
 
-code_to_run = "a = input()\nb = input()\nc = input()\nprint(a, b, c)"
+code_to_run = "def main():\n\ta = input()\n\tb = input()\n\tc = input()\n\tprint(a, b, c)"
 stdin_value = "1\n2\n3"
 
 result = execute_code(code_to_run, stdin_value)

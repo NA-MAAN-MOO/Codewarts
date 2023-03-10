@@ -48,7 +48,7 @@ const getEachUserBojInfo = async (bojId: string) => {
       `https://solved.ac/api/v3/user/show?handle=${bojId}`
     );
   } catch (e) {
-    console.log(e);
+    // console.log(e);
     return false;
   }
 };
