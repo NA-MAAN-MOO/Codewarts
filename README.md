@@ -12,9 +12,9 @@
 <br><br>
 
 # <strong>Links 📎 </strong>
-코드와트 : https://codewarts.com <br>
-발표 영상 : <br>
-Notion : https://palm-numeric-fb6.notion.site/9534d334cd9a4b4694f5f2a1dd0723a7
+- 코드와트 : https://codewarts.com 
+- 트러블슈팅 기록 : https://palm-numeric-fb6.notion.site/9534d334cd9a4b4694f5f2a1dd0723a7 
+- 발표 영상 : 
 <br><br>
 
 # <strong>Features 🪄 </strong>
@@ -87,7 +87,7 @@ Notion : https://palm-numeric-fb6.notion.site/9534d334cd9a4b4694f5f2a1dd0723a7
 
 # <strong>Stacks 📚 </strong></h2>
 
-<div display="inline-block">
+<p align="center" display="inline-block">
 <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black" >
 <img src="https://img.shields.io/badge/redux-764ABC?style=for-the-badge&logo=redux&logoColor=white">
 <img src="https://img.shields.io/badge/phaser-3178C6?style=for-the-badge&logo=phaser&logoColor=white">
@@ -104,11 +104,12 @@ Notion : https://palm-numeric-fb6.notion.site/9534d334cd9a4b4694f5f2a1dd0723a7
 <img src="https://img.shields.io/badge/mongodb-47A248?style=for-the-badge&logo=mongodb&logoColor=white">
 <img src="https://img.shields.io/badge/openVidu-F7C603?style=for-the-badge&logo=openvidu&logoColor=47A248">
 <img src="https://img.shields.io/badge/jdoodle-000000?style=for-the-badge&logo=jdoodle&logoColor=47A248">
-</div>
+</p>
 
 <br>
 
-<img width="80%" src="./client/public/assets/readme/architecture.png">
+<p align="center">
+<img width="80%" src="./client/public/assets/readme/architecture.png"></p>
 
 <br><br>
 
