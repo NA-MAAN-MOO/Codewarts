@@ -55,7 +55,7 @@ function EvaluateButton(props) {
   const broadcastSuccess = () => {
     mySocket?.emit('Big Deal', {
       editorName: editorName,
-      problemId: bojProblemId || null,
+      problemId: bojProblemId || 19939,
       broadcast: true,
     });
   };
