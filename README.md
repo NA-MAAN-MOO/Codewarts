@@ -1,4 +1,4 @@
-# <strong>Codewarts 🏰 </strong>
+# <strong>Codewarts 👋🏻 </strong>
 
 <p align="center">
 <img width="50%" src="./client/src/assets/images/logo_new.png"></p>
@@ -14,7 +14,7 @@
 # <strong>Links 📎 </strong>
 코드와트 : https://codewarts.com <br>
 발표 영상 : <br>
-Notion : (?)
+Notion : https://palm-numeric-fb6.notion.site/9534d334cd9a4b4694f5f2a1dd0723a7
 <br><br>
 
 # <strong>Features 🪄 </strong>
@@ -80,9 +80,8 @@ Notion : (?)
 
 - 문제를 맞히거나 에디터를 이용 중인 친구들에게는 특수한 이펙트가 나와요.
 <p align="center">
-<img width="80%" src="./client/public/assets/readme/fire_effect.png"></p>
+<img width="80%" src="./client/public/assets/readme/subfeatures.png"></p>
 
-- 풍부한 효과를 잘 이용해서 코드와트를 조금 더 재미있게 즐겨보세요! 
 <br><br>
 
 
@@ -90,19 +89,26 @@ Notion : (?)
 
 <div display="inline-block">
 <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black" >
-<img src="https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white">
-<img src="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
-<img src="https://img.shields.io/badge/phaser-3178C6?style=for-the-badge&logo=phaser&logoColor=white">
-<img src="https://img.shields.io/badge/express-000000?style=for-the-badge&logo=express&logoColor=white">
-<img src="https://img.shields.io/badge/socket.io-white?style=for-the-badge&logo=socket.io&logoColor=010101">
-<img src="https://img.shields.io/badge/mongodb-000000?style=for-the-badge&logo=mongodb&logoColor=47A248">
-<img src="https://img.shields.io/badge/css-000000?style=for-the-badge&logo=css&logoColor=47A248">
-<img src="https://img.shields.io/badge/html-000000?style=for-the-badge&logo=html&logoColor=47A248">
 <img src="https://img.shields.io/badge/redux-764ABC?style=for-the-badge&logo=redux&logoColor=white">
+<img src="https://img.shields.io/badge/phaser-3178C6?style=for-the-badge&logo=phaser&logoColor=white">
+<img src="https://img.shields.io/badge/codemirror-D30707?style=for-the-badge&logo=codemirror&logoColor=white">
+<img src="https://img.shields.io/badge/html-D35836?style=for-the-badge&logo=html&logoColor=47A248">
+<img src="https://img.shields.io/badge/css-2565F1?style=for-the-badge&logo=css&logoColor=47A248">
+<img src="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
 <img src="https://img.shields.io/badge/nginx-009639?style=for-the-badge&logo=nginx&logoColor=white">
 <img src="https://img.shields.io/badge/pm2-2B037A?style=for-the-badge&logo=pm2&logoColor=white">
-<img src="https://img.shields.io/badge/codemirror-D30707?style=for-the-badge&logo=codemirror&logoColor=white">
+<img src="https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white">
+<img src="https://img.shields.io/badge/express-000000?style=for-the-badge&logo=express&logoColor=white">
+<img src="https://img.shields.io/badge/yjs-FCBB42?style=for-the-badge&logo=yjs&logoColor=white">
+<img src="https://img.shields.io/badge/socket.io-white?style=for-the-badge&logo=socket.io&logoColor=010101">
+<img src="https://img.shields.io/badge/mongodb-47A248?style=for-the-badge&logo=mongodb&logoColor=white">
+<img src="https://img.shields.io/badge/openVidu-F7C603?style=for-the-badge&logo=openvidu&logoColor=47A248">
+<img src="https://img.shields.io/badge/jdoodle-000000?style=for-the-badge&logo=jdoodle&logoColor=47A248">
 </div>
+
+<br>
+
+<img width="80%" src="./client/public/assets/readme/architecture.png">
 
 <br><br>
 
