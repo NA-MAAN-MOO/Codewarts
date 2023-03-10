@@ -27,20 +27,12 @@ interface DetailInfo {
 function Whiteboard() {
   const initialState: [] = [];
 
-  // const appDispatch = useAppDispatch();
-
-  // useEffect(() => {
-  //   appDispatch(getbojInfos());
-  // }, []);
-
-  // let rankInfos: any = useSelector((state: RootState) => state.rank.infos);
-
   let [bojInfos, setbojInfos] = useState<DetailInfo[]>(initialState);
 
   const getBojInfos = async () => {
     try {
       const response = await axios.get(`${APPLICATION_DB_URL}/user-rank`);
-      // console.log(response.data);
+
       setbojInfos(response.data);
     } catch (e) {
       console.error(e);
@@ -50,16 +42,8 @@ function Whiteboard() {
   useEffect(() => {
     getBojInfos();
   }, []);
-  // console.log('bojInfos', bojInfos);
-  // console.log(Boolean(bojInfos));
-  // const getBojInfos = () => {};
-  // useEffect(()=> {})
-  // useEffect(() => {
-  //   setbojInfos(rankInfos);
-  // }, []);
 
   const handleClose = () => {
-    // setbojInfos([]);
     store.dispatch(openGame());
   };
 
@@ -67,25 +51,18 @@ function Whiteboard() {
     <>
       <Background>
         <Box
-          // component="image"
           sx={{
             display: 'flex',
             animationDuration: '0.8s',
-            // background: 'darkred',
             backgroundImage: `url(${Image})`,
             backgroundSize: '40% 100%',
             backgroundRepeat: 'no-repeat',
-            // border: '1px solid black',
           }}
           className="animate__animated animate__zoomIn"
         >
           <RankingHeader />
 
-          <RankingList
-            // getBojInfos={getBojInfos}
-            bojInfos={bojInfos}
-            // setbojInfos={setbojInfos}
-          />
+          <RankingList bojInfos={bojInfos} />
           <MainField handleClose={handleClose} />
         </Box>
       </Background>

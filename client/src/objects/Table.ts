@@ -1,9 +1,7 @@
 import Phaser from 'phaser';
 import Resource from './Resources';
 import Player from './Player';
-import { fontStyle } from '@mui/system';
 
-// type tableStateType = { [index: number]: object };
 const tableInfoModel = {
   username: '',
   editorName: 0,
@@ -16,7 +14,6 @@ export default class Table {
   tableObject: Resource;
   tableId: number;
   usercount: number;
-  //   tableInfo: tableStateType;
   tableInfo: any = new Map();
   buttonToEditor: any;
   editorListDialog!: Phaser.GameObjects.Container;
@@ -26,7 +23,6 @@ export default class Table {
   constructor(scene: Phaser.Scene, tableObject: Resource, tableId: number) {
     this.usercount = 0;
     for (let i = 0; i < 4; i++) {
-      // 얕은 복사와 깊은 복사 유의해서 처리해야한다. 아니면 하나 변경 시 전부 변경됨 ㅠㅜ
       this.tableInfo.set(i, { ...tableInfoModel });
     }
     this.tableObject = tableObject;
@@ -54,7 +50,6 @@ export default class Table {
       let fontStyle: any;
       let username = this.tableInfo.get(i).username;
       if (username) {
-        // console.log(this.tableInfo.get(i));
         str = `🧙🏻‍♂️${this.tableInfo.get(i).username}의 에디터 열기`;
         fontStyle = { fontSize: '20px', color: '#e06609' };
       } else {
@@ -105,8 +100,6 @@ export default class Table {
       targetPlace[username] = username;
       targetPlace[editorName] = editorName;
       this.usercount++;
-      // 맥북 texture 바꾸기
-      // this.updateLaptopImage(i);
     }
   }
 
@@ -158,14 +151,12 @@ export default class Table {
       chair.setTexture(`chair_back`);
     }
     player.playerNameBubble.setDepth(50);
-    // console.log('standUpFromChair 불림 ', this.fire);
 
     player.setVisible(true);
     player.removeFireEffect();
   }
 
   updateTable(idx: number, userName: string, player: Player) {
-    // console.log(this.tableInfo.get(idx).laptop);
     this.updateLaptopImage(idx);
 
     this.tableInfo.get(idx)['username'] = userName;
@@ -175,7 +166,6 @@ export default class Table {
       this.sitOnChair(idx, player);
     } else {
       this.standUpFromChair(idx, player);
-      // console.log('일어나');
     }
   }
 }
