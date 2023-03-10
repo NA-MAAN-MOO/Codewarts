@@ -82,6 +82,8 @@
 <p align="center">
 <img width="80%" src="./client/public/assets/readme/subfeatures.png"></p>
 
+- 풍부한 효과를 잘 이용해서 코드와트를 조금 더 재미있게 즐겨보세요! 
+
 <br><br>
 
 
