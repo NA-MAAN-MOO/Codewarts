@@ -4,6 +4,7 @@ import io
 from contextlib import redirect_stdout
 import builtins
 import sys
+import os
 
 
 def execute_code(code_to_run: str, stdin_value: str):
@@ -18,12 +19,16 @@ def execute_code(code_to_run: str, stdin_value: str):
             else:
                 # Otherwise, read input from stdin
                 return sys.stdin.readline().rstrip('\n')
-            
+
+        # Write user's code to a file
+        with open('/tmp/user_code.py', 'w') as f:
+            f.write(code_to_run)
+
         # Redirect stdout to a buffer
         stdout = io.StringIO()  # Create a StringIO object to capture stdout
         with redirect_stdout(stdout):
-            # Execute the code, passing read_input() as the input function
-            exec(code_to_run, {'__builtins__': builtins},
+            # Execute the file, passing read_input() as the input function
+            exec(open('/tmp/user_code.py').read(), {'__builtins__': builtins},
                  {'input': read_input})
 
         return {"status": "success", "output": stdout.getvalue()}
@@ -55,5 +60,8 @@ def hello_world(request: Request):
     resp.headers['Access-Control-Allow-Origin'] = '*'
     resp.headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'
     resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+
+    # Clean up the user code file
+    os.remove('/tmp/user_code.py')
 
     return resp

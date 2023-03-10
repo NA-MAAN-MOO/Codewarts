@@ -181,14 +181,14 @@ function EvaluateButton(props) {
   };
 
   /* google cloud functions */
-  async function callCloudFunction(data: any) {
+  async function callCloudFunction(inputData: any) {
     const url = `https://asia-northeast3-codeuk-379309.cloudfunctions.net/compiler`;
     const options = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(inputData),
     };
     console.log(options);
 
@@ -198,11 +198,11 @@ function EvaluateButton(props) {
   }
 
   const evaluateSample = async () => {
-    console.log(bojProbFullData?.samples?.[1].input.toString());
+    // console.log(bojProbFullData?.samples?.[1].input.toString());
     const inputData = {
       code: ytext.toString(),
-      // stdin: '1\n', // todo: 실제 input value로 바꾸기
-      stdin: bojProbFullData?.samples?.[1].input.toString() || '',
+      stdin: '1\n', // todo: 실제 input value로 바꾸기
+      // stdin: bojProbFullData?.samples?.[1].input.toString() || '',
     };
 
     callCloudFunction(inputData)
@@ -249,7 +249,6 @@ function EvaluateButton(props) {
         </Button>
       </Tooltip>
       {markingPercent === '100' ? <Fireworks /> : null}
-
       <EvaluateGauge
         value={markingPercent}
         min={0}
@@ -262,6 +261,16 @@ function EvaluateButton(props) {
       {/* <button onClick={broadcastSuccess}>
         테스트버튼: "{editorName}"님이 문제 맞췄다고 알리기
       </button> */}
+      <Button
+        color="primary"
+        style={{
+          fontFamily: 'Cascadia Code, Pretendard-Regular',
+          fontSize: '17px',
+        }}
+        onClick={evaluateSample}
+      >
+        예제채점
+      </Button>{' '}
     </>
   );
 }
