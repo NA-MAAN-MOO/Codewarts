@@ -182,14 +182,14 @@ function EvaluateButton(props) {
   };
 
   /* google cloud functions */
-  async function callCloudFunction(inputData: any) {
+  async function callCloudFunction(program: any) {
     const url = `https://asia-northeast3-codeuk-379309.cloudfunctions.net/compiler`;
     const options = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(inputData),
+      body: JSON.stringify(program),
     };
     console.log(options);
 
@@ -200,13 +200,13 @@ function EvaluateButton(props) {
 
   const evaluateSample = async () => {
     console.log(bojProbFullData?.samples?.[1].input.toString());
-    const inputData = {
+    const program = {
       code: ytext.toString(),
       stdin: '1\n',
       // stdin: bojProbFullData?.samples?.[1].input.toString() || '',
     };
 
-    callCloudFunction(inputData)
+    callCloudFunction(program)
       .then((result) => {
         console.log('RESULT:', result);
         if (result.status === 'success') {

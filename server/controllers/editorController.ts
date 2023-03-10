@@ -34,30 +34,66 @@ export const createRoom = async (req: Request, res: Response) => {
 };
 
 /* get response for compiled code */
+// export const compileCode = async (req: Request, res: Response) => {
+//   const { codeToRun = '', stdin = '', redisClient } = req.body;
+
+//   const program = {
+//     script: codeToRun,
+//     stdin: stdin,
+//     language: 'python3',
+//     versionIndex: '4',
+//     clientId: `${process.env.JDOODLE_CLIENT_ID}`,
+//     clientSecret: `${process.env.JDOODLE_CLIENT_SECRET}`,
+//   };
+
+//   axios({
+//     method: 'post',
+//     url: 'https://api.jdoodle.com/v1/execute',
+//     data: program,
+//   })
+//     .then((response: AxiosResponse) => {
+//       console.log('statusCode:', response.status);
+//       console.log('body:', response.data);
+//       res.status(response.status).send(response.data);
+//     })
+//     .catch((error: Error) => {
+//       console.log('error:', error);
+//     });
+// };
+
+/* google cloud functions */
+async function callCloudFunction(program: any) {
+  const url = `https://asia-northeast3-codeuk-379309.cloudfunctions.net/compiler`;
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(program),
+  };
+  console.log(options);
+
+  const response = await fetch(url, options);
+  const result = await response.json();
+  return result;
+}
+
+/* get response for compiled code */
 export const compileCode = async (req: Request, res: Response) => {
-  const { codeToRun = '', stdin = '', redisClient } = req.body;
+  const { code = '', stdin = '' } = req.body;
 
   const program = {
-    script: codeToRun,
+    code: code,
     stdin: stdin,
-    language: 'python3',
-    versionIndex: '4',
-    clientId: `${process.env.JDOODLE_CLIENT_ID}`,
-    clientSecret: `${process.env.JDOODLE_CLIENT_SECRET}`,
   };
 
-  axios({
-    method: 'post',
-    url: 'https://api.jdoodle.com/v1/execute',
-    data: program,
-  })
-    .then((response: AxiosResponse) => {
-      console.log('statusCode:', response.status);
-      console.log('body:', response.data);
-      res.status(response.status).send(response.data);
+  callCloudFunction(program)
+    .then((result) => {
+      console.log('RESULT:', result);
+      res.status(200).send(result);
     })
     .catch((error: Error) => {
-      console.log('error:', error);
+      console.error('Error:', error);
     });
 };
 
