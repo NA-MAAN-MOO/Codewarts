@@ -107,7 +107,7 @@ export default class MainScene extends Phaser.Scene {
       for (let j = 0; j < 4; j++) {
         let targetTable = this.tableMap.get(tableKeys[i]);
         targetTable?.registerLaptop(j, this.macbookList[i][j]);
-        targetTable.registerChair(j, this.chairList[i][j]);
+        targetTable?.registerChair(j, this.chairList[i][j]);
         // this.tableMap
         //   .get(tableKeys[i])
         //   ?.registerLaptop(j, this.macbookList[i][j]);
@@ -235,17 +235,19 @@ export default class MainScene extends Phaser.Scene {
     phaserGame.socket.on(
       'updateEditor',
       (payLoad: {
-        id: string;
-        idx: number;
-        userName: string;
+        id: string; //테이블의 id
+        idx: number; //tableInfo에서 업데이트된 index값
+        userName: string; //업데이트된 user name(에디터 주인)
         socketId: string;
       }) => {
         console.log('updateEditor');
         const table = this.tableMap.get(payLoad.id);
         if (table) {
           if (phaserGame.socketId === payLoad.socketId) {
+            //요청 보낸 게 나일 경우
             table.updateTable(payLoad.idx, payLoad.userName, this.player);
           } else {
+            //요청 보낸 게 다른 사람일 경우
             this.otherPlayers.forEach((otherPlayer: OtherPlayer) => {
               if (otherPlayer.socketId === payLoad.socketId) {
                 table.updateTable(payLoad.idx, payLoad.userName, otherPlayer);
