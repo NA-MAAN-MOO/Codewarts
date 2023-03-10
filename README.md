@@ -62,11 +62,11 @@
 <br><br>
 
 # <strong>Team Codewarts 🧑‍🤝‍🧑 </strong></h2>
-|김준철|이은민|염혜지|김세희|한동훈|
+|김준철|이은민|염혜지|한동훈|김세희|
 |:------:|:-----:|:-----:|:-----:|:-----:|
 |사진|사진|사진|사진|사진|사진
 |플랫폼 그림판<br> 배포환경 구축|에디터 컴파일 <br>문제 검색 및 채점|플랫폼 UI <br>문제 풀이 랭킹 및 메모|에디터 로그인 <br>이모지 UI|플랫폼 보이스챗<br> 코드 구조 설계
-|[GitHub](https://github.com/juncheolkim)|[GitHub](https://github.com/gcount85)|[GitHub](https://github.com/sententi-a)|[GitHub](https://github.com/sadie100)|[GitHub](https://github.com/mrsuit0114)
+|[GitHub](https://github.com/juncheolkim)|[GitHub](https://github.com/gcount85)|[GitHub](https://github.com/sententi-a)|[GitHub](https://github.com/mrsuit0114)|[GitHub](https://github.com/sadie100)
 
 <br><br>
 
