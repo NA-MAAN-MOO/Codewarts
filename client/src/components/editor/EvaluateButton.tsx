@@ -199,10 +199,10 @@ function EvaluateButton(props) {
   }
 
   const evaluateSample = async () => {
-    // console.log(bojProbFullData?.samples?.[1].input.toString());
+    console.log(bojProbFullData?.samples?.[1].input.toString());
     const inputData = {
       code: ytext.toString(),
-      stdin: '1\n', // todo: 실제 input value로 바꾸기
+      stdin: '1\n',
       // stdin: bojProbFullData?.samples?.[1].input.toString() || '',
     };
 

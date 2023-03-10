@@ -36,6 +36,32 @@ function RunButton(props) {
     }
   };
 
+  /* 구글 클라우드 펑션 버전  */
+  // const runCode = async () => {
+  //   if (!inputStdin) return;
+
+  //   // console.log(inputStdin.value);
+
+  //   try {
+  //     const { data } = await axios.post(
+  //       `${APPLICATION_EDITOR_URL}/code_to_run`,
+  //       {
+  //         code: ytext.toString(),
+  //         //@ts-ignore
+  //         stdin: inputStdin.value,
+  //       }
+  //     );
+
+  //     console.log(data); // 전체 reponse body (output, statusCode, memory, cpuTime)
+  //     setCompileOutput(data.output.replace(/ \n/g, '\r\n').trimEnd());
+  //     setMemory(data.memory);
+  //     setCpuTime(data.cpuTime);
+  //   } catch (error) {
+  //     console.error(error);
+  //     alert('코드 서버로 보내기 실패');
+  //   }
+  // };
+
   return (
     <>
       <Tooltip title="코드 실행하기" arrow slotProps={tooltipStyle}>

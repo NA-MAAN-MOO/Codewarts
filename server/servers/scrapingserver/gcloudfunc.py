@@ -5,6 +5,8 @@ from contextlib import redirect_stdout
 import builtins
 import sys
 import os
+import resource
+import time
 
 
 def execute_code(code_to_run: str, stdin_value: str):
@@ -24,6 +26,10 @@ def execute_code(code_to_run: str, stdin_value: str):
         with open('/tmp/user_code.py', 'w') as f:
             f.write(code_to_run)
 
+        # Start tracking the time and memory usage
+        start_time = time.monotonic()
+        start_mem = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+
         # Redirect stdout to a buffer
         stdout = io.StringIO()  # Create a StringIO object to capture stdout
         with redirect_stdout(stdout):
@@ -31,7 +37,20 @@ def execute_code(code_to_run: str, stdin_value: str):
             exec(open('/tmp/user_code.py').read(), {'__builtins__': builtins},
                  {'input': read_input})
 
-        return {"status": "success", "output": stdout.getvalue()}
+        # End tracking the time and memory usage
+        end_time = time.monotonic()
+        end_mem = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+
+        # # Calculate the time and memory usage
+        # elapsed_time = end_time - start_time
+        # elapsed_mem = (end_mem - start_mem) / 1024  # Convert to MB
+
+        # Calculate the time and memory usage
+        elapsed_time = (end_time - start_time) * 1000  # Convert to milliseconds
+        elapsed_mem = end_mem - start_mem  # Return in KB
+
+        return {"status": "success", "output": stdout.getvalue(),
+                "time": elapsed_time, "memory": elapsed_mem}
     except Exception as e:
         tb = traceback.format_exc()
         return {"status": "error", "output": str(e), "traceback": tb}
@@ -51,7 +70,10 @@ def hello_world(request: Request):
     if result["status"] == "success":
         resp = make_response(
             jsonify({"status": "success",
-                     "output": result["output"]}), 200)
+                     "output": result["output"],
+                     "time": result["time"],
+                     "memory": result["memory"]
+                     }), 200)
     else:
         resp = make_response(
             jsonify({"status": "traceback",
