@@ -8,8 +8,6 @@
 
 <h2><strong>KEY FEATURE 🪄 </strong></h2>
 
-<hr>
-
 <div style="font-size: 20px">1.실시간 공동 편집 코드 에디터</div>
 컴파일도 가능
 <div><img width="40vw" src="~@source/client/public/assets/readme/editor_record.gif"></div>
@@ -18,7 +16,7 @@
 <div><img width="40vw" src="~@source/client/public/assets/readme/algorithm_record.gif"></div>
 <div style="font-size: 20px">3. 실시간 그림판</div>
 실시간으로 코드를 보며 그려보세요.
-<div><img width="40vw" src="~@source/client/public/assets/readme/whiteboard_record.gif"></div>
+<div><img width="40vw" src="./client/public/assets/readme/whiteboard_record.gif"></div>
 <div style="font-size: 20px">4. 실시간 음성 채팅</div>
 강의실과 에디터에서 음성 채팅이 가능합니다! 함께 이야기해보세요.
 <div style="font-size: 20px">5. 게시판 (리더보드 및 메모)</div>
@@ -26,7 +24,7 @@
 알고리즘 스터디를 지속해보세요!
 <div><img width="100vw" src="~@source/client/public/assets/readme/main_board.png"></div>
 <br><br>
-<h2><strong>STACKS 📚 </strong></h2><hr>
+<h2><strong>STACKS 📚 </strong></h2>
 
 <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black" >
 <img src="https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white">
@@ -44,11 +42,11 @@
 
 <br><br>
 
-<h2><strong>Team Codewarts 🧑‍🤝‍🧑 </strong></h2><hr>
+<h2><strong>Team Codewarts 🧑‍🤝‍🧑 </strong></h2>
 김준철 이은민 염혜지 김세희 한동훈 + Github 링크
 <br><br>
 
-<h2><strong>How to start ❓ </strong></h2><hr>
+<h2><strong>How to start ❓ </strong></h2>
 
 1. **client 디렉토리로 이동해서(cd client), npm install**
 2. **server 디렉토리로 이동해서(cd server), npm install**
