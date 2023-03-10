@@ -8,22 +8,33 @@ import os
 import resource
 import time
 
+fileUrl = '/tmp/user_code.py'
+
 
 def execute_code(code_to_run: str, stdin_value: str):
     try:
+        inputs = []
         # Define a function to read input
+
         def read_input():
+            nonlocal inputs
             if stdin_value is not None:
-                return stdin_value
+                input_value = stdin_value.split('\n')[len(inputs)]
+                inputs.append(input_value)
+                return input_value
             elif sys.stdin.isatty():
                 # If running in a terminal, prompt the user for input
-                return input()
+                input_value = input()
+                inputs.append(input_value)
+                return input_value
             else:
                 # Otherwise, read input from stdin
-                return sys.stdin.readline().rstrip('\n')
+                input_value = sys.stdin.readline().rstrip('\n')
+                inputs.append(input_value)
+                return input_value
 
         # Write user's code to a file
-        with open('/tmp/user_code.py', 'w') as f:
+        with open(fileUrl, 'w') as f:
             f.write(code_to_run)
 
         # Start tracking the time and memory usage
@@ -31,13 +42,11 @@ def execute_code(code_to_run: str, stdin_value: str):
         start_mem = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
 
         # Redirect stdout to a buffer
-        output_buf = io.StringIO()
-        for line in stdin_value.split('\n'):
-            stdout = io.StringIO()
-            with redirect_stdout(stdout):
-                exec(open('/tmp/user_code.py').read(), {'__builtins__': builtins},
-                     {'input': lambda: line.strip(), 'print': lambda *args, **kwargs: print(*args, **kwargs, file=output_buf)})
-            output_buf.write('\n')
+        stdout = io.StringIO()  # Create a StringIO object to capture stdout
+        with redirect_stdout(stdout):
+            # Execute the file, passing read_input() as the input function
+            exec(open(fileUrl).read(), {'__builtins__': builtins},
+                 {'input': read_input, 'print': print})
 
         # End tracking the time and memory usage
         end_time = time.monotonic()
@@ -49,7 +58,9 @@ def execute_code(code_to_run: str, stdin_value: str):
         elapsed_mem = end_mem - start_mem  # Return in KB
 
         # Parse the output and format it as a single string
-        output_str = output_buf.getvalue().strip()
+        output_lines = stdout.getvalue().split('\n')
+        output_lines = [line.strip() for line in output_lines if line.strip()]
+        output_str = ' '.join(output_lines)
 
         return {"status": "success", "output": output_str,
                 "time": elapsed_time, "memory": elapsed_mem}
@@ -87,6 +98,6 @@ def hello_world(request: Request):
     resp.headers['Access-Control-Allow-Headers'] = 'Content-Type'
 
     # Clean up the user code file
-    os.remove('/tmp/user_code.py')
+    os.remove(fileUrl)
 
     return resp
