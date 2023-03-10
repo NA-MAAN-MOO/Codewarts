@@ -1,6 +1,6 @@
 # <strong>Codewarts 🏰 </strong>
 
-## 코드와트는 알고리즘 문제 풀이에 특화된 온라인 모같코 플랫폼입니다.
+<div style="font-size: 20px">코드와트는 알고리즘 문제 풀이에 특화된 온라인 모같코 플랫폼입니다.</div>
 
 <div style="font-size: 14px">*모같코 : 모여서 같이 코딩하기</div>
 
@@ -11,29 +11,29 @@
 
 # <strong>KEY FEATURE 🪄 </strong>
 
-## 🔮 실시간 공동 편집 코드 에디터
+<h2>🔮 실시간 공동 편집 코드 에디터</h2>
 
 컴파일도 가능
 
-<div style="text-align: center"><img width="40vw" src="./client/public/assets/readme/editor_record.gif"></div>
+<div style="text-align: center"><img width="80%" src="./client/public/assets/readme/editor_record.gif"></div>
 
-## 🔮 알고리즘 문제 제공 및 채점
+<h2>🔮 알고리즘 문제 제공 및 채점</h2>
 
 에디터 내 검색 기능으로 문제를 불러올 수 있어요. 문제 정보를 읽으며 알고리즘 문제를 풀고, 잘 풀었는지 채점도 해보세요!
 
-<div style="text-align: center"><img width="40vw" src="./client/public/assets/readme/algorithm_record.gif"></div>
+<div style="text-align: center"><img width="80%" src="./client/public/assets/readme/algorithm_record.gif"></div>
 
-## 🔮 실시간 그림판
+<h2>🔮 실시간 그림판</h2>
 
 실시간으로 코드를 보며 그려보세요.
 
-<div style="text-align: center"><img width="40vw" src="./client/public/assets/readme/whiteboard_record.gif"></div>
+<div style="text-align: center"><img width="80%" src="./client/public/assets/readme/whiteboard_record.gif"></div>
 
-## 🔮 실시간 음성 채팅
+<h2>🔮 실시간 음성 채팅</h2>
 
 강의실과 에디터에서 음성 채팅이 가능합니다! 함께 이야기해보세요.
 
-## 🔮 게시판 (리더보드 및 메모)
+<h2>🔮 게시판 (리더보드 및 메모)</h2>
 
 코드와트 학생들의 코딩 랭킹을 확인하고 의지를 불태울 수 있어요!
 알고리즘 스터디를 지속해보세요!
