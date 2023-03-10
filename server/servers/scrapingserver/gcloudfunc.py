@@ -31,25 +31,27 @@ def execute_code(code_to_run: str, stdin_value: str):
         start_mem = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
 
         # Redirect stdout to a buffer
-        stdout = io.StringIO()  # Create a StringIO object to capture stdout
-        with redirect_stdout(stdout):
-            # Execute the file, passing read_input() as the input function
-            exec(open('/tmp/user_code.py').read(), {'__builtins__': builtins},
-                 {'input': read_input})
+        output_buf = io.StringIO()
+        for line in stdin_value.split('\n'):
+            stdout = io.StringIO()
+            with redirect_stdout(stdout):
+                exec(open('/tmp/user_code.py').read(), {'__builtins__': builtins},
+                     {'input': lambda: line.strip(), 'print': lambda *args, **kwargs: print(*args, **kwargs, file=output_buf)})
+            output_buf.write('\n')
 
         # End tracking the time and memory usage
         end_time = time.monotonic()
         end_mem = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
 
-        # # Calculate the time and memory usage
-        # elapsed_time = end_time - start_time
-        # elapsed_mem = (end_mem - start_mem) / 1024  # Convert to MB
-
         # Calculate the time and memory usage
-        elapsed_time = (end_time - start_time) * 1000  # Convert to milliseconds
+        elapsed_time = (end_time - start_time) * \
+            1000  # Convert to milliseconds
         elapsed_mem = end_mem - start_mem  # Return in KB
 
-        return {"status": "success", "output": stdout.getvalue(),
+        # Parse the output and format it as a single string
+        output_str = output_buf.getvalue().strip()
+
+        return {"status": "success", "output": output_str,
                 "time": elapsed_time, "memory": elapsed_mem}
     except Exception as e:
         tb = traceback.format_exc()
@@ -78,7 +80,7 @@ def hello_world(request: Request):
         resp = make_response(
             jsonify({"status": "traceback",
                      "error": result["output"],
-                     "traceback": result["traceback"]}), 500)
+                     "output": result["traceback"]}), 500)
 
     resp.headers['Access-Control-Allow-Origin'] = '*'
     resp.headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'
