@@ -12,7 +12,7 @@
 <br><br>
 
 # <strong>Links 📎 </strong>
-- 코드와트 : https://codewarts.com 
+- 코드와트 : https://codewarts.store
 - 트러블슈팅 기록 : https://palm-numeric-fb6.notion.site/9534d334cd9a4b4694f5f2a1dd0723a7 
 - 발표 영상 : 
 <br><br>
