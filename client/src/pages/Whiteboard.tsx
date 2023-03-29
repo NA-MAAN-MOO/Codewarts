@@ -31,7 +31,7 @@ function Whiteboard() {
 
   const getBojInfos = async () => {
     try {
-      const response = await axios.get(`${APPLICATION_DB_URL}/user-rank`);
+      const response = await axios.get(`${APPLICATION_DB_URL}/boj-infos`);
 
       setbojInfos(response.data);
     } catch (e) {
@@ -53,7 +53,7 @@ function Whiteboard() {
         <Box
           sx={{
             display: 'flex',
-            animationDuration: '0.8s',
+            animationDuration: '1.2s',
             backgroundImage: `url(${Image})`,
             backgroundSize: '40% 100%',
             backgroundRepeat: 'no-repeat',
