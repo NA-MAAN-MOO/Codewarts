@@ -71,16 +71,8 @@ export default function RankingList(props: any) {
         <NothingToShow>
           <br />
           <div style={{ background: 'white', borderRadius: '30px' }}>
-            코드와트 코딩 랭킹은
-            <br />
-            10분마다 한 번 갱신됩니다!
-            <br />
+            🛠 랭킹을 가져오는 중입니다.
           </div>
-          <br />
-          🛠 랭킹을 가져오는 중입니다. <br />
-          잠시 후 게시판을 다시 열어주세요.
-          <br />
-          <br />
         </NothingToShow>
       )}
       {/* <RankingTable bojInfos={bojInfos} /> */}
