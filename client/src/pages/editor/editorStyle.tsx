@@ -109,7 +109,7 @@ width: 100%
 const ProbTitleDiv = styledc.div`
 text-shadow: 1px 1px 2px grey;
 color: #fff;
-font-size: 1.5rem;
+font-size: 1.3rem;
 width: 100%;
 display: flex;
 flex-direction : row;
@@ -120,7 +120,7 @@ display: flex,
 justify-content: space-between,
 text-align: center;
 // border: 1px solid lightgreen;
-padding: 16px;
+padding: 10px 0px 8px 16px;
 `;
 
 const AlgoInput = styledc.input`
