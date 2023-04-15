@@ -3,12 +3,15 @@
 import USERINFOQUERY from '../../graphql/userInfoQuery';
 import axios from 'axios';
 
+const APPLICATION_EDITOR_URL =
+  process.env.REACT_APP_EDITOR_URL || 'http://localhost:3001';
+
 /* leetcode 유저 정보 가져오기 */
-const fetchLeetUserData = async () => {
-  if (leetUserNameRef.current === null) return;
+export const fetchLeetUserData = async (leetUserName: string) => {
+  // if (leetUserNameRef.current === null) return;
 
   //@ts-ignore
-  let leetUserName = leetUserNameRef.current.value;
+  // let leetUserName = leetUserNameRef.current.value;
   console.log(leetUserName);
 
   const userQueryVariable = {
@@ -18,7 +21,7 @@ const fetchLeetUserData = async () => {
 
   try {
     const response = await axios.post(
-      'https://cors-anywhere.herokuapp.com/https://leetcode.com/graphql',
+      `${APPLICATION_EDITOR_URL}/leet_user_data`,
       {
         query: USERINFOQUERY,
         variables: userQueryVariable,
@@ -26,15 +29,15 @@ const fetchLeetUserData = async () => {
     );
 
     let userData = response.data;
-    console.log(userData.data);
-    setLeetUserData(userData.data);
+    console.log(userData);
+    // setLeetUserData(userData.data);
   } catch (error) {
     console.error(error);
   }
 };
 
 /* 백준 유저 정보 가져오기 */
-const fetchBojUserData = async () => {
+export const fetchBojUserData = async () => {
   if (bojUserNameRef.current === null) return;
 
   //@ts-ignore

@@ -60,6 +60,7 @@ import AlgoHeaderTab from 'components/editor/AlgoHeaderTab';
 import AlgoInfoAccordion from 'components/editor/AlgoInfoAccordion';
 import ProbTitle from 'components/editor/ProbTitle';
 import SearchModal from '../../components/editor/ProbSearchModal';
+import { fetchLeetUserData } from './fetchFunction';
 
 /* network */
 import { getPhaserSocket } from 'network/phaserSocket';
@@ -273,6 +274,9 @@ function YjsCodeMirror(props: YjsProp) {
               />
             </ThemeProvider>
           </MiddleWrapper>
+          <button onClick={() => fetchLeetUserData('gcount85')}>
+            leetcode 정보 불러오기
+          </button>
           <div
             className="codemirror-editor"
             ref={editor}

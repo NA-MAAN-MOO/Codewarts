@@ -187,6 +187,25 @@ export const getProbData = async (req: Request, res: Response) => {
   });
 };
 
+export const getLeetUserData = async (req: Request, res: Response) => {
+  const userInfoQuery = req?.body.query;
+  const variables = req?.body.variables;
+
+  // console.log(userInfoQuery, variables); // 잘 찍힘
+
+  try {
+    const response = await axios.post('https://leetcode.com/graphql', {
+      query: userInfoQuery,
+      variables: variables,
+    });
+
+    // console.log(response); // 잘 찍힘
+    res.status(response.status).send(response.data);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const origin = (req: Request, res: Response) => {
   res.send({ msg: "I'm alive" });
 };

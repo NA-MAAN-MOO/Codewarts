@@ -5,6 +5,7 @@ import {
   getBojProbData,
   getProbData,
   origin,
+  getLeetUserData,
 } from '../controllers/editorController';
 
 const router = express.Router();
@@ -22,5 +23,8 @@ router.get('/bojdata', getBojProbData);
 
 /* 백준 문제 필터링 몽고DB 요청에 보내는 응답 */
 router.post('/probdata', getProbData);
+
+/* leetcode 유저 정보 요청에 보내는 응답 */
+router.post('/leet_user_data', getLeetUserData);
 
 export default router;
