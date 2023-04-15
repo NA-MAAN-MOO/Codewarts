@@ -56,3 +56,51 @@ export const fetchBojUserData = async () => {
     console.error(error);
   }
 };
+
+/* 백준 문제 정보 가져오기 */
+// const fetchBojProbTitleDiv = async () => {
+//   if (bojProbDataRef.current === null) return;
+
+//   let probId = bojProbDataRef.current.value;
+//   setBojProblemId(probId);
+//   console.log(probId);
+
+//   try {
+//     const response = await axios.get(
+//       `https://solved.ac/api/v3/problem/show?problemId=${probId}`
+//     );
+
+//     let probData = response.data;
+//     console.log(probData);
+//     setBojProbData(probData);
+//     fetchBojProbFullData(probId);
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
+
+/* leetcode 문제 정보 가져오기 */
+// const fetchLeetProbInfo = async () => {
+//   if (leetProbDataRef.current === null) return;
+
+//   const problemQueryVariable = {
+//     //@ts-ignore
+//     titleSlug: leetProbDataRef.current.value,
+//   };
+
+//   try {
+//     const response = await axios.post(
+//       'https://cors-anywhere.herokuapp.com/https://leetcode.com/graphql',
+//       {
+//         query: PROBLEMQUERY,
+//         variables: problemQueryVariable,
+//       }
+//     );
+
+//     let probData = response.data;
+//     console.log(probData.data);
+//     setLeetProbData(probData.data);
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
