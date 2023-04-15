@@ -319,6 +319,7 @@ const accordionSampleStyle = {
   fontFamily: 'Cascadia Code, Pretendard-Regular',
   textAlign: 'left',
   fontSize: '1rem',
+  wordBreak: 'break-word',
 };
 
 const accoSampleTitleStyle = {
