@@ -22,6 +22,7 @@ function AlgoHeaderTab(props) {
         `${APPLICATION_EDITOR_URL}/bojdata?probId=${probId}`
       );
 
+      setBojProblemId(parseInt(probId));
       let probFullData = response.data[0];
       // console.log(probFullData);
       setBojProbFullData(probFullData);
@@ -88,7 +89,6 @@ function AlgoHeaderTab(props) {
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       let probId = bojProbDataRef.current.value;
-      setBojProblemId(parseInt(probId));
       fetchBojProbFullData(probId);
     }
   };
