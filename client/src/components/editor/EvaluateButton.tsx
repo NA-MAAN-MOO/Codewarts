@@ -245,7 +245,7 @@ function EvaluateButton(props) {
           onClick={_.debounce(evaluateCode, 200)}
           style={middleButtonStyle}
         >
-          <TaskIcon sx={{ marginRight: '5px' }} />
+          <TaskIcon sx={{ marginRight: '5px', fontSize: '1.2rem' }} />
           제출
         </Button>
       </Tooltip>

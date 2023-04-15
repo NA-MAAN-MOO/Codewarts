@@ -396,7 +396,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 const middleButtonStyle = {
   // fontFamily: 'Cascadia Code, Pretendard-Regular',
   fontFamily: 'Firenze, Pretendard-Regular',
-  fontSize: '1.1rem',
+  fontSize: '1rem',
   boxShadow: 'inset 0.2em 0.2em #ededed',
   marginRight: '5px',
   marginLeft: '5px',
