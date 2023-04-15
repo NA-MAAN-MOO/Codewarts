@@ -34,7 +34,6 @@ import {
   buttonTheme,
   Main,
   DrawerHeader,
-  leftDrawerCSS,
   AlgoInputWrap,
   editorThemeCSS,
 } from './editorStyle';

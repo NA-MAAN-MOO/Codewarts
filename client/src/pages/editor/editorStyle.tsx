@@ -1,5 +1,5 @@
 import styledc from 'styled-components';
-import { styled, alpha, createTheme, useTheme } from '@mui/material/styles';
+import { styled, alpha, createTheme } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
@@ -14,7 +14,6 @@ import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 const buttonTheme = createTheme({
   palette: {
     primary: {
-      // main: '#eeba30', // 그리핀도르 찐노랑
       main: '#ffefd5', // papayawhip
       // main: '#272822', // 에디터 검정
       // main: '#ba835e', // 갈색
@@ -197,12 +196,6 @@ const AlgoTextField = styled((props: TextFieldProps) => (
     },
   },
 }));
-
-const ProfileInfo = styledc.div`
-  margin-left: 20px;
-  martgin-top: 10px;
-  font-size: 20px;
-`;
 
 /* Paper element theme setting */
 const Item = styled(Paper)(({ theme }) => ({
@@ -437,7 +430,6 @@ export {
   AlgoInputWrap,
   AlgoTextField,
   ProbTitleDiv,
-  ProfileInfo,
   Item,
   MiddleWrapper,
   EditorWrapper,
