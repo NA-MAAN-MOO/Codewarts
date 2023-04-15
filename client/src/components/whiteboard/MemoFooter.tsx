@@ -18,7 +18,6 @@ function MemoFooter(props: any) {
 
   /* Checkbox function */
   const participateIn = () => {
-    // participants.push(currentUserNickname);
     try {
       axios.post(APPLICATION_DB_URL + `/participate-in-memo`, {
         _id: _id,
@@ -59,8 +58,6 @@ function MemoFooter(props: any) {
     } else {
       notParticipateIn();
     }
-    // console.log(event.target.checked, participantsCopy);
-    // getMemos();
   };
 
   return (
@@ -86,12 +83,10 @@ function MemoFooter(props: any) {
           checked={checked}
           onChange={handleChange}
           sx={{
-            // marginRight: '10px',
             color: '#b52216',
             '&.Mui-checked': { color: '#b52216' },
             margin: '0 0 10px 10px',
           }}
-          // disabled={isChecked ? true : false}
         />
       </FooterWrapper>
     </>

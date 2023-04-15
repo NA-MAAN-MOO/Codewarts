@@ -17,9 +17,7 @@ export function getDate(): string {
   return year + '.' + month + '.' + day + '. ' + hour + ':' + minute;
 }
 
-// declare module 'node-cron';
-const cron = require('node-cron');
-// import cron from 'node-cron';
+// const cron = require('node-cron');
 
 interface ResponseType {
   nickname: string;
@@ -31,91 +29,81 @@ interface ResponseType {
 }
 
 let response: ResponseType[] = [];
-const task = cron.schedule('*/10 * * * *', async () => {
-  await getUsersBojInfo();
-  console.log('가져온 랭킹 수', response.length);
-});
-
-// const task = cron.schedule('30 18 * * *', async () => {
+// const task = cron.schedule('*/10 * * * *', async () => {
 //   await getUsersBojInfo();
 //   console.log('가져온 랭킹 수', response.length);
 // });
 
 /* Get each user's data */
-const getEachUserBojInfo = async (bojId: string) => {
+const getEachUserBojInfo = async (data: any) => {
   try {
-    return await axios.get(
-      `https://solved.ac/api/v3/user/show?handle=${bojId}`
+    const bojInfo = await axios.get(
+      `https://solved.ac/api/v3/user/show?handle=${data.userBojId}`
     );
+
+    const eachData = {
+      nickname: data.userNickname,
+      id: data.userId,
+      bojId: data.userBojId,
+      tier: bojInfo.data.tier,
+      maxStreak: bojInfo.data.maxStreak,
+      solved: bojInfo.data.solvedCount,
+    };
+
+    return eachData;
   } catch (e) {
     // console.log(e);
     return false;
   }
 };
 
-/* Recreate response based on info through solved.ac api */
-const regenerateData = async (datum: any) => {
-  let result: ResponseType[] = [];
-  for await (const data of datum) {
-    const eachData: false | AxiosResponse<any, any> = await getEachUserBojInfo(
-      data.userBojId
-    );
-
-    if (!!eachData) {
-      result.push({
-        nickname: data.userNickname,
-        id: data.userId,
-        bojId: data.userBojId,
-        tier: eachData.data.tier,
-        maxStreak: eachData.data.maxStreak,
-        solved: eachData.data.solvedCount,
-      });
-    }
-  }
-  /* Error handling (too many requests) */
-  if (result.length === 0) {
-    console.log(`Ranking Update Failed`);
-    return;
-  }
-  // return result;
-  response = [...result];
-};
+// const getEachUserBojInfo = async (bojId: string) => {
+//   try {
+//     return await axios.get(
+//       `https://solved.ac/api/v3/user/show?handle=${bojId}`
+//     );
+//   } catch (e) {
+//     // console.log(e);
+//     return false;
+//   }
+// };
 
 /* Get all user's number of solved problems through boj ids in DB */
-export const getUsersBojInfo = async () => {
+export const getUsersBojInfo = async (req: Request, res: Response) => {
   const datum = await User.find({});
+  const promises = datum.map(getEachUserBojInfo);
+  let result = await Promise.allSettled(promises);
+  //TODO: elem type 변경하기
+  result = result.filter((elem: any) => {
+    return elem.value !== false;
+  });
 
-  await regenerateData(datum);
+  const resultData = result.map((elem: any) => {
+    const { nickname, id, bojId, tier, maxStreak, solved } = elem.value;
+    return { nickname, id, bojId, tier, maxStreak, solved };
+  });
 
-  /* Sort by tier */
-  if (response.length) {
-    await response.sort((a, b) => b.tier - a.tier);
+  // console.log(resultData);
+
+  if (resultData.length) {
+    resultData.sort((a, b) => b.tier - a.tier);
+    res.status(200).send(resultData);
+  } else {
+    res.status(404).send('No valid boj users id!');
   }
 };
 
 /* When server starts, it brings boj infos */
-getUsersBojInfo();
+// getUsersBojInfo();
 
 /* Send Boj Infos saved in heap(?) */
 export const sendUsersBojInfo = (req: Request, res: Response) => {
-  // console.log(response, 'sendUsersBojInfo');
   if (response.length === 0) {
     res.status(404).send('No valid Boj Users Id');
   } else {
     res.status(200).send(response);
   }
 };
-
-// export const getAllUsers = async (req: Request, res: Response) => {
-//   try {
-//     const datum = await User.find({});
-//     res.status(200).send(datum);
-//     // console.log(datum);
-//   } catch (e) {
-//     console.error(e);
-//     res.status(404).send('No valid Boj Users Id');
-//   }
-// };
 
 /* Save memo to DB */
 export const addMemo = async (req: Request, res: Response) => {
@@ -166,7 +154,6 @@ export const updateMemo = async (req: Request, res: Response) => {
 /* Change memo position */
 export const changeMemoPos = async (req: Request, res: Response) => {
   try {
-    // const objectId = new Types.ObjectId(req.body._id);
     const objectId = req.body._id;
     const result = await Memo.updateOne(
       { _id: objectId },
@@ -193,7 +180,6 @@ export const participateInMemo = async (req: Request, res: Response) => {
       { _id: objectId },
       { participants: newParticipants }
     );
-    // console.log(newParticipants);
     res.status(200).json(result);
   } catch (e) {
     console.error(e);
@@ -217,7 +203,6 @@ export const dropOutOfMemo = async (req: Request, res: Response) => {
       { _id: objectId },
       { participants: newParticipants }
     );
-    // console.log(newParticipants);
     res.status(200).json(result);
   } catch (e) {
     console.error(e);
@@ -236,5 +221,4 @@ export const deleteMemo = async (req: Request, res: Response) => {
     console.error(e);
     res.status(400).json({ message: '삭제 실패' });
   }
-  // await Memo.remove({ _id: objectId });
 };

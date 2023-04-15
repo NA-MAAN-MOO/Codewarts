@@ -172,27 +172,29 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
   /* Called whenever player solve a problem  */
   problemSolvedEffect() {
-    this.scene.anims.create({
-      key: 'gold',
-      frames: this.scene.anims.generateFrameNames('gold', {
-        start: 0,
-        end: 59,
-        prefix: 'gold-',
-      }),
-      frameRate: 30,
-      repeat: -1,
-    });
+    // this.scene.anims.create({
+    //   key: 'gold',
+    //   frames: this.scene.anims.generateFrameNames('gold', {
+    //     start: 0,
+    //     end: 59,
+    //     prefix: 'gold-',
+    //   }),
+    //   frameRate: 30,
+    //   repeat: -1,
+    // });
 
-    this.scene.anims.create({
-      key: 'success',
-      frames: this.scene.anims.generateFrameNames('success', {
-        start: 0,
-        end: 22,
-        prefix: 'success-',
-      }),
-      frameRate: 30,
-      repeat: -1,
-    });
+    // this.scene.anims.create({
+    //   key: 'success',
+    //   frames: this.scene.anims.generateFrameNames('success', {
+    //     start: 0,
+    //     end: 22,
+    //     prefix: 'success-',
+    //   }),
+    //   frameRate: 30,
+    //   repeat: -1,
+    // });
+
+    this.destroySuccessEffect();
 
     this.successEffect = this.scene.add
       .sprite(this.x, this.y + 20, 'gold', 0)
@@ -201,7 +203,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
     setTimeout(() => {
       this.successEffect.destroy();
-    }, 120000);
+    }, 60000);
   }
 
   /* When player close editor or exits, 강제적으로 성공 이펙트 없애버림 */

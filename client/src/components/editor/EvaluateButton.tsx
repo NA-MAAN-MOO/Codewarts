@@ -16,6 +16,7 @@ import EvaluateGauge from 'components/editor/EvaluateGauge';
 import { Fireworks } from './fireworks';
 import TaskIcon from '@mui/icons-material/Task';
 import Swal from 'sweetalert2';
+import _ from 'lodash';
 
 const APPLICATION_EDITOR_URL =
   process.env.REACT_APP_EDITOR_URL || 'http://localhost:3001';
@@ -55,7 +56,7 @@ function EvaluateButton(props) {
   const broadcastSuccess = () => {
     mySocket?.emit('Big Deal', {
       editorName: editorName,
-      problemId: bojProblemId || null,
+      problemId: bojProblemId || 19939,
       broadcast: true,
     });
   };
@@ -247,14 +248,25 @@ function EvaluateButton(props) {
         <Button
           variant="outlined"
           color="primary"
-          onClick={evaluateCode}
+          onClick={_.debounce(evaluateCode, 200)}
           style={middleButtonStyle}
         >
-          <TaskIcon sx={{ marginRight: '5px' }} />
+          <TaskIcon sx={{ marginRight: '5px', fontSize: '1.2rem' }} />
           제출
         </Button>
       </Tooltip>
       {markingPercent === '100' ? <Fireworks /> : null}
+      {/* ▼ 문제 성공 알림을 테스트용 투명 버튼 */}
+      {/* <button
+        onClick={broadcastSuccess}
+        style={{
+          // border: '1px solid green',
+          backgroundColor: 'transparent',
+          color: 'transparent',
+        }}
+      >
+        -
+      </button> */}
       <EvaluateGauge
         value={markingPercent}
         min={0}
@@ -263,17 +275,6 @@ function EvaluateButton(props) {
         shining={shining}
         totalCases={totalCases}
       />
-      {/* ▼ 문제 성공 알림을 테스트하고 싶으면 주석 해제 */}
-      {/* <button
-        onClick={broadcastSuccess}
-        style={{
-          border: '1px solid green',
-          backgroundColor: 'transparent',
-          color: 'transparent',
-        }}
-      >
-        {editorName}
-      </button> */}
       <Button
         color="primary"
         style={{
@@ -282,7 +283,7 @@ function EvaluateButton(props) {
         }}
         onClick={evaluateSample}
       >
-        예제채점
+        구글클라우드예제채점
       </Button>{' '}
     </>
   );

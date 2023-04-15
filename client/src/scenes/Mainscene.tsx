@@ -144,6 +144,28 @@ export default class MainScene extends Phaser.Scene {
     });
     this.watchTable = false;
 
+    this.anims.create({
+      key: 'gold',
+      frames: this.anims.generateFrameNames('gold', {
+        start: 0,
+        end: 59,
+        prefix: 'gold-',
+      }),
+      frameRate: 30,
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: 'success',
+      frames: this.anims.generateFrameNames('success', {
+        start: 0,
+        end: 22,
+        prefix: 'success-',
+      }),
+      frameRate: 30,
+      repeat: -1,
+    });
+
     let camera = this.cameras.main;
     camera.zoom = 1.4;
     camera.startFollow(this.player);
@@ -240,7 +262,7 @@ export default class MainScene extends Phaser.Scene {
         userName: string; //업데이트된 user name(에디터 주인)
         socketId: string;
       }) => {
-        console.log('updateEditor');
+        // console.log('updateEditor');
         const table = this.tableMap.get(payLoad.id);
         if (table) {
           if (phaserGame.socketId === payLoad.socketId) {
@@ -598,7 +620,7 @@ export default class MainScene extends Phaser.Scene {
 
   /* Effect on when player solve a problem */
   showProblemSolvedEffect(nickname: string) {
-    console.log(nickname, phaserGame.userName);
+    // console.log(nickname, phaserGame.userName);
     if (nickname === phaserGame.userName) {
       this.player.problemSolvedEffect();
     } else {

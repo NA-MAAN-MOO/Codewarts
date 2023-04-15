@@ -8,10 +8,6 @@ import { RootState } from 'stores';
 import { useSelector } from 'react-redux';
 import { useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
-// import Image from '../../assets/images/memoboard_bg.jpg';
-// import Image from '../../assets/images/memo_bg1.jpg';
-// import Image from '../../assets/images/old_paper.jpg';
-// import Image from '../../assets/images/old_paper2.jpeg';
 import Image from '../../assets/images/white_paper.jpg';
 
 const drawerWidth = 60;
