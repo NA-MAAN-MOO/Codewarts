@@ -48,12 +48,12 @@ const editorThemeCSS = {
   },
   '.cm-content, .cm-gutter': {
     fontFamily: 'Cascadia Code, Pretendard-Regular',
-    fontSize: '1.4em',
+    fontSize: '1.1rem',
     // height: 'auto',
     // minHeight: `${400 * 50}%`,
   },
   '.cm-content': {
-    fontSize: '1.7em',
+    fontSize: '1.1rem',
   },
   '.cm-gutter': {
     // minHeight: '50%',
@@ -76,7 +76,7 @@ const EditorWrapper = styledc.div`
 const EditorInfo = styledc.div`
 font-family: 'Firenze';
 // color: rgba(255, 255, 255, 0.7);
-font-size: 40px; 
+font-size: 2rem; 
 font-weight: 600; 
 // margin-top: 3%;
 text-align: center;
@@ -110,7 +110,7 @@ width: 100%
 const ProbTitleDiv = styledc.div`
 text-shadow: 1px 1px 2px grey;
 color: #fff;
-font-size: 1.9rem;
+font-size: 1.5rem;
 width: 100%;
 display: flex;
 flex-direction : row;
@@ -125,7 +125,7 @@ padding: 16px;
 `;
 
 const AlgoInput = styledc.input`
-  font-size: 18px;
+  font-size: 1rem;
   padding: 10px;
   margin: 10px;
   background: papayawhip;
@@ -148,12 +148,10 @@ const AlgoTextField = styled((props: TextFieldProps) => (
   },
   '& input': {
     fontFamily: 'Cascadia Code, Pretendard-Regular',
-    // color: 'papayawhip',
   },
   // '문제 번호로 바로가기' 라벨
   '.MuiFormLabel-root': {
-    fontSize: '1.1rem',
-    marginTop: '-2.5px',
+    fontSize: '1rem',
   },
   '& .MuiInputBase-sizeSmall': {
     // margin: '10px 10px 10px 10px',
@@ -164,7 +162,7 @@ const AlgoTextField = styled((props: TextFieldProps) => (
   },
   // 컴파일칸 라벨
   '& .css-1pv68re-MuiFormLabel-root-MuiInputLabel-root': {
-    fontSize: '1.5rem',
+    fontSize: '1.3rem',
   },
 
   // 컴파일 output칸 input 필드
@@ -217,7 +215,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const MiddleWrapper = styledc.div`
   martgin-top: 10px;
-  font-size: 20px;
+  font-size: 15px;
   text-align: right;
   // font-family: 'Cascadia Code', 'Pretendard-Regular';
 
@@ -296,7 +294,7 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
         sx={{ fontSize: '0.9rem', color: 'rgba(255, 255, 255, 0.7)' }}
       />
     }
-    sx={{ fontSize: '1.5rem' }}
+    sx={{ fontSize: '1.1rem' }}
     {...props}
   />
 ))(({ theme }) => ({
@@ -313,7 +311,7 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
 
 /* 왼쪽 서랍 아코디언 내용 */
 const accordionDetailStyle = {
-  fontSize: '1.3rem',
+  fontSize: '1rem',
 };
 
 /* 왼쪽 서랍 아코디언 예제 제목*/
@@ -327,7 +325,7 @@ const accordionSampleStyle = {
   color: 'papayawhip',
   fontFamily: 'Cascadia Code, Pretendard-Regular',
   textAlign: 'left',
-  fontSize: '1.2em',
+  fontSize: '1rem',
 };
 
 const accoSampleTitleStyle = {
@@ -405,7 +403,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 const middleButtonStyle = {
   // fontFamily: 'Cascadia Code, Pretendard-Regular',
   fontFamily: 'Firenze, Pretendard-Regular',
-  fontSize: '1.5rem',
+  fontSize: '1.1rem',
   boxShadow: 'inset 0.2em 0.2em #ededed',
   marginRight: '5px',
   marginLeft: '5px',
@@ -415,12 +413,12 @@ const middleButtonStyle = {
 const filterButtonStyle = {
   wordBreak: 'keep-all',
   wrap: 'no-wrap',
-  padding: '8px 5px 6px 14px',
-  margin: '10px',
-  width: 120,
+  padding: '9px 0px 8px 5px',
+  margin: '8px',
+  width: 100,
   fontFamily: 'Cascadia Code, Pretendard-Regular',
   fontWeight: 'bold',
-  fontSize: '1.2rem',
+  fontSize: '1rem',
   boxShadow: 'inset 0.2em 0.2em #ededed',
 };
 
@@ -428,7 +426,7 @@ const tooltipStyle = {
   tooltip: {
     sx: {
       fontFamily: 'Cascadia Code, Pretendard-Regular',
-      fontSize: '1rem',
+      fontSize: '0.8rem',
     },
   },
 };
