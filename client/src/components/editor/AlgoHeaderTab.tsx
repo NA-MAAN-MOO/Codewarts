@@ -1,10 +1,10 @@
 import axios from 'axios';
 import {
   HeaderTab,
-  AlgoInputWrap,
   AlgoTextField,
 } from '../../../src/pages/editor/editorStyle';
 import { useEffect } from 'react';
+import Swal from 'sweetalert2';
 
 const APPLICATION_EDITOR_URL =
   process.env.REACT_APP_EDITOR_URL || 'http://localhost:3001';
@@ -23,9 +23,15 @@ function AlgoHeaderTab(props) {
       );
 
       let probFullData = response.data[0];
-      console.log(probFullData);
+      // console.log(probFullData);
       setBojProbFullData(probFullData);
-    } catch (error) {
+    } catch (error: any) {
+      if (error.response.status === 404) {
+        Swal.fire({
+          icon: 'error',
+          title: '찾는 문제가 없습니다',
+        });
+      }
       console.error(error);
     }
   }
