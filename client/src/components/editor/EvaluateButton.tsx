@@ -98,6 +98,7 @@ function EvaluateButton(props) {
       alert('채점할 테스트 케이스가 없어요!');
       return;
     }
+    setTotalCases(cases);
     let hitCount = 0;
 
     try {
