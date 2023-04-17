@@ -57,6 +57,7 @@ function EvaluateButton(props) {
     });
   };
 
+  /* 문제 번호에 따라 테스트 케이스 개수와 올림피아드 출처 여부 판별 */
   const getTestCasesInfo = () => {
     const pizzaovenCase = 2; // 19940번 테스트 케이스 개수
     const gourdPop = 5; // 19939번 테스트 케이스 개수
@@ -73,6 +74,85 @@ function EvaluateButton(props) {
       isOlympiad = 0;
     }
     return { cases, isOlympiad };
+  };
+
+  /* 올림피아드 소스 문제 채점 */
+  const evalulateOlympiad = async (hitCount: number, cases: number) => {
+    for (let i = 1; i < 50; i++) {
+      const fetchInput = await fetchInputFileText(
+        `/assets/olympiad/${bojProblemId}/${i}.in`
+      );
+
+      if (fetchInput === null || fetchInput?.startsWith('<!DOCTYPE html>')) {
+        console.log('더 이상 채점할 파일이 없어요!!');
+        setEvalFinished(true);
+        break;
+      }
+
+      const { data } = await axios.post(
+        `${APPLICATION_EDITOR_URL}/code_to_run`,
+        {
+          codeToRun: ytext.toString(),
+          //@ts-ignore
+          stdin: fetchInput,
+        }
+      );
+
+      const fetchOutput = await fetchInputFileText(
+        `assets/olympiad/${bojProblemId}/${i}.out`
+      );
+      const jdoodleOutput = data.output;
+
+      if (jdoodleOutput === fetchOutput) {
+        console.log(`${i}번 테스트 케이스 맞음`);
+        hitCount++;
+      } else {
+        console.log(`${i}번 테스트 케이스 틀림`);
+      }
+
+      setMarkingPercent(`${(hitCount / cases) * 100}`);
+      setShining(true);
+    }
+  };
+
+  /* 올림피아드 소스가 아닌 문제 채점 */
+  const evalulateNonOlympiad = async (hitCount: number, cases: number) => {
+    // console.log(bojProbFullData.samples);
+
+    for (let i = 1; i < 50; i++) {
+      if (!bojProbFullData.samples[i]) {
+        console.log('더 이상 채점할 파일이 없어요!!');
+        setEvalFinished(true);
+        break;
+      }
+      const inputWithLf = bojProbFullData.samples[i].input.replace(
+        /\r\n/g,
+        '\n'
+      );
+      const outputWithLf = bojProbFullData.samples[i].output
+        .replace(/\r\n/g, '\n')
+        .trimEnd();
+
+      const { data } = await axios.post(
+        `${APPLICATION_EDITOR_URL}/code_to_run`,
+        {
+          codeToRun: ytext.toString(),
+          //@ts-ignore
+          stdin: inputWithLf,
+        }
+      );
+
+      const jdoodleOutput = data.output.replace(/ \n/g, '\n').trimEnd();
+
+      if (jdoodleOutput === outputWithLf) {
+        console.log(`${i}번 테스트 케이스 맞음`);
+        hitCount++;
+      } else {
+        console.log(`${i}번 테스트 케이스 틀림`);
+      }
+      setMarkingPercent(`${(hitCount / cases) * 100}`);
+      setShining(true);
+    }
   };
 
   /* 유저가 작성한 코드 가채점하기 위해 서버로 보냄 */
@@ -103,79 +183,9 @@ function EvaluateButton(props) {
 
     try {
       if (isOlympiad === 1) {
-        for (let i = 1; i < 50; i++) {
-          const fetchInput = await fetchInputFileText(
-            `/assets/olympiad/${bojProblemId}/${i}.in`
-          );
-
-          if (
-            fetchInput === null ||
-            fetchInput?.startsWith('<!DOCTYPE html>')
-          ) {
-            console.log('더 이상 채점할 파일이 없어요!!');
-            setEvalFinished(true);
-            break;
-          }
-
-          const { data } = await axios.post(
-            `${APPLICATION_EDITOR_URL}/code_to_run`,
-            {
-              codeToRun: ytext.toString(),
-              //@ts-ignore
-              stdin: fetchInput,
-            }
-          );
-
-          const fetchOutput = await fetchInputFileText(
-            `assets/olympiad/${bojProblemId}/${i}.out`
-          );
-          const jdoodleOutput = data.output;
-
-          if (jdoodleOutput === fetchOutput) {
-            console.log(`${i}번 테스트 케이스 맞음`);
-            hitCount++;
-          } else {
-            console.log(`${i}번 테스트 케이스 틀림`);
-          }
-
-          setMarkingPercent(`${(hitCount / cases) * 100}`);
-          setShining(true);
-        }
+        await evalulateOlympiad(hitCount, cases);
       } else {
-        // 올림피아드 문제 아닌 샘플로만 채점할 것들!!
-        console.log(bojProbFullData.samples);
-        for (let i = 1; i < 50; i++) {
-          if (!bojProbFullData.samples[i]) {
-            console.log('더 이상 채점할 파일이 없어요!!');
-            setEvalFinished(true);
-            break;
-          }
-          const inputWithLf = bojProbFullData.samples[i].input.replace(
-            /\r\n/g,
-            '\n'
-          );
-          const outputWithLf = bojProbFullData.samples[i].output
-            .replace(/\r\n/g, '\n')
-            .trimEnd();
-          // return;
-          const { data } = await axios.post(
-            `${APPLICATION_EDITOR_URL}/code_to_run`,
-            {
-              codeToRun: ytext.toString(),
-              //@ts-ignore
-              stdin: inputWithLf,
-            }
-          );
-          const jdoodleOutput = data.output.replace(/ \n/g, '\n').trimEnd();
-          if (jdoodleOutput === outputWithLf) {
-            console.log(`${i}번 테스트 케이스 맞음`);
-            hitCount++;
-          } else {
-            console.log(`${i}번 테스트 케이스 틀림`);
-          }
-          setMarkingPercent(`${(hitCount / cases) * 100}`);
-          setShining(true);
-        }
+        await evalulateNonOlympiad(hitCount, cases);
       }
     } catch (error) {
       console.error(error);
