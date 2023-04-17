@@ -36,9 +36,6 @@ function EvaluateButton(props) {
   const newHitSoundToggle = SoundPlayer(hitSoundFile);
   let [totalCases, setTotalCases] = useState(0);
 
-  const pizzaovenCase = 2; // 19940번 테스트 케이스 개수
-  const gourdPop = 5; // 19939번 테스트 케이스 개수
-
   /* fetching '.in' file */
   async function fetchInputFileText(url: string) {
     try {
@@ -60,6 +57,24 @@ function EvaluateButton(props) {
     });
   };
 
+  const getTestCasesInfo = () => {
+    const pizzaovenCase = 2; // 19940번 테스트 케이스 개수
+    const gourdPop = 5; // 19939번 테스트 케이스 개수
+    let cases = 0; // 전체 testcase 개수 (state 대신 쓰기 위해 필요)
+    let isOlympiad = 1;
+
+    if (bojProblemId === 19940) {
+      cases = pizzaovenCase; // 19940번 테스트 케이스 개수
+    } else if (bojProblemId === 19939) {
+      cases = gourdPop; // 19939번 테스트 케이스 개수
+    } else if (bojProblemId !== 19939 || bojProblemId !== 19940) {
+      let sampleNum = Object.keys(bojProbFullData?.samples).length;
+      cases = sampleNum; // 19939번 테스트 케이스 개수
+      isOlympiad = 0;
+    }
+    return { cases, isOlympiad };
+  };
+
   /* 유저가 작성한 코드 가채점하기 위해 서버로 보냄 */
   const evaluateCode = async () => {
     if (!ytext.toString()) {
@@ -78,26 +93,12 @@ function EvaluateButton(props) {
       return;
     }
 
-    let hitCount = 0;
-    let cases = 0; // 전체 testcase 개수 (state 대신 쓰기 위해 필요)
-    let isOlympiad = 1;
-
-    if (bojProblemId === 19940) {
-      setTotalCases(pizzaovenCase);
-      cases = pizzaovenCase; // 19940번 테스트 케이스 개수
-    } else if (bojProblemId === 19939) {
-      setTotalCases(gourdPop);
-      cases = gourdPop; // 19939번 테스트 케이스 개수
-    } else if (bojProblemId !== 19939 || bojProblemId !== 19940) {
-      let sampleNum = Object.keys(bojProbFullData?.samples).length;
-      setTotalCases(sampleNum);
-      cases = sampleNum; // 19939번 테스트 케이스 개수
-      isOlympiad = 0;
-      // console.log(Object.keys(bojProbFullData?.samples).length);
-    } else {
+    let { cases, isOlympiad } = getTestCasesInfo();
+    if (cases === 0) {
       alert('채점할 테스트 케이스가 없어요!');
       return;
     }
+    let hitCount = 0;
 
     try {
       if (isOlympiad === 1) {
