@@ -118,7 +118,7 @@
 # <strong>Team Codewarts 🧑‍🤝‍🧑 </strong></h2>
 |김준철|이은민|염혜지|한동훈|김세희|
 |:------:|:-----:|:-----:|:-----:|:-----:|
-|사진|사진|사진|사진|사진|![세희](https://user-images.githubusercontent.com/77879373/224283531-b110675a-ccb8-49c1-b941-0671245d99a7.jpeg)|
+|<img src="https://user-images.githubusercontent.com/82367039/234198220-3fa6522b-dfab-4fc6-ab16-7c9b5be2d12a.png" width="100" height="100">|<img src="https://user-images.githubusercontent.com/82367039/234198552-b16e519d-5858-4b27-9e37-2ad7703765d7.jpg" width="100" height="100">|<img src="https://user-images.githubusercontent.com/82367039/234196336-8c1732c6-97e6-466e-aee2-563ad2f484bb.jpg" width="100" height="100">|<img src="https://user-images.githubusercontent.com/82367039/234196547-aea89ccd-f0b5-4764-8f2d-82fc46470eaa.png" width="100" height="100">|<img src="https://user-images.githubusercontent.com/77879373/224283531-b110675a-ccb8-49c1-b941-0671245d99a7.jpeg" width="100" height="100">|
 |플랫폼 그림판<br> 배포환경 구축|에디터 컴파일 <br>문제 검색 및 채점|플랫폼 UI <br>문제 풀이 랭킹 및 메모|에디터 로그인 <br>이모지 UI|플랫폼 보이스챗<br> 코드 구조 설계
 |[GitHub](https://github.com/juncheolkim)|[GitHub](https://github.com/gcount85)|[GitHub](https://github.com/sententi-a)|[GitHub](https://github.com/mrsuit0114)|[GitHub](https://github.com/sadie100)
 
