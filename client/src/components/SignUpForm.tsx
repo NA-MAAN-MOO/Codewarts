@@ -125,7 +125,17 @@ export default function FormDialog() {
         color="primary"
         size="large"
         onClick={handleClickOpen}
-        sx={{ fontFamily: styledTheme.mainFont }}
+        sx={{
+          fontFamily: styledTheme.mainFont,
+          color: 'black',
+          borderWidth: '2px',
+          backgroundColor: 'rgba( 255, 255, 255, 0.6 )',
+
+          '&:hover': {
+            borderWidth: '2px',
+            backgroundColor: 'white',
+          },
+        }}
       >
         회원가입
       </Button>
