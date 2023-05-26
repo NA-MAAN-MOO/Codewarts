@@ -1,15 +1,17 @@
 import dotenv from 'dotenv';
-//환경변수 이용(코드 최상단에 위치시킬 것)
-dotenv.config();
+dotenv.config(); //환경변수 이용(코드 최상단에 위치시킬 것)
 
 import { Request, Response } from 'express';
 import axios from 'axios';
 
+/* mongoDB */
 const { MongoClient } = require('mongodb');
+import { Prob } from '../models/Prob';
+
+/* load enviroment variables */
 const mongoPassword = process.env.MONGO_PW;
 const CLIENT_ID = process.env.JDOODLE_CLIENT_ID;
 const CLIENT_SECRET = process.env.JDOODLE_CLIENT_SECRET;
-import { Prob } from '../models/Prob';
 
 /* create the data to be sent to the JDoodle API */
 const createProgramData = (codeToRun: string, stdin: string) => {
