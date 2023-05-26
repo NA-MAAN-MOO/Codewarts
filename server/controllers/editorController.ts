@@ -2,8 +2,6 @@ import dotenv from 'dotenv';
 //환경변수 이용(코드 최상단에 위치시킬 것)
 dotenv.config();
 
-import { v4 } from 'uuid';
-import moment from 'moment';
 import { Request, Response } from 'express';
 import axios from 'axios';
 
@@ -12,28 +10,6 @@ const mongoPassword = process.env.MONGO_PW;
 const CLIENT_ID = process.env.JDOODLE_CLIENT_ID;
 const CLIENT_SECRET = process.env.JDOODLE_CLIENT_SECRET;
 import { Prob } from '../models/Prob';
-
-export const createRoom = async (req: Request, res: Response) => {
-  const { userName = '', redisClient } = req.body;
-  const hashField = 'code-mirror';
-  const editorName = v4(); // editorName 최초 생성
-
-  await redisClient
-    /* room 정보 해쉬로 저장 */
-    .hSet(
-      `${editorName}:info`,
-      hashField,
-      JSON.stringify({
-        created: moment(),
-        updated: moment(),
-      })
-    )
-    .catch((err: Error) => {
-      console.error(1, err);
-    });
-
-  res.status(201).send({ editorName }); // return success & the room ID
-};
 
 /* create the data to be sent to the JDoodle API */
 const createProgramData = (codeToRun: string, stdin: string) => {
@@ -65,7 +41,7 @@ const callJDoodleAPI = async (program: object) => {
 
 /* manage the handling for request and response to compile user's code. */
 export const compileCode = async (req: Request, res: Response) => {
-  const { codeToRun = '', stdin = '', redisClient } = req.body;
+  const { codeToRun = '', stdin = '' } = req.body;
 
   // check if required fields are provided
   if (codeToRun === undefined || stdin === undefined) {
