@@ -5,11 +5,28 @@ import { createClient } from 'redis';
 import editorRouter from '../routes/editorRouter';
 import pkg from 'body-parser';
 
+/* swagger */
+import swaggerJsDoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
+
 const app: Express = express();
 const server = http.createServer(app);
 const { json } = pkg;
 const redisClient = createClient();
 const hashField = 'code-mirror';
+
+/* swagger */
+const swaggerOptions = {
+  swaggerDefinition: {
+    info: {
+      title: 'Customer API',
+      version: '1.0.0',
+    },
+  },
+  apis: ['./routes/*.ts'], // API가 있는 경로
+};
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.use(json());
 app.use(cors());
