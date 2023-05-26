@@ -73,7 +73,7 @@ function CompilerField(props) {
               readOnly: true,
             }}
             InputLabelProps={{ shrink: true }}
-            value={compileOutput ? compileOutput : null}
+            value={compileOutput ? compileOutput : undefined}
           />
         </Item>
       </Grid>

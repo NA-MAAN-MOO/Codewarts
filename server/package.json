@@ -18,7 +18,6 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",
-    "moment": "^2.29.4",
     "mongodb": "5.0",
     "mongoose": "^6.9.0",
     "mongoose-paginate-v2": "^1.7.1",
@@ -26,11 +25,9 @@
     "openvidu-node-client": "^2.25.0",
     "peerjs": "^1.4.7",
     "phaser": "^3.55.2",
-    "redis": "^4.6.4",
     "socket.io": "^4.6.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^4.6.3",
-    "uuid": "^9.0.0",
     "y-websocket": "^1.4.5"
   },
   "devDependencies": {

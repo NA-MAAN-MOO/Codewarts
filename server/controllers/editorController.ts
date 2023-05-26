@@ -1,64 +1,64 @@
 import dotenv from 'dotenv';
-//환경변수 이용(코드 최상단에 위치시킬 것)
-dotenv.config();
+dotenv.config(); //환경변수 이용(코드 최상단에 위치시킬 것)
 
-import { v4 } from 'uuid';
-import moment from 'moment';
 import { Request, Response } from 'express';
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 
+/* mongoDB */
 const { MongoClient } = require('mongodb');
-const mongoPassword = process.env.MONGO_PW;
 import { Prob } from '../models/Prob';
 
-export const createRoom = async (req: Request, res: Response) => {
-  const { userName = '', redisClient } = req.body;
-  const hashField = 'code-mirror';
-  const editorName = v4(); // editorName 최초 생성
+/* load enviroment variables */
+const mongoPassword = process.env.MONGO_PW;
+const CLIENT_ID = process.env.JDOODLE_CLIENT_ID;
+const CLIENT_SECRET = process.env.JDOODLE_CLIENT_SECRET;
 
-  await redisClient
-    /* room 정보 해쉬로 저장 */
-    .hSet(
-      `${editorName}:info`,
-      hashField,
-      JSON.stringify({
-        created: moment(),
-        updated: moment(),
-      })
-    )
-    .catch((err: Error) => {
-      console.error(1, err);
-    });
-
-  res.status(201).send({ editorName }); // return success & the room ID
-};
-
-/* get response for compiled code */
-export const compileCode = async (req: Request, res: Response) => {
-  const { codeToRun = '', stdin = '', redisClient } = req.body;
-
-  const program = {
+/* create the data to be sent to the JDoodle API */
+const createProgramData = (codeToRun: string, stdin: string) => {
+  return {
     script: codeToRun,
     stdin: stdin,
     language: 'python3',
     versionIndex: '4',
-    clientId: `${process.env.JDOODLE_CLIENT_ID}`,
-    clientSecret: `${process.env.JDOODLE_CLIENT_SECRET}`,
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
   };
+};
 
-  axios({
-    method: 'post',
-    url: 'https://api.jdoodle.com/v1/execute',
-    data: program,
-  })
-    .then((response: AxiosResponse) => {
-      console.log('statusCode:', response.status);
-      console.log('body:', response.data);
-      res.status(response.status).send(response.data);
-    })
-    .catch((error: Error) => {
-      console.log('error:', error);
+/* the actual interaction with the JDoodle API */
+const callJDoodleAPI = async (program: object) => {
+  try {
+    const response = await axios({
+      method: 'post',
+      url: 'https://api.jdoodle.com/v1/execute',
+      data: program,
     });
+
+    return response;
+  } catch (error) {
+    console.error('error:', error);
+    throw new Error('Error calling JDoodle API');
+  }
+};
+
+/* manage the handling for request and response to compile user's code. */
+export const compileCode = async (req: Request, res: Response) => {
+  const { codeToRun = '', stdin = '' } = req.body;
+
+  // check if required fields are provided
+  if (codeToRun === undefined || stdin === undefined) {
+    res.status(400).send({ error: 'Required fields: codeToRun and stdin' });
+    return;
+  }
+
+  const program = createProgramData(codeToRun, stdin);
+
+  try {
+    const response = await callJDoodleAPI(program);
+    res.status(response.status).send(response.data);
+  } catch (error: any) {
+    res.status(500).send({ error: error.message });
+  }
 };
 
 /* get response for fetching boj problem data */
