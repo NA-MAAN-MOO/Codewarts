@@ -26,6 +26,8 @@ import { toggleWhiteboard } from 'stores/whiteboardSlice';
 import QuizIcon from '@mui/icons-material/Quiz';
 import { styledTheme } from 'styles/theme';
 import ToggleButton from '@mui/material/ToggleButton';
+import Tooltip from '@mui/material/Tooltip';
+import { tooltipStyle } from 'pages/editor/editorStyle';
 
 const rightDrawerWidth = 350;
 
@@ -143,15 +145,21 @@ const Editor = (props: VoiceProp & YjsProp) => {
                   justifyContent: 'space-between',
                 }}
               >
-                <IconButton
-                  color="inherit"
-                  aria-label="open drawer"
-                  onClick={handleRightDrawerOpen}
-                  edge="start"
-                  sx={{ mr: 2, ...(leftOpen && { display: 'none' }) }}
+                <Tooltip
+                  title="알고리즘 문제 검색하기"
+                  arrow
+                  slotProps={tooltipStyle}
                 >
-                  <QuizIcon />
-                </IconButton>
+                  <IconButton
+                    color="inherit"
+                    aria-label="open drawer"
+                    onClick={handleRightDrawerOpen}
+                    edge="start"
+                    sx={{ mr: 2, ...(leftOpen && { display: 'none' }) }}
+                  >
+                    <QuizIcon />
+                  </IconButton>
+                </Tooltip>
                 <Header />
                 <BtnDiv>
                   <CloseIcon
