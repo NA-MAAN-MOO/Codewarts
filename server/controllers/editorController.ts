@@ -5,7 +5,7 @@ dotenv.config();
 import { v4 } from 'uuid';
 import moment from 'moment';
 import { Request, Response } from 'express';
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 
 const { MongoClient } = require('mongodb');
 const mongoPassword = process.env.MONGO_PW;
@@ -66,6 +66,12 @@ const callJDoodleAPI = async (program: object) => {
 /* manage the handling for request and response to compile user's code. */
 export const compileCode = async (req: Request, res: Response) => {
   const { codeToRun = '', stdin = '', redisClient } = req.body;
+
+  // check if required fields are provided
+  if (codeToRun === undefined || stdin === undefined) {
+    res.status(400).send({ error: 'Required fields: codeToRun and stdin' });
+    return;
+  }
 
   const program = createProgramData(codeToRun, stdin);
 
