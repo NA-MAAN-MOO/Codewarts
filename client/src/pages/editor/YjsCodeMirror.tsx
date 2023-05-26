@@ -146,7 +146,7 @@ function YjsCodeMirror(props: YjsProp) {
     if (!provider || !undoManager) return;
     let basicThemeSet = EditorView.theme(editorThemeCSS);
 
-    const editorPlaceHolder = `def python():`;
+    const editorPlaceHolder = `print("hello codewarts")  # 디폴트 언어는 python입니다`;
 
     /* editor instance 생성; state, view 생성 */
     const state = EditorState.create({
