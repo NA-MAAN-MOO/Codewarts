@@ -73,7 +73,7 @@ export const compileCode = async (req: Request, res: Response) => {
   }
 };
 
-/* get response for fetching boj problem data by its id */
+/* fetch boj problem data by its id */
 export const getBojProbDataById = async (req: Request, res: Response) => {
   try {
     const data = await Prob.find({ probId: req?.query?.probId });
@@ -90,7 +90,7 @@ export const getBojProbDataById = async (req: Request, res: Response) => {
   }
 };
 
-/* process the filter input to proper mongoose query */
+/* process the filtering tags to proper mongoose query */
 const processFilterInput = (probQuery: ProbQueryItem[]) => {
   let probFilter: ProbFilter = {};
   probQuery.forEach((query) => {
@@ -162,16 +162,14 @@ const paginateFilteredResult = async (
   }
 };
 
-/* get response for fetching filtered paginated data */
+/* fetch paginated and filtered boj problems */
 export const getFilteredBojProbDataByPage = async (
   req: Request,
   res: Response
 ) => {
-  const probQuery: ProbQueryItem[] = req?.body.probQuery;
-  const page: number = req?.body.page;
-  const limit: number = req?.body.limit;
+  const { probQuery, page, limit } = req.body;
 
-  const probFilter: ProbFilter = processFilterInput(probQuery);
+  const probFilter = processFilterInput(probQuery);
   const sort = { probId: 'asc' };
 
   try {
