@@ -61,8 +61,8 @@ export const compileCode = async (req: Request, res: Response) => {
   }
 };
 
-/* get response for fetching boj problem data */
-export const getBojProbData = async (req: Request, res: Response) => {
+/* get response for fetching boj problem data by its id */
+export const getBojProbDataById = async (req: Request, res: Response) => {
   const uri = `mongodb+srv://juncheol:${mongoPassword}@cluster0.v0izvl3.mongodb.net/?retryWrites=true&w=majority`;
   const client = new MongoClient(uri, {
     useNewUrlParser: true,
