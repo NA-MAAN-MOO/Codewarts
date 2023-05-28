@@ -66,9 +66,9 @@ export default function SearchModal(props: any) {
     }
   }
 
-  const handlePageChange = (pageNumber: number) => {
+  const handlePageChange = async (pageNumber: number) => {
     page = pageNumber;
-    fetchFilteredData(filter, page);
+    await fetchFilteredData(filter, page);
   };
 
   // useEffect(() => {
