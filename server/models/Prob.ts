@@ -1,6 +1,6 @@
 import { Schema, model, Document, Model } from 'mongoose';
-import { IProbInfo } from '../controllers/propTyes';
-const mongoosePaginate = require('mongoose-paginate-v2');
+import { IProbInfo } from '../controllers/propTypes';
+import mongoosePaginate from 'mongoose-paginate-v2';
 
 const probdata = new Schema<IProbInfo>({
   probId: {
@@ -29,7 +29,6 @@ const probdata = new Schema<IProbInfo>({
 probdata.plugin(mongoosePaginate);
 
 const Prob = model<IProbDocument>('prob', probdata);
-// create new User document
 
 export interface IProbDocument extends IProbInfo, Document {}
 export interface IProbModel extends Model<IProbDocument> {}

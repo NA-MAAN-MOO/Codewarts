@@ -14,12 +14,12 @@ function AlgoHeaderTab(props) {
   const { bojProbDataRef, setBojProbFullData, setBojProblemId } = props;
 
   /* 서버로 몽고DB에 저장된 백준 문제 전체 정보 요청 */
-  async function fetchBojProbFullData(probId: string) {
+  async function showBojProbDataById(probId: string) {
     if (bojProbDataRef.current === null) return;
 
     try {
       const response = await axios.get(
-        `${APPLICATION_EDITOR_URL}/bojdata?probId=${probId}`
+        `${APPLICATION_EDITOR_URL}/boj_prob_data?probId=${probId}`
       );
 
       setBojProblemId(parseInt(probId));
@@ -53,7 +53,7 @@ function AlgoHeaderTab(props) {
   //     let probData = response.data;
   //     console.log(probData);
   //     setBojProbData(probData);
-  //     fetchBojProbFullData(probId);
+  //     showBojProbDataById(probId);
   //   } catch (error) {
   //     console.error(error);
   //   }
@@ -89,7 +89,7 @@ function AlgoHeaderTab(props) {
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       let probId = bojProbDataRef.current.value;
-      fetchBojProbFullData(probId);
+      showBojProbDataById(probId);
     }
   };
 

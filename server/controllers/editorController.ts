@@ -4,14 +4,26 @@ dotenv.config(); //환경변수 이용(코드 최상단에 위치시킬 것)
 import { Request, Response } from 'express';
 import axios from 'axios';
 
-/* mongoDB */
-const { MongoClient } = require('mongodb');
+/* mongoose model */
 import { Prob } from '../models/Prob';
 
 /* load enviroment variables */
-const mongoPassword = process.env.MONGO_PW;
 const CLIENT_ID = process.env.JDOODLE_CLIENT_ID;
 const CLIENT_SECRET = process.env.JDOODLE_CLIENT_SECRET;
+
+/* define interfaces */
+interface ProbQueryItem {
+  'solvedAC.level'?: string;
+  source: string;
+}
+
+interface ProbFilter {
+  'solvedAC.level'?: string | object | number;
+  source?: string;
+
+  // Add other possible keys here
+  [key: string]: string | object | number | undefined;
+}
 
 /* create the data to be sent to the JDoodle API */
 const createProgramData = (codeToRun: string, stdin: string) => {
@@ -61,130 +73,116 @@ export const compileCode = async (req: Request, res: Response) => {
   }
 };
 
-/* get response for fetching boj problem data */
-export const getBojProbData = async (req: Request, res: Response) => {
-  const uri = `mongodb+srv://juncheol:${mongoPassword}@cluster0.v0izvl3.mongodb.net/?retryWrites=true&w=majority`;
-  const client = new MongoClient(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
-
-  async function connect() {
-    try {
-      await client.connect();
-      console.log('Connected to MongoDB Atlas to Get Boj Problem Data');
-    } catch (e) {
-      console.error(e);
+/* fetch boj problem data by its id */
+export const getBojProbDataById = async (req: Request, res: Response) => {
+  try {
+    const data = await Prob.find({ probId: req?.query?.probId });
+    if (data.length === 0) {
+      return res.status(404).json({ message: 'Problem not found' });
+    } else {
+      return res.status(200).json(data);
     }
-  }
-
-  await connect();
-
-  const db = client.db('codewart');
-  const collection = db.collection('probs');
-
-  const data = await collection
-    //@ts-ignore
-    .find({ probId: parseInt(req?.query?.probId) })
-    .toArray();
-
-  if (data.length === 0) {
-    res.status(404).send('Problem not found');
-  } else {
-    res.status(200).send(data);
+  } catch (err: any) {
+    console.error(err);
+    return res
+      .status(500)
+      .json({ message: 'An error occurred while retrieving problem.' });
   }
 };
 
-/* get response for fetching filtered paginated data */
-export const getProbData = async (req: Request, res: Response) => {
-  const probQuery = req?.body.data;
-  const page = req?.body.page;
-  // console.log(req?.body);
-
-  let probFilter = {};
-
-  //@ts-ignore
-  probQuery.forEach((value, index) => {
-    console.log(value.tag, index);
-    if (['백준', '리트코드'].includes(value.tag)) {
-      //@ts-ignore
-      probFilter['platform'] = value.tag;
-    } else if (
-      [
-        '브론즈',
-        '실버',
-        '다이아몬드',
-        '플래티넘',
-        '골드',
-        '루비',
-        '난이도 없음',
-      ].includes(value.tag)
-    ) {
-      let condition = null;
-      switch (value.tag) {
-        case '브론즈':
-          condition = { $gt: 0, $lt: 6 };
-          break;
-        case '실버':
-          condition = { $gt: 5, $lt: 11 };
-          break;
-        case '골드':
-          condition = { $gt: 10, $lt: 16 };
-          break;
-        case '플래티넘':
-          condition = { $gt: 15, $lt: 21 };
-          break;
-        case '다이아몬드':
-          condition = { $gt: 20, $lt: 26 };
-          break;
-        case '루비':
-          condition = { $gt: 25, $lt: 32 };
-          break;
-        default:
-          condition = 0;
-      }
-      //@ts-ignore
-      probFilter['solvedAC.level'] = condition;
-    } else if (['한국정보올림피아드'].includes(value.tag)) {
-      //@ts-ignore
-      probFilter['source'] = value.tag;
-    }
+/* process the filtering tags to proper mongoose query */
+const processFilterInput = (probQuery: ProbQueryItem[]) => {
+  let probFilter: ProbFilter = {};
+  probQuery.forEach((query) => {
+    let [key, value] = Object.entries(query)[0];
+    probFilter[key] = value;
   });
 
-  console.log(probFilter);
+  if (!('solvedAC.level' in probFilter)) return probFilter;
 
-  const options = {
-    page: page,
-    limit: 10,
-    sort: { probId: 'asc' },
+  const levelRanges: Record<string, { $gt: number; $lt: number }> = {
+    브론즈: { $gt: 0, $lt: 6 },
+    실버: { $gt: 5, $lt: 11 },
+    골드: { $gt: 10, $lt: 16 },
+    플래티넘: { $gt: 15, $lt: 21 },
+    다이아몬드: { $gt: 20, $lt: 26 },
+    루비: { $gt: 25, $lt: 32 },
   };
+  const level = probFilter['solvedAC.level'] as string;
+  probFilter['solvedAC.level'] = levelRanges[level] || {
+    $gt: 0,
+    $lt: 0,
+  };
+  return probFilter;
+};
 
-  //@ts-ignore
-  Prob.paginate(probFilter, options, function (err, result) {
-    // console.log(result.docs);
-    // console.log(result.totalPages);
-    const resultData = {
-      message: 'problems found',
-      payload: { pagedDocs: result.docs, totalPages: result.totalPages },
-    };
-    // console.log(resultData.payload);
-    // console.log(result.pagingCounter);
-    // result.docs is an array of paginated documents
-    // result.totalPages is the total number of pages
-    // result.currentPage is the current page number
-    // result.hasNextPage is a boolean indicating if there are more pages
-    // result.hasPrevPage is a boolean indicating if there are previous pages
-    // result.nextPage is the number of the next page
-    // result.prevPage is the number of the previous page
-    // result.pagingCounter is the number of the current page within the total number of pages
+const createPagingOptions = (page: number, limit: number, sort: object) => ({
+  page,
+  limit,
+  sort,
+});
 
-    if (!resultData.payload.pagedDocs.length) {
-      resultData.message = 'problem not found';
-      res.status(404).send(resultData);
-    } else {
-      res.status(200).send(resultData);
+const createPagingData = (
+  status: number,
+  message: string,
+  docs: any[] = [],
+  totalPages: number = 0
+) => ({
+  status,
+  message,
+  payload: { pagedDocs: docs, totalPages: totalPages },
+});
+
+const paginateFilteredResult = async (
+  probFilter: ProbFilter,
+  page: number,
+  limit: number,
+  sort: object
+) => {
+  const options = createPagingOptions(page, limit, sort);
+
+  try {
+    //@ts-ignore
+    const result = await Prob.paginate(probFilter, options);
+    let data = createPagingData(
+      200,
+      'problems found',
+      result.docs,
+      result.totalPages
+    );
+
+    // 검색 결과가 없는 경우
+    if (!data.payload.pagedDocs.length) {
+      data = createPagingData(404, 'problems not found');
     }
-  });
+    return data;
+  } catch (err) {
+    console.log(err);
+    return createPagingData(500, 'An error occurred while paginating result');
+  }
+};
+
+/* fetch paginated and filtered boj problems */
+export const getFilteredBojProbDataByPage = async (
+  req: Request,
+  res: Response
+) => {
+  const { probQuery, page, limit } = req.body;
+
+  const probFilter = processFilterInput(probQuery);
+  const sort = { probId: 'asc' };
+
+  try {
+    const response = await paginateFilteredResult(
+      probFilter,
+      page,
+      limit,
+      sort
+    );
+    res.status(response.status).send(response);
+  } catch (error: any) {
+    res.status(500).send({ error: error.message });
+  }
 };
 
 export const origin = (req: Request, res: Response) => {

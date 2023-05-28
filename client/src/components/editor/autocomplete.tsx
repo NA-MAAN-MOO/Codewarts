@@ -1,6 +1,21 @@
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 
+interface AlgoFilterOptions {
+  source?: string;
+  'solvedAC.level'?: string;
+}
+
+const algoFilterOptions: AlgoFilterOptions[] = [
+  { 'solvedAC.level': '브론즈' },
+  { 'solvedAC.level': '실버' },
+  { 'solvedAC.level': '골드' },
+  { 'solvedAC.level': '플래티넘' },
+  { 'solvedAC.level': '다이아몬드' },
+  { 'solvedAC.level': '루비' },
+  { source: '한국정보올림피아드' },
+];
+
 export default function LimitTags(props: any) {
   const { setFilter } = props;
 
@@ -9,8 +24,10 @@ export default function LimitTags(props: any) {
       multiple
       limitTags={2}
       id="multiple-limit-tags"
-      options={algoFilter}
-      getOptionLabel={(option) => option.tag}
+      options={algoFilterOptions}
+      getOptionLabel={(option: AlgoFilterOptions) =>
+        Object.values(option)[0] || ''
+      }
       renderInput={(params) => (
         <TextField {...params} placeholder="검색 필터 추가" />
       )}
@@ -25,20 +42,3 @@ export default function LimitTags(props: any) {
     />
   );
 }
-
-const algoFilter = [
-  // { tag: '백준' },
-  // { tag: '리트코드' },
-  { tag: '브론즈' },
-  { tag: '실버' },
-  { tag: '골드' },
-  { tag: '플래티넘' },
-  { tag: '다이아몬드' },
-  { tag: '루비' },
-  { tag: '난이도 없음' },
-  // { tag: 'easy' },
-  // { tag: 'medium' },
-  // { tag: 'difficult' },
-  // { tag: '채점가능' },
-  { tag: '한국정보올림피아드' },
-];

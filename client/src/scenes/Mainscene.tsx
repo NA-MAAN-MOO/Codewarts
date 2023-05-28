@@ -327,11 +327,10 @@ export default class MainScene extends Phaser.Scene {
     this.whiteboardButton.scale *= 0.65;
     this.whiteboardButton.setVisible(false);
 
-    // Listen for the "Big Deal" event on the client side
-    phaserGame.socket?.on('Big Deal', (payload) => {
+    /* Listen for the "broadcastSuccess" event from other clients */
+    phaserGame.socket?.on('broadcastSuccess', (payload) => {
       showSuccessToast(payload.editorName, payload.problemId);
       newHitSoundToggle();
-      /* If player solve a problem, turn the solved effect on */
       this.showProblemSolvedEffect(payload.editorName);
     });
 
