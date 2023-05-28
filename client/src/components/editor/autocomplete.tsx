@@ -9,7 +9,7 @@ export default function LimitTags(props: any) {
       multiple
       limitTags={2}
       id="multiple-limit-tags"
-      options={algoFilter}
+      options={algoFilterOptions}
       getOptionLabel={(option) => option.tag}
       renderInput={(params) => (
         <TextField {...params} placeholder="검색 필터 추가" />
@@ -26,7 +26,7 @@ export default function LimitTags(props: any) {
   );
 }
 
-const algoFilter = [
+const algoFilterOptions = [
   // { tag: '백준' },
   // { tag: '리트코드' },
   { tag: '브론즈' },

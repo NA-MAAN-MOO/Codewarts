@@ -2,7 +2,7 @@ import express from 'express';
 import {
   compileCode,
   getBojProbDataById,
-  getProbData,
+  getFilteredBojProbDataByPage,
   origin,
 } from '../controllers/editorController';
 
@@ -17,6 +17,6 @@ router.post('/code_to_run', compileCode);
 router.get('/boj_prob_data', getBojProbDataById);
 
 /* 백준 문제 필터링 몽고DB 요청에 보내는 응답 */
-router.post('/probdata', getProbData);
+router.post('/filtered_prob_data', getFilteredBojProbDataByPage);
 
 export default router;

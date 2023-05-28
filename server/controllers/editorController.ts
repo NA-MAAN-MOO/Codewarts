@@ -11,6 +11,17 @@ import { Prob } from '../models/Prob';
 const CLIENT_ID = process.env.JDOODLE_CLIENT_ID;
 const CLIENT_SECRET = process.env.JDOODLE_CLIENT_SECRET;
 
+/* define interfaces */
+interface ProbQueryItem {
+  tag: string;
+}
+
+interface ProbFilter {
+  platform?: string;
+  'solvedAC.level'?: number | object;
+  source?: string;
+}
+
 /* create the data to be sent to the JDoodle API */
 const createProgramData = (codeToRun: string, stdin: string) => {
   return {
@@ -77,18 +88,19 @@ export const getBojProbDataById = async (req: Request, res: Response) => {
 };
 
 /* get response for fetching filtered paginated data */
-export const getProbData = async (req: Request, res: Response) => {
-  const probQuery = req?.body.data;
-  const page = req?.body.page;
+export const getFilteredBojProbDataByPage = async (
+  req: Request,
+  res: Response
+) => {
+  const probQuery: ProbQueryItem[] = req?.body.probQuery;
+  const page: number = req?.body.page;
   // console.log(req?.body);
 
-  let probFilter = {};
+  let probFilter: ProbFilter = {};
 
-  //@ts-ignore
   probQuery.forEach((value, index) => {
     console.log(value.tag, index);
     if (['백준', '리트코드'].includes(value.tag)) {
-      //@ts-ignore
       probFilter['platform'] = value.tag;
     } else if (
       [
@@ -124,10 +136,8 @@ export const getProbData = async (req: Request, res: Response) => {
         default:
           condition = 0;
       }
-      //@ts-ignore
       probFilter['solvedAC.level'] = condition;
     } else if (['한국정보올림피아드'].includes(value.tag)) {
-      //@ts-ignore
       probFilter['source'] = value.tag;
     }
   });
