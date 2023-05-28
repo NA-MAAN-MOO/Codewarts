@@ -45,7 +45,7 @@ export default function SearchModal(props: any) {
   const [pagedProbData, setPagedProbData] = useState('');
   const [totalPages, setTotalPages] = useState(0);
   let page = 1;
-  const limit = 12;
+  const limit = 10;
 
   /* DB에 저장된 백준 문제 정보를 페이징하여 요청 */
   async function showFilteredBojProbData(filter: any, page: number) {

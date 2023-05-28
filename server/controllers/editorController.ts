@@ -152,6 +152,7 @@ const paginateFilteredResult = async (
   };
 
   try {
+    //@ts-ignore
     const result = await Prob.paginate(probFilter, options);
     const data = {
       status: 200,

@@ -1,6 +1,6 @@
 import { Schema, model, Document, Model } from 'mongoose';
 import { IProbInfo } from '../controllers/propTypes';
-const mongoosePaginate = require('mongoose-paginate-v2');
+import mongoosePaginate from 'mongoose-paginate-v2';
 
 const probdata = new Schema<IProbInfo>({
   probId: {
