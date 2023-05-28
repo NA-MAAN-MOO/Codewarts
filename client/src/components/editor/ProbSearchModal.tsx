@@ -45,17 +45,21 @@ export default function SearchModal(props: any) {
   const [pagedProbData, setPagedProbData] = useState('');
   const [totalPages, setTotalPages] = useState(0);
   let page = 1;
+  const limit = 10;
 
-  /* 서버로 몽고DB에 저장된 백준 문제 정보 요청 */
-  async function fetchFilteredData(filter: any, page: number) {
+  /* DB에 저장된 백준 문제 정보를 페이징하여 요청 */
+  async function showFilteredBojProbData(filter: any, page: number) {
     if (filter === null || filter === '') return;
-    console.log(page, '페이지 자료 가져와줘');
 
     try {
-      const response = await axios.post(`${APPLICATION_EDITOR_URL}/probdata`, {
-        data: filter,
-        page: page,
-      });
+      const response = await axios.post(
+        `${APPLICATION_EDITOR_URL}/filtered_prob_data`,
+        {
+          probQuery: filter,
+          page: page,
+          limit: limit,
+        }
+      );
 
       console.log(response.data.message);
       setPagedProbData(response.data.payload.pagedDocs);
@@ -66,9 +70,8 @@ export default function SearchModal(props: any) {
     }
   }
 
-  const handlePageChange = (pageNumber: number) => {
-    page = pageNumber;
-    fetchFilteredData(filter, page);
+  const handlePageChange = async (page: number) => {
+    await showFilteredBojProbData(filter, page);
   };
 
   // useEffect(() => {
@@ -121,7 +124,7 @@ export default function SearchModal(props: any) {
                   fontSize="large"
                   onClick={() => {
                     console.log(filter);
-                    fetchFilteredData(filter, 1); // 필터를 만족하는 DB 자료들 fetch
+                    showFilteredBojProbData(filter, page); // 필터를 만족하는 DB 자료들 fetch
                   }}
                 />
               </ListItemIcon>

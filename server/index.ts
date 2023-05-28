@@ -5,7 +5,6 @@ dotenv.config();
 import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
 import http from 'http'; // Load in http module
-import pkg from 'body-parser';
 import mongoose from 'mongoose';
 import { Socket, Server } from 'socket.io'; // Load in socket.io
 import editorServer from './servers/editorServer';
@@ -24,10 +23,9 @@ import MicMuteInfo from './services/MicMuteInfo';
 
 const port = process.env.PORT || 8080;
 const mongoPassword = process.env.MONGO_PW;
-const { json } = pkg;
 
 const app: Express = express();
-app.use(json());
+app.use(express.json());
 app.use(cors());
 app.use(cookieParser());
 
@@ -271,11 +269,9 @@ io.on('connection', (socket: Socket) => {
     socket.broadcast.emit('changePlayerCollider', payLoad);
   });
 
-  // Listen for the "Big Deal" event on the client side
-  socket.on('Big Deal', (payload) => {
-    console.log(`${payload.editorName}`);
-    // socket.broadcast.emit('Big Deal', payload);
-    io.emit('Big Deal', payload);
+  /* Listen for an event of success on quiz from the client side */
+  socket.on('broadcastSuccess', (payload) => {
+    io.emit('broadcastSuccess', payload);
   });
 
   socket.on('sendEmoji', (payload) => {

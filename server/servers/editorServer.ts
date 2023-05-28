@@ -2,7 +2,6 @@ import express, { Express, Request, Response } from 'express';
 import http from 'http';
 import cors from 'cors';
 import editorRouter from '../routes/editorRouter';
-import pkg from 'body-parser';
 
 /* swagger */
 import swaggerJsDoc from 'swagger-jsdoc';
@@ -10,7 +9,6 @@ import swaggerUi from 'swagger-ui-express';
 
 const app: Express = express();
 const server = http.createServer(app);
-const { json } = pkg;
 
 /* swagger */
 const swaggerOptions = {
@@ -25,7 +23,7 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-app.use(json());
+app.use(express.json());
 app.use(cors());
 
 app.use('/', editorRouter);
