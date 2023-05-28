@@ -116,39 +116,49 @@ const processFilterInput = (probQuery: ProbQueryItem[]) => {
   return probFilter;
 };
 
+const createPagingOptions = (page: number, limit: number, sort: object) => ({
+  page,
+  limit,
+  sort,
+});
+
+const createPagingData = (
+  status: number,
+  message: string,
+  docs: any[] = [],
+  totalPages: number = 0
+) => ({
+  status,
+  message,
+  payload: { pagedDocs: docs, totalPages: totalPages },
+});
+
 const paginateFilteredResult = async (
   probFilter: ProbFilter,
   page: number,
   limit: number,
   sort: object
 ) => {
-  const options = {
-    page: page,
-    limit: limit,
-    sort: sort,
-  };
+  const options = createPagingOptions(page, limit, sort);
 
   try {
     //@ts-ignore
     const result = await Prob.paginate(probFilter, options);
-    const data = {
-      status: 200,
-      message: 'problems found',
-      payload: { pagedDocs: result.docs, totalPages: result.totalPages },
-    };
+    let data = createPagingData(
+      200,
+      'problems found',
+      result.docs,
+      result.totalPages
+    );
 
     // 검색 결과가 없는 경우
     if (!data.payload.pagedDocs.length) {
-      data.status = 404;
-      data.message = 'problems not found';
+      data = createPagingData(404, 'problems not found');
     }
     return data;
   } catch (err) {
     console.log(err);
-    return {
-      status: 500,
-      message: 'An error occurred while paginating result',
-    };
+    return createPagingData(500, 'An error occurred while paginating result');
   }
 };
 
