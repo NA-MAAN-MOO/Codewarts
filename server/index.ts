@@ -5,7 +5,6 @@ dotenv.config();
 import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
 import http from 'http'; // Load in http module
-import pkg from 'body-parser';
 import mongoose from 'mongoose';
 import { Socket, Server } from 'socket.io'; // Load in socket.io
 import editorServer from './servers/editorServer';
@@ -24,10 +23,9 @@ import MicMuteInfo from './services/MicMuteInfo';
 
 const port = process.env.PORT || 8080;
 const mongoPassword = process.env.MONGO_PW;
-const { json } = pkg;
 
 const app: Express = express();
-app.use(json());
+app.use(express.json());
 app.use(cors());
 app.use(cookieParser());
 
