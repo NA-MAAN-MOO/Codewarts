@@ -4,12 +4,10 @@ dotenv.config(); //환경변수 이용(코드 최상단에 위치시킬 것)
 import { Request, Response } from 'express';
 import axios from 'axios';
 
-/* mongoDB */
-const { MongoClient } = require('mongodb');
+/* mongoose model */
 import { Prob } from '../models/Prob';
 
 /* load enviroment variables */
-const mongoPassword = process.env.MONGO_PW;
 const CLIENT_ID = process.env.JDOODLE_CLIENT_ID;
 const CLIENT_SECRET = process.env.JDOODLE_CLIENT_SECRET;
 
@@ -63,35 +61,18 @@ export const compileCode = async (req: Request, res: Response) => {
 
 /* get response for fetching boj problem data by its id */
 export const getBojProbDataById = async (req: Request, res: Response) => {
-  const uri = `mongodb+srv://juncheol:${mongoPassword}@cluster0.v0izvl3.mongodb.net/?retryWrites=true&w=majority`;
-  const client = new MongoClient(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
-
-  async function connect() {
-    try {
-      await client.connect();
-      console.log('Connected to MongoDB Atlas to Get Boj Problem Data');
-    } catch (e) {
-      console.error(e);
+  try {
+    const data = await Prob.find({ probId: req?.query?.probId });
+    if (data.length === 0) {
+      return res.status(404).json({ message: 'Problem not found' });
+    } else {
+      return res.status(200).json(data);
     }
-  }
-
-  await connect();
-
-  const db = client.db('codewart');
-  const collection = db.collection('probs');
-
-  const data = await collection
-    //@ts-ignore
-    .find({ probId: parseInt(req?.query?.probId) })
-    .toArray();
-
-  if (data.length === 0) {
-    res.status(404).send('Problem not found');
-  } else {
-    res.status(200).send(data);
+  } catch (err: any) {
+    console.error(err);
+    return res
+      .status(500)
+      .json({ message: 'An error occurred while retrieving problem.' });
   }
 };
 
