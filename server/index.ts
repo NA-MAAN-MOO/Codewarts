@@ -271,11 +271,9 @@ io.on('connection', (socket: Socket) => {
     socket.broadcast.emit('changePlayerCollider', payLoad);
   });
 
-  // Listen for the "Big Deal" event on the client side
-  socket.on('Big Deal', (payload) => {
-    console.log(`${payload.editorName}`);
-    // socket.broadcast.emit('Big Deal', payload);
-    io.emit('Big Deal', payload);
+  /* Listen for an event of success on quiz from the client side */
+  socket.on('broadcastSuccess', (payload) => {
+    io.emit('broadcastSuccess', payload);
   });
 
   socket.on('sendEmoji', (payload) => {

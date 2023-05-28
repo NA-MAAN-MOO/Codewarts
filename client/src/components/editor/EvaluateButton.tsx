@@ -50,9 +50,9 @@ function EvaluateButton(props) {
 
   /* 유저가 가채점 성공시 소켓 이벤트 발동 */
   const broadcastSuccess = () => {
-    mySocket?.emit('Big Deal', {
+    mySocket?.emit('broadcastSuccess', {
       editorName: editorName,
-      problemId: bojProblemId || 19939,
+      problemId: bojProblemId,
       broadcast: true,
     });
   };
