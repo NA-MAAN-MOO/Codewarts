@@ -45,6 +45,7 @@ export default function SearchModal(props: any) {
   const [pagedProbData, setPagedProbData] = useState('');
   const [totalPages, setTotalPages] = useState(0);
   let page = 1;
+  const limit = 12;
 
   /* DB에 저장된 백준 문제 정보를 페이징하여 요청 */
   async function showFilteredBojProbData(filter: any, page: number) {
@@ -56,6 +57,7 @@ export default function SearchModal(props: any) {
         {
           probQuery: filter,
           page: page,
+          limit: limit,
         }
       );
 
@@ -68,8 +70,7 @@ export default function SearchModal(props: any) {
     }
   }
 
-  const handlePageChange = async (pageNumber: number) => {
-    page = pageNumber;
+  const handlePageChange = async (page: number) => {
     await showFilteredBojProbData(filter, page);
   };
 
@@ -123,7 +124,7 @@ export default function SearchModal(props: any) {
                   fontSize="large"
                   onClick={() => {
                     console.log(filter);
-                    showFilteredBojProbData(filter, 1); // 필터를 만족하는 DB 자료들 fetch
+                    showFilteredBojProbData(filter, page); // 필터를 만족하는 DB 자료들 fetch
                   }}
                 />
               </ListItemIcon>

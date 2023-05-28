@@ -87,15 +87,8 @@ export const getBojProbDataById = async (req: Request, res: Response) => {
   }
 };
 
-/* get response for fetching filtered paginated data */
-export const getFilteredBojProbDataByPage = async (
-  req: Request,
-  res: Response
-) => {
-  const probQuery: ProbQueryItem[] = req?.body.probQuery;
-  const page: number = req?.body.page;
-  // console.log(req?.body);
-
+/* process the filter input to proper mongoose query */
+const processFilterInput = (probQuery: ProbQueryItem[]) => {
   let probFilter: ProbFilter = {};
 
   probQuery.forEach((value, index) => {
@@ -143,39 +136,67 @@ export const getFilteredBojProbDataByPage = async (
   });
 
   console.log(probFilter);
+  return probFilter;
+};
 
+const paginateFilteredResult = async (
+  probFilter: ProbFilter,
+  page: number,
+  limit: number,
+  sort: object
+) => {
   const options = {
     page: page,
-    limit: 10,
-    sort: { probId: 'asc' },
+    limit: limit,
+    sort: sort,
   };
 
-  //@ts-ignore
-  Prob.paginate(probFilter, options, function (err, result) {
-    // console.log(result.docs);
-    // console.log(result.totalPages);
-    const resultData = {
+  try {
+    const result = await Prob.paginate(probFilter, options);
+    const data = {
+      status: 200,
       message: 'problems found',
       payload: { pagedDocs: result.docs, totalPages: result.totalPages },
     };
-    // console.log(resultData.payload);
-    // console.log(result.pagingCounter);
-    // result.docs is an array of paginated documents
-    // result.totalPages is the total number of pages
-    // result.currentPage is the current page number
-    // result.hasNextPage is a boolean indicating if there are more pages
-    // result.hasPrevPage is a boolean indicating if there are previous pages
-    // result.nextPage is the number of the next page
-    // result.prevPage is the number of the previous page
-    // result.pagingCounter is the number of the current page within the total number of pages
 
-    if (!resultData.payload.pagedDocs.length) {
-      resultData.message = 'problem not found';
-      res.status(404).send(resultData);
-    } else {
-      res.status(200).send(resultData);
+    // 검색 결과가 없는 경우
+    if (!data.payload.pagedDocs.length) {
+      data.status = 404;
+      data.message = 'problems not found';
     }
-  });
+    return data;
+  } catch (err) {
+    console.log(err);
+    return {
+      status: 500,
+      message: 'An error occurred while paginating result',
+    };
+  }
+};
+
+/* get response for fetching filtered paginated data */
+export const getFilteredBojProbDataByPage = async (
+  req: Request,
+  res: Response
+) => {
+  const probQuery: ProbQueryItem[] = req?.body.probQuery;
+  const page: number = req?.body.page;
+  const limit: number = req?.body.limit;
+
+  const probFilter: ProbFilter = processFilterInput(probQuery);
+  const sort = { probId: 'asc' };
+
+  try {
+    const response = await paginateFilteredResult(
+      probFilter,
+      page,
+      limit,
+      sort
+    );
+    res.status(response.status).send(response);
+  } catch (error: any) {
+    res.status(500).send({ error: error.message });
+  }
 };
 
 export const origin = (req: Request, res: Response) => {
