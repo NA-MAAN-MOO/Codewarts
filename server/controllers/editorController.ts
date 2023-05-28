@@ -13,13 +13,16 @@ const CLIENT_SECRET = process.env.JDOODLE_CLIENT_SECRET;
 
 /* define interfaces */
 interface ProbQueryItem {
-  tag: string;
+  'solvedAC.level'?: string;
+  source: string;
 }
 
 interface ProbFilter {
-  platform?: string;
-  'solvedAC.level'?: number | object;
+  'solvedAC.level'?: string | object | number;
   source?: string;
+
+  // Add other possible keys here
+  [key: string]: string | object | number | undefined;
 }
 
 /* create the data to be sent to the JDoodle API */
@@ -90,52 +93,26 @@ export const getBojProbDataById = async (req: Request, res: Response) => {
 /* process the filter input to proper mongoose query */
 const processFilterInput = (probQuery: ProbQueryItem[]) => {
   let probFilter: ProbFilter = {};
-
-  probQuery.forEach((value, index) => {
-    console.log(value.tag, index);
-    if (['백준', '리트코드'].includes(value.tag)) {
-      probFilter['platform'] = value.tag;
-    } else if (
-      [
-        '브론즈',
-        '실버',
-        '다이아몬드',
-        '플래티넘',
-        '골드',
-        '루비',
-        '난이도 없음',
-      ].includes(value.tag)
-    ) {
-      let condition = null;
-      switch (value.tag) {
-        case '브론즈':
-          condition = { $gt: 0, $lt: 6 };
-          break;
-        case '실버':
-          condition = { $gt: 5, $lt: 11 };
-          break;
-        case '골드':
-          condition = { $gt: 10, $lt: 16 };
-          break;
-        case '플래티넘':
-          condition = { $gt: 15, $lt: 21 };
-          break;
-        case '다이아몬드':
-          condition = { $gt: 20, $lt: 26 };
-          break;
-        case '루비':
-          condition = { $gt: 25, $lt: 32 };
-          break;
-        default:
-          condition = 0;
-      }
-      probFilter['solvedAC.level'] = condition;
-    } else if (['한국정보올림피아드'].includes(value.tag)) {
-      probFilter['source'] = value.tag;
-    }
+  probQuery.forEach((query) => {
+    let [key, value] = Object.entries(query)[0];
+    probFilter[key] = value;
   });
 
-  console.log(probFilter);
+  if (!('solvedAC.level' in probFilter)) return probFilter;
+
+  const levelRanges: Record<string, { $gt: number; $lt: number }> = {
+    브론즈: { $gt: 0, $lt: 6 },
+    실버: { $gt: 5, $lt: 11 },
+    골드: { $gt: 10, $lt: 16 },
+    플래티넘: { $gt: 15, $lt: 21 },
+    다이아몬드: { $gt: 20, $lt: 26 },
+    루비: { $gt: 25, $lt: 32 },
+  };
+  const level = probFilter['solvedAC.level'] as string;
+  probFilter['solvedAC.level'] = levelRanges[level] || {
+    $gt: 0,
+    $lt: 0,
+  };
   return probFilter;
 };
 
