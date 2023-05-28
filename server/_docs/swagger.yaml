@@ -1,0 +1,40 @@
+components:
+  schemas:
+    CodeToRun:
+      type: object
+      properties:
+        codeToRun:
+          type: string
+          description: The code to execute.
+        stdin:
+          type: string
+          description: The standard input for the code.
+      required:
+        - codeToRun
+        - stdin
+
+    ExecutionOutput:
+      type: object
+      properties:
+        output:
+          type: string
+          description: The output of the executed code using Jdoodle API.
+        statusCode:
+          type: integer
+          description: Status Code of the result.
+        memory:
+          type: number
+          description: Memory used by the program.
+        cpuTime:
+          type: number
+          description: CPU Time used by the program.
+
+    ExecutionTraceback:
+      type: object
+      properties:
+        error:
+          type: string
+          description: The compile error message .
+        statusCode:
+          type: integer
+          description: Status Code of the result.

@@ -17,52 +17,26 @@ router.get('/', origin);
  *  post:
  *    summary: Execute compiled code
  *    description: Execute code using jdoodle API
+ *    operationId: compileCode
  *    requestBody:
  *      required: true
  *      content:
  *        application/json:
  *          schema:
- *            type: object
- *            properties:
- *              codeToRun:
- *                type: string
- *                description: The code to excute
- *              stdin:
- *                type: string
- *                description: The standard input for the code
+ *            $ref: '#/components/schemas/CodeToRun'
  *    responses:
  *      200:
  *        description: The output of the code execution
  *        content:
  *          application/json:
  *            schema:
- *              type: object
- *              properties:
- *                output:
- *                  type: string
- *                  description: The output of the excuted code using Jdoodle API
- *                statusCode:
- *                  type: integer
- *                  description: Status Code of the result
- *                memory:
- *                  type: number
- *                  description: Memory used by the program
- *                cpuTime:
- *                  type: number
- *                  description: CPU Time used by the program
+ *              $ref: '#/components/schemas/ExecutionOutput'
  *      400:
  *        description: The excution failed
  *        content:
  *          aplication/json:
  *            schema:
- *              type: object
- *              properties:
- *                error:
- *                  type: string
- *                  description: Error message
- *                statusCode:
- *                  type: integer
- *                  description: Status code of the result
+ *              $ref: '#/components/schemas/ExecutionTraceback'
  *      401:
  *        description: Unauthorized
  *      429:
