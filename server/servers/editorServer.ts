@@ -14,14 +14,14 @@ const server = http.createServer(app);
 const swaggerOptions = {
   swaggerDefinition: {
     info: {
-      title: 'Customer API',
+      title: 'CodeWarts API _ Editor',
       version: '1.0.0',
     },
   },
   apis: ['./routes/*.ts'], // API가 있는 경로
 };
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+app.use('/editor-api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.use(express.json());
 app.use(cors());
