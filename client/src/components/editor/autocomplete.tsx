@@ -13,6 +13,7 @@ const algoFilterOptions: AlgoFilterOptions[] = [
   { 'solvedAC.level': '플래티넘' },
   { 'solvedAC.level': '다이아몬드' },
   { 'solvedAC.level': '루비' },
+  { 'solvedAC.level': '난이도 없음' },
   { source: '한국정보올림피아드' },
 ];
 

@@ -53,7 +53,7 @@ export default function SearchModal(props: any) {
 
     try {
       const response = await axios.post(
-        `${APPLICATION_EDITOR_URL}/filtered_prob_data`,
+        `${APPLICATION_EDITOR_URL}/filtered-prob-data`,
         {
           probQuery: filter,
           page: page,
