@@ -24,7 +24,7 @@ function AlgoHeaderTab(props) {
 
       setBojProblemId(parseInt(probId));
       let probFullData = response.data[0];
-      // console.log(probFullData);
+      console.log(probFullData);
       setBojProbFullData(probFullData);
     } catch (error: any) {
       if (error.response.status === 404) {
