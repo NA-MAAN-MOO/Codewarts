@@ -16,6 +16,10 @@ const swaggerOptions = {
     info: {
       title: 'CodeWarts API _ Editor',
       version: '1.0.0',
+      contact: {
+        name: 'CodeWarts API Support',
+        url: 'https://github.com/NA-MAAN-MOO/Codewarts/issues',
+      },
     },
   },
   apis: ['./routes/*.ts'], // API가 있는 경로

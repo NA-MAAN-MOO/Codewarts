@@ -13,76 +13,66 @@ router.get('/', origin);
 /* "코드 실행하기" 요청에 보내는 응답 */
 /**
  * @swagger
- *
- * components:
- *   schemas:
- *     CodeToRun:
- *       type: object
- *       properties:
- *         codeToRun:
- *           type: string
- *           description: The code to execute.
- *         stdin:
- *           type: string
- *           description: The standard input for the code.
- *       required:
- *         - codeToRun
- *         - stdin
- *
- *     ExecutionOutput:
- *       type: object
- *       properties:
- *         output:
- *           type: string
- *           description: The output of the executed code using Jdoodle API.
- *         statusCode:
- *           type: integer
- *           description: Status Code of the result.
- *         memory:
- *           type: number
- *           description: Memory used by the program.
- *         cpuTime:
- *           type: number
- *           description: CPU Time used by the program.
- *
- *     ExecutionTraceback:
- *       type: object
- *       properties:
- *         error:
- *           type: string
- *           description: The compile error message .
- *         statusCode:
- *           type: integer
- *           description: Status Code of the result.
- *
  * /code_to_run:
- *  post:
- *    summary: Execute compiled code
- *    description: Execute user-written code using jdoodle API
- *    operationId: compileCode
- *    requestBody:
- *      required: true
- *      content:
- *        application/json:
- *          schema:
- *            $ref: '#/components/schemas/CodeToRun'
- *    responses:
- *      200:
- *        description: Code executed successfully
- *        content:
- *          application/json:
- *            schema:
- *              $ref: '#/components/schemas/ExecutionOutput'
- *      400:
- *        description: Bad request
- *        content:
- *          application/json:
- *            schema:
- *              $ref: '#/components/schemas/ExecutionTraceback'
- *      401:
- *        description: Unauthorized
- *      429:
- *        description: Daily limit reached
+ *   post:
+ *     summary: Execute compiled code
+ *     description: The CodeWarts' editor sends the user's code and standard input to the Jdoodle server for a response, internally passing identifying values and language information to be compiled. CodeWarts delivers this response from Jdoodle to the client.
+ *     operationId: compileCode
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               codeToRun:
+ *                 type: string
+ *                 description: The code to execute.
+ *                 example: print("hello world")
+ *               stdin:
+ *                 type: string
+ *                 description: The standard input for the code.
+ *                 example: hello
+ *             required:
+ *               - codeToRun
+ *               - stdin
+ *     responses:
+ *       200:
+ *         description: Code executed successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 output:
+ *                   type: string
+ *                   description: The output of the executed code using Jdoodle API.
+ *                 statusCode:
+ *                   type: integer
+ *                   description: Status Code of the result.
+ *                 memory:
+ *                   type: number
+ *                   description: Memory used by the program.
+ *                 cpuTime:
+ *                   type: number
+ *                   description: CPU Time used by the program.
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: The compile error message .
+ *                 statusCode:
+ *                   type: integer
+ *                   description: Status Code of the result.
+ *       401:
+ *         description: Unauthorized
+ *       429:
+ *         description: Daily limit reached
  *
  */
 
