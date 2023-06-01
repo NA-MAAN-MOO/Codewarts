@@ -246,6 +246,53 @@ router.post('/code-to-run', compileCode);
 router.get('/boj-prob-data', getBojProbDataById);
 
 /* 백준 문제 필터링 몽고DB 요청에 보내는 응답 */
+/**
+ * @swagger
+ * /filtered-prob-data:
+ *  post:
+ *    summary: Retrieves filtered list of problems by page
+ *    description: This fetches a paginated list of problems from Baekjoon Online Judge (BOJ) based on provided filter criteria.
+ *    operationId: getFilteredBojProbDataByPage
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              probQuery:
+ *                type: object
+ *                description: The problem filter query
+ *              page:
+ *                type: integer
+ *                description: The page number to fetch
+ *              limit:
+ *                type: integer
+ *                description: The number of problems per page
+ *            required:
+ *              - probQuery
+ *              - page
+ *              - limit
+ *    responses:
+ *      200:
+ *        description: Problem data retrieved successfully
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              $ref: '#/components/schemas/BOJProblemData'
+ *      500:
+ *        description: Internal server error
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                error:
+ *                  type: string
+ *                  description: Error message
+ *
+ */
 router.post('/filtered-prob-data', getFilteredBojProbDataByPage);
 
 export default router;
