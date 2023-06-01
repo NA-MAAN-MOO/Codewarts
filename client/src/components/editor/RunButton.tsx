@@ -17,7 +17,7 @@ function RunButton(props) {
 
     try {
       const { data } = await axios.post(
-        `${APPLICATION_EDITOR_URL}/code_to_run`,
+        `${APPLICATION_EDITOR_URL}/code-to-run`,
         {
           codeToRun: ytext.toString(),
           //@ts-ignore

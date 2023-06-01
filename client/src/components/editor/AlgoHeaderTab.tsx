@@ -19,7 +19,7 @@ function AlgoHeaderTab(props) {
 
     try {
       const response = await axios.get(
-        `${APPLICATION_EDITOR_URL}/boj_prob_data?probId=${probId}`
+        `${APPLICATION_EDITOR_URL}/boj-prob-data?probId=${probId}`
       );
 
       setBojProblemId(parseInt(probId));
