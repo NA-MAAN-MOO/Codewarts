@@ -109,10 +109,7 @@ const processFilterInput = (probQuery: ProbQueryItem[]) => {
     루비: { $gt: 25, $lt: 32 },
   };
   const level = probFilter['solvedAC.level'] as string;
-  probFilter['solvedAC.level'] = levelRanges[level] || {
-    $gt: 0,
-    $lt: 0,
-  };
+  probFilter['solvedAC.level'] = levelRanges[level] || 0;
   return probFilter;
 };
 
