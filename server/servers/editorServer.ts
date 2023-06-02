@@ -9,6 +9,7 @@ import swaggerUi from 'swagger-ui-express';
 
 const app: Express = express();
 const server = http.createServer(app);
+const EDITOR_URL = process.env.EDITOR_URL || 'http://localhost:3001';
 
 /* swagger */
 const swaggerOptions = {
@@ -23,7 +24,7 @@ const swaggerOptions = {
       },
       servers: [
         {
-          url: 'http://localhost:3001', // 에디터 서버
+          url: EDITOR_URL, // 에디터 서버
         },
       ],
     },
