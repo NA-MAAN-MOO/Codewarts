@@ -1,5 +1,5 @@
 import { Schema, model, Document, Model } from 'mongoose';
-import { IProbInfo } from '../controllers/propTypes';
+import { IProbInfo } from '../controllers/probTypes';
 import mongoosePaginate from 'mongoose-paginate-v2';
 
 const probdata = new Schema<IProbInfo>({
