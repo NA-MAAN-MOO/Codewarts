@@ -68,7 +68,7 @@ router.get('/', origin);
  *          application/json:
  *            schema:
  *              type: object
- *              $ref: '#/components/schemas/UserCode'
+ *              $ref: '#/components/schemas/UserCodeResponse'
  *            examples:
  *              general example:
  *                value:
