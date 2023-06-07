@@ -30,7 +30,7 @@ app.use(cors());
 app.use(cookieParser());
 
 /*********배포 시 설정들********* */
-//빌드하고 나서 주석 해제
+// 빌드하기 전에 주석 해제 후 빌드
 // app.use(express.static(__dirname + '/../../client/build'));
 // app.get('/', function (req, res) {
 //   res.sendFile(__dirname + '/../../client/build/index.html');

@@ -46,7 +46,7 @@ const config = {
   physics: {
     default: 'matter',
     matter: {
-      debug: true, // 이 설정때문에 오브젝트에 이미지를 추가하지 않아도 대체되는 도형이 그려진다.
+      debug: true, // 배포 시 주석 처리 (메타버스 디버그 모드)
       gravity: { y: 0 },
     },
   },
