@@ -243,7 +243,7 @@ router.post('/code-to-run', compileCode);
  *                  example: 'An error occurred while retrieving problem.'
  *
  */
-router.get('/boj-prob-data', getBojProbDataById);
+router.get('/boj-prob-data/:probId', getBojProbDataById);
 
 /* 백준 문제 필터링 몽고DB 요청에 보내는 응답 */
 /**

@@ -76,7 +76,8 @@ export const compileCode = async (req: Request, res: Response) => {
 /* fetch boj problem data by its id */
 export const getBojProbDataById = async (req: Request, res: Response) => {
   try {
-    const data = await Prob.find({ probId: req?.query?.probId });
+    console.log(req);
+    const data = await Prob.find({ probId: req?.params?.probId });
     if (data.length === 0) {
       return res.status(404).json({ message: 'Problem not found' });
     } else {
