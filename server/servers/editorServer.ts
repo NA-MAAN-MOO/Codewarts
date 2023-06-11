@@ -22,12 +22,12 @@ const swaggerOptions = {
         name: 'CodeWarts API Support',
         url: 'https://github.com/NA-MAAN-MOO/Codewarts/issues',
       },
-      servers: [
-        {
-          url: EDITOR_URL, // 에디터 서버
-        },
-      ],
     },
+    servers: [
+      {
+        url: EDITOR_URL, // 에디터 서버
+      },
+    ],
   },
   apis: ['./routes/*.ts'], // API가 있는 경로
 };
