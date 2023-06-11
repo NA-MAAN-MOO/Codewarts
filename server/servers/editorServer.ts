@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config(); // 환경변수 이용(코드 최상단에 위치시킬 것)
+
 import express, { Express, Request, Response } from 'express';
 import http from 'http';
 import cors from 'cors';
