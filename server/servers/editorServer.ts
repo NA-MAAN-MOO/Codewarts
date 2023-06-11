@@ -1,6 +1,3 @@
-import dotenv from 'dotenv';
-dotenv.config(); // 환경변수 이용(코드 최상단에 위치시킬 것)
-
 import express, { Express, Request, Response } from 'express';
 import http from 'http';
 import cors from 'cors';
@@ -25,12 +22,12 @@ const swaggerOptions = {
         name: 'CodeWarts API Support',
         url: 'https://github.com/NA-MAAN-MOO/Codewarts/issues',
       },
-      servers: [
-        {
-          url: EDITOR_URL, // 에디터 서버
-        },
-      ],
     },
+    servers: [
+      {
+        url: EDITOR_URL, // 에디터 서버
+      },
+    ],
   },
   apis: ['./routes/*.ts'], // API가 있는 경로
 };
