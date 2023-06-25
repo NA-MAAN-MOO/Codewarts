@@ -128,6 +128,10 @@
 <img src="./client/public/assets/readme/poster.png">
 <br><br>
 
+# <strong>Branch 전략</strong></h2>
+- main : 최신 개발 브랜치
+- deploy/codewarts : 클라우드 배포 브랜치
+
 # <strong>How to install ❓ </strong></h2>
 
 
