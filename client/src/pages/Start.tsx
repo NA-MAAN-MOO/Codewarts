@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import LoginDialog from '../components/LoginDialog';
+import LoginDialog from './sign/LoginDialog';
 import { useSelector } from 'react-redux';
 import { RootState } from 'stores';
 import { GAME_STATUS } from 'utils/Constants';

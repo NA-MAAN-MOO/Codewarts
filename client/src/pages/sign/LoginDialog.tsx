@@ -2,13 +2,12 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import ToggleButton from '@mui/material/ToggleButton';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/navigation';
-import logo from 'assets/images/logo.png';
+// import logo from 'assets/images/logo.png';
 import logo_new from 'assets/images/logo_new.png';
 import chars from 'assets/characters';
 import loginFrame from '../assets/images/frame.png';
@@ -27,9 +26,9 @@ import { useDispatch } from 'react-redux';
 import { handleScene } from 'lib/phaserLib';
 import { GAME_STATUS } from 'utils/Constants';
 import { Snackbar, SnackbarOrigin } from '@mui/material';
-import SignUpForm from './SignUpForm';
+import SignUpForm from '../../components/SignUpForm';
 import axios, { AxiosError } from 'axios';
-import MySnackbar from './MySnackbar';
+import MySnackbar from '../../components/MySnackbar';
 import { useAppDispatch } from 'stores';
 
 import 'animate.css';
@@ -171,6 +170,7 @@ const LoginDialog = () => {
         onOpen={openLoginWarn}
       />
       <img
+        alt="logo"
         src={logo_new}
         style={{
           width: styledTheme.logoWidth,
@@ -178,14 +178,6 @@ const LoginDialog = () => {
           userSelect: 'none',
         }}
       />
-      {/* <RoomName>
-        <Avatar
-          style={{ background: getColorByString('roomName와야함 나중에') }}
-        >
-          {'CW'}
-        </Avatar>
-        <h3>{'My Room'}</h3>
-      </RoomName> */}
       <Content onSubmit={handleSubmit} id="login">
         <Left>
           <Swiper
@@ -225,7 +217,8 @@ const LoginDialog = () => {
             helperText={userIdFieldEmpty && 'ID를 입력해 주세요.'}
             value={userId}
             // margin="dense"
-            onInput={(e) => {
+            onChange={(e: object) => {
+              console.log('dd');
               setUserId((e.target as HTMLInputElement).value);
             }}
             sx={{ fontFamily: styledTheme.mainFont }}
