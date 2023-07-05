@@ -29,6 +29,57 @@ interface CurUser {
   [userNickname: string]: number;
 }
 
+export const validate = async (req: Request, res: Response) => {
+  try {
+    const { item, value } = req.body;
+    switch (item) {
+      case 'userId':
+        if (!value) {
+          return res.status(200).json({
+            message: '아이디를 입력해 주세요.',
+          });
+        }
+        const foundUserById = await User.findOne({ userId: value });
+        if (foundUserById) {
+          return res.status(200).json({
+            message: '이미 존재하는 아이디입니다.',
+          });
+        }
+        if (!userIdRegex.test(value)) {
+          return res.status(200).json({
+            message: '아이디는 영문과 숫자만 포함할 수 있습니다.',
+          });
+        }
+        break;
+      case 'userNickName':
+        if (!value) {
+          return res.status(200).json({
+            message: '닉네임을 입력해 주세요.',
+          });
+        }
+        const foundUserByNick = await User.findOne({
+          userNickname: value,
+        });
+        if (foundUserByNick) {
+          return res.status(200).json({
+            message: '이미 존재하는 닉네임입니다.',
+          });
+        }
+        if (!userNicknameRegex.test(value)) {
+          return res.status(200).json({
+            message: '닉네임은 한글, 영문, 숫자만 포함할 수 있습니다.',
+          });
+        }
+        break;
+    }
+    return res.status(200).json({
+      message: '',
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export const signUp = async (req: Request, res: Response) => {
   try {
     const user = req.body;
