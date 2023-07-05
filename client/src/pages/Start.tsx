@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import LoginDialog from './sign/LoginDialog';
+import SignIn from 'pages/sign';
 import { useSelector } from 'react-redux';
 import { RootState } from 'stores';
 import { GAME_STATUS } from 'utils/Constants';
@@ -9,7 +9,7 @@ const Start = () => {
   const { status } = useSelector((state: RootState) => {
     return { ...state.mode };
   });
-  return <StartDiv>{status === LOGIN ? <LoginDialog /> : <></>}</StartDiv>;
+  return <StartDiv>{status === LOGIN ? <SignIn /> : <></>}</StartDiv>;
 };
 
 export default Start;
