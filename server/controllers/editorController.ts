@@ -20,10 +20,8 @@ export const compileCode = async (req: Request, res: Response) => {
         message: response.error,
       });
     }
-
-    return res.status(response.status).send(response.data);
+    return res.status(response.statusCode).send(response);
   } catch (error: any) {
-    console.log(error);
     return res.status(500).send({ status: 500, message: error.message });
   }
 };
