@@ -5,9 +5,9 @@ import AvatarGroup from '@mui/material/AvatarGroup';
 import Checkbox from '@mui/material/Checkbox';
 import styled from 'styled-components';
 import axios from 'axios';
+import { APPLICATION_URL } from '../../utils/Constants';
 
-const APPLICATION_DB_URL =
-  process.env.REACT_APP_DB_URL || 'http://localhost:3003';
+const APPLICATION_DB_URL = APPLICATION_URL.APPLICATION_DB_URL;
 
 function MemoFooter(props: any) {
   let { _id, participants, getMemos, currentUserNickname } = props;

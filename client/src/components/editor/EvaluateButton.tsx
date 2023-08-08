@@ -17,9 +17,9 @@ import { Fireworks } from './fireworks';
 import TaskIcon from '@mui/icons-material/Task';
 import Swal from 'sweetalert2';
 import _ from 'lodash';
+import { APPLICATION_URL } from '../../utils/Constants';
 
-const APPLICATION_EDITOR_URL =
-  process.env.REACT_APP_EDITOR_URL || 'http://localhost:3001';
+const APPLICATION_EDITOR_URL = APPLICATION_URL.APPLICATION_EDITOR_URL;
 
 //@ts-ignore
 function EvaluateButton(props) {
@@ -89,14 +89,11 @@ function EvaluateButton(props) {
         break;
       }
 
-      const { data } = await axios.post(
-        `${APPLICATION_EDITOR_URL}/code-to-run`,
-        {
-          codeToRun: ytext.toString(),
-          //@ts-ignore
-          stdin: fetchInput,
-        }
-      );
+      const { data } = await axios.post(`${APPLICATION_EDITOR_URL}/usercode`, {
+        codeToRun: ytext.toString(),
+        //@ts-ignore
+        stdin: fetchInput,
+      });
 
       const fetchOutput = await fetchInputFileText(
         `assets/olympiad/${bojProblemId}/${i}.out`
@@ -133,14 +130,11 @@ function EvaluateButton(props) {
         .replace(/\r\n/g, '\n')
         .trimEnd();
 
-      const { data } = await axios.post(
-        `${APPLICATION_EDITOR_URL}/code-to-run`,
-        {
-          codeToRun: ytext.toString(),
-          //@ts-ignore
-          stdin: inputWithLf,
-        }
-      );
+      const { data } = await axios.post(`${APPLICATION_EDITOR_URL}/usercode`, {
+        codeToRun: ytext.toString(),
+        //@ts-ignore
+        stdin: inputWithLf,
+      });
 
       const jdoodleOutput = data.output.replace(/ \n/g, '\n').trimEnd();
 

@@ -9,11 +9,11 @@ import { useSelector } from 'react-redux';
 import { useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
 import Image from '../../assets/images/white_paper.jpg';
+import { APPLICATION_URL } from '../../utils/Constants';
 
 const drawerWidth = 60;
 
-const APPLICATION_DB_URL =
-  process.env.REACT_APP_DB_URL || 'http://localhost:3003';
+const APPLICATION_DB_URL = APPLICATION_URL.APPLICATION_DB_URL;
 
 /* Left side main field of whiteboard */
 function MainField(props: any) {

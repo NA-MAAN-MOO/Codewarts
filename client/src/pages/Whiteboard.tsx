@@ -11,9 +11,9 @@ import RankingList from 'components/whiteboard/RankingList';
 import { useSelector } from 'react-redux';
 import 'animate.css';
 import Image from '../assets/images/leaderboard_bg.png';
+import { APPLICATION_URL } from 'utils/Constants';
 
-const APPLICATION_DB_URL =
-  process.env.REACT_APP_DB_URL || 'http://localhost:3003';
+const APPLICATION_DB_URL = APPLICATION_URL.APPLICATION_DB_URL;
 
 interface DetailInfo {
   bojId: string;

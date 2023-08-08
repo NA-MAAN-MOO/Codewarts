@@ -11,9 +11,6 @@ import Whiteboard from 'pages/Whiteboard';
 import axios from 'axios';
 import BgmPlayer from 'components/musicplayer/BgmPlayer';
 
-const APPLICATION_DB_URL =
-  process.env.REACT_APP_DB_URL || 'http://localhost:3003';
-
 function App() {
   const mode = process.env.REACT_APP_MODE;
   const { START, LOBBY, GAME, EDITOR, WHITEBOARD, LOGIN } = GAME_STATUS;
