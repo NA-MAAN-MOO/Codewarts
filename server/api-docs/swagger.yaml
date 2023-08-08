@@ -3,7 +3,7 @@ info:
   title: Codewarts Editor - OpenAPI 3.0
   description: |-
     코드와트의 에디터 기능과 관련된 API 문서입니다. 
-    
+
     코드와트에 대해 더 궁금하다면?:
     - [코드와트 저장소](https://github.com/NA-MAAN-MOO/Codewarts)
   contact:
@@ -25,7 +25,7 @@ tags:
 paths:
   /code-to-run:
     post:
-      tags: 
+      tags:
         - code
       summary: Execute compiled code
       description: The CodeWarts' editor sends the user's code and standard input to the Jdoodle server for a response, internally passing identifying values and language information to be compiled. CodeWarts delivers this response from Jdoodle to the client.
@@ -39,12 +39,12 @@ paths:
             examples:
               general example:
                 value:
-                  codeToRun: "print(input())"
-                  stdin: "hello world"
+                  codeToRun: 'print(input())'
+                  stdin: 'hello world'
               traceback example(no input when needed):
                 value:
-                  codeToRun: "print(input())"
-                  stdin: ""
+                  codeToRun: 'print(input())'
+                  stdin: ''
       responses:
         200:
           description: Code executed successfully. This includes cases where the user's code generated a traceback error message.
@@ -82,7 +82,6 @@ paths:
           description: Unauthorized
         429:
           description: Daily limit reached
-
 
   /boj-prob-data:
     get:
@@ -205,49 +204,52 @@ components:
     Titles:
       type: object
       properties:
-        language: 
+        language:
           example: ko
           type: string
-        languageDisplayName: 
+        languageDisplayName:
           example: ko
           type: string
-        title: 
+        title:
           example: A-B
           type: string
-        isOriginal: 
+        isOriginal:
           example: true
           type: boolean
     DisplayNames:
       type: object
       properties:
-        language: 
+        language:
           example: ko
           type: string
-        name: 
+        name:
           example: 구현
           type: string
-        short: 
+        short:
           example: 구현
           type: string
     Tags:
       type: object
       properties:
-        key: 
+        key:
           type: string
           example: implementation
-        isMeta: 
+        isMeta:
           type: boolean
           example: false
-        bojTagId: 
+        bojTagId:
           type: integer
           example: 102
-        problemCount: 
+        problemCount:
           type: integer
           example: 4169
         displayNames:
           type: array
-          example: [{language: 'ko', name: '구현', short: '구현'}, 
-{language: 'en', name: 'implementation', short: 'impl'}]
+          example:
+            [
+              { language: 'ko', name: '구현', short: '구현' },
+              { language: 'en', name: 'implementation', short: 'impl' },
+            ]
           items:
             $ref: '#/components/schemas/DisplayNames'
     BojProblem:
@@ -277,7 +279,7 @@ components:
         samples:
           type: object
           description: Sample input and output of the problem
-          example: { '1': {input: '3 2\n', output: '1'} }
+          example: { '1': { input: '3 2\n', output: '1' } }
           properties:
             1:
               type: object
@@ -305,9 +307,17 @@ components:
             titles:
               type: array
               description: The Korean title of the problem
-              items: 
+              items:
                 $ref: '#/components/schemas/Titles'
-              example: [{language: 'ko', languageDisplayName: 'ko', title: 'A-B', isOriginal: true}]
+              example:
+                [
+                  {
+                    language: 'ko',
+                    languageDisplayName: 'ko',
+                    title: 'A-B',
+                    isOriginal: true,
+                  },
+                ]
             isSolvable:
               type: boolean
               description: The Korean title of the problem
@@ -332,8 +342,49 @@ components:
               type: boolean
             tags:
               type: array
-              items: 
+              items:
                 $ref: '#/components/schemas/Tags'
-              example: [{key: 'implementation', isMeta: false, bojTagId: 102, problemCount: 4169, displayNames: [{language: 'ko', name: '구현', short: '구현'}, 
-{language: 'en', name: 'implementation', short: 'impl'}]}, {key: 'arithmetic', isMeta: false, bojTagId: 121, problemCount: 809, displayNames: [
-{language: 'ko', name: '사칙연산', short: '사칙연산'}, {language: 'en', name: 'arithmetic', short: 'arithmetic'}]}, {key: 'math', isMeta: false, bojTagId: 124, problemCount: 4899, displayNames: [{language: 'ko', name: '수학', short: '수학'}, {language: 'en', name: 'mathematics', short: 'math'}]}]
+              example:
+                [
+                  {
+                    key: 'implementation',
+                    isMeta: false,
+                    bojTagId: 102,
+                    problemCount: 4169,
+                    displayNames:
+                      [
+                        { language: 'ko', name: '구현', short: '구현' },
+                        {
+                          language: 'en',
+                          name: 'implementation',
+                          short: 'impl',
+                        },
+                      ],
+                  },
+                  {
+                    key: 'arithmetic',
+                    isMeta: false,
+                    bojTagId: 121,
+                    problemCount: 809,
+                    displayNames:
+                      [
+                        { language: 'ko', name: '사칙연산', short: '사칙연산' },
+                        {
+                          language: 'en',
+                          name: 'arithmetic',
+                          short: 'arithmetic',
+                        },
+                      ],
+                  },
+                  {
+                    key: 'math',
+                    isMeta: false,
+                    bojTagId: 124,
+                    problemCount: 4899,
+                    displayNames:
+                      [
+                        { language: 'ko', name: '수학', short: '수학' },
+                        { language: 'en', name: 'mathematics', short: 'math' },
+                      ],
+                  },
+                ]
