@@ -8,6 +8,16 @@ import whiteboardRouter from '../routes/whiteboardRouter';
 const app: Express = express();
 const server = http.createServer(app);
 
+// 로깅을 위한 미들웨어
+const LoggerMiddleware = (req: Request, res: Response, next: any) => {
+  console.log(`:::requestLog::: origin: ${req.headers.origin} host: ${
+    req.headers.host
+  } url: ${req.url} method: ${req.method} 
+            -- ${new Date()}`);
+  next();
+};
+
+app.use(LoggerMiddleware);
 app.use(express.json());
 app.use(cors());
 
