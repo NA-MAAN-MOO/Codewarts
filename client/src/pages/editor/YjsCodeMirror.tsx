@@ -65,8 +65,10 @@ import SearchModal from '../../components/editor/ProbSearchModal';
 import { getPhaserSocket } from 'network/phaserSocket';
 import { YjsProp } from 'types';
 
-const APPLICATION_YJS_URL =
-  process.env.REACT_APP_YJS_URL || 'ws://localhost:1234/';
+/* envorionment variables */
+import { APPLICATION_URL } from 'utils/Constants';
+
+const APPLICATION_YJS_URL = APPLICATION_URL.APPLICATION_YJS_URL;
 
 function YjsCodeMirror(props: YjsProp) {
   /* ref */

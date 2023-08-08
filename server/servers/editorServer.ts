@@ -6,11 +6,10 @@ import editorRouter from '../routes/editorRouter';
 /* swagger */
 import swaggerUi from 'swagger-ui-express';
 const YAML = require('yamljs');
-const swaggerDocs = YAML.load('../api-docs/swagger.yaml');
+const swaggerDocs = YAML.load('../server/api-docs/swagger.yaml');
 
 const app: Express = express();
 const server = http.createServer(app);
-const EDITOR_URL = process.env.EDITOR_URL || 'http://localhost:3001';
 
 /* swagger */
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));

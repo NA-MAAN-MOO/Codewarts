@@ -9,6 +9,7 @@ import axios, { AxiosError } from 'axios';
 import { styledTheme } from 'styles/theme';
 import MySnackbar from '../../components/MySnackbar';
 import { useSignContext } from 'hooks/useSignContext';
+import { APPLICATION_URL } from 'utils/Constants';
 
 interface IForm {
   userId: string;
@@ -17,8 +18,7 @@ interface IForm {
   userBojId: string;
   userLeetId: string;
 }
-const APPLICATION_DB_URL =
-  process.env.REACT_APP_DB_URL || 'http://localhost:3003';
+const APPLICATION_DB_URL = APPLICATION_URL.APPLICATION_DB_URL;
 
 export default function FormDialog() {
   const { isSignUpOpen, handleSignUpFailMsg, signUpFailMsg, closeSignUpForm } =

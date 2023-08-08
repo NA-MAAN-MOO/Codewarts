@@ -1,7 +1,4 @@
-import dotenv from 'dotenv';
-//환경변수 이용(코드 최상단에 위치시킬 것)
-dotenv.config();
-
+import { CONFIG } from './constants/index'; // 환경변수
 import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
 import http from 'http'; // Load in http module
@@ -21,8 +18,8 @@ import cookieParser from 'cookie-parser';
 import VolMuteInfo from './services/VolMuteInfo';
 import MicMuteInfo from './services/MicMuteInfo';
 
-const port = process.env.PORT || 8080;
-const mongoPassword = process.env.MONGO_PW;
+const port = CONFIG.PORT;
+const mongoPassword = CONFIG.MONGO_PW;
 
 const app: Express = express();
 app.use(express.json());

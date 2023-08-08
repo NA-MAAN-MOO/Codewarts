@@ -5,9 +5,9 @@ import {
 } from '../../../src/pages/editor/editorStyle';
 import { useEffect } from 'react';
 import Swal from 'sweetalert2';
+import { APPLICATION_URL } from '../../utils/Constants';
 
-const APPLICATION_EDITOR_URL =
-  process.env.REACT_APP_EDITOR_URL || 'http://localhost:3001';
+const APPLICATION_EDITOR_URL = APPLICATION_URL.APPLICATION_EDITOR_URL;
 
 //@ts-ignore
 function AlgoHeaderTab(props) {

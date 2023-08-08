@@ -8,9 +8,9 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import FloatingButton from 'components/FloatingButton';
 import { useSelector } from 'react-redux';
 import { RootState } from 'stores';
+import { APPLICATION_URL } from 'utils/Constants';
 
-const APPLICATION_BOARD_URL =
-  process.env.REACT_APP_SERVER_URL || 'http://localhost:3004';
+const APPLICATION_BOARD_URL = APPLICATION_URL.APPLICATION_BOARD_URL;
 
 type BoardType = {
   roomKey: string;

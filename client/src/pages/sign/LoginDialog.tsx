@@ -30,11 +30,10 @@ import { openGame } from 'stores/modeSlice';
 import useVoice from 'hooks/useVoice';
 import AvatarSlide from 'components/sign/AvatarSlide';
 import { useSignContext } from 'hooks/useSignContext';
+import { APPLICATION_URL } from 'utils/Constants';
 
-const APPLICATION_DB_URL =
-  process.env.REACT_APP_DB_URL || 'http://localhost:3003';
-const APPLICATION_VOICE_URL =
-  process.env.REACT_APP_VOICE_URL || 'http://localhost:3002';
+const APPLICATION_DB_URL = APPLICATION_URL.APPLICATION_DB_URL;
+const APPLICATION_VOICE_URL = APPLICATION_URL.APPLICATION_VOICE_URL;
 
 // const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 //   props,

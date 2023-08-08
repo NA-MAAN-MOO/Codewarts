@@ -3,10 +3,11 @@ import { json } from 'body-parser';
 import http from 'http'; // Load in http module
 import cors from 'cors';
 import voiceRouter from '../routes/voiceRouter';
+import { CONFIG } from '../constants/index';
 
 const app = express();
 
-const SERVER_URL = process.env.SERVER_URL || 'http://localhost:3000';
+const SERVER_URL = CONFIG.SERVER_URL;
 
 app.use(cors({ credentials: true, origin: `${SERVER_URL}` }));
 app.use(json());

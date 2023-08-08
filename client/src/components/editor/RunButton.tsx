@@ -3,9 +3,9 @@ import Tooltip from '@mui/material/Tooltip';
 import Button from '@mui/material/Button';
 import { middleButtonStyle, tooltipStyle } from 'pages/editor/editorStyle';
 import _ from 'lodash';
+import { APPLICATION_URL } from '../../utils/Constants';
 
-const APPLICATION_EDITOR_URL =
-  process.env.REACT_APP_EDITOR_URL || 'http://localhost:3001';
+const APPLICATION_EDITOR_URL = APPLICATION_URL.APPLICATION_EDITOR_URL;
 
 //@ts-ignore
 function RunButton(props) {

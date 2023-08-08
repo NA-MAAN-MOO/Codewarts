@@ -1,6 +1,4 @@
-import dotenv from 'dotenv';
-dotenv.config(); //환경변수 이용(코드 최상단에 위치시킬 것)
-
+import { CONFIG } from '../constants/index';
 import { Request, Response } from 'express';
 import axios from 'axios';
 
@@ -8,8 +6,8 @@ import axios from 'axios';
 import { Prob } from '../models/Prob';
 
 /* load enviroment variables */
-const CLIENT_ID = process.env.JDOODLE_CLIENT_ID;
-const CLIENT_SECRET = process.env.JDOODLE_CLIENT_SECRET;
+const CLIENT_ID = CONFIG.JDOODLE_CLIENT_ID;
+const CLIENT_SECRET = CONFIG.JDOODLE_CLIENT_SECRET;
 
 /* define interfaces */
 interface ProbQueryItem {
