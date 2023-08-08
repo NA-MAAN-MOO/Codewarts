@@ -3,6 +3,7 @@ info:
   title: Codewarts Editor - OpenAPI 3.0
   description: |-
     코드와트의 에디터 기능과 관련된 API 문서입니다. 
+    로컬 환경에서는 로컬 서버를 선택하여 테스트해주세요!!
 
     코드와트에 대해 더 궁금하다면?:
     - [코드와트 저장소](https://github.com/NA-MAAN-MOO/Codewarts)
@@ -10,10 +11,10 @@ info:
     email: 100mgml@gmail.com
   version: 1.0.11
 servers:
-  - url: 'http://localhost:3001'
-    description: Local development server
   - url: 'https://codewarts.store/editor'
     description: Production server
+  - url: 'http://localhost:3001'
+    description: Local development server
 tags:
   - name: code
     description: 코드 실행 API
