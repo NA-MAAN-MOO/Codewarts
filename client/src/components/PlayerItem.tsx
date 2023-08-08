@@ -35,7 +35,7 @@ const GamePlayerItem = (
       ...state.mode,
       ...state.editor,
     }));
-  const { APPLICATION_DB_URL } = APPLICATION_URL;
+  const APPLICATION_DB_URL = APPLICATION_URL.APPLICATION_DB_URL;
 
   const [myTier, setMyTier] = useState(0);
 
