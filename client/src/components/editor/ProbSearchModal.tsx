@@ -49,21 +49,19 @@ export default function SearchModal(props: any) {
 
   /* DB에 저장된 백준 문제 정보를 페이징하여 요청 */
   async function showFilteredBojProbData(filter: any, page: number) {
-    if (filter === null || filter === '') return;
-
     try {
-      const response = await axios.post(
-        `${APPLICATION_EDITOR_URL}/filtered-prob-data`,
-        {
-          probQuery: filter,
+      if (filter === null || filter === '') return;
+      const response = await axios.get(`${APPLICATION_EDITOR_URL}/problems`, {
+        params: {
           page: page,
           limit: limit,
-        }
-      );
+          filter: JSON.stringify(filter),
+        },
+      });
 
       console.log(response.data.message);
-      setPagedProbData(response.data.payload.pagedDocs);
-      setTotalPages(response.data.payload.totalPages);
+      setPagedProbData(response.data.data.pagedDocs);
+      setTotalPages(response.data.data.totalPages);
       console.log(pagedProbData);
     } catch (error) {
       console.error(error);

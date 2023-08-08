@@ -16,14 +16,11 @@ function RunButton(props) {
     if (!inputStdin) return;
 
     try {
-      const { data } = await axios.post(
-        `${APPLICATION_EDITOR_URL}/code-to-run`,
-        {
-          codeToRun: ytext.toString(),
-          //@ts-ignore
-          stdin: inputStdin.value,
-        }
-      );
+      const { data } = await axios.post(`${APPLICATION_EDITOR_URL}/usercode`, {
+        codeToRun: ytext.toString(),
+        //@ts-ignore
+        stdin: inputStdin.value,
+      });
 
       console.log(data); // 전체 reponse body (output, statusCode, memory, cpuTime)
       setCompileOutput(data.output.replace(/ \n/g, '\r\n').trimEnd());

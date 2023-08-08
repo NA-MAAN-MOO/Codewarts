@@ -23,7 +23,7 @@ tags:
   - name: problem
     description: 백준 문제 API
 paths:
-  /code-to-run:
+  /usercode:
     post:
       tags:
         - code
@@ -66,33 +66,95 @@ paths:
                     memory: 7852
                     cpuTime: 0.01
         400:
-          description: Bad request
+          description: Bad request. Check Jdoodle request body.
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  error:
+                  status:
                     type: string
-                    description: The compile error message .
-                  statusCode:
+                    example: 400
+                  message:
                     type: integer
-                    description: Status Code of the result.
+                    example: codeToRun Required
         401:
-          description: Unauthorized
+          description: Unauthorized. Check client id and client secret.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 401
+                  message:
+                    type: integer
+                    example: unauthorized error calling Jdoodle api
+
         429:
           description: Daily limit reached
+        500:
+          description: Internal server error
 
-  /boj-prob-data:
+  /problems:
+    get:
+      tags:
+        - problem
+      summary: Retrieves filtered list of problems by page
+      description: This fetches a paginated list of problems from Baekjoon Online Judge (BOJ) based on provided filter criteria.
+      operationId: getFilteredBojProblemByPage
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          required: true
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          required: true
+        - in: query
+          name: filter
+          schema:
+            $ref: '#/components/schemas/Filter'
+          required: false
+      responses:
+        200:
+          description: Problem data retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BojProblem'
+        400:
+          description: Bad request
+        404:
+          description: Not found
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 500
+                  message:
+                    type: string
+                    example: unexpected error while handling filter
+
+  /problems/{problemId}:
     get:
       tags:
         - problem
       summary: Retrieves the problem by its id
-      description: This fetches a single problem from Baekjoon Online Judge (BOJ) by its id.
-      operationId: getBojProbDataById
+      description: This fetches a single problem from Baekjoon Online Judge (BOJ) by its id. Search from number 1000.
+      operationId: getBojProblemById
       parameters:
-        - in: query
-          name: probId
+        - in: path
+          name: problemId
           schema:
             type: integer
           required: true
@@ -104,6 +166,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BojProblem'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: bad request. problem Id required
         404:
           description: The problem data you are searching for does not exist.
           content:
@@ -111,9 +186,12 @@ paths:
               schema:
                 type: object
                 properties:
+                  status:
+                    type: integer
+                    example: 404
                   message:
                     type: string
-                    example: Problem not found
+                    example: problem not found
         500:
           description: Internal server error
           content:
@@ -121,41 +199,13 @@ paths:
               schema:
                 type: object
                 properties:
+                  status:
+                    type: integer
+                    example: 500
                   message:
                     type: string
-                    example: 'An error occurred while retrieving problem.'
+                    example: Error occured while retrieving problem.
 
-  /filtered-prob-data:
-    post:
-      tags:
-        - problem
-      summary: Retrieves filtered list of problems by page
-      description: This fetches a paginated list of problems from Baekjoon Online Judge (BOJ) based on provided filter criteria.
-      operationId: getFilteredBojProbDataByPage
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Query'
-
-      responses:
-        200:
-          description: Problem data retrieved successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BojProblem'
-        500:
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    description: Error message
 components:
   schemas:
     Usercode:
@@ -185,22 +235,20 @@ components:
         cpuTime:
           type: number
           description: CPU Time used by the program.
-    Query:
-      type: object
-      properties:
-        probQuery:
-          type: object
-          description: The problem filter query
-        page:
-          type: integer
-          description: The page number to fetch
-        limit:
-          type: integer
-          description: The number of problems per page
-      required:
-        - probQuery
-        - page
-        - limit
+        compilationStatus:
+          type: string
+          example: null
+    Filter:
+      type: array
+      items:
+        type: object
+        properties:
+          solvedAC.level:
+            type: string
+            example: 브론즈
+          source:
+            type: string
+            example: 한국정보올림피아드
     Titles:
       type: object
       properties:
@@ -388,3 +436,15 @@ components:
                       ],
                   },
                 ]
+
+    ApiResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 200
+        message:
+          type: boolean
+          example: Successfully fetched boj problem
+        data:
+          type: object
