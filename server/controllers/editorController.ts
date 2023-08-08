@@ -70,6 +70,7 @@ export const getFilteredBojProblemByPage = async (
   try {
     const { page, limit, filter } = req.query;
     const { err, result } = await editorService.getFilteredBojProblemByPage(
+      //@ts-ignore
       page,
       limit,
       filter
