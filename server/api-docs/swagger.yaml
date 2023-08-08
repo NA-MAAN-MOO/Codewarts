@@ -1,0 +1,451 @@
+openapi: 3.0.3
+info:
+  title: Codewarts Editor - OpenAPI 3.0
+  description: |-
+    코드와트의 에디터 기능과 관련된 API 문서입니다. 
+    로컬 환경에서는 로컬 서버를 선택하여 테스트해주세요!!
+
+    코드와트에 대해 더 궁금하다면?:
+    - [코드와트 저장소](https://github.com/NA-MAAN-MOO/Codewarts)
+  contact:
+    email: 100mgml@gmail.com
+  version: 1.0.11
+servers:
+  - url: 'https://codewarts.store/editor'
+    description: Production server
+  - url: 'http://localhost:3001'
+    description: Local development server
+tags:
+  - name: code
+    description: 코드 실행 API
+    externalDocs:
+      description: Find out more (Jdoodle)
+      url: https://docs.jdoodle.com/integrating-compiler-ide-to-your-application/compiler-api/rest-api
+  - name: problem
+    description: 백준 문제 API
+paths:
+  /usercode:
+    post:
+      tags:
+        - code
+      summary: Execute compiled code
+      description: The CodeWarts' editor sends the user's code and standard input to the Jdoodle server for a response, internally passing identifying values and language information to be compiled. CodeWarts delivers this response from Jdoodle to the client.
+      operationId: compileCode
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Usercode'
+            examples:
+              general example:
+                value:
+                  codeToRun: 'print(input())'
+                  stdin: 'hello world'
+              traceback example(no input when needed):
+                value:
+                  codeToRun: 'print(input())'
+                  stdin: ''
+      responses:
+        200:
+          description: Code executed successfully. This includes cases where the user's code generated a traceback error message.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JdoodleApiResponse'
+              examples:
+                general example:
+                  value:
+                    output: "hello world\n"
+                    statusCode: 200
+                    memory: 7580
+                    cpuTime: 0.01
+                traceback example:
+                  value:
+                    output: " Traceback (most recent call last): File '/home/jdoodle.py', line 1, in <module> print(input()) EOFError: EOF when reading a line "
+                    statusCode: 200
+                    memory: 7852
+                    cpuTime: 0.01
+        400:
+          description: Bad request. Check Jdoodle request body.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 400
+                  message:
+                    type: integer
+                    example: codeToRun Required
+        401:
+          description: Unauthorized. Check client id and client secret.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 401
+                  message:
+                    type: integer
+                    example: unauthorized error calling Jdoodle api
+
+        429:
+          description: Daily limit reached
+        500:
+          description: Internal server error
+
+  /problems:
+    get:
+      tags:
+        - problem
+      summary: Retrieves filtered list of problems by page
+      description: This fetches a paginated list of problems from Baekjoon Online Judge (BOJ) based on provided filter criteria.
+      operationId: getFilteredBojProblemByPage
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          required: true
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          required: true
+        - in: query
+          name: filter
+          schema:
+            $ref: '#/components/schemas/Filter'
+          required: false
+      responses:
+        200:
+          description: Problem data retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BojProblem'
+        400:
+          description: Bad request
+        404:
+          description: Not found
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 500
+                  message:
+                    type: string
+                    example: unexpected error while handling filter
+
+  /problems/{problemId}:
+    get:
+      tags:
+        - problem
+      summary: Retrieves the problem by its id
+      description: This fetches a single problem from Baekjoon Online Judge (BOJ) by its id. Search from number 1000.
+      operationId: getBojProblemById
+      parameters:
+        - in: path
+          name: problemId
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the problem to get
+      responses:
+        200:
+          description: Problem data retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BojProblem'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: bad request. problem Id required
+        404:
+          description: The problem data you are searching for does not exist.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                    example: problem not found
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                    example: Error occured while retrieving problem.
+
+components:
+  schemas:
+    Usercode:
+      type: object
+      properties:
+        codeToRun:
+          type: string
+          description: The user's code to execute.
+        stdin:
+          type: string
+          description: The standard input for the code.
+      required:
+        - codeToRun
+        - stdin
+    JdoodleApiResponse:
+      type: object
+      properties:
+        output:
+          type: string
+          description: The output of the executed code using Jdoodle API.
+        statusCode:
+          type: integer
+          description: Status Code of the result.
+        memory:
+          type: number
+          description: Memory used by the program.
+        cpuTime:
+          type: number
+          description: CPU Time used by the program.
+        compilationStatus:
+          type: string
+          example: null
+    Filter:
+      type: array
+      items:
+        type: object
+        properties:
+          solvedAC.level:
+            type: string
+            example: 브론즈
+          source:
+            type: string
+            example: 한국정보올림피아드
+    Titles:
+      type: object
+      properties:
+        language:
+          example: ko
+          type: string
+        languageDisplayName:
+          example: ko
+          type: string
+        title:
+          example: A-B
+          type: string
+        isOriginal:
+          example: true
+          type: boolean
+    DisplayNames:
+      type: object
+      properties:
+        language:
+          example: ko
+          type: string
+        name:
+          example: 구현
+          type: string
+        short:
+          example: 구현
+          type: string
+    Tags:
+      type: object
+      properties:
+        key:
+          type: string
+          example: implementation
+        isMeta:
+          type: boolean
+          example: false
+        bojTagId:
+          type: integer
+          example: 102
+        problemCount:
+          type: integer
+          example: 4169
+        displayNames:
+          type: array
+          example:
+            [
+              { language: 'ko', name: '구현', short: '구현' },
+              { language: 'en', name: 'implementation', short: 'impl' },
+            ]
+          items:
+            $ref: '#/components/schemas/DisplayNames'
+    BojProblem:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: uuid
+          description: The auto-generated id of the problem
+          example: new ObjectId("63ed161b27652b075011b125")
+        probId:
+          type: integer
+          description: The id of the problem
+          example: 1001
+        prob_desc:
+          type: string
+          description: The description of the problem
+          example: \n두 정수 A와 B를 입력받은 다음, A-B를 출력하는 프로그램을 작성하시오.\n
+        prob_input:
+          type: string
+          description: The input of the problem
+          example: \n첫째 줄에 A와 B가 주어진다. (0 < A, B < 10)\n
+        prob_output:
+          type: string
+          description: The output of the problem
+          example: \n첫째 줄에 A-B를 출력한다.\n
+        samples:
+          type: object
+          description: Sample input and output of the problem
+          example: { '1': { input: '3 2\n', output: '1' } }
+          properties:
+            1:
+              type: object
+              properties:
+                input:
+                  type: string
+                  example: 3 2\n
+                output:
+                  type: string
+                  example: 1
+        source:
+          type: string
+          description: The source of the problem
+          example: 한국정보올림피아드
+        solvedAC:
+          type: object
+          description: Information about the problem solution from Solved.AC
+          properties:
+            problemId:
+              type: integer
+              description: The problem id
+            titleKo:
+              type: string
+              description: The Korean title of the problem
+            titles:
+              type: array
+              description: The Korean title of the problem
+              items:
+                $ref: '#/components/schemas/Titles'
+              example:
+                [
+                  {
+                    language: 'ko',
+                    languageDisplayName: 'ko',
+                    title: 'A-B',
+                    isOriginal: true,
+                  },
+                ]
+            isSolvable:
+              type: boolean
+              description: The Korean title of the problem
+            isPartial:
+              type: boolean
+              description: The Korean title of the problem
+            acceptedUserCount:
+              type: integer
+            level:
+              type: integer
+            votedUserCount:
+              type: integer
+            sprout:
+              type: boolean
+            givesNoRating:
+              type: boolean
+            isLevelLocked:
+              type: boolean
+            averageTries:
+              type: number
+            official:
+              type: boolean
+            tags:
+              type: array
+              items:
+                $ref: '#/components/schemas/Tags'
+              example:
+                [
+                  {
+                    key: 'implementation',
+                    isMeta: false,
+                    bojTagId: 102,
+                    problemCount: 4169,
+                    displayNames:
+                      [
+                        { language: 'ko', name: '구현', short: '구현' },
+                        {
+                          language: 'en',
+                          name: 'implementation',
+                          short: 'impl',
+                        },
+                      ],
+                  },
+                  {
+                    key: 'arithmetic',
+                    isMeta: false,
+                    bojTagId: 121,
+                    problemCount: 809,
+                    displayNames:
+                      [
+                        { language: 'ko', name: '사칙연산', short: '사칙연산' },
+                        {
+                          language: 'en',
+                          name: 'arithmetic',
+                          short: 'arithmetic',
+                        },
+                      ],
+                  },
+                  {
+                    key: 'math',
+                    isMeta: false,
+                    bojTagId: 124,
+                    problemCount: 4899,
+                    displayNames:
+                      [
+                        { language: 'ko', name: '수학', short: '수학' },
+                        { language: 'en', name: 'mathematics', short: 'math' },
+                      ],
+                  },
+                ]
+
+    ApiResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 200
+        message:
+          type: boolean
+          example: Successfully fetched boj problem
+        data:
+          type: object

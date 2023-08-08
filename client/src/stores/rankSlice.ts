@@ -1,11 +1,16 @@
-import { createSlice, createAsyncThunk, createReducer } from '@reduxjs/toolkit';
+import {
+  createSlice,
+  createAsyncThunk,
+  createReducer,
+  applyMiddleware,
+} from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 import { RootState } from 'stores';
 import axios from 'axios';
+import { APPLICATION_URL } from 'utils/Constants';
 
-const APPLICATION_DB_URL =
-  process.env.REACT_APP_DB_URL || 'http://localhost:3003';
+const APPLICATION_DB_URL = APPLICATION_URL.APPLICATION_DB_URL;
 
 export const getbojInfos = createAsyncThunk('rank/getbojInfos', async () => {
   try {

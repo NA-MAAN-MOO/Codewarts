@@ -5,11 +5,12 @@ import { MUTE_TYPE } from '../constants';
 import MicMuteInfo from '../services/MicMuteInfo';
 import VolMuteInfo from '../services/VolMuteInfo';
 import { IsRoomExist as ConnectionList } from '../types/Voice';
+import { CONFIG } from '../constants/index';
 
 // Environment variable: URL where our OpenVidu server is listening
-const OPENVIDU_URL = process.env.OPENVIDU_URL || 'http://localhost:4443';
+const OPENVIDU_URL = CONFIG.OPENVIDU_URL;
 // Environment variable: secret shared with our OpenVidu server
-const OPENVIDU_SECRET = process.env.OPENVIDU_SECRET || 'MY_SECRET';
+const OPENVIDU_SECRET = CONFIG.OPENVIDU_SECRET;
 
 const openvidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
 const authCode = Buffer.from(`OPENVIDUAPP:${OPENVIDU_SECRET}`).toString(

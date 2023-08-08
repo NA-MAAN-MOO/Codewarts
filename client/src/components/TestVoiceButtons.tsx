@@ -5,10 +5,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from 'stores';
 import axios from 'axios';
 import { stringToUnicode } from 'lib/voiceLib';
+import { APPLICATION_URL } from '../utils/Constants';
 
-const APPLICATION_VOICE_URL = process.env.REACT_APP_SERVER_URL
-  ? `${process.env.REACT_APP_SERVER_URL}/voice`
-  : 'http://localhost:3002';
+const APPLICATION_VOICE_URL = APPLICATION_URL.APPLICATION_VOICE_URL;
 
 const TestVoiceButtons = () => {
   const { getSessions, getConnections } = useVoice();

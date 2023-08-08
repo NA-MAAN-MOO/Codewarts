@@ -3,9 +3,9 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { GAME_STATUS, MUTE_TYPE } from '../utils/Constants';
 import { CharInfoType, MuteInfoType } from 'types';
 import axios from 'axios';
+import { APPLICATION_URL } from '../utils/Constants';
 
-const APPLICATION_VOICE_URL =
-  process.env.REACT_APP_VOICE_URL || 'http://localhost:3002';
+const APPLICATION_VOICE_URL = APPLICATION_URL.APPLICATION_VOICE_URL;
 
 export interface ChatState {
   users: CharInfoType[];

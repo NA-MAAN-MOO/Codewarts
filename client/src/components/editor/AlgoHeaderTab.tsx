@@ -5,25 +5,25 @@ import {
 } from '../../../src/pages/editor/editorStyle';
 import { useEffect } from 'react';
 import Swal from 'sweetalert2';
+import { APPLICATION_URL } from '../../utils/Constants';
 
-const APPLICATION_EDITOR_URL =
-  process.env.REACT_APP_EDITOR_URL || 'http://localhost:3001';
+const APPLICATION_EDITOR_URL = APPLICATION_URL.APPLICATION_EDITOR_URL;
 
 //@ts-ignore
 function AlgoHeaderTab(props) {
   const { bojProbDataRef, setBojProbFullData, setBojProblemId } = props;
 
   /* 서버로 몽고DB에 저장된 백준 문제 전체 정보 요청 */
-  async function showBojProbDataById(probId: string) {
+  async function showBojProblemById(problemId: string) {
     if (bojProbDataRef.current === null) return;
 
     try {
       const response = await axios.get(
-        `${APPLICATION_EDITOR_URL}/boj-prob-data?probId=${probId}`
+        `${APPLICATION_EDITOR_URL}/problems/${problemId}`
       );
 
-      setBojProblemId(parseInt(probId));
-      let probFullData = response.data[0];
+      setBojProblemId(parseInt(problemId));
+      let probFullData = response.data.data[0];
       console.log(probFullData);
       setBojProbFullData(probFullData);
     } catch (error: any) {
@@ -41,19 +41,19 @@ function AlgoHeaderTab(props) {
   // const fetchBojProbTitleDiv = async () => {
   //   if (bojProbDataRef.current === null) return;
 
-  //   let probId = bojProbDataRef.current.value;
-  //   setBojProblemId(probId);
-  //   console.log(probId);
+  //   let problemId = bojProbDataRef.current.value;
+  //   setBojProblemId(problemId);
+  //   console.log(problemId);
 
   //   try {
   //     const response = await axios.get(
-  //       `https://solved.ac/api/v3/problem/show?problemId=${probId}`
+  //       `https://solved.ac/api/v3/problem/show?problemId=${problemId}`
   //     );
 
   //     let probData = response.data;
   //     console.log(probData);
   //     setBojProbData(probData);
-  //     showBojProbDataById(probId);
+  //     showBojProbDataById(problemId);
   //   } catch (error) {
   //     console.error(error);
   //   }
@@ -88,8 +88,8 @@ function AlgoHeaderTab(props) {
   //@ts-ignore
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
-      let probId = bojProbDataRef.current.value;
-      showBojProbDataById(probId);
+      let problemId = bojProbDataRef.current.value;
+      showBojProblemById(problemId);
     }
   };
 

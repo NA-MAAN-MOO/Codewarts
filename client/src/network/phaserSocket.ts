@@ -1,9 +1,9 @@
 import Lobby from 'scenes/Lobby';
 import phaserGame from 'codeuk';
 import { io, Socket } from 'socket.io-client';
+import { APPLICATION_URL } from 'utils/Constants';
 
-const APPLICATION_SERVER_URL =
-  process.env.REACT_APP_SERVER_URL || 'http://localhost:8080';
+const APPLICATION_SERVER_URL = APPLICATION_URL.APPLICATION_SERVER_URL;
 
 const initSocket = (data: any, scene: Lobby) => {
   phaserGame.socket = io(`${APPLICATION_SERVER_URL}`);

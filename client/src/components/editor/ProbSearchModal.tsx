@@ -17,9 +17,9 @@ import {
 } from 'pages/editor/editorStyle';
 import { ThemeProvider } from '@mui/material/styles';
 import Tooltip from '@mui/material/Tooltip';
+import { APPLICATION_URL } from '../../utils/Constants';
 
-const APPLICATION_EDITOR_URL =
-  process.env.REACT_APP_EDITOR_URL || 'http://localhost:3001';
+const APPLICATION_EDITOR_URL = APPLICATION_URL.APPLICATION_EDITOR_URL;
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -49,21 +49,19 @@ export default function SearchModal(props: any) {
 
   /* DB에 저장된 백준 문제 정보를 페이징하여 요청 */
   async function showFilteredBojProbData(filter: any, page: number) {
-    if (filter === null || filter === '') return;
-
     try {
-      const response = await axios.post(
-        `${APPLICATION_EDITOR_URL}/filtered-prob-data`,
-        {
-          probQuery: filter,
+      if (filter === null || filter === '') return;
+      const response = await axios.get(`${APPLICATION_EDITOR_URL}/problems`, {
+        params: {
           page: page,
           limit: limit,
-        }
-      );
+          filter: JSON.stringify(filter),
+        },
+      });
 
       console.log(response.data.message);
-      setPagedProbData(response.data.payload.pagedDocs);
-      setTotalPages(response.data.payload.totalPages);
+      setPagedProbData(response.data.data.pagedDocs);
+      setTotalPages(response.data.data.totalPages);
       console.log(pagedProbData);
     } catch (error) {
       console.error(error);
