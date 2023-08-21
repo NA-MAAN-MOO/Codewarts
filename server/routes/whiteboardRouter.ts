@@ -8,14 +8,15 @@ import {
   participateInMemo,
   dropOutOfMemo,
   getUsersBojInfo,
+  fetchBojInfos,
 } from '../controllers/whiteboardController';
 import express from 'express';
 
 const router = express.Router();
 
-router.get('/boj-infos', getUsersBojInfo);
+router.get('/boj-infos', fetchBojInfos);
 // send to client
-router.get('/user-rank', sendUsersBojInfo);
+// router.get('/user-rank', sendUsersBojInfo);
 
 router.post('/add-memo', addMemo);
 router.post('/delete-memo', deleteMemo);
