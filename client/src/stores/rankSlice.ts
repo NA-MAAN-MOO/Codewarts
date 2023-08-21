@@ -14,14 +14,14 @@ const APPLICATION_DB_URL = APPLICATION_URL.APPLICATION_DB_URL;
 
 export const getbojInfos = createAsyncThunk('rank/getbojInfos', async () => {
   try {
-    const response = await axios.get(APPLICATION_DB_URL + '/user-rank');
+    const response = await axios.get(APPLICATION_DB_URL + '/boj-infos');
     return response.data;
   } catch (e) {}
 });
 
 export interface BojInfoState {
   nickname: string;
-  id: string;
+  userId: string;
   bojId: string;
   tier: number;
   maxStreak: number;

@@ -17,7 +17,7 @@ import VoiceItem from 'components/VoiceItem';
 
 interface DetailInfo {
   bojId: string;
-  id: string;
+  userId: string;
   maxStreak: number;
   nickname: string;
   tier: number;
@@ -43,7 +43,7 @@ const GamePlayerItem = (
     (async () => {
       try {
         const { data }: { data: DetailInfo[] } = await axios.get(
-          `${APPLICATION_DB_URL}/user-rank`
+          `${APPLICATION_DB_URL}/boj-infos`
         );
         const tier = data?.find((d) => d.nickname === name)?.tier || 0;
         setMyTier(tier);

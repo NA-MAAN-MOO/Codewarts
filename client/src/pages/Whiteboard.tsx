@@ -17,7 +17,7 @@ const APPLICATION_DB_URL = APPLICATION_URL.APPLICATION_DB_URL;
 
 interface DetailInfo {
   bojId: string;
-  id: string;
+  userId: string;
   maxStreak: number;
   nickname: string;
   tier: number;
