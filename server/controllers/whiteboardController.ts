@@ -105,6 +105,26 @@ export const saveUsersBojInfo = async () => {
   }
 };
 
+export const addBojInfo = async (req: Request, res: Response) => {
+  try {
+    const bojId = req.body.bojId;
+    const result = await getEachUserBojInfo(bojId);
+
+    if (result) {
+      const bojInfo = new BojInfo(result);
+      const response = bojInfo.save();
+      res.status(200).json(response);
+    } else {
+      res.status(200).json({
+        message:
+          '가입은 완료되었지만, 백준 ID가 유효하지 않아 랭킹 확인은 어렵습니다.',
+      });
+    }
+  } catch (e) {
+    console.error(e);
+  }
+};
+
 /* Get users bojInfo from DB and send it to client */
 export const fetchBojInfos = async (req: Request, res: Response) => {
   try {

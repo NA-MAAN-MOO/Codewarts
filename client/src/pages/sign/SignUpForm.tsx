@@ -50,6 +50,12 @@ export default function FormDialog() {
         `${APPLICATION_DB_URL}/user/signup`,
         body
       );
+
+      const addBojInfoResponse = await axios.post(
+        `${APPLICATION_DB_URL}/boj-info`,
+        userForm.userBojId
+      );
+
       if (signUpResponse.data.status === 200) {
         setSignUpStatus('SUCCESS');
         closeSignUpForm();

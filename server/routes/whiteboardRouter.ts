@@ -9,12 +9,14 @@ import {
   dropOutOfMemo,
   getUsersBojInfo,
   fetchBojInfos,
+  addBojInfo,
 } from '../controllers/whiteboardController';
 import express from 'express';
 
 const router = express.Router();
 
 router.get('/boj-infos', fetchBojInfos);
+router.post('/boj-info', addBojInfo);
 // send to client
 // router.get('/user-rank', sendUsersBojInfo);
 
