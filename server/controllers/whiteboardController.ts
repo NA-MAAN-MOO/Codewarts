@@ -109,6 +109,7 @@ export const saveUsersBojInfo = async () => {
 export const fetchBojInfos = async (req: Request, res: Response) => {
   try {
     const result = await BojInfo.find({});
+    result.sort((a, b) => b.tier - a.tier);
     res.status(200).json(result);
   } catch (e) {
     console.error(e);
