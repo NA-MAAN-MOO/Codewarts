@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 
 import User from '../models/User';
 import Memo from '../models/Memo';
+import BojInfo from '../models/BojInfo';
 
 import axios, { AxiosResponse } from 'axios';
 
@@ -17,11 +18,9 @@ export function getDate(): string {
   return year + '.' + month + '.' + day + '. ' + hour + ':' + minute;
 }
 
-// const cron = require('node-cron');
-
 interface ResponseType {
   nickname: string;
-  id: string;
+  userId: string;
   bojId: string;
   tier: number;
   maxStreak: number;
@@ -29,10 +28,6 @@ interface ResponseType {
 }
 
 let response: ResponseType[] = [];
-// const task = cron.schedule('*/10 * * * *', async () => {
-//   await getUsersBojInfo();
-//   console.log('가져온 랭킹 수', response.length);
-// });
 
 /* Get each user's data */
 const getEachUserBojInfo = async (data: any) => {
@@ -43,7 +38,7 @@ const getEachUserBojInfo = async (data: any) => {
 
     const eachData = {
       nickname: data.userNickname,
-      id: data.userId,
+      userId: data.userId,
       bojId: data.userBojId,
       tier: bojInfo.data.tier,
       maxStreak: bojInfo.data.maxStreak,
@@ -56,17 +51,6 @@ const getEachUserBojInfo = async (data: any) => {
     return false;
   }
 };
-
-// const getEachUserBojInfo = async (bojId: string) => {
-//   try {
-//     return await axios.get(
-//       `https://solved.ac/api/v3/user/show?handle=${bojId}`
-//     );
-//   } catch (e) {
-//     // console.log(e);
-//     return false;
-//   }
-// };
 
 /* Get all user's number of solved problems through boj ids in DB */
 export const getUsersBojInfo = async (req: Request, res: Response) => {
@@ -93,15 +77,31 @@ export const getUsersBojInfo = async (req: Request, res: Response) => {
   }
 };
 
-/* When server starts, it brings boj infos */
-// getUsersBojInfo();
-
 /* Send Boj Infos saved in heap(?) */
 export const sendUsersBojInfo = (req: Request, res: Response) => {
   if (response.length === 0) {
     res.status(404).send('No valid Boj Users Id');
   } else {
     res.status(200).send(response);
+  }
+};
+
+/* Save Boj Infos in DB */
+export const saveUsersBojInfo = async () => {
+  const users = await User.find({});
+
+  for (let user of users) {
+    const eachData = await getEachUserBojInfo(user);
+
+    if (eachData) {
+      const bojInfo = new BojInfo({ ...eachData });
+
+      try {
+        await bojInfo.save();
+      } catch (e) {
+        console.error(e);
+      }
+    }
   }
 };
 
