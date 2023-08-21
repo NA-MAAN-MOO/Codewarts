@@ -105,6 +105,17 @@ export const saveUsersBojInfo = async () => {
   }
 };
 
+/* Get users bojInfo from DB and send it to client */
+export const fetchBojInfos = async (req: Request, res: Response) => {
+  try {
+    const result = await BojInfo.find({});
+    res.status(200).json(result);
+  } catch (e) {
+    console.error(e);
+    res.status(404).json({ message: '백준 랭킹 불러오기 실패' });
+  }
+};
+
 /* Save memo to DB */
 export const addMemo = async (req: Request, res: Response) => {
   const memo = new Memo({
