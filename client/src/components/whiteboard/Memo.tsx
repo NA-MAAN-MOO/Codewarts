@@ -14,16 +14,6 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'stores';
 import Image from '../../assets/images/memo_bg1.jpg';
 
-const memoColors = [
-  '#ffe552',
-  '#7fff7a',
-  '#ffbfec',
-  '#ffbfc8',
-  '#ffbb6e',
-  '#abe9ff',
-  '#e9c4ff',
-];
-
 function Memo(props: any) {
   const {
     memo,
@@ -40,16 +30,10 @@ function Memo(props: any) {
     x: memo.x * window.innerWidth * 0.6,
     y: memo.y * window.innerHeight,
   });
-  const [color, setColor] = useState('');
   const [isDragging, setIsDragging] = useState(false);
   const [ownZIndex, setOwnZIndex] = useState(0);
 
   const isMine = currentUserNickname === memo.authorNickname;
-
-  useEffect(() => {
-    let randNum = Math.floor(Math.random() * memoColors.length);
-    setColor(memoColors[randNum]);
-  }, []);
 
   /* Track position of draggable memo */
   const onChangePosition = useCallback(
@@ -115,7 +99,6 @@ function Memo(props: any) {
         sx={{
           width: '300px',
           minHeight: '240px',
-          background: color,
           backgroundImage: `url(${Image})`,
           backgroundSize: '100% 100%',
           display: 'inline',
