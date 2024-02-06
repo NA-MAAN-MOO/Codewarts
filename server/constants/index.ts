@@ -19,7 +19,7 @@ export const CONFIG = {
   OPENVIDU_URL: process.env.OPENVIDU_URL || 'http://localhost:4443',
   OPENVIDU_SECRET: process.env.OPENVIDU_SECRET || 'MY_SECRET',
   PORT: process.env.PORT || 8080, // SOCKET.IO 포트
-  MONGO_PW: process.env.MONGO_PW,
+  MONGO_URL: process.env.MONGO_URL,
   JDOODLE_CLIENT_ID: process.env.JDOODLE_CLIENT_ID,
   JDOODLE_CLIENT_SECRET: process.env.JDOODLE_CLIENT_SECRET,
 };
