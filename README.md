@@ -8,11 +8,11 @@
 <p align="center"><em>* 모같코 : 모여서 같이 코딩하기</em><br></p>
 <p align="center"><img width="80%" src="./client/public/assets/readme/room_map.png"></p>
 <p align="center">친구들과 함께 실시간으로 코드를 치며 알고리즘 문제를 맞혀보세요!</p>
-<!-- <a href="https://codewarts.store">&nbsp; 👉🏻 코드와트로 날아가기</a></div> -->
+<!-- <a href="https://codewarts.online">&nbsp; 👉🏻 코드와트로 날아가기</a></div> -->
 <br><br>
 
 # <strong>Links 📎 </strong>
-- 코드와트 : https://codewarts.store
+- 코드와트 : https://codewarts.online
 - 트러블슈팅 기록 : https://hyejiyeom.notion.site/9534d334cd9a4b4694f5f2a1dd0723a7?pvs=4 
 - 발표 영상 : 
 <br><br>
