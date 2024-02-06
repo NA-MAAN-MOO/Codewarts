@@ -19,7 +19,7 @@ import VolMuteInfo from './services/VolMuteInfo';
 import MicMuteInfo from './services/MicMuteInfo';
 
 const port = CONFIG.PORT;
-const mongoPassword = CONFIG.MONGO_PW;
+const mongoUrl = CONFIG.MONGO_URL;
 
 const app: Express = express();
 app.use(express.json());
@@ -34,7 +34,7 @@ app.use(cookieParser());
 // });
 
 //db connect
-const db = `mongodb+srv://juncheol:${mongoPassword}@cluster0.v0izvl3.mongodb.net/?retryWrites=true&w=majority`;
+const db = `${mongoUrl}`;
 mongoose
   .connect(db, { dbName: 'codewart' })
   .then(() => {
